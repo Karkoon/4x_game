@@ -1,4 +1,4 @@
-sourceCompatibility = 1.8
+sourceCompatibility = 1.17
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
@@ -41,5 +41,3 @@ task dist(type: Jar) {
 
 
 dist.dependsOn classes
-
-eclipse.project.name = appName + "-desktop"

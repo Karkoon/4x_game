@@ -14,8 +14,13 @@ buildscript {
     }
 }
 
+plugins {
+    id "io.freefair.lombok" version "6.4.1"
+}
+
 allprojects {
-    apply plugin: "eclipse"
+
+    apply plugin: 'io.freefair.lombok'
 
     version = '1.0'
     ext {
@@ -38,7 +43,6 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
-
 
     dependencies {
         implementation project(":core")
