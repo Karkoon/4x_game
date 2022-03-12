@@ -9,10 +9,10 @@ import lombok.NonNull;
 
 import java.util.Set;
 
-public class CameraMoverInputProcessor extends InputAdapter {
+public final class CameraMoverInputProcessor extends InputAdapter {
 
-    private final static float MARGIN_X = 0.03f;
-    private final static float MARGIN_Y = 0.03f;
+    private static final float MARGIN_X = 0.03f;
+    private static final float MARGIN_Y = 0.03f;
 
     private final Set<Integer> handledKeys = Set.of(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
     @Getter
@@ -31,7 +31,9 @@ public class CameraMoverInputProcessor extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (!handledKeys.contains(keycode)) return false;
+        if (!handledKeys.contains(keycode)) {
+            return false;
+        }
 
         if (cameraControl.isMoving() && !arrowKeysUsed) {
             cameraControl.stopMoving(Direction.ANY);
@@ -43,7 +45,9 @@ public class CameraMoverInputProcessor extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (!handledKeys.contains(keycode)) return false;
+        if (!handledKeys.contains(keycode)) {
+            return false;
+        }
 
         cameraControl.stopMoving(keyToDirection(keycode));
         if (!cameraControl.isMoving()) {
@@ -55,8 +59,9 @@ public class CameraMoverInputProcessor extends InputAdapter {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         if (arrowKeysUsed) {
-            return true;
+            return false;
         }
+
         float xPercentage = screenX / (float) viewport.getScreenWidth();
         float yPercentage = screenY / (float) viewport.getScreenHeight();
 
