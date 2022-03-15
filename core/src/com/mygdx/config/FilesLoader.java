@@ -17,9 +17,8 @@ public class FilesLoader {
 
     public List<String> loadJsonFileNames() throws IOException {
         return Files.list(new File(directoryPath).toPath())
+                .map(path -> path.getFileName().toString())
                 .filter(path -> path.endsWith(".json"))
-                .map(Path::getFileName)
-                .map(Path::toString)
                 .collect(Collectors.toList());
     }
 

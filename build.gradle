@@ -69,6 +69,6 @@ project(":core") {
         api "com.esotericsoftware.spine:spine-libgdx:4.0.18.1"
         api "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+        implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     }
 }
