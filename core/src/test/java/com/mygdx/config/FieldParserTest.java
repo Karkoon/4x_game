@@ -15,7 +15,7 @@ class FieldParserTest {
 
     @Test
     @DisplayName("shouldReturnCorrectField")
-    public void shouldReturnCorrectField() throws IOException {
+    public void shouldReturnCorrectField(){
         // given
         String filesPath = "src/test/resources/fieldParser";
 
@@ -24,12 +24,11 @@ class FieldParserTest {
         GameContent content = new GameContent();
 
         List<String> loaderFiles = loader.loadJsonFileNames();
-        String fileName = loaderFiles.get(0);
 
         Field exampleField = new Field(1, "field", "pole", "field.g3db");
 
         // when
-        parser.parseContent(content, fileName);
+        parser.parseContent(content, loaderFiles);
         Field singleField = content.getSingleField(0);
 
         // then

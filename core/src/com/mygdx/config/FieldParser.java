@@ -2,18 +2,14 @@ package com.mygdx.config;
 
 import com.mygdx.model.Field;
 import com.mygdx.model.GameContent;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
-class FieldParser implements JsonParser {
+public class FieldParser implements JsonParser {
 
     private String directoryPath;
 
@@ -21,9 +17,10 @@ class FieldParser implements JsonParser {
         this.directoryPath = directoryPath;
     }
     @Override
-    public void parseContent(GameContent content, String fileName){
+    public void parseContent(GameContent content, List<String> fileNames){
         JSONParser parser = new JSONParser();
 
+        for (String fileName: fileNames)
         try (Reader reader = new FileReader(directoryPath + "/" + fileName)) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             Field field = parseField(jsonObject);

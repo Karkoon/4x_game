@@ -16,6 +16,8 @@ public class Field {
     private String polishName;
     private String resourceName;
 
+    public static String FIELD_PREVIEW = "fields/";
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

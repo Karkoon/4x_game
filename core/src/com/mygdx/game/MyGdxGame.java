@@ -17,9 +17,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.config.FieldParser;
+import com.mygdx.config.FilesLoader;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
+import com.mygdx.model.Field;
+import com.mygdx.model.GameContent;
 import lombok.NonNull;
+
+import java.io.File;
+import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -31,6 +38,9 @@ public class MyGdxGame extends ApplicationAdapter {
     ModelInstance fieldInstance;
     AssetManager assets;
     Model field;
+    GameContent content;
+    FieldParser parser;
+    FilesLoader loader;
 
     private @NonNull Viewport createViewport() {
         Camera camera = new OrthographicCamera(300, 300);
@@ -57,11 +67,20 @@ public class MyGdxGame extends ApplicationAdapter {
         compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
         Gdx.input.setInputProcessor(inputProcessor);
 
+        content = new GameContent();
+        loader = new FilesLoader("assets/fields");
+        List<String> fieldFiles = loader.loadJsonFileNames();
+        parser = new FieldParser("assets/fields");
+        parser.parseContent(content, fieldFiles);
+        System.out.println(content.getSingleField(0));
+
+        String fileName = Field.FIELD_PREVIEW + content.getSingleField(0).getResourceName();
+
         img = new Texture("badlogic.jpg");
         assets = new AssetManager();
-        assets.load("field.g3db", Model.class);
+        assets.load(fileName, Model.class);
         assets.finishLoading();
-        field = assets.get("field.g3db", Model.class);
+        field = assets.get(fileName, Model.class);
         modelInstance = createModelInstance();
         fieldInstance = new ModelInstance(field, new Vector3(0, 0, 0));
 
