@@ -2,10 +2,11 @@ package com.mygdx.config;
 
 import com.mygdx.model.GameContent;
 
+import java.io.File;
 import java.io.IOException;
 
 interface JsonParser {
 
-    void loadContent(GameContent content) throws IOException;
+    void parseContent(GameContent content, String fileName) throws IOException;
 
 }
