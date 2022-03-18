@@ -1,48 +1,41 @@
 package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client.Updatable;
 import lombok.NonNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 class CameraControl implements Updatable {
 
-    private final static float SPEED = 0.5f;
+    private static final float SPEED = 0.5f;
     private final Camera camera;
-    private boolean movingLeft = false;
-    private boolean movingRight = false;
-    private boolean movingUp = false;
-    private boolean movingDown = false;
+    private final Set<Direction> activeDirections = new HashSet<>();
 
     CameraControl(@NonNull Camera camera) {
         this.camera = camera;
     }
 
     void stopMoving(@NonNull Direction direction) {
-        switch (direction) {
-            case RIGHT -> movingRight = false;
-            case LEFT -> movingLeft = false;
-            case UP -> movingUp = false;
-            case DOWN -> movingDown = false;
-            case ANY -> {
-                movingLeft = false;
-                movingRight = false;
-                movingUp = false;
-                movingDown = false;
-            }
+        if (direction == Direction.ANY) {
+            activeDirections.clear();
+        } else {
+            activeDirections.remove(direction);
         }
     }
 
     void startMoving(@NonNull Direction direction) {
-        switch (direction) {
-            case RIGHT -> movingRight = true;
-            case LEFT -> movingLeft = true;
-            case UP -> movingUp = true;
-            case DOWN -> movingDown = true;
+        if (direction == Direction.ANY) {
+            throw new IllegalArgumentException("Unexpected value: " + direction);
+        } else {
+            activeDirections.add(direction);
         }
     }
 
     boolean isMoving() {
-        return movingDown || movingUp || movingRight || movingLeft;
+        return !activeDirections.isEmpty();
     }
 
     enum Direction {
@@ -51,26 +44,17 @@ class CameraControl implements Updatable {
 
     @Override
     public void update() {
-        float xSpeed = 0f;
-        float ySpeed = 0f;
+        var translationVector = new Vector3(0, 0, 0);
+        activeDirections.forEach(direction -> {
+            switch (direction) {
+                case RIGHT -> translationVector.x += SPEED;
+                case LEFT -> translationVector.x -= SPEED;
+                case UP -> translationVector.z -= SPEED;
+                case DOWN -> translationVector.z += SPEED;
+                default -> throw new IllegalStateException("Unhandled direction: " + direction);
+            }
+        });
 
-        if (movingLeft) {
-            xSpeed -= SPEED;
-        }
-
-        if (movingRight) {
-            xSpeed += SPEED;
-        }
-
-        if (movingDown) {
-            ySpeed -= SPEED;
-        }
-
-        if (movingUp) {
-            ySpeed += SPEED;
-        }
-
-        camera.position.add(xSpeed, ySpeed, 0);
+        camera.position.add(translationVector);
     }
 }
-
