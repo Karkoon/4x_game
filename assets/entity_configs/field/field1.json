@@ -2,6 +2,6 @@
     "id": 1,
     "name": "field",
     "polishName": "pole",
-    "resourceName": "field.g3db",
+    "modelPath": "field.g3db",
     "textureName": "field.png"
 }
