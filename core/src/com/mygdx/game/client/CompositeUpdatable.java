@@ -19,7 +19,7 @@ public class CompositeUpdatable implements Updatable {
 
     @Override
     public void update() {
-        for (Updatable updatable: updatableList) {
+        for (Updatable updatable : updatableList) {
             updatable.update();
         }
     }

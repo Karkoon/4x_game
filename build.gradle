@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -9,13 +7,12 @@ buildscript {
         google()
     }
     dependencies {
-        
-
     }
 }
 
 plugins {
     id "io.freefair.lombok" version "6.4.1"
+    id "org.sonarqube" version "3.2.0"
 }
 
 allprojects {
@@ -68,10 +65,12 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "com.esotericsoftware.spine:spine-libgdx:4.0.18.1"
         api "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-        testImplementation("org.assertj:assertj-core:3.11.1")
-        implementation("org.assertj:assertj-core:3.11.1")
-        implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-        implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+        testImplementation "org.mockito:mockito-core:3.+"
+        testImplementation 'org.mockito:mockito-junit-jupiter:3.+'
+        testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     }
 }
