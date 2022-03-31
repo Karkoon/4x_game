@@ -17,10 +17,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.assets.AssetPaths;
 import com.mygdx.assets.Assets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
-import com.mygdx.game.util.Const;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -68,7 +68,7 @@ public class MyGdxGame extends ApplicationAdapter {
         assets.loadConfig();
         assets.loadAssets();
 
-        img = assets.getTexture(Const.DEMO_TEXTURE_PATH);
+        img = assets.getTexture(AssetPaths.DEMO_TEXTURE_PATH);
         modelInstance = createDebugBoxModelInstance();
 
         var fieldConfig = assets.getGameContentService().getAnyField();
