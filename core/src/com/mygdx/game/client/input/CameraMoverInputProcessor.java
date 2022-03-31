@@ -28,7 +28,6 @@ public final class CameraMoverInputProcessor extends InputAdapter {
         this.viewport = viewport;
     }
 
-
     @Override
     public boolean keyDown(int keycode) {
         if (!handledKeys.contains(keycode)) {

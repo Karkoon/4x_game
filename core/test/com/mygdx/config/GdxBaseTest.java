@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 class GdxBaseTest {
 
+    //TODO fix in #15
     @Test
     void gdx_files_should_not_be_null() {
         assertNotNull(Gdx.files);

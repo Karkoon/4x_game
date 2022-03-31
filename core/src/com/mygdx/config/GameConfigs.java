@@ -9,7 +9,7 @@ import java.util.Map;
 public class GameConfigs {
 
     @NonNull
-    private final Map<Class<? extends EntityConfig>, Map<String, EntityConfig>> entityConfigMap;
+    private final Map<Class<? extends EntityConfig>, Map<Integer, EntityConfig>> entityConfigMap;
 
     public GameConfigs() {
         entityConfigMap = new HashMap<>();
@@ -40,17 +40,17 @@ public class GameConfigs {
             var entityMap = entityConfigMap.get(entityClass);
             putEntityConfigsInMap(entityMap, entityArray);
         } else {
-            var entityMap = new HashMap<String, EntityConfig>();
+            var entityMap = new HashMap<Integer, EntityConfig>();
             putEntityConfigsInMap(entityMap, entityArray);
             entityConfigMap.put(entityClass, entityMap);
         }
     }
 
-    private <T extends EntityConfig> void putEntityConfigsInMap(Map<String, EntityConfig> entityMap,
+    private <T extends EntityConfig> void putEntityConfigsInMap(Map<Integer, EntityConfig> entityMap,
                                                                 Array<T> entityArray) {
         for (var i = 0; i < entityArray.size; i++) {
             var entityConfig = entityArray.get(i);
-            entityMap.put(entityConfig.getName(), entityConfig);
+            entityMap.put(entityConfig.getId(), entityConfig);
         }
     }
 }
