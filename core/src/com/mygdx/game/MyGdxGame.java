@@ -57,8 +57,8 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create() {
         viewport = createViewport();
         assets = new Assets();
-        viewport.getCamera().position.set(0, 75, 75);
-        viewport.getCamera().lookAt(-100, 0, 0);
+        viewport.getCamera().position.set(0, 100, 100);
+        viewport.getCamera().lookAt(0, 0, 0);
 
         var inputProcessor = new CameraMoverInputProcessor(viewport);
         compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
