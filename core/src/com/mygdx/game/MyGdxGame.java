@@ -3,7 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -36,7 +36,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Assets assets;
 
     private @NonNull Viewport createViewport() {
-        Camera camera = new OrthographicCamera(300, 300);
+        Camera camera = new PerspectiveCamera(66, 300, 300);
         camera.near = 1f;
         camera.far = 300f;
         return new ExtendViewport(300, 300, camera);
@@ -57,7 +57,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create() {
         viewport = createViewport();
         assets = new Assets();
-        viewport.getCamera().position.set(0, 100, 100);
+        viewport.getCamera().position.set(0, 75, 75);
         viewport.getCamera().lookAt(-100, 0, 0);
 
         var inputProcessor = new CameraMoverInputProcessor(viewport);

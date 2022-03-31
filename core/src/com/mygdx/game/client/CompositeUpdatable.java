@@ -25,4 +25,3 @@ public class CompositeUpdatable implements Updatable {
     }
 
 }
-
