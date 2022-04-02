@@ -12,6 +12,7 @@ import com.mygdx.assets.assetloaders.JsonLoader;
 import com.mygdx.config.EntityConfig;
 import com.mygdx.config.FieldConfig;
 import com.mygdx.config.GameConfigsService;
+import com.mygdx.config.UnitConfig;
 import lombok.NonNull;
 
 public class Assets implements Disposable {
@@ -28,18 +29,21 @@ public class Assets implements Disposable {
     private void initCustomLoaders() {
         assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
         assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
+        assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void loadConfig() {
-        assetManager.load(AssetPaths.ASSETS_PATH + "entity_configs/field",
-                Array.class,
+        assetManager.load(AssetPaths.FIELD_CONFIG_DIR, Array.class,
                 new ArrayLoaderParameter(FieldConfig.class, "json"));
+        assetManager.load(AssetPaths.UNIT_CONFIG_DIR, Array.class,
+                new ArrayLoaderParameter(UnitConfig.class, "json"));
         assetManager.finishLoading();
     }
 
     public void loadAssets() {
         loadModels(FieldConfig.class);
+        loadModels(UnitConfig.class);
         loadTextures();
         assetManager.finishLoading();
     }

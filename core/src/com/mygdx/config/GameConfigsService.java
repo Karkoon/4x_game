@@ -11,15 +11,26 @@ public class GameConfigsService {
     public GameConfigsService(@NonNull final AssetManager manager) {
         this.gameConfigs = new GameConfigs();
         putAllFields(manager);
+        putAllUnits(manager);
     }
 
     public @NonNull FieldConfig getAnyField() {
         return gameConfigs.getAny(FieldConfig.class);
     }
 
+    public @NonNull UnitConfig getAnyUnit() {
+        return gameConfigs.getAny(UnitConfig.class);
+    }
+
     private void putAllFields(@NonNull AssetManager manager) {
-        Array<FieldConfig> fieldArray = new Array<>();
-        manager.getAll(FieldConfig.class, fieldArray);
-        gameConfigs.putAll(FieldConfig.class, fieldArray);
+        var fieldConfigArray = new Array<FieldConfig>();
+        manager.getAll(FieldConfig.class, fieldConfigArray);
+        gameConfigs.putAll(FieldConfig.class, fieldConfigArray);
+    }
+
+    private void putAllUnits(@NonNull AssetManager manager) {
+        var unitConfigArray = new Array<UnitConfig>();
+        manager.getAll(UnitConfig.class, unitConfigArray);
+        gameConfigs.putAll(UnitConfig.class, unitConfigArray);
     }
 }

@@ -33,6 +33,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Texture img;
     private ModelInstance modelInstance;
     private ModelInstance fieldModelInstance;
+    private ModelInstance unitModelInstance;
     private Assets assets;
 
     private @NonNull Viewport createViewport() {
@@ -74,6 +75,13 @@ public class MyGdxGame extends ApplicationAdapter {
         var fieldConfig = assets.getGameContentService().getAnyField();
         fieldModelInstance = createModelInstance(assets.getModel(fieldConfig));
         fieldModelInstance.transform.set(new Vector3(100, 0, 0), new Quaternion());
+
+        var unitConfig = assets.getGameContentService().getAnyUnit();
+        unitModelInstance = createModelInstance(assets.getModel(unitConfig));
+        unitModelInstance.transform.set(new Vector3(-100, 0, 0),
+                new Quaternion(),
+                new Vector3(0.5f, 0.5f, 0.5f));
+
         batch = new ModelBatch();
     }
 
@@ -85,6 +93,7 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.begin(viewport.getCamera());
         batch.render(modelInstance);
         batch.render(fieldModelInstance);
+        batch.render(unitModelInstance);
         batch.end();
     }
 
