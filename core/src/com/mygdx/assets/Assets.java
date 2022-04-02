@@ -15,11 +15,16 @@ import com.mygdx.config.GameConfigsService;
 import com.mygdx.config.UnitConfig;
 import lombok.NonNull;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class Assets implements Disposable {
 
     @NonNull
     private final AssetManager assetManager;
 
+    @Inject
     public Assets() {
         this.assetManager = new AssetManager();
         initCustomLoaders();

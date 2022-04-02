@@ -48,6 +48,8 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
 
+        implementation 'com.google.dagger:dagger:2.41'
+        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
     }
 }
 
@@ -59,12 +61,14 @@ project(":core") {
     }
 
     dependencies {
-        api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        api "com.esotericsoftware.spine:spine-libgdx:4.0.18.1"
-        api "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        implementation "com.esotericsoftware.spine:spine-libgdx:4.0.18.1"
+        implementation "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
+
+        implementation "com.badlogicgames.ashley:ashley:1.7.4"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -72,5 +76,8 @@ project(":core") {
         testImplementation "org.mockito:mockito-core:3.+"
         testImplementation 'org.mockito:mockito-junit-jupiter:3.+'
         testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+
+        implementation 'com.google.dagger:dagger:2.41'
+        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
     }
 }
