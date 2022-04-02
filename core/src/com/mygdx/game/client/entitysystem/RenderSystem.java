@@ -10,10 +10,14 @@ import com.mygdx.game.client.component.PositionComponent;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class RenderSystem extends IteratingSystem {
 
-    private static final Family RENDER_SYSTEM_FAMILY = Family.one(ModelInstanceComponent.class).get();
+    private static final Family RENDER_SYSTEM_FAMILY = Family.all(
+            ModelInstanceComponent.class, PositionComponent.class
+    ).get();
 
     private final ComponentMapper<ModelInstanceComponent> modelInstanceMapper = ComponentMapper.getFor(ModelInstanceComponent.class);
     private final ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);

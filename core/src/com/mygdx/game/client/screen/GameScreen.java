@@ -1,6 +1,5 @@
 package com.mygdx.game.client.screen;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.assets.AssetPaths;
 import com.mygdx.assets.Assets;
+import com.mygdx.game.GameEngine;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.entityfactory.UnitFactory;
@@ -28,7 +28,7 @@ public class GameScreen extends ScreenAdapter {
     private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
     private final Assets assets;
-    private final Engine engine;
+    private final GameEngine engine;
 
     private final Viewport viewport;
     private final UnitFactory unitFactory;
@@ -38,7 +38,7 @@ public class GameScreen extends ScreenAdapter {
     @Inject
     public GameScreen(@NonNull Assets assets,
                       @NonNull ModelInstanceRenderer renderer,
-                      @NonNull Engine engine,
+                      @NonNull GameEngine engine,
                       @NonNull Viewport viewport,
                       @NonNull UnitFactory unitFactory) {
         this.assets = assets;
@@ -47,7 +47,6 @@ public class GameScreen extends ScreenAdapter {
         this.viewport = viewport;
         this.unitFactory = unitFactory;
     }
-
 
     private void positionCamera(@NonNull Camera camera) {
         camera.position.set(0, 100, 100);
@@ -60,6 +59,8 @@ public class GameScreen extends ScreenAdapter {
         assets.loadAssets();
         positionCamera(viewport.getCamera());
 
+        compositeUpdatable.addUpdatable(engine);
+
         var inputProcessor = new CameraMoverInputProcessor(viewport);
         compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
         Gdx.input.setInputProcessor(inputProcessor);
@@ -69,8 +70,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        compositeUpdatable.update();
-        engine.update(delta);
+        compositeUpdatable.update(delta);
         viewport.getCamera().update();
         renderer.render();
     }

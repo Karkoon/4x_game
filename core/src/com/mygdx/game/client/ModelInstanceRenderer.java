@@ -49,8 +49,8 @@ public class ModelInstanceRenderer implements Disposable {
         float[] val = instance.transform.val;
         return cam.frustum.boundsInFrustum(
                 val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23],
-                5f, 5f, 0f)
-                && cam.position.dst(val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23]) < 55f;
+                500f, 500f, 0f)
+                && cam.position.dst(val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23]) < 5500f;
     }
 
     public void addToCache(ModelInstance modelInstance) {

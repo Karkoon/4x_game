@@ -43,7 +43,7 @@ class CameraControl implements Updatable {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         var translationVector = new Vector3(0, 0, 0);
         activeDirections.forEach(direction -> {
             switch (direction) {
