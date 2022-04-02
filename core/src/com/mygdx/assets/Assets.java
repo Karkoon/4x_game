@@ -16,65 +16,65 @@ import lombok.NonNull;
 
 public class Assets implements Disposable {
 
-    @NonNull
-    private final AssetManager assetManager;
+  @NonNull
+  private final AssetManager assetManager;
 
-    public Assets() {
-        this.assetManager = new AssetManager();
-        initCustomLoaders();
-    }
+  public Assets() {
+    this.assetManager = new AssetManager();
+    initCustomLoaders();
+  }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void initCustomLoaders() {
-        assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
-        assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    }
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void initCustomLoaders() {
+    assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
+  }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void loadConfig() {
-        assetManager.load(AssetPaths.ASSETS_PATH + "entity_configs/field",
-                Array.class,
-                new ArrayLoaderParameter(FieldConfig.class, "json"));
-        assetManager.finishLoading();
-    }
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void loadConfig() {
+    assetManager.load(AssetPaths.ASSETS_PATH + "entity_configs/field",
+        Array.class,
+        new ArrayLoaderParameter(FieldConfig.class, "json"));
+    assetManager.finishLoading();
+  }
 
-    public void loadAssets() {
-        loadModels(FieldConfig.class);
-        loadTextures();
-        assetManager.finishLoading();
-    }
+  public void loadAssets() {
+    loadModels(FieldConfig.class);
+    loadTextures();
+    assetManager.finishLoading();
+  }
 
-    public Model getModel(@NonNull EntityConfig config) {
-        var filename = assetManager.getAssetFileName(config);
-        var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-        return assetManager.get(directory + config.getModelPath());
-    }
+  public Model getModel(@NonNull EntityConfig config) {
+    var filename = assetManager.getAssetFileName(config);
+    var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
+    return assetManager.get(directory + config.getModelPath());
+  }
 
-    public Texture getTexture(@NonNull String path) {
-        return assetManager.get(path, Texture.class);
-    }
+  public Texture getTexture(@NonNull String path) {
+    return assetManager.get(path, Texture.class);
+  }
 
-    public GameConfigsService getGameContentService() {
-        return new GameConfigsService(assetManager);
-    }
+  public GameConfigsService getGameContentService() {
+    return new GameConfigsService(assetManager);
+  }
 
-    @Override
-    public void dispose() {
-        assetManager.dispose();
-    }
+  @Override
+  public void dispose() {
+    assetManager.dispose();
+  }
 
-    private <T extends EntityConfig> void loadModels(@NonNull Class<T> entityConfigClass) {
-        var entityConfigs = new Array<T>();
-        assetManager.getAll(entityConfigClass, entityConfigs);
-        for (var i = 0; i < entityConfigs.size; i++) {
-            var entityConfig = entityConfigs.get(i);
-            var filename = assetManager.getAssetFileName(entityConfig);
-            var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-            assetManager.load(directory + entityConfig.getModelPath(), Model.class);
-        }
+  private <T extends EntityConfig> void loadModels(@NonNull Class<T> entityConfigClass) {
+    var entityConfigs = new Array<T>();
+    assetManager.getAll(entityConfigClass, entityConfigs);
+    for (var i = 0; i < entityConfigs.size; i++) {
+      var entityConfig = entityConfigs.get(i);
+      var filename = assetManager.getAssetFileName(entityConfig);
+      var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
+      assetManager.load(directory + entityConfig.getModelPath(), Model.class);
     }
+  }
 
-    private void loadTextures() {
-        assetManager.load(AssetPaths.DEMO_TEXTURE_PATH, Texture.class);
-    }
+  private void loadTextures() {
+    assetManager.load(AssetPaths.DEMO_TEXTURE_PATH, Texture.class);
+  }
 }
