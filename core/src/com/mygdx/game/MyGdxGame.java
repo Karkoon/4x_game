@@ -7,25 +7,33 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.assets.AssetPaths;
+import com.mygdx.assets.Assets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
+@Log
 public class MyGdxGame extends ApplicationAdapter {
 
-    CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
-    Viewport viewport;
-    ModelBatch batch;
-    Texture img;
-    ModelInstance modelInstance;
+    private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
+    private Viewport viewport;
+    private ModelBatch batch;
+    private Texture img;
+    private ModelInstance modelInstance;
+    private ModelInstance fieldModelInstance;
+    private Assets assets;
 
     private @NonNull Viewport createViewport() {
         Camera camera = new PerspectiveCamera(66, 300, 300);
@@ -34,27 +42,38 @@ public class MyGdxGame extends ApplicationAdapter {
         return new ExtendViewport(300, 300, camera);
     }
 
-    private @NonNull ModelInstance createModelInstance() {
+    private @NonNull ModelInstance createDebugBoxModelInstance() {
         var model = new ModelBuilder().createBox(25, 25, 25,
                 new Material(TextureAttribute.createDiffuse(img)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);
         return new ModelInstance(model, new Vector3(0, 0, 0));
     }
 
+    private @NonNull ModelInstance createModelInstance(Model model) {
+        return new ModelInstance(model, new Vector3(0, 0, 0));
+    }
+
     @Override
     public void create() {
         viewport = createViewport();
-
-        viewport.getCamera().position.set(0, 75, 75);
+        assets = new Assets();
+        viewport.getCamera().position.set(0, 100, 100);
         viewport.getCamera().lookAt(0, 0, 0);
 
         var inputProcessor = new CameraMoverInputProcessor(viewport);
         compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
         Gdx.input.setInputProcessor(inputProcessor);
 
-        img = new Texture("badlogic.jpg");
-        modelInstance = createModelInstance();
 
+        assets.loadConfig();
+        assets.loadAssets();
+
+        img = assets.getTexture(AssetPaths.DEMO_TEXTURE_PATH);
+        modelInstance = createDebugBoxModelInstance();
+
+        var fieldConfig = assets.getGameContentService().getAnyField();
+        fieldModelInstance = createModelInstance(assets.getModel(fieldConfig));
+        fieldModelInstance.transform.set(new Vector3(100, 0, 0), new Quaternion());
         batch = new ModelBatch();
     }
 
@@ -65,13 +84,15 @@ public class MyGdxGame extends ApplicationAdapter {
         viewport.getCamera().update();
         batch.begin(viewport.getCamera());
         batch.render(modelInstance);
+        batch.render(fieldModelInstance);
         batch.end();
     }
-    
+
     @Override
     public void dispose() {
         batch.dispose();
         img.dispose();
+        assets.dispose();
     }
 
     @Override
