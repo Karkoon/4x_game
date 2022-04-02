@@ -16,8 +16,8 @@ public class GameConfigs {
     }
 
     public <T extends EntityConfig> T get(@NonNull final Class<T> entityClass,
-                                          @NonNull final String entityName) {
-        return entityClass.cast(entityConfigMap.get(entityClass).get(entityName));
+                                          @NonNull final Integer entityId) {
+        return entityClass.cast(entityConfigMap.get(entityClass).get(entityId));
     }
 
     @NonNull
