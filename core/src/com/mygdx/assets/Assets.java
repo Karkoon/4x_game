@@ -47,7 +47,7 @@ public class Assets implements Disposable {
     public Model getModel(@NonNull EntityConfig config) {
         var filename = assetManager.getAssetFileName(config);
         var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-        return assetManager.get(directory + config.getName() + ".g3db");
+        return assetManager.get(directory + config.getModelPath());
     }
 
     public Texture getTexture(@NonNull String path) {
@@ -63,9 +63,9 @@ public class Assets implements Disposable {
         assetManager.dispose();
     }
 
-    private <T extends EntityConfig> void loadModels(@NonNull Class<T> clazz) {
+    private <T extends EntityConfig> void loadModels(@NonNull Class<T> entityConfigClass) {
         var entityConfigs = new Array<T>();
-        assetManager.getAll(clazz, entityConfigs);
+        assetManager.getAll(entityConfigClass, entityConfigs);
         for (var i = 0; i < entityConfigs.size; i++) {
             var entityConfig = entityConfigs.get(i);
             var filename = assetManager.getAssetFileName(entityConfig);
