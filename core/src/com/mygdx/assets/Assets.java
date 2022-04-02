@@ -44,16 +44,17 @@ public class Assets implements Disposable {
         assetManager.finishLoading();
     }
 
+    @NonNull
     public Model getModel(@NonNull EntityConfig config) {
-        var filename = assetManager.getAssetFileName(config);
-        var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-        return assetManager.get(directory + config.getModelPath());
+        return assetManager.get(AssetPaths.MODEL_DIR + config.getModelPath());
     }
 
+    @NonNull
     public Texture getTexture(@NonNull String path) {
         return assetManager.get(path, Texture.class);
     }
 
+    @NonNull
     public GameConfigsService getGameContentService() {
         return new GameConfigsService(assetManager);
     }
@@ -68,9 +69,7 @@ public class Assets implements Disposable {
         assetManager.getAll(entityConfigClass, entityConfigs);
         for (var i = 0; i < entityConfigs.size; i++) {
             var entityConfig = entityConfigs.get(i);
-            var filename = assetManager.getAssetFileName(entityConfig);
-            var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-            assetManager.load(directory + entityConfig.getModelPath(), Model.class);
+            assetManager.load(AssetPaths.MODEL_DIR + entityConfig.getModelPath(), Model.class);
         }
     }
 
