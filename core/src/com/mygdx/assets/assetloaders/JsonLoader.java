@@ -15,33 +15,33 @@ import lombok.NonNull;
 
 public class JsonLoader<T> extends AsynchronousAssetLoader<T, JsonLoaderParameters<T>> {
 
-    private final Json json = new Json();
-    private T objectToLoad;
+  private final Json json = new Json();
+  private T objectToLoad;
 
-    public JsonLoader(FileHandleResolver resolver) {
-        super(resolver);
-    }
+  public JsonLoader(FileHandleResolver resolver) {
+    super(resolver);
+  }
 
-    @Override
-    public void loadAsync(AssetManager manager, String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
-        objectToLoad = json.fromJson(parameter.getLoadedObjectClass(), file);
-    }
+  @Override
+  public void loadAsync(AssetManager manager, String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
+    objectToLoad = json.fromJson(parameter.getLoadedObjectClass(), file);
+  }
 
-    @Override
-    public T loadSync(AssetManager manager, String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
-        return objectToLoad;
-    }
+  @Override
+  public T loadSync(AssetManager manager, String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
+    return objectToLoad;
+  }
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
-        return null;
-    }
+  @Override
+  @SuppressWarnings("rawtypes")
+  public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, JsonLoaderParameters<T> parameter) {
+    return null;
+  }
 
-    @AllArgsConstructor
-    @Getter
-    public static class JsonLoaderParameters<T> extends AssetLoaderParameters<T> {
-        @NonNull
-        private final Class<T> loadedObjectClass;
-    }
+  @AllArgsConstructor
+  @Getter
+  public static class JsonLoaderParameters<T> extends AssetLoaderParameters<T> {
+    @NonNull
+    private final Class<T> loadedObjectClass;
+  }
 }

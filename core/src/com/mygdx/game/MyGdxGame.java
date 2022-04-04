@@ -27,76 +27,76 @@ import lombok.extern.java.Log;
 @Log
 public class MyGdxGame extends ApplicationAdapter {
 
-    private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
-    private Viewport viewport;
-    private ModelBatch batch;
-    private Texture img;
-    private ModelInstance modelInstance;
-    private ModelInstance fieldModelInstance;
-    private Assets assets;
+  private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
+  private Viewport viewport;
+  private ModelBatch batch;
+  private Texture img;
+  private ModelInstance modelInstance;
+  private ModelInstance fieldModelInstance;
+  private Assets assets;
 
-    private @NonNull Viewport createViewport() {
-        Camera camera = new PerspectiveCamera(66, 300, 300);
-        camera.near = 1f;
-        camera.far = 300f;
-        return new ExtendViewport(300, 300, camera);
-    }
+  private @NonNull Viewport createViewport() {
+    Camera camera = new PerspectiveCamera(66, 300, 300);
+    camera.near = 1f;
+    camera.far = 300f;
+    return new ExtendViewport(300, 300, camera);
+  }
 
-    private @NonNull ModelInstance createDebugBoxModelInstance() {
-        var model = new ModelBuilder().createBox(25, 25, 25,
-                new Material(TextureAttribute.createDiffuse(img)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);
-        return new ModelInstance(model, new Vector3(0, 0, 0));
-    }
+  private @NonNull ModelInstance createDebugBoxModelInstance() {
+    var model = new ModelBuilder().createBox(25, 25, 25,
+        new Material(TextureAttribute.createDiffuse(img)),
+        VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);
+    return new ModelInstance(model, new Vector3(0, 0, 0));
+  }
 
-    private @NonNull ModelInstance createModelInstance(Model model) {
-        return new ModelInstance(model, new Vector3(0, 0, 0));
-    }
+  private @NonNull ModelInstance createModelInstance(Model model) {
+    return new ModelInstance(model, new Vector3(0, 0, 0));
+  }
 
-    @Override
-    public void create() {
-        viewport = createViewport();
-        assets = new Assets();
-        viewport.getCamera().position.set(0, 100, 100);
-        viewport.getCamera().lookAt(0, 0, 0);
+  @Override
+  public void create() {
+    viewport = createViewport();
+    assets = new Assets();
+    viewport.getCamera().position.set(0, 100, 100);
+    viewport.getCamera().lookAt(0, 0, 0);
 
-        var inputProcessor = new CameraMoverInputProcessor(viewport);
-        compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
-        Gdx.input.setInputProcessor(inputProcessor);
+    var inputProcessor = new CameraMoverInputProcessor(viewport);
+    compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
+    Gdx.input.setInputProcessor(inputProcessor);
 
 
-        assets.loadConfig();
-        assets.loadAssets();
+    assets.loadConfig();
+    assets.loadAssets();
 
-        img = assets.getTexture(AssetPaths.DEMO_TEXTURE_PATH);
-        modelInstance = createDebugBoxModelInstance();
+    img = assets.getTexture(AssetPaths.DEMO_TEXTURE_PATH);
+    modelInstance = createDebugBoxModelInstance();
 
-        var fieldConfig = assets.getGameContentService().getAnyField();
-        fieldModelInstance = createModelInstance(assets.getModel(fieldConfig));
-        fieldModelInstance.transform.set(new Vector3(100, 0, 0), new Quaternion());
-        batch = new ModelBatch();
-    }
+    var fieldConfig = assets.getGameContentService().getAnyField();
+    fieldModelInstance = createModelInstance(assets.getModel(fieldConfig));
+    fieldModelInstance.transform.set(new Vector3(100, 0, 0), new Quaternion());
+    batch = new ModelBatch();
+  }
 
-    @Override
-    public void render() {
-        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
-        compositeUpdatable.update();
-        viewport.getCamera().update();
-        batch.begin(viewport.getCamera());
-        batch.render(modelInstance);
-        batch.render(fieldModelInstance);
-        batch.end();
-    }
+  @Override
+  public void render() {
+    ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
+    compositeUpdatable.update();
+    viewport.getCamera().update();
+    batch.begin(viewport.getCamera());
+    batch.render(modelInstance);
+    batch.render(fieldModelInstance);
+    batch.end();
+  }
 
-    @Override
-    public void dispose() {
-        batch.dispose();
-        img.dispose();
-        assets.dispose();
-    }
+  @Override
+  public void dispose() {
+    batch.dispose();
+    img.dispose();
+    assets.dispose();
+  }
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height);
+  }
 }

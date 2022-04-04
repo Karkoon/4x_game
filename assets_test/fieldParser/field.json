@@ -1,7 +1,7 @@
 {
-    "id": 1,
-    "name": "field",
-    "polishName": "pole",
-    "resourceName": "field.g3db",
-    "textureName": "field1.png"
+  "id": 1,
+  "name": "field",
+  "polishName": "pole",
+  "resourceName": "field.g3db",
+  "textureName": "field1.png"
 }
