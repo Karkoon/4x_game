@@ -21,10 +21,6 @@ public class MyGdxGame extends Game {
         this.gameScreen = gameScreen;
     }
 
-    private void changeToGameScreen() {
-        setScreen(gameScreen.get());
-    }
-
     @Override
     public void create() {
         changeToGameScreen();
@@ -34,5 +30,9 @@ public class MyGdxGame extends Game {
     public void render() {
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
         super.render();
+    }
+
+    private void changeToGameScreen() {
+        setScreen(gameScreen.get());
     }
 }

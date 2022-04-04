@@ -8,9 +8,6 @@ import lombok.NonNull;
 @Data
 public class PositionComponent implements Component {
 
-    private @NonNull Vector3 position;
+    private @NonNull Vector3 position = new Vector3();
 
-    public PositionComponent() {
-        this.position = new Vector3();
-    }
 }
