@@ -8,6 +8,6 @@ public class DesktopLauncher {
     public static void main(String[] arg) {
         var config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
-        new Lwjgl3Application(DaggerGameComponent.create().providesGame(), config);
+        new Lwjgl3Application(DaggerGameFactory.create().providesGame(), config);
     }
 }
