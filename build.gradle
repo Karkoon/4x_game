@@ -47,9 +47,6 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
-
-        implementation 'com.google.dagger:dagger:2.41'
-        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
     }
 }
 
