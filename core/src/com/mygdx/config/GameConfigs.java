@@ -27,6 +27,16 @@ public class GameConfigs {
                 .findAny().orElseThrow());
     }
 
+    @NonNull
+    public Array<EntityConfig> getAll() {
+        var array = new Array<EntityConfig>();
+        entityConfigMap.values()
+                .stream()
+                .flatMap(v -> v.values().stream())
+                .forEach(array::add);
+        return array;
+    }
+
     public <T extends EntityConfig> void put(@NonNull final Class<T> entityClass,
                                              @NonNull final T entityConfig) {
         var singleItemArray = new Array<T>(1);

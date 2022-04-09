@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.assets.AssetPaths;
 import com.mygdx.assets.Assets;
+import com.mygdx.config.UnitConfig;
 import com.mygdx.game.GameEngine;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
@@ -55,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        assets.loadConfig();
+        assets.loadConfigs();
         assets.loadAssets();
         positionCamera(viewport.getCamera());
 
@@ -65,7 +66,7 @@ public class GameScreen extends ScreenAdapter {
         compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
         Gdx.input.setInputProcessor(inputProcessor);
 
-        unitFactory.createUnit(assets.getGameContentService().getAnyUnit());
+        unitFactory.createUnit(assets.getGameConfigs().getAny(UnitConfig.class));
     }
 
     @Override

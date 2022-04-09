@@ -11,7 +11,7 @@ import com.mygdx.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 import com.mygdx.assets.assetloaders.JsonLoader;
 import com.mygdx.config.EntityConfig;
 import com.mygdx.config.FieldConfig;
-import com.mygdx.config.GameConfigsService;
+import com.mygdx.config.GameConfigs;
 import com.mygdx.config.UnitConfig;
 import lombok.NonNull;
 
@@ -23,6 +23,9 @@ public class Assets implements Disposable {
 
     @NonNull
     private final AssetManager assetManager;
+
+    @NonNull
+    private final GameConfigs gameConfigs = new GameConfigs();
 
     @Inject
     public Assets() {
@@ -38,17 +41,18 @@ public class Assets implements Disposable {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void loadConfig() {
+    public void loadConfigs() {
         assetManager.load(AssetPaths.FIELD_CONFIG_DIR, Array.class,
                 new ArrayLoaderParameter(FieldConfig.class, "json"));
         assetManager.load(AssetPaths.UNIT_CONFIG_DIR, Array.class,
                 new ArrayLoaderParameter(UnitConfig.class, "json"));
         assetManager.finishLoading();
+
+        populateGameConfigs();
     }
 
     public void loadAssets() {
-        loadModels(FieldConfig.class);
-        loadModels(UnitConfig.class);
+        loadModels(getGameConfigs().getAll());
         loadTextures();
         assetManager.finishLoading();
     }
@@ -64,8 +68,8 @@ public class Assets implements Disposable {
     }
 
     @NonNull
-    public GameConfigsService getGameContentService() {
-        return new GameConfigsService(assetManager);
+    public GameConfigs getGameConfigs() {
+        return gameConfigs;
     }
 
     @Override
@@ -73,9 +77,7 @@ public class Assets implements Disposable {
         assetManager.dispose();
     }
 
-    private <T extends EntityConfig> void loadModels(@NonNull Class<T> entityConfigClass) {
-        var entityConfigs = new Array<T>();
-        assetManager.getAll(entityConfigClass, entityConfigs);
+    private void loadModels(@NonNull Array<EntityConfig> entityConfigs) {
         for (var i = 0; i < entityConfigs.size; i++) {
             var entityConfig = entityConfigs.get(i);
             assetManager.load(AssetPaths.MODEL_DIR + entityConfig.getModelPath(), Model.class);
@@ -84,5 +86,10 @@ public class Assets implements Disposable {
 
     private void loadTextures() {
         assetManager.load(AssetPaths.DEMO_TEXTURE_PATH, Texture.class);
+    }
+
+    private void populateGameConfigs() {
+        gameConfigs.putAll(FieldConfig.class, assetManager.getAll(FieldConfig.class, new Array<>()));
+        gameConfigs.putAll(UnitConfig.class, assetManager.getAll(UnitConfig.class, new Array<>()));
     }
 }
