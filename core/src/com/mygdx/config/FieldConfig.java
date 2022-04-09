@@ -9,13 +9,13 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FieldConfig implements EntityConfig {
-    private int id;
-    @NonNull
-    private String name;
-    @NonNull
-    private String polishName;
-    @NonNull
-    private String modelPath;
-    @NonNull
-    private String textureName;
+  private int id;
+  @NonNull
+  private String name;
+  @NonNull
+  private String polishName;
+  @NonNull
+  private String modelPath;
+  @NonNull
+  private String textureName;
 }

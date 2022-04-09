@@ -16,57 +16,57 @@ import javax.inject.Singleton;
 @Singleton
 public class ModelInstanceRenderer implements Disposable {
 
-    private final ModelBatch modelBatch;
-    private final ModelCache cache;
-    private final Array<ModelInstance> modelInstances;
+  private final ModelBatch modelBatch;
+  private final ModelCache cache;
+  private final Array<ModelInstance> modelInstances;
 
-    private final Camera camera;
+  private final Camera camera;
 
-    @Inject
-    public ModelInstanceRenderer(@NonNull Viewport viewport) {
-        this.camera = viewport.getCamera();
-        this.cache = new ModelCache();
-        this.modelBatch = new ModelBatch();
-        this.modelInstances = new Array<>();
+  @Inject
+  public ModelInstanceRenderer(@NonNull Viewport viewport) {
+    this.camera = viewport.getCamera();
+    this.cache = new ModelCache();
+    this.modelBatch = new ModelBatch();
+    this.modelInstances = new Array<>();
+  }
+
+  public void render() {
+    performFrustumCullingToModelCache();
+    modelInstances.clear();
+    modelBatch.begin(camera);
+    modelBatch.render(cache);
+    modelBatch.end();
+  }
+
+  private void performFrustumCullingToModelCache() {
+    cache.begin(camera);
+    for (var i = 0; i < modelInstances.size; i++) {
+      var modelInstance = modelInstances.get(i);
+      if (isVisible(camera, modelInstance)) {
+        cache.add(modelInstance);
+      }
     }
+    cache.end();
+  }
 
-    public void render() {
-        performFrustumCullingToModelCache();
-        modelInstances.clear();
-        modelBatch.begin(camera);
-        modelBatch.render(cache);
-        modelBatch.end();
-    }
+  private boolean isVisible(Camera cam, ModelInstance instance) {
+    float[] val = instance.transform.val;
+    return cam.frustum.boundsInFrustum(
+        val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23],
+        500f, 500f, 0f)
+        && cam.position.dst(val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23]) < 5500f;
+  }
 
-    private void performFrustumCullingToModelCache() {
-        cache.begin(camera);
-        for (var i = 0; i < modelInstances.size; i++) {
-            var modelInstance = modelInstances.get(i);
-            if (isVisible(camera, modelInstance)) {
-                cache.add(modelInstance);
-            }
-        }
-        cache.end();
-    }
+  public void addToCache(ModelInstance modelInstance) {
+    modelInstances.add(modelInstance);
+  }
 
-    private boolean isVisible(Camera cam, ModelInstance instance) {
-        float[] val = instance.transform.val;
-        return cam.frustum.boundsInFrustum(
-                val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23],
-                500f, 500f, 0f)
-                && cam.position.dst(val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23]) < 5500f;
-    }
+  public void addToCache(Array<ModelInstance> modelInstances) {
+    this.modelInstances.addAll(modelInstances);
+  }
 
-    public void addToCache(ModelInstance modelInstance) {
-        modelInstances.add(modelInstance);
-    }
-
-    public void addToCache(Array<ModelInstance> modelInstances) {
-        this.modelInstances.addAll(modelInstances);
-    }
-
-    @Override
-    public void dispose() {
-        cache.dispose();
-    }
+  @Override
+  public void dispose() {
+    cache.dispose();
+  }
 }

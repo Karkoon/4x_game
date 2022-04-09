@@ -10,9 +10,9 @@ import javax.inject.Singleton;
 
 @Module
 public class EngineModule {
-    @Provides
-    @Singleton
-    public @NonNull Engine providesEngine() {
-        return new PooledEngine();
-    }
+  @Provides
+  @Singleton
+  public @NonNull Engine providesEngine() {
+    return new PooledEngine();
+  }
 }

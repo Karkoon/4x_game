@@ -9,6 +9,6 @@ import javax.inject.Singleton;
 @Singleton
 @Component(modules = {ViewportModule.class, EngineModule.class})
 public interface GameFactory {
-    MyGdxGame providesGame();
+  MyGdxGame providesGame();
 }
 

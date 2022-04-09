@@ -14,25 +14,25 @@ import javax.inject.Singleton;
 @Singleton
 public class MyGdxGame extends Game {
 
-    private final Lazy<GameScreen> gameScreen;
+  private final Lazy<GameScreen> gameScreen;
 
-    @Inject
-    MyGdxGame(@NonNull Lazy<GameScreen> gameScreen) {
-        this.gameScreen = gameScreen;
-    }
+  @Inject
+  MyGdxGame(@NonNull Lazy<GameScreen> gameScreen) {
+    this.gameScreen = gameScreen;
+  }
 
-    @Override
-    public void create() {
-        changeToGameScreen();
-    }
+  @Override
+  public void create() {
+    changeToGameScreen();
+  }
 
-    @Override
-    public void render() {
-        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
-        super.render();
-    }
+  @Override
+  public void render() {
+    ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
+    super.render();
+  }
 
-    private void changeToGameScreen() {
-        setScreen(gameScreen.get());
-    }
+  private void changeToGameScreen() {
+    setScreen(gameScreen.get());
+  }
 }

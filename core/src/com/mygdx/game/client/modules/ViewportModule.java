@@ -12,12 +12,12 @@ import javax.inject.Singleton;
 
 @Module
 public class ViewportModule {
-    @Provides
-    @Singleton
-    public @NonNull Viewport providesViewport() {
-        Camera camera = new PerspectiveCamera(66, 300, 300);
-        camera.near = 1f;
-        camera.far = 300f;
-        return new ExtendViewport(300, 300, camera);
-    }
+  @Provides
+  @Singleton
+  public @NonNull Viewport providesViewport() {
+    Camera camera = new PerspectiveCamera(66, 300, 300);
+    camera.near = 1f;
+    camera.far = 300f;
+    return new ExtendViewport(300, 300, camera);
+  }
 }

@@ -12,9 +12,9 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class ModelInstanceComponent implements Component {
 
-    private @NonNull ModelInstance modelInstance;
+  private @NonNull ModelInstance modelInstance;
 
-    public void setModelInstanceFromModel(@NonNull Model model) {
-        this.modelInstance = new ModelInstance(model, new Vector3());
-    }
+  public void setModelInstanceFromModel(@NonNull Model model) {
+    this.modelInstance = new ModelInstance(model, new Vector3());
+  }
 }

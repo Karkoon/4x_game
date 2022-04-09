@@ -16,25 +16,25 @@ import java.util.logging.Level;
 @Log
 public class UnitFactory {
 
-    private final Engine engine;
-    private final Assets assets;
+  private final Engine engine;
+  private final Assets assets;
 
-    @Inject
-    public UnitFactory(@NonNull Engine engine, @NonNull Assets assets) {
-        this.engine = engine;
-        this.assets = assets;
-    }
+  @Inject
+  public UnitFactory(@NonNull Engine engine, @NonNull Assets assets) {
+    this.engine = engine;
+    this.assets = assets;
+  }
 
-    @NonNull
-    public void createUnit(@NonNull UnitConfig config) {
-        var entity = engine.createEntity();
-        var positionComponent = engine.createComponent(PositionComponent.class);
-        entity.add(positionComponent);
-        var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-        modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config));
-        entity.add(modelInstanceComponent);
-        engine.addEntity(entity);
-        log.log(Level.INFO, "Added a unit.");
-    }
+  @NonNull
+  public void createUnit(@NonNull UnitConfig config) {
+    var entity = engine.createEntity();
+    var positionComponent = engine.createComponent(PositionComponent.class);
+    entity.add(positionComponent);
+    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
+    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config));
+    entity.add(modelInstanceComponent);
+    engine.addEntity(entity);
+    log.log(Level.INFO, "Added a unit.");
+  }
 
 }
