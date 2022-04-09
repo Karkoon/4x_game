@@ -31,6 +31,14 @@ public class ModelInstanceRenderer implements Disposable {
     }
 
     public void render() {
+        performFrustumCullingToModelCache();
+        modelInstances.clear();
+        modelBatch.begin(camera);
+        modelBatch.render(cache);
+        modelBatch.end();
+    }
+
+    private void performFrustumCullingToModelCache() {
         cache.begin(camera);
         for (var i = 0; i < modelInstances.size; i++) {
             var modelInstance = modelInstances.get(i);
@@ -39,10 +47,6 @@ public class ModelInstanceRenderer implements Disposable {
             }
         }
         cache.end();
-        modelInstances.clear();
-        modelBatch.begin(camera);
-        modelBatch.render(cache);
-        modelBatch.end();
     }
 
     private boolean isVisible(Camera cam, ModelInstance instance) {
