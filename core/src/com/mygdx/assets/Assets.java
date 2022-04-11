@@ -11,14 +11,23 @@ import com.mygdx.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 import com.mygdx.assets.assetloaders.JsonLoader;
 import com.mygdx.config.EntityConfig;
 import com.mygdx.config.FieldConfig;
-import com.mygdx.config.GameConfigsService;
+import com.mygdx.config.GameConfigs;
+import com.mygdx.config.UnitConfig;
 import lombok.NonNull;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class Assets implements Disposable {
 
   @NonNull
   private final AssetManager assetManager;
 
+  @NonNull
+  private final GameConfigs gameConfigs = new GameConfigs();
+
+  @Inject
   public Assets() {
     this.assetManager = new AssetManager();
     initCustomLoaders();
@@ -28,34 +37,39 @@ public class Assets implements Disposable {
   private void initCustomLoaders() {
     assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
+    assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public void loadConfig() {
-    assetManager.load(AssetPaths.ASSETS_PATH + "entity_configs/field",
-        Array.class,
+  public void loadConfigs() {
+    assetManager.load(AssetPaths.FIELD_CONFIG_DIR, Array.class,
         new ArrayLoaderParameter(FieldConfig.class, "json"));
+    assetManager.load(AssetPaths.UNIT_CONFIG_DIR, Array.class,
+        new ArrayLoaderParameter(UnitConfig.class, "json"));
     assetManager.finishLoading();
+
+    populateGameConfigs();
   }
 
   public void loadAssets() {
-    loadModels(FieldConfig.class);
+    loadModels(getGameConfigs().getAll());
     loadTextures();
     assetManager.finishLoading();
   }
 
+  @NonNull
   public Model getModel(@NonNull EntityConfig config) {
-    var filename = assetManager.getAssetFileName(config);
-    var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-    return assetManager.get(directory + config.getModelPath());
+    return assetManager.get(AssetPaths.MODEL_DIR + config.getModelPath());
   }
 
+  @NonNull
   public Texture getTexture(@NonNull String path) {
     return assetManager.get(path, Texture.class);
   }
 
-  public GameConfigsService getGameContentService() {
-    return new GameConfigsService(assetManager);
+  @NonNull
+  public GameConfigs getGameConfigs() {
+    return gameConfigs;
   }
 
   @Override
@@ -63,18 +77,19 @@ public class Assets implements Disposable {
     assetManager.dispose();
   }
 
-  private <T extends EntityConfig> void loadModels(@NonNull Class<T> entityConfigClass) {
-    var entityConfigs = new Array<T>();
-    assetManager.getAll(entityConfigClass, entityConfigs);
+  private void loadModels(@NonNull Array<EntityConfig> entityConfigs) {
     for (var i = 0; i < entityConfigs.size; i++) {
       var entityConfig = entityConfigs.get(i);
-      var filename = assetManager.getAssetFileName(entityConfig);
-      var directory = filename.substring(0, filename.lastIndexOf("/") + 1);
-      assetManager.load(directory + entityConfig.getModelPath(), Model.class);
+      assetManager.load(AssetPaths.MODEL_DIR + entityConfig.getModelPath(), Model.class);
     }
   }
 
   private void loadTextures() {
     assetManager.load(AssetPaths.DEMO_TEXTURE_PATH, Texture.class);
+  }
+
+  private void populateGameConfigs() {
+    gameConfigs.putAll(FieldConfig.class, assetManager.getAll(FieldConfig.class, new Array<>()));
+    gameConfigs.putAll(UnitConfig.class, assetManager.getAll(UnitConfig.class, new Array<>()));
   }
 }

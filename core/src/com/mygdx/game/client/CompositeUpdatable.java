@@ -18,9 +18,9 @@ public class CompositeUpdatable implements Updatable {
   }
 
   @Override
-  public void update() {
+  public void update(float delta) {
     for (Updatable updatable : updatableList) {
-      updatable.update();
+      updatable.update(delta);
     }
   }
 

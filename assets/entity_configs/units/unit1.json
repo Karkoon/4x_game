@@ -1,0 +1,7 @@
+{
+    "id": 1,
+    "name": "unit",
+    "polishName": "jednostka",
+    "modelPath": "field.g3db",
+    "textureName": "unit.png"
+}
