@@ -5,6 +5,7 @@ import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.component.StatsComponent;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -31,6 +32,7 @@ public class UnitFactory {
     var entity = engine.createEntity();
     entity.add(engine.createComponent(PositionComponent.class));
     entity.add(setUpModelInstanceComponent(config));
+    entity.add(engine.createComponent(StatsComponent.class));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
   }
