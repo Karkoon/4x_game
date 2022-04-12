@@ -1,4 +1,4 @@
-package com.mygdx.assets.assetloaders;
+package com.mygdx.game.assets.assetloaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -7,12 +7,12 @@ import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.assets.assetloaders.JsonLoader.JsonLoaderParameters;
+import com.mygdx.game.assets.assetloaders.JsonLoader.JsonLoaderParameters;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-import static com.mygdx.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
+import static com.mygdx.game.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 
 public class ArrayLoader<T> extends AsynchronousAssetLoader<Array<T>, ArrayLoaderParameter<T>> {
 

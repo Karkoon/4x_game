@@ -1,4 +1,4 @@
-package com.mygdx.assets;
+package com.mygdx.game.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -6,17 +6,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.mygdx.assets.assetloaders.ArrayLoader;
-import com.mygdx.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
-import com.mygdx.assets.assetloaders.JsonLoader;
-import com.mygdx.config.EntityConfig;
-import com.mygdx.config.FieldConfig;
-import com.mygdx.config.GameConfigs;
-import com.mygdx.config.UnitConfig;
+import com.mygdx.game.assets.assetloaders.ArrayLoader;
+import com.mygdx.game.assets.assetloaders.JsonLoader;
+import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.FieldConfig;
+import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static com.mygdx.game.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 
 @Singleton
 public class Assets implements Disposable {

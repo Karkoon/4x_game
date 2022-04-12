@@ -1,4 +1,4 @@
-package com.mygdx.assets.assetloaders;
+package com.mygdx.game.assets.assetloaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.mygdx.assets.assetloaders.JsonLoader.JsonLoaderParameters;
+import com.mygdx.game.assets.assetloaders.JsonLoader.JsonLoaderParameters;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
