@@ -29,7 +29,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   @Override
-  public @NonNull Unit createEntity(@NonNull UnitConfig config) {
+  public @NonNull Unit createEntity(@NonNull UnitConfig config, int x, int y) {
     var entity = engine.createEntity();
     var positionComponent = engine.createComponent(PositionComponent.class);
     entity.add(positionComponent);

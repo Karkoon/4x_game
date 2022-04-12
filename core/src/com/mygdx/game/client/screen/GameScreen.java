@@ -10,14 +10,16 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.assets.AssetPaths;
+import com.mygdx.assets.Assets;
 import com.mygdx.game.GameEngine;
-import com.mygdx.game.assets.AssetPaths;
-import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
+import com.mygdx.game.client.entityfactory.FieldFactory;
 import com.mygdx.game.client.entityfactory.UnitFactory;
+import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
-import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.client.model.GameState;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -32,25 +34,29 @@ public class GameScreen extends ScreenAdapter {
   private final GameEngine engine;
 
   private final Viewport viewport;
-  private final UnitFactory unitFactory;
+  private final FieldFactory fieldFactory;
 
   private final ModelInstanceRenderer renderer;
+
+  private final GameState gameState;
 
   @Inject
   public GameScreen(@NonNull Assets assets,
                     @NonNull ModelInstanceRenderer renderer,
                     @NonNull GameEngine engine,
                     @NonNull Viewport viewport,
-                    @NonNull UnitFactory unitFactory) {
+                    @NonNull FieldFactory fieldFactory,
+                    @NonNull GameState gameState) {
     this.assets = assets;
     this.engine = engine;
     this.renderer = renderer;
     this.viewport = viewport;
-    this.unitFactory = unitFactory;
+    this.fieldFactory = fieldFactory;
+    this.gameState = gameState;
   }
 
   private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 100, 100);
+    camera.position.set(0, 100, 200);
     camera.lookAt(0, 0, 0);
   }
 
@@ -66,7 +72,7 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputProcessor);
 
-    unitFactory.createEntity(assets.getGameConfigs().getAny(UnitConfig.class));
+    gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
   }
 
   @Override

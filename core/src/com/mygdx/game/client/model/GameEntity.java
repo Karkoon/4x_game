@@ -13,9 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class GameEntity<T extends EntityConfig> {
 
-    @NonNull
     private int xPosition;
-    @NonNull
     private int yPosition;
     @NonNull
     private T entityConfig;

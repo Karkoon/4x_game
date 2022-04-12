@@ -17,6 +17,6 @@ public abstract class EntityFactory<T extends EntityConfig> {
     }
 
     @NonNull
-    public abstract GameEntity<T> createEntity(T entityConfig);
+    public abstract GameEntity<T> createEntity(T entityConfig, int x, int y);
 
 }
