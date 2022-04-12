@@ -1,4 +1,4 @@
-package com.mygdx.config;
+package com.mygdx.game.config;
 
 import lombok.NonNull;
 

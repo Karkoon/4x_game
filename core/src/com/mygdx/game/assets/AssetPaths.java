@@ -1,4 +1,4 @@
-package com.mygdx.assets;
+package com.mygdx.game.assets;
 
 public final class AssetPaths {
 

@@ -1,6 +1,7 @@
-package com.mygdx.config;
+package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.config.FieldConfig;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

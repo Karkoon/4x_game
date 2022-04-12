@@ -10,14 +10,14 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.assets.AssetPaths;
-import com.mygdx.assets.Assets;
-import com.mygdx.config.UnitConfig;
 import com.mygdx.game.GameEngine;
+import com.mygdx.game.assets.AssetPaths;
+import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.entityfactory.UnitFactory;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
+import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
 import javax.inject.Inject;
