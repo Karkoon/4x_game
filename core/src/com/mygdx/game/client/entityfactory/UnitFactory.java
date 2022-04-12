@@ -1,10 +1,15 @@
 package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
+import com.mygdx.assets.Assets;
+import com.mygdx.config.EntityConfig;
+import com.mygdx.config.UnitConfig;
 import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.model.GameEntity;
+import com.mygdx.game.client.model.Unit;
 import com.mygdx.game.client.component.StatsComponent;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
@@ -16,25 +21,24 @@ import java.util.logging.Level;
 
 @Singleton
 @Log
-public class UnitFactory {
-
-  private final Engine engine;
-  private final Assets assets;
+public class UnitFactory extends EntityFactory<UnitConfig> {
 
   @Inject
   public UnitFactory(@NonNull Engine engine, @NonNull Assets assets) {
-    this.engine = engine;
-    this.assets = assets;
+    super(engine, assets);
   }
 
-  @NonNull
-  public void createUnit(@NonNull UnitConfig config) {
+  @Override
+  public @NonNull Unit createEntity(@NonNull UnitConfig config) {
     var entity = engine.createEntity();
-    entity.add(engine.createComponent(PositionComponent.class));
-    entity.add(setUpModelInstanceComponent(config));
-    entity.add(engine.createComponent(StatsComponent.class));
+    var positionComponent = engine.createComponent(PositionComponent.class);
+    entity.add(positionComponent);
+    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
+    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config));
+    entity.add(modelInstanceComponent);
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
+    return new Unit(0,0, config);
   }
 
   private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {

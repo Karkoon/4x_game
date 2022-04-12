@@ -66,7 +66,7 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputProcessor);
 
-    unitFactory.createUnit(assets.getGameConfigs().getAny(UnitConfig.class));
+    unitFactory.createEntity(assets.getGameConfigs().getAny(UnitConfig.class));
   }
 
   @Override
