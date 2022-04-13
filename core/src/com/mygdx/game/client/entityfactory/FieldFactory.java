@@ -29,7 +29,7 @@ public class FieldFactory extends EntityFactory<FieldConfig>{
     public @NonNull Field createEntity(@NonNull FieldConfig config, int x, int y) {
         var entity = engine.createEntity();
         var positionComponent = engine.createComponent(PositionComponent.class);
-        positionComponent.setPosition(new Vector3(x * 100, y * 100, 0));
+        positionComponent.setPosition(new Vector3(x * 115 + (y%2) * 55, 0, y * 105));
         entity.add(positionComponent);
         var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
         modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config));
