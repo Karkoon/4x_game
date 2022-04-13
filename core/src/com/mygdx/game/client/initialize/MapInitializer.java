@@ -1,12 +1,9 @@
 package com.mygdx.game.client.initialize;
 
-import com.mygdx.assets.Assets;
-import com.mygdx.config.FieldConfig;
-import com.mygdx.config.UnitConfig;
+import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.entityfactory.FieldFactory;
-import com.mygdx.game.client.entityfactory.UnitFactory;
 import com.mygdx.game.client.model.Field;
-import com.mygdx.game.client.model.Unit;
+import com.mygdx.game.config.FieldConfig;
 
 import java.util.ArrayList;
 import java.util.List;

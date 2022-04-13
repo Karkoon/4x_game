@@ -1,6 +1,5 @@
 package com.mygdx.game.client.initialize;
 
-import com.mygdx.assets.AssetPaths;
 
 public final class InitializeParameters {
 

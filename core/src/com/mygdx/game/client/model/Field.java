@@ -1,6 +1,6 @@
 package com.mygdx.game.client.model;
 
-import com.mygdx.config.FieldConfig;
+import com.mygdx.game.config.FieldConfig;
 import lombok.NonNull;
 
 public class Field extends GameEntity<FieldConfig> {

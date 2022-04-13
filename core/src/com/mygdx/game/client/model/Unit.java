@@ -1,6 +1,6 @@
 package com.mygdx.game.client.model;
 
-import com.mygdx.config.UnitConfig;
+import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
 public class Unit extends GameEntity<UnitConfig> {

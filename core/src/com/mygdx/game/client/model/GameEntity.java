@@ -1,6 +1,6 @@
 package com.mygdx.game.client.model;
 
-import com.mygdx.config.EntityConfig;
+import com.mygdx.game.config.EntityConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

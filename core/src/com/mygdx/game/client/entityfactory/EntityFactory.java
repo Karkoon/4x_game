@@ -1,9 +1,9 @@
 package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
-import com.mygdx.assets.Assets;
-import com.mygdx.config.EntityConfig;
+import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.model.GameEntity;
+import com.mygdx.game.config.EntityConfig;
 import lombok.NonNull;
 
 public abstract class EntityFactory<T extends EntityConfig> {
