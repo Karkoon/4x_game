@@ -56,8 +56,8 @@ public class GameScreen extends ScreenAdapter {
   }
 
   private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 500, 0);
-    camera.lookAt(0, -100, 0);
+    camera.position.set(0, 300, 0);
+    camera.lookAt(0, 0, 0);
   }
 
   @Override
