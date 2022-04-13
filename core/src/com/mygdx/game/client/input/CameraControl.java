@@ -10,7 +10,7 @@ import java.util.Set;
 
 class CameraControl implements Updatable {
 
-  private static final float SPEED = 1.5f;
+  private static final float SPEED = 2.5f;
   private final Camera camera;
   private final Set<Direction> activeDirections = new HashSet<>();
 
