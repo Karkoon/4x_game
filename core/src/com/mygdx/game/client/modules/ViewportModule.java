@@ -18,7 +18,7 @@ public class ViewportModule {
   @Provides
   @Singleton
   public @NonNull Viewport providesViewport() {
-    log.log(Level.INFO, "provided camera");
+    log.log(Level.INFO, "provided viewport");
     Camera camera = new PerspectiveCamera(66, 300, 300);
     camera.near = 1f;
     camera.far = 300f;
