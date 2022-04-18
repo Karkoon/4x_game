@@ -37,6 +37,13 @@ public class GameConfigs {
     return array;
   }
 
+  public int size() {
+    return entityConfigMap.values()
+        .stream()
+        .map(v -> v.values().size()).reduce(Integer::sum)
+        .orElse(0);
+  }
+
   public <T extends EntityConfig> void put(@NonNull final Class<T> entityClass,
                                            @NonNull final T entityConfig) {
     var singleItemArray = new Array<T>(1);
