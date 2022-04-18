@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameEngine;
-import com.mygdx.game.assets.AssetPaths;
-import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.GameScreenAssetPaths;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.entityfactory.UnitFactory;
@@ -28,7 +28,7 @@ public class GameScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
-  private final Assets assets;
+  private final GameScreenAssets gameScreenAssets;
   private final GameEngine engine;
 
   private final Viewport viewport;
@@ -37,12 +37,12 @@ public class GameScreen extends ScreenAdapter {
   private final ModelInstanceRenderer renderer;
 
   @Inject
-  public GameScreen(@NonNull Assets assets,
+  public GameScreen(@NonNull GameScreenAssets gameScreenAssets,
                     @NonNull ModelInstanceRenderer renderer,
                     @NonNull GameEngine engine,
                     @NonNull Viewport viewport,
                     @NonNull UnitFactory unitFactory) {
-    this.assets = assets;
+    this.gameScreenAssets = gameScreenAssets;
     this.engine = engine;
     this.renderer = renderer;
     this.viewport = viewport;
@@ -56,8 +56,6 @@ public class GameScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    assets.loadConfigs();
-    assets.loadAssets();
     positionCamera(viewport.getCamera());
 
     compositeUpdatable.addUpdatable(engine);
@@ -66,7 +64,7 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputProcessor);
 
-    unitFactory.createUnit(assets.getGameConfigs().getAny(UnitConfig.class));
+    unitFactory.createUnit(gameScreenAssets.getGameConfigs().getAny(UnitConfig.class));
   }
 
   @Override
@@ -84,11 +82,16 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     renderer.dispose();
-    assets.dispose();
+    gameScreenAssets.dispose();
+  }
+
+  @Override
+  public void hide() {
+    gameScreenAssets.unload();
   }
 
   private @NonNull ModelInstance createDebugBoxModelInstance() {
-    var texture = assets.getTexture(AssetPaths.DEMO_TEXTURE_PATH);
+    var texture = gameScreenAssets.getTexture(GameScreenAssetPaths.DEMO_TEXTURE_PATH);
     var model = new ModelBuilder().createBox(25, 25, 25,
         new Material(TextureAttribute.createDiffuse(texture)),
         VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);

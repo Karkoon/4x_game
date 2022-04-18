@@ -2,7 +2,7 @@ package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.mygdx.game.ModelInstanceUtil;
-import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
 import com.mygdx.game.client.component.StatsComponent;
@@ -19,12 +19,12 @@ import java.util.logging.Level;
 public class UnitFactory {
 
   private final Engine engine;
-  private final Assets assets;
+  private final GameScreenAssets gameScreenAssets;
 
   @Inject
-  public UnitFactory(@NonNull Engine engine, @NonNull Assets assets) {
+  public UnitFactory(@NonNull Engine engine, @NonNull GameScreenAssets gameScreenAssets) {
     this.engine = engine;
-    this.assets = assets;
+    this.gameScreenAssets = gameScreenAssets;
   }
 
   @NonNull
@@ -39,8 +39,8 @@ public class UnitFactory {
 
   private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
     var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
-    var texture = assets.getTexture(config.getTextureName());
+    modelInstanceComponent.setModelInstanceFromModel(gameScreenAssets.getModel(config.getModelPath()));
+    var texture = gameScreenAssets.getTexture(config.getTextureName());
     ModelInstanceUtil.setTexture(modelInstanceComponent.getModelInstance(), texture);
     return modelInstanceComponent;
   }

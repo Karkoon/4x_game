@@ -1,6 +1,6 @@
 package com.mygdx.game.assets;
 
-public final class AssetPaths {
+public final class GameScreenAssetPaths {
 
   public static final String ASSETS_PATH = "./assets/";
   public static final String DEMO_TEXTURE_PATH = ASSETS_PATH + "badlogic.jpg";
@@ -10,6 +10,6 @@ public final class AssetPaths {
   public static final String UNIT_CONFIG_DIR = ENTITY_CONFIG_DIR + "units/";
   public static final String TEXTURE_DIR = MODEL_DIR;
 
-  private AssetPaths() {
+  private GameScreenAssetPaths() {
   }
 }
