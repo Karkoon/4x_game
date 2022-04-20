@@ -1,5 +1,6 @@
 package com.mygdx.game.assets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import com.mygdx.game.assets.assetloaders.JsonLoader;
-import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.UnitConfig;
@@ -53,19 +53,19 @@ public class Assets implements Disposable {
   }
 
   public void loadAssets() {
-    loadModels(getGameConfigs().getAll());
+    loadModels();
     loadTextures();
     assetManager.finishLoading();
   }
 
   @NonNull
-  public Model getModel(@NonNull EntityConfig config) {
-    return assetManager.get(AssetPaths.MODEL_DIR + config.getModelPath());
+  public Model getModel(@NonNull String filename) {
+    return assetManager.get(AssetPaths.MODEL_DIR + filename);
   }
 
   @NonNull
   public Texture getTexture(@NonNull String path) {
-    return assetManager.get(path, Texture.class);
+    return assetManager.get(AssetPaths.TEXTURE_DIR + path);
   }
 
   @NonNull
@@ -78,15 +78,20 @@ public class Assets implements Disposable {
     assetManager.dispose();
   }
 
-  private void loadModels(@NonNull Array<EntityConfig> entityConfigs) {
-    for (var i = 0; i < entityConfigs.size; i++) {
-      var entityConfig = entityConfigs.get(i);
-      assetManager.load(AssetPaths.MODEL_DIR + entityConfig.getModelPath(), Model.class);
-    }
+  private void loadModels() {
+    loadDirectory(AssetPaths.MODEL_DIR, ".g3db", Model.class);
   }
 
   private void loadTextures() {
+    loadDirectory(AssetPaths.TEXTURE_DIR, ".png", Texture.class);
     assetManager.load(AssetPaths.DEMO_TEXTURE_PATH, Texture.class);
+  }
+
+  private <T> void loadDirectory(@NonNull String path, @NonNull String suffix, Class<T> assetType) {
+    var dir = Gdx.files.internal(path).list(suffix);
+    for (var i = 0; i < dir.length; i++) {
+      assetManager.load(dir[i].path(), assetType);
+    }
   }
 
   private void populateGameConfigs() {

@@ -18,4 +18,9 @@ public class UnitConfig implements EntityConfig {
   private String modelPath;
   @NonNull
   private String textureName;
+  private int maxHp;
+  private int attackPower;
+  private int defense;
+  private int sightRadius;
+  private int speed;
 }

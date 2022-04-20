@@ -1,9 +1,11 @@
 package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
+import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.component.StatsComponent;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -28,13 +30,18 @@ public class UnitFactory {
   @NonNull
   public void createUnit(@NonNull UnitConfig config) {
     var entity = engine.createEntity();
-    var positionComponent = engine.createComponent(PositionComponent.class);
-    entity.add(positionComponent);
-    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config));
-    entity.add(modelInstanceComponent);
+    entity.add(engine.createComponent(PositionComponent.class));
+    entity.add(setUpModelInstanceComponent(config));
+    entity.add(engine.createComponent(StatsComponent.class));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
   }
 
+  private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
+    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
+    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+    var texture = assets.getTexture(config.getTextureName());
+    ModelInstanceUtil.setTexture(modelInstanceComponent.getModelInstance(), texture);
+    return modelInstanceComponent;
+  }
 }
