@@ -8,15 +8,15 @@ import lombok.NonNull;
 
 public abstract class EntityFactory<T extends EntityConfig> {
 
-    protected final Engine engine;
-    protected final Assets assets;
+  protected final Engine engine;
+  protected final Assets assets;
 
-    public EntityFactory(Engine engine, Assets assets) {
-        this.engine = engine;
-        this.assets = assets;
-    }
+  public EntityFactory(Engine engine, Assets assets) {
+    this.engine = engine;
+    this.assets = assets;
+  }
 
-    @NonNull
-    public abstract GameEntity<T> createEntity(T entityConfig, int x, int y);
+  @NonNull
+  public abstract GameEntity<T> createEntity(T entityConfig, int x, int y);
 
 }

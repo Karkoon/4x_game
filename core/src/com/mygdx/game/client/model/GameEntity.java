@@ -1,5 +1,6 @@
 package com.mygdx.game.client.model;
 
+import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.config.EntityConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class GameEntity<T extends EntityConfig> {
 
-    private int xPosition;
-    private int yPosition;
-    @NonNull
-    private T entityConfig;
+  private int xPosition;
+  private int yPosition;
+  @NonNull
+  private T entityConfig;
+  @NonNull
+  private Entity entity;
 }

@@ -34,7 +34,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
     entity.add(modelInstanceComponent);
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
-    return new Unit(0,0, config);
+    return new Unit(x, y, config, entity);
   }
 
   private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
