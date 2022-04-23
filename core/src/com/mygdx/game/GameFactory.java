@@ -12,4 +12,3 @@ import javax.inject.Singleton;
 public interface GameFactory {
   MyGdxGame providesGame();
 }
-
