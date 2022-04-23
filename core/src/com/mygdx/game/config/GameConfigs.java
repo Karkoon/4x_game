@@ -40,7 +40,8 @@ public class GameConfigs {
   public int size() {
     return entityConfigMap.values()
         .stream()
-        .map(v -> v.values().size()).reduce(Integer::sum)
+        .map(v -> v.values().size())
+        .reduce(Integer::sum)
         .orElse(0);
   }
 
