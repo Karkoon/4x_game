@@ -82,12 +82,6 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     renderer.dispose();
-    gameScreenAssets.dispose();
-  }
-
-  @Override
-  public void hide() {
-    gameScreenAssets.unload();
   }
 
   private @NonNull ModelInstance createDebugBoxModelInstance() {

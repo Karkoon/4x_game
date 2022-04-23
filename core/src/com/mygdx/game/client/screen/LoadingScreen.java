@@ -11,14 +11,20 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.LoadingScreenAssetPaths;
 import com.mygdx.game.assets.LoadingScreenAssets;
+import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.actor.LoadingBar;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
+@Log
 public class LoadingScreen extends ScreenAdapter {
 
   private final MyGdxGame game;
   private final LoadingScreenAssets loadingScreenAssets;
+  private final MenuScreenAssets menuScreenAssets;
   private final GameScreenAssets gameScreenAssets;
   private Stage stage;
   private Image logo;
@@ -32,10 +38,14 @@ public class LoadingScreen extends ScreenAdapter {
   private LoadingBar loadingBar;
 
   @Inject
-  public LoadingScreen(MyGdxGame game, GameScreenAssets gameScreenAssets, LoadingScreenAssets loadingScreenAssets) {
+  public LoadingScreen(MyGdxGame game,
+                       GameScreenAssets gameScreenAssets,
+                       LoadingScreenAssets loadingScreenAssets,
+                       MenuScreenAssets menuScreenAssets) {
     this.game = game;
     this.gameScreenAssets = gameScreenAssets;
     this.loadingScreenAssets = loadingScreenAssets;
+    this.menuScreenAssets = menuScreenAssets;
   }
 
   @Override
@@ -43,7 +53,8 @@ public class LoadingScreen extends ScreenAdapter {
     loadingScreenAssets.loadAssetsSync();
     stage = new Stage(new ScreenViewport());
     getLoadingScreenAssets();
-    gameScreenAssets.loadAssets();
+    menuScreenAssets.loadAssetsAsync();
+    gameScreenAssets.loadAssetsAsync();
   }
 
   private void getLoadingScreenAssets() {
@@ -60,16 +71,11 @@ public class LoadingScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     if (gameScreenAssets.update()) {
-      game.changeToGameScreen();
+      game.changeToMenuScreen();
     }
     updateLoadingBar();
     stage.act();
     stage.draw();
-  }
-
-  @Override
-  public void hide() {
-    loadingScreenAssets.dispose();
   }
 
   private void updateLoadingBar() {

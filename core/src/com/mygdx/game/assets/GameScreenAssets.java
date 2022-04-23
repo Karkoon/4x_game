@@ -6,7 +6,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import com.mygdx.game.assets.assetloaders.JsonLoader;
 import com.mygdx.game.config.FieldConfig;
@@ -20,7 +19,7 @@ import javax.inject.Singleton;
 import static com.mygdx.game.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 
 @Singleton
-public class GameScreenAssets implements Disposable {
+public class GameScreenAssets {
 
   @NonNull
   private final AssetManager assetManager;
@@ -29,7 +28,7 @@ public class GameScreenAssets implements Disposable {
   private final GameConfigs gameConfigs = new GameConfigs();
 
   @Inject
-  public GameScreenAssets(AssetManager assetManager) {
+  public GameScreenAssets(@NonNull AssetManager assetManager) {
     this.assetManager = assetManager;
     initCustomLoaders();
   }
@@ -38,7 +37,7 @@ public class GameScreenAssets implements Disposable {
     return assetManager.update();
   }
 
-  public void loadAssets() {
+  public void loadAssetsAsync() {
     loadConfigs();
     loadModels();
     loadTextures();
@@ -62,9 +61,17 @@ public class GameScreenAssets implements Disposable {
     return gameConfigs;
   }
 
-  @Override
-  public void dispose() {
-    assetManager.dispose();
+  public float getLoadingProgress() {
+    return assetManager.getProgress();
+  }
+
+  private <T> void loadDirectory(@NonNull String path,
+                                 @NonNull String suffix,
+                                 @NonNull Class<T> assetType) {
+    var dir = Gdx.files.internal(path).list(suffix);
+    for (var i = 0; i < dir.length; i++) {
+      assetManager.load(dir[i].path(), assetType);
+    }
   }
 
   private void loadModels() {
@@ -76,11 +83,12 @@ public class GameScreenAssets implements Disposable {
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
   }
 
-  private <T> void loadDirectory(@NonNull String path, @NonNull String suffix, Class<T> assetType) {
-    var dir = Gdx.files.internal(path).list(suffix);
-    for (var i = 0; i < dir.length; i++) {
-      assetManager.load(dir[i].path(), assetType);
-    }
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void loadConfigs() {
+    assetManager.load(GameScreenAssetPaths.FIELD_CONFIG_DIR, Array.class,
+        new ArrayLoaderParameter(FieldConfig.class, "json"));
+    assetManager.load(GameScreenAssetPaths.UNIT_CONFIG_DIR, Array.class,
+        new ArrayLoaderParameter(UnitConfig.class, "json"));
   }
 
   private void populateGameConfigs() {
@@ -88,43 +96,10 @@ public class GameScreenAssets implements Disposable {
     gameConfigs.putAll(UnitConfig.class, assetManager.getAll(UnitConfig.class, new Array<>()));
   }
 
-  public boolean loaded() {
-    return assetManager.isFinished();
-  }
-
-  public float getLoadingProgress() {
-    return assetManager.getProgress();
-  }
-
-  public void unload() {
-    assetManager.unload(GameScreenAssetPaths.DEMO_TEXTURE_PATH);
-    unloadModels();
-  }
-
-  private void unloadModels() {
-    unloadDirectory(GameScreenAssetPaths.MODEL_DIR, ".g3db");
-  }
-
-  private void unloadDirectory(@NonNull String path, @NonNull String suffix) {
-    var dir = Gdx.files.internal(path).list(suffix);
-    for (var i = 0; i < dir.length; i++) {
-      assetManager.unload(dir[i].path());
-    }
-  }
-
-
   @SuppressWarnings({"unchecked", "rawtypes"})
   private void initCustomLoaders() {
     assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
     assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  private void loadConfigs() {
-    assetManager.load(GameScreenAssetPaths.FIELD_CONFIG_DIR, Array.class,
-        new ArrayLoaderParameter(FieldConfig.class, "json"));
-    assetManager.load(GameScreenAssetPaths.UNIT_CONFIG_DIR, Array.class,
-        new ArrayLoaderParameter(UnitConfig.class, "json"));
   }
 }

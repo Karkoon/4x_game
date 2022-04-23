@@ -5,20 +5,19 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.utils.Disposable;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class LoadingScreenAssets implements Disposable {
+public class LoadingScreenAssets {
 
   @NonNull
   private final AssetManager assetManager;
 
   @Inject
-  public LoadingScreenAssets(AssetManager manager) {
+  public LoadingScreenAssets(@NonNull AssetManager manager) {
     this.assetManager = manager;
     initCustomLoaders();
   }
@@ -31,11 +30,6 @@ public class LoadingScreenAssets implements Disposable {
   public void loadAssetsSync() {
     assetManager.load(LoadingScreenAssetPaths.LOADING_SCREEN_TEXTURE_ATLAS, TextureAtlas.class);
     assetManager.finishLoading();
-  }
-
-  @Override
-  public void dispose() {
-    assetManager.unload(LoadingScreenAssetPaths.LOADING_SCREEN_TEXTURE_ATLAS);
   }
 
   private void initCustomLoaders() {
