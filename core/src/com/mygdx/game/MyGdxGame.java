@@ -32,7 +32,7 @@ public class MyGdxGame extends Game {
 
   @Override
   public void render() {
-    ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1, true);
+    ScreenUtils.clear(0f, 0f, 0f, 1, true);
     super.render();
   }
 
