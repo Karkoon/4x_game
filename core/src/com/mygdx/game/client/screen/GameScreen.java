@@ -3,15 +3,8 @@ package com.mygdx.game.client.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameEngine;
-import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
@@ -87,13 +80,5 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     renderer.dispose();
-  }
-
-  private @NonNull ModelInstance createDebugBoxModelInstance() {
-    var texture = assets.getTexture(GameScreenAssetPaths.DEMO_TEXTURE_PATH);
-    var model = new ModelBuilder().createBox(25, 25, 25,
-        new Material(TextureAttribute.createDiffuse(texture)),
-        VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);
-    return new ModelInstance(model, new Vector3(0, 0, 0));
   }
 }
