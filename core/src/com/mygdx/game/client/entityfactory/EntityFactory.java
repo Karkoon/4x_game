@@ -11,7 +11,7 @@ public abstract class EntityFactory<T extends EntityConfig> {
   protected final Engine engine;
   protected final GameScreenAssets assets;
 
-  public EntityFactory(Engine engine, GameScreenAssets assets) {
+  protected EntityFactory(Engine engine, GameScreenAssets assets) {
     this.engine = engine;
     this.assets = assets;
   }
