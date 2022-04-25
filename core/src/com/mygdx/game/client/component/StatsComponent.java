@@ -6,15 +6,15 @@ import lombok.Data;
 
 @Data
 public class StatsComponent implements Component, Pool.Poolable {
-  int maxHp;
-  int hp;
-  int attackPower;
-  int defense;
-  int sightRadius;
-  int speed;
+  private int maxHp;
+  private int hp;
+  private int attackPower;
+  private int defense;
+  private int sightRadius;
+  private int speed;
 
   @Override
   public void reset() {
-    this.hp = maxHp;
+    this.hp = this.maxHp;
   }
 }
