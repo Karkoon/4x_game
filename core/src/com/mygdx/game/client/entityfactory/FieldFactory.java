@@ -6,7 +6,7 @@ import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
-import com.mygdx.game.client.initialize.DrawUtil;
+import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.config.FieldConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -28,7 +28,7 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   public @NonNull Entity createEntity(@NonNull FieldConfig config, int x, int y) {
     var entity = engine.createEntity();
     var positionComponent = engine.createComponent(PositionComponent.class);
-    positionComponent.setPosition(DrawUtil.generatePositionForField(x, y));
+    positionComponent.setPosition(PositionUtil.generatePositionForField(x, y));
     entity.add(positionComponent);
     entity.add(setUpModelInstanceComponent(config));
     engine.addEntity(entity);
