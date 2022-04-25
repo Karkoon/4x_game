@@ -15,9 +15,10 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.entityfactory.UnitFactory;
+import com.mygdx.game.client.entityfactory.FieldFactory;
+import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
-import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.client.model.GameState;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -28,29 +29,33 @@ public class GameScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
-  private final GameScreenAssets gameScreenAssets;
+  private final GameScreenAssets assets;
   private final GameEngine engine;
 
   private final Viewport viewport;
-  private final UnitFactory unitFactory;
+  private final FieldFactory fieldFactory;
 
   private final ModelInstanceRenderer renderer;
 
+  private final GameState gameState;
+
   @Inject
-  public GameScreen(@NonNull GameScreenAssets gameScreenAssets,
+  public GameScreen(@NonNull GameScreenAssets assets,
                     @NonNull ModelInstanceRenderer renderer,
                     @NonNull GameEngine engine,
                     @NonNull Viewport viewport,
-                    @NonNull UnitFactory unitFactory) {
-    this.gameScreenAssets = gameScreenAssets;
+                    @NonNull FieldFactory fieldFactory,
+                    @NonNull GameState gameState) {
+    this.assets = assets;
     this.engine = engine;
     this.renderer = renderer;
     this.viewport = viewport;
-    this.unitFactory = unitFactory;
+    this.fieldFactory = fieldFactory;
+    this.gameState = gameState;
   }
 
   private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 100, 100);
+    camera.position.set(0, 300, 0);
     camera.lookAt(0, 0, 0);
   }
 
@@ -64,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputProcessor);
 
-    unitFactory.createUnit(gameScreenAssets.getGameConfigs().getAny(UnitConfig.class));
+    gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
   }
 
   @Override
@@ -85,7 +90,7 @@ public class GameScreen extends ScreenAdapter {
   }
 
   private @NonNull ModelInstance createDebugBoxModelInstance() {
-    var texture = gameScreenAssets.getTexture(GameScreenAssetPaths.DEMO_TEXTURE_PATH);
+    var texture = assets.getTexture(GameScreenAssetPaths.DEMO_TEXTURE_PATH);
     var model = new ModelBuilder().createBox(25, 25, 25,
         new Material(TextureAttribute.createDiffuse(texture)),
         VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates);

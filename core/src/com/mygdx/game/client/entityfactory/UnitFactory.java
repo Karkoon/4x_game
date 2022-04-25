@@ -1,11 +1,11 @@
 package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
-import com.mygdx.game.client.component.StatsComponent;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -16,31 +16,28 @@ import java.util.logging.Level;
 
 @Singleton
 @Log
-public class UnitFactory {
-
-  private final Engine engine;
-  private final GameScreenAssets gameScreenAssets;
+public class UnitFactory extends EntityFactory<UnitConfig> {
 
   @Inject
-  public UnitFactory(@NonNull Engine engine, @NonNull GameScreenAssets gameScreenAssets) {
-    this.engine = engine;
-    this.gameScreenAssets = gameScreenAssets;
+  public UnitFactory(@NonNull Engine engine, @NonNull GameScreenAssets assets) {
+    super(engine, assets);
   }
 
-  @NonNull
-  public void createUnit(@NonNull UnitConfig config) {
+  @Override
+  public @NonNull Entity createEntity(@NonNull UnitConfig config, int x, int y) {
     var entity = engine.createEntity();
-    entity.add(engine.createComponent(PositionComponent.class));
+    var positionComponent = engine.createComponent(PositionComponent.class);
+    entity.add(positionComponent);
     entity.add(setUpModelInstanceComponent(config));
-    entity.add(engine.createComponent(StatsComponent.class));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
+    return entity;
   }
 
   private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
     var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-    modelInstanceComponent.setModelInstanceFromModel(gameScreenAssets.getModel(config.getModelPath()));
-    var texture = gameScreenAssets.getTexture(config.getTextureName());
+    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+    var texture = assets.getTexture(config.getTextureName());
     ModelInstanceUtil.setTexture(modelInstanceComponent.getModelInstance(), texture);
     return modelInstanceComponent;
   }
