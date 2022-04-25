@@ -1,6 +1,6 @@
 package com.mygdx.game.client.model;
 
-import lombok.Builder;
+import com.badlogic.ashley.core.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import java.util.HashMap;
 @Getter
 public class GameState {
 
-  private HashMap<Coordinates, Field> fieldList;
+  private HashMap<Coordinates, Entity> fieldList;
 
   @Inject
   public GameState() {
