@@ -1,6 +1,7 @@
 package com.mygdx.game.client.screen;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
@@ -26,6 +27,7 @@ public class LoadingScreen extends ScreenAdapter {
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
   private final GameScreenAssets gameScreenAssets;
+  private final AssetManager manager;
   private Stage stage;
   private Image logo;
   private Image loadingFrame;
@@ -41,11 +43,13 @@ public class LoadingScreen extends ScreenAdapter {
   public LoadingScreen(MyGdxGame game,
                        GameScreenAssets gameScreenAssets,
                        LoadingScreenAssets loadingScreenAssets,
-                       MenuScreenAssets menuScreenAssets) {
+                       MenuScreenAssets menuScreenAssets,
+                       AssetManager manager) {
     this.game = game;
     this.gameScreenAssets = gameScreenAssets;
     this.loadingScreenAssets = loadingScreenAssets;
     this.menuScreenAssets = menuScreenAssets;
+    this.manager = manager;
   }
 
   @Override
@@ -70,7 +74,7 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    if (gameScreenAssets.update()) {
+    if (manager.update()) {
       game.changeToMenuScreen();
     }
     updateLoadingBar();
@@ -79,7 +83,7 @@ public class LoadingScreen extends ScreenAdapter {
   }
 
   private void updateLoadingBar() {
-    displayedPercent = Interpolation.linear.apply(displayedPercent, gameScreenAssets.getLoadingProgress(), 0.1f);
+    displayedPercent = Interpolation.linear.apply(displayedPercent, manager.getProgress(), 0.1f);
     loadingBarHidden.setX(startX + endX * displayedPercent);
     loadingBg.setX(loadingBarHidden.getX() + 30);
     loadingBg.setWidth(450 - 450 * displayedPercent);

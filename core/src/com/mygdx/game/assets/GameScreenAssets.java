@@ -33,10 +33,6 @@ public class GameScreenAssets {
     initCustomLoaders();
   }
 
-  public boolean update() {
-    return assetManager.update();
-  }
-
   public void loadAssetsAsync() {
     loadConfigs();
     loadModels();
@@ -59,10 +55,6 @@ public class GameScreenAssets {
       populateGameConfigs();
     }
     return gameConfigs;
-  }
-
-  public float getLoadingProgress() {
-    return assetManager.getProgress();
   }
 
   private <T> void loadDirectory(@NonNull String path,
