@@ -33,7 +33,7 @@ public class GameScreenInputAdapter extends InputAdapter {
       calculateBoundingBox(bounds);
       bounds.getCenter(center);
       bounds.getDimensions(dimensions);
-      radius = dimensions.len() / 2f;
+      radius = dimensions.len() / 3f;
     }
   }
 
@@ -41,11 +41,10 @@ public class GameScreenInputAdapter extends InputAdapter {
   private final ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);
 
   private final Viewport viewport;
-  private Array<GameObject> fieldList = new Array<>();
-  private Array<Coordinates> fieldCords = new Array<>();
+  private final Array<GameObject> fieldList = new Array<>();
+  private final Array<Coordinates> fieldCords = new Array<>();
 
-  private int selected = -1, selecting = -1;
-  private Vector3 position = new Vector3();
+  private final Vector3 position = new Vector3();
 
   public GameScreenInputAdapter(Viewport viewport, Map<Coordinates, Entity> fieldList) {
     this.viewport = viewport;
@@ -65,8 +64,9 @@ public class GameScreenInputAdapter extends InputAdapter {
 
   @Override
   public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-    selecting = getObject(screenX, screenY);
-    System.out.println(selecting + " - " + fieldCords.get(selecting));
+    int selecting = getObject(screenX, screenY);
+    if (selecting >= 0)
+      System.out.println(selecting + " - " + fieldCords.get(selecting));
     return selecting >= 0;
   }
 
