@@ -1,6 +1,7 @@
 package com.mygdx.game.client.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -11,6 +12,7 @@ import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.entityfactory.FieldFactory;
 import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
+import com.mygdx.game.client.input.GameScreenInputAdapter;
 import com.mygdx.game.client.model.GameState;
 import lombok.NonNull;
 
@@ -58,11 +60,18 @@ public class GameScreen extends ScreenAdapter {
 
     compositeUpdatable.addUpdatable(engine);
 
-    var inputProcessor = new CameraMoverInputProcessor(viewport);
-    compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
-    Gdx.input.setInputProcessor(inputProcessor);
-
     gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
+
+    var inputProcessor = new CameraMoverInputProcessor(viewport);
+    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState.getFieldList());
+
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(inputProcessor);
+    inputMultiplexer.addProcessor(gameScreenInput);
+
+    compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
+    Gdx.input.setInputProcessor(inputMultiplexer);
+
   }
 
   @Override
