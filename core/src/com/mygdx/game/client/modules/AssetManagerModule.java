@@ -1,7 +1,6 @@
 package com.mygdx.game.client.modules;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.assets.AssetManager;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -12,11 +11,11 @@ import java.util.logging.Level;
 
 @Module
 @Log
-public class EngineModule {
+public class AssetManagerModule {
   @Provides
   @Singleton
-  public @NonNull Engine providesEngine() {
-    log.log(Level.INFO, "provided Engine");
-    return new PooledEngine();
+  public @NonNull AssetManager providesAssetManager() {
+    log.log(Level.INFO, "provided AssetManager");
+    return new AssetManager();
   }
 }

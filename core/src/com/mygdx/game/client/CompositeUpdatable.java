@@ -23,5 +23,4 @@ public class CompositeUpdatable implements Updatable {
       updatable.update(delta);
     }
   }
-
 }

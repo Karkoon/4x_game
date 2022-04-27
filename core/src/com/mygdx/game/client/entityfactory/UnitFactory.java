@@ -3,7 +3,7 @@ package com.mygdx.game.client.entityfactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.ModelInstanceUtil;
-import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
 import com.mygdx.game.config.UnitConfig;
@@ -19,7 +19,7 @@ import java.util.logging.Level;
 public class UnitFactory extends EntityFactory<UnitConfig> {
 
   @Inject
-  public UnitFactory(@NonNull Engine engine, @NonNull Assets assets) {
+  public UnitFactory(@NonNull Engine engine, @NonNull GameScreenAssets assets) {
     super(engine, assets);
   }
 

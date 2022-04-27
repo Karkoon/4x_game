@@ -6,14 +6,14 @@ import lombok.Setter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 @Setter
 @Getter
 public class GameState {
 
-  private HashMap<Coordinates, Entity> fieldList;
+  private Map<Coordinates, Entity> fieldList;
 
   @Inject
   public GameState() {
