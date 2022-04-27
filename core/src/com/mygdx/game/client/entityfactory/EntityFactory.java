@@ -3,6 +3,7 @@ package com.mygdx.game.client.entityfactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.config.EntityConfig;
 import lombok.NonNull;
 
@@ -17,6 +18,6 @@ public abstract class EntityFactory<T extends EntityConfig> {
   }
 
   @NonNull
-  public abstract Entity createEntity(T entityConfig, int x, int y);
+  public abstract Entity createEntity(T entityConfig, Coordinates coordinates);
 
 }
