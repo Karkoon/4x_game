@@ -6,6 +6,7 @@ import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -24,7 +25,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   @Override
-  public @NonNull Entity createEntity(@NonNull UnitConfig config, int x, int y) {
+  public @NonNull Entity createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
     var positionComponent = engine.createComponent(PositionComponent.class);
     entity.add(positionComponent);
