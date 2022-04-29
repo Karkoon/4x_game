@@ -33,6 +33,7 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     positionComponent.setPosition(PositionUtil.generateWorldPositionForCoords(coordinates));
     var fieldComponent = engine.createComponent(FieldComponent.class);
     fieldComponent.setCoordinates(coordinates);
+    fieldComponent.setName(config.getName());
     entity.add(positionComponent);
     entity.add(fieldComponent);
     entity.add(setUpModelInstanceComponent(config));

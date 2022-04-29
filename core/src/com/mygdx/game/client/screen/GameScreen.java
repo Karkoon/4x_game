@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameEngine;
 import com.mygdx.game.assets.GameScreenAssets;
@@ -38,6 +40,8 @@ public class GameScreen extends ScreenAdapter {
 
   private final GameState gameState;
 
+  private Stage stage;
+
   @Inject
   public GameScreen(@NonNull GameScreenAssets assets,
                     @NonNull ModelInstanceRenderer renderer,
@@ -64,13 +68,15 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     positionCamera(viewport.getCamera());
 
+    stage = new Stage(new ScreenViewport());
+
     compositeUpdatable.addUpdatable(engine);
 
     gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
     StartUnitInitializer.initializeTestUnit(unitFactory, assets, gameState.getFieldList());
 
     var inputProcessor = new CameraMoverInputProcessor(viewport);
-    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState.getFieldList());
+    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage);
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);
@@ -86,11 +92,14 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.update(delta);
     viewport.getCamera().update();
     renderer.render();
+    stage.draw();
+    stage.act(delta);
   }
 
   @Override
   public void resize(int width, int height) {
     viewport.update(width, height);
+    stage.getViewport().update(width, height, true);
   }
 
   @Override

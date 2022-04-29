@@ -14,4 +14,6 @@ public class FieldComponent implements Component {
   private Entity unitEntity;
   @NonNull
   private Coordinates coordinates;
+  @NonNull
+  private String name;
 }
