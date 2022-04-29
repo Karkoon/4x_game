@@ -19,8 +19,9 @@ public class MapInitializer {
     var fieldList = new HashMap<Coordinates, Entity>();
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        var fieldEntity = fieldFactory.createEntity(assets.getGameConfigs().getAny(FieldConfig.class), i, j);
-        fieldList.put(new Coordinates(i, j), fieldEntity);
+        Coordinates coords = new Coordinates(i, j);
+        var fieldEntity = fieldFactory.createEntity(assets.getGameConfigs().getAny(FieldConfig.class), coords);
+        fieldList.put(coords, fieldEntity);
       }
     }
     return fieldList;
