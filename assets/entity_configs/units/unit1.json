@@ -2,7 +2,7 @@
   "id": 1,
   "name": "unit",
   "polishName": "jednostka",
-  "modelPath": "field.g3db",
+  "modelPath": "basic.g3db",
   "textureName": "unit.png",
   "maxHp": 100,
   "attackPower": 50,
