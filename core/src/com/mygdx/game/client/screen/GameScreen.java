@@ -10,7 +10,9 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.entityfactory.FieldFactory;
+import com.mygdx.game.client.entityfactory.UnitFactory;
 import com.mygdx.game.client.initialize.MapInitializer;
+import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
 import com.mygdx.game.client.model.GameState;
@@ -28,7 +30,9 @@ public class GameScreen extends ScreenAdapter {
   private final GameEngine engine;
 
   private final Viewport viewport;
+
   private final FieldFactory fieldFactory;
+  private final UnitFactory unitFactory;
 
   private final ModelInstanceRenderer renderer;
 
@@ -40,12 +44,14 @@ public class GameScreen extends ScreenAdapter {
                     @NonNull GameEngine engine,
                     @NonNull Viewport viewport,
                     @NonNull FieldFactory fieldFactory,
+                    @NonNull UnitFactory unitFactory,
                     @NonNull GameState gameState) {
     this.assets = assets;
     this.engine = engine;
     this.renderer = renderer;
     this.viewport = viewport;
     this.fieldFactory = fieldFactory;
+    this.unitFactory = unitFactory;
     this.gameState = gameState;
   }
 
@@ -61,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
     compositeUpdatable.addUpdatable(engine);
 
     gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
+    StartUnitInitializer.initializeTestUnit(unitFactory, assets, gameState.getFieldList());
 
     var inputProcessor = new CameraMoverInputProcessor(viewport);
     var gameScreenInput = new GameScreenInputAdapter(viewport, gameState.getFieldList());

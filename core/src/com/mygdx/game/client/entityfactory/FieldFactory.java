@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.client.component.FieldComponent;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.PositionComponent;
 import com.mygdx.game.client.initialize.PositionUtil;
@@ -30,7 +31,10 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     var entity = engine.createEntity();
     var positionComponent = engine.createComponent(PositionComponent.class);
     positionComponent.setPosition(PositionUtil.generateWorldPositionForCoords(coordinates));
+    var fieldComponent = engine.createComponent(FieldComponent.class);
+    fieldComponent.setCoordinates(coordinates);
     entity.add(positionComponent);
+    entity.add(fieldComponent);
     entity.add(setUpModelInstanceComponent(config));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a field.");
