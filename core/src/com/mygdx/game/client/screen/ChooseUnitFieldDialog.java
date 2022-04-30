@@ -3,12 +3,9 @@ package com.mygdx.game.client.screen;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.client.component.FieldComponent;
 import com.mygdx.game.client.component.UnitComponent;
 import lombok.extern.java.Log;
@@ -45,11 +42,11 @@ public class ChooseUnitFieldDialog {
 
     FieldComponent fieldComponent = fieldComponentMapper.get(entity);
     customDialog.text("Choose on of the following:");
-    customDialog.button("Field" + fieldComponent.getName(), "field");
+    customDialog.button("Field: " + fieldComponent.getName(), "field");
 
     if (fieldHasUnit(fieldComponent)) {
       UnitComponent unitComponent = unitComponentMapper.get(fieldComponent.getUnitEntity());
-      customDialog.button("Unit" + unitComponent.getName(), "unit");
+      customDialog.button("Unit: " + unitComponent.getName(), "unit");
     }
     customDialog.show(parentStage);
   }
