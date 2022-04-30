@@ -14,8 +14,8 @@ import com.mygdx.game.client.screen.ChooseUnitFieldDialog;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
-import javax.inject.Inject;
 import java.util.Map;
+import java.util.logging.Level;
 
 @Log
 public class GameScreenInputAdapter extends InputAdapter {
@@ -58,7 +58,13 @@ public class GameScreenInputAdapter extends InputAdapter {
   public boolean touchDown (int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
     if (selecting != null) {
-      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords));
+      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords), s -> {
+        if (s.equals("field")) {
+          log.log(Level.INFO, "Selected field.");
+        } else if (s.equals("unit")) {
+          log.log(Level.INFO, "Selected unit.");
+        }
+      });
     }
     return selecting != null;
   }

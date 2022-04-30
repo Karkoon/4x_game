@@ -10,8 +10,6 @@ import com.mygdx.game.client.component.FieldComponent;
 import com.mygdx.game.client.component.UnitComponent;
 import lombok.extern.java.Log;
 
-import java.util.logging.Level;
-
 @Log
 public class ChooseUnitFieldDialog {
 
@@ -21,22 +19,17 @@ public class ChooseUnitFieldDialog {
 
   public static Dialog customDialog = null;
 
-  public static void createCustomDialog(Stage parentStage, Entity entity) {
+  @SuppressWarnings("unchecked")
+  public static <T> void createCustomDialog(Stage parentStage, Entity entity, ResultHandler<T> handler) {
     if (customDialog != null) {
       customDialog.hide();
       customDialog = null;
     }
 
-
     customDialog = new Dialog("Choose", uiSkin) {
       @Override
       protected void result(Object object) {
-        super.result(object);
-        if (object.equals("field")) {
-          log.log(Level.INFO, "Selected field.");
-        } else if (object.equals("unit")) {
-          log.log(Level.INFO, "Selected unit.");
-        }
+        handler.handle((T) object);
       }
     };
 
@@ -55,4 +48,7 @@ public class ChooseUnitFieldDialog {
     return fieldComponent.getUnitEntity() != null;
   }
 
+  public interface ResultHandler<T> {
+    void handle(T t);
+  }
 }
