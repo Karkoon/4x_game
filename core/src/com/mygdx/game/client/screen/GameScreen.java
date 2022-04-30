@@ -80,6 +80,7 @@ public class GameScreen extends ScreenAdapter {
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);
+    inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(gameScreenInput);
 
     compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());

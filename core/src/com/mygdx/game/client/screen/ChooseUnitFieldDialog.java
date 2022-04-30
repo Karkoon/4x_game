@@ -20,23 +20,32 @@ public class ChooseUnitFieldDialog {
   private static final ComponentMapper<FieldComponent> fieldComponentMapper = ComponentMapper.getFor(FieldComponent.class);
   private static final Skin uiSkin = new Skin(Gdx.files.internal("dialog/custom/uiskin.json"));
 
+  public static Dialog customDialog = null;
+
   public static void createCustomDialog(Stage parentStage, Entity entity) {
+    if (customDialog != null) {
+      customDialog.hide();
+      customDialog = null;
+    }
+
     FieldComponent fieldComponent = fieldComponentMapper.get(entity);
 
-    Dialog customDialog = new Dialog("Choose", uiSkin);
-    customDialog.text("Choose on of the following");
-    addFieldButton(customDialog, fieldComponent);
+    customDialog = new Dialog("Choose", uiSkin) {
+      @Override
+      protected void result(Object object) {
+        System.out.println("HEAJ");
+        super.result(object);
+        if (object.equals("field")) {
+          log.log(Level.INFO, "Selected field.");
+        } else if (object.equals("unit")) {
+          log.log(Level.INFO, "Selected field.");
+        }
+      }
+    };
+
+    customDialog.text("Choose on of the following:");
+    customDialog.button("Field" + fieldComponent.getName(), "field");
     customDialog.show(parentStage);
   }
 
-  private static void addFieldButton(Dialog customDialog, FieldComponent fieldComponent) {
-    customDialog.button("Field: " + fieldComponent.getName()).addListener(new ClickListener(){
-      @Override
-      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        log.log(Level.INFO, "Field: " + fieldComponent.getName());
-        customDialog.cancel();
-        return true;
-      }
-    });
-  }
 }
