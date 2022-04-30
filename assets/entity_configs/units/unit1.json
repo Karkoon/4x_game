@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "name": "unit",
+  "name": "unitTest",
   "polishName": "jednostka",
   "modelPath": "basic.g3db",
   "textureName": "unit.png",
