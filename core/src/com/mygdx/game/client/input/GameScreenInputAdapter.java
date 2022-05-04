@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.model.GameState;
@@ -38,14 +39,17 @@ public class GameScreenInputAdapter extends InputAdapter {
   private final Array<GameObject> gameObjects = new Array<>();
   private final GameState gameState;
   private final Stage parentStage;
+  private final GameScreenAssets assets;
 
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
-                                @NonNull Stage stage) {
+                                @NonNull Stage stage,
+                                @NonNull GameScreenAssets assets) {
     this.viewport = viewport;
     this.gameState = gameState;
     loadGameObjects(gameState.getFieldList());
     this.parentStage = stage;
+    this.assets = assets;
   }
 
   private void loadGameObjects(Map<Coordinates, Entity> coordinatesEntityMap) {
@@ -59,7 +63,7 @@ public class GameScreenInputAdapter extends InputAdapter {
   public boolean touchDown (int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
     if (selecting != null) {
-      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords));
+      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords), assets);
     }
     return selecting != null;
   }

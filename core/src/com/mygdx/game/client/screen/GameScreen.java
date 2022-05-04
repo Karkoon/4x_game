@@ -76,7 +76,7 @@ public class GameScreen extends ScreenAdapter {
     StartUnitInitializer.initializeTestUnit(unitFactory, assets, gameState.getFieldList());
 
     var inputProcessor = new CameraMoverInputProcessor(viewport);
-    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage);
+    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets);
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);

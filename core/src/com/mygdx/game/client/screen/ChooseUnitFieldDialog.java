@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.assets.GameScreenAssetPaths;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.SlotComponent;
 import lombok.extern.java.Log;
@@ -17,17 +19,16 @@ public class ChooseUnitFieldDialog {
 
   private static final ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
   private static final ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
-  private static final Skin uiSkin = new Skin(Gdx.files.internal("dialog/custom/uiskin.json"));
 
   public static Dialog customDialog = null;
 
-  public static void createCustomDialog(Stage parentStage, Entity entity) {
+  public static void createCustomDialog(Stage parentStage, Entity entity, GameScreenAssets assets) {
     if (customDialog != null) {
       customDialog.hide();
       customDialog = null;
     }
-
-    customDialog = new Dialog("Choose", uiSkin) {
+    Skin skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    customDialog = new Dialog("Choose", skin) {
       @Override
       protected void result(Object object) {
         if (object.equals("field")) {
