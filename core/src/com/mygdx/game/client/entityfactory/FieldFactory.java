@@ -4,9 +4,10 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.component.FieldComponent;
 import com.mygdx.game.client.component.ModelInstanceComponent;
+import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.component.SlotComponent;
 import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.config.FieldConfig;
@@ -29,17 +30,26 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   @Override
   public @NonNull Entity createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
+
     var positionComponent = engine.createComponent(PositionComponent.class);
     positionComponent.setPosition(PositionUtil.generateWorldPositionForCoords(coordinates));
-    var fieldComponent = engine.createComponent(FieldComponent.class);
-    fieldComponent.setCoordinates(coordinates);
-    fieldComponent.setName(config.getName());
+    var slotComponent = engine.createComponent(SlotComponent.class);
+    var nameComponent = setUpNameComponent(config);
+
     entity.add(positionComponent);
-    entity.add(fieldComponent);
+    entity.add(nameComponent);
+    entity.add(slotComponent);
     entity.add(setUpModelInstanceComponent(config));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a field.");
     return entity;
+  }
+
+  private NameComponent setUpNameComponent(FieldConfig config) {
+    var nameComponent = engine.createComponent(NameComponent.class);
+    nameComponent.setName(config.getName());
+    nameComponent.setPolishName(config.getPolishName());
+    return nameComponent;
   }
 
   private ModelInstanceComponent setUpModelInstanceComponent(FieldConfig config) {

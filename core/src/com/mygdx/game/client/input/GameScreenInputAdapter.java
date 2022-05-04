@@ -40,14 +40,15 @@ public class GameScreenInputAdapter extends InputAdapter {
   private final Stage parentStage;
 
   public GameScreenInputAdapter(@NonNull Viewport viewport,
-                                @NonNull GameState gameState, Stage stage) {
+                                @NonNull GameState gameState,
+                                @NonNull Stage stage) {
     this.viewport = viewport;
     this.gameState = gameState;
     loadGameObjects(gameState.getFieldList());
     this.parentStage = stage;
   }
 
-  public void loadGameObjects(Map<Coordinates, Entity> coordinatesEntityMap) {
+  private void loadGameObjects(Map<Coordinates, Entity> coordinatesEntityMap) {
     for (var entry : coordinatesEntityMap.entrySet()) {
       var cords = entry.getKey();
       gameObjects.add(new GameObject(cords));

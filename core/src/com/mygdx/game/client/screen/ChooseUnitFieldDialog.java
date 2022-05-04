@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mygdx.game.client.component.FieldComponent;
-import com.mygdx.game.client.component.UnitComponent;
+import com.mygdx.game.client.component.NameComponent;
+import com.mygdx.game.client.component.SlotComponent;
 import lombok.extern.java.Log;
 
 import java.util.logging.Level;
@@ -15,8 +15,8 @@ import java.util.logging.Level;
 @Log
 public class ChooseUnitFieldDialog {
 
-  private static final ComponentMapper<FieldComponent> fieldComponentMapper = ComponentMapper.getFor(FieldComponent.class);
-  private static final ComponentMapper<UnitComponent> unitComponentMapper = ComponentMapper.getFor(UnitComponent.class);
+  private static final ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
+  private static final ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
   private static final Skin uiSkin = new Skin(Gdx.files.internal("dialog/custom/uiskin.json"));
 
   public static Dialog customDialog = null;
@@ -27,11 +27,9 @@ public class ChooseUnitFieldDialog {
       customDialog = null;
     }
 
-
     customDialog = new Dialog("Choose", uiSkin) {
       @Override
       protected void result(Object object) {
-        super.result(object);
         if (object.equals("field")) {
           log.log(Level.INFO, "Selected field.");
         } else if (object.equals("unit")) {
@@ -40,19 +38,20 @@ public class ChooseUnitFieldDialog {
       }
     };
 
-    FieldComponent fieldComponent = fieldComponentMapper.get(entity);
+    var fieldSlotComponent = slotComponentMapper.get(entity);
+    var fieldNameComponent = nameComponentMapper.get(entity);
     customDialog.text("Choose on of the following:");
-    customDialog.button("Field: " + fieldComponent.getName(), "field");
+    customDialog.button("Field: " + fieldNameComponent.getName(), "field");
 
-    if (fieldHasUnit(fieldComponent)) {
-      UnitComponent unitComponent = unitComponentMapper.get(fieldComponent.getUnitEntity());
-      customDialog.button("Unit: " + unitComponent.getName(), "unit");
+    if (fieldHasUnit(fieldSlotComponent)) {
+      var unitNameComponent = nameComponentMapper.get(fieldSlotComponent.getUnitEntity());
+      customDialog.button("Unit: " + unitNameComponent.getName(), "unit");
     }
     customDialog.show(parentStage);
   }
 
-  private static boolean fieldHasUnit(FieldComponent fieldComponent) {
-    return fieldComponent.getUnitEntity() != null;
+  private static boolean fieldHasUnit(SlotComponent slotComponent) {
+    return slotComponent.getUnitEntity() != null;
   }
 
 }

@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
+import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.PositionComponent;
-import com.mygdx.game.client.component.UnitComponent;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
@@ -29,14 +29,21 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   public @NonNull Entity createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
     var positionComponent = engine.createComponent(PositionComponent.class);
-    var unitComponent = engine.createComponent(UnitComponent.class);
-    unitComponent.setName(config.getName());
+    var nameComponent = setUpNameComponent(config);
+
     entity.add(positionComponent);
-    entity.add(unitComponent);
+    entity.add(nameComponent);
     entity.add(setUpModelInstanceComponent(config));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
     return entity;
+  }
+
+  private NameComponent setUpNameComponent(UnitConfig config) {
+    var nameComponent = engine.createComponent(NameComponent.class);
+    nameComponent.setName(config.getName());
+    nameComponent.setPolishName(config.getPolishName());
+    return nameComponent;
   }
 
   private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
