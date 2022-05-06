@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.initialize.PositionUtil;
+import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.client.screen.ChooseUnitFieldDialog;
@@ -23,15 +24,16 @@ public class GameScreenInputAdapter extends InputAdapter {
 
   private static class GameObject {
 
+
     public final Vector3 position;
     public final Coordinates coords;
     public final float radius;
-
     private GameObject (Coordinates coords) {
       this.coords = coords;
       this.position = PositionUtil.generateWorldPositionForCoords(coords);
       radius = 90f;
     }
+
 
   }
 
@@ -40,16 +42,18 @@ public class GameScreenInputAdapter extends InputAdapter {
   private final GameState gameState;
   private final Stage parentStage;
   private final GameScreenAssets assets;
+  private final ActiveEntity activeEntity;
 
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
                                 @NonNull Stage stage,
-                                @NonNull GameScreenAssets assets) {
+                                @NonNull GameScreenAssets assets, ActiveEntity activeEntity) {
     this.viewport = viewport;
     this.gameState = gameState;
     loadGameObjects(gameState.getFieldList());
     this.parentStage = stage;
     this.assets = assets;
+    this.activeEntity = activeEntity;
   }
 
   private void loadGameObjects(Map<Coordinates, Entity> coordinatesEntityMap) {
@@ -63,7 +67,7 @@ public class GameScreenInputAdapter extends InputAdapter {
   public boolean touchDown (int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
     if (selecting != null) {
-      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords), assets);
+      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords), assets, activeEntity);
     }
     return selecting != null;
   }

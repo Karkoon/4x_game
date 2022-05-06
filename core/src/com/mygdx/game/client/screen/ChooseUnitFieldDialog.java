@@ -10,6 +10,8 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.SlotComponent;
+import com.mygdx.game.client.model.ActiveEntity;
+import com.mygdx.game.client.model.GameState;
 import lombok.extern.java.Log;
 
 import java.util.logging.Level;
@@ -22,7 +24,7 @@ public class ChooseUnitFieldDialog {
 
   public static Dialog customDialog = null;
 
-  public static void createCustomDialog(Stage parentStage, Entity entity, GameScreenAssets assets) {
+  public static void createCustomDialog(Stage parentStage, Entity entity, GameScreenAssets assets, ActiveEntity activeEntity) {
     if (customDialog != null) {
       customDialog.hide();
       customDialog = null;
