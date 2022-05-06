@@ -4,38 +4,52 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.Coordinates;
+import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.screen.ChooseUnitFieldDialog;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 @Log
 public class GameScreenInputAdapter extends InputAdapter {
 
   private static class GameObject {
+
     public final Vector3 position;
     public final Coordinates coords;
     public final float radius;
-
 
     private GameObject (Coordinates coords) {
       this.coords = coords;
       this.position = PositionUtil.generateWorldPositionForCoords(coords);
       radius = 90f;
     }
+
   }
 
   private final Viewport viewport;
   private final Array<GameObject> gameObjects = new Array<>();
+  private final GameState gameState;
+  private final Stage parentStage;
+  private final GameScreenAssets assets;
 
   public GameScreenInputAdapter(@NonNull Viewport viewport,
-                                @NonNull Map<Coordinates, Entity> coordinatesEntityMap) {
+                                @NonNull GameState gameState,
+                                @NonNull Stage stage,
+                                @NonNull GameScreenAssets assets) {
     this.viewport = viewport;
-    loadGameObjects(coordinatesEntityMap);
+    this.gameState = gameState;
+    loadGameObjects(gameState.getFieldList());
+    this.parentStage = stage;
+    this.assets = assets;
   }
 
   private void loadGameObjects(Map<Coordinates, Entity> coordinatesEntityMap) {
@@ -48,8 +62,9 @@ public class GameScreenInputAdapter extends InputAdapter {
   @Override
   public boolean touchDown (int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
-    if (selecting != null)
-      System.out.println(selecting.coords);
+    if (selecting != null) {
+      ChooseUnitFieldDialog.createCustomDialog(parentStage, gameState.getFieldList().get(selecting.coords), assets);
+    }
     return selecting != null;
   }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import com.mygdx.game.assets.assetloaders.JsonLoader;
@@ -37,6 +38,7 @@ public class GameScreenAssets {
     loadConfigs();
     loadModels();
     loadTextures();
+    loadSkin();
   }
 
   @NonNull
@@ -47,6 +49,11 @@ public class GameScreenAssets {
   @NonNull
   public Texture getTexture(@NonNull String path) {
     return assetManager.get(GameScreenAssetPaths.TEXTURE_DIR + path);
+  }
+
+  @NonNull
+  public Skin getSkin(@NonNull String path) {
+    return assetManager.get(path);
   }
 
   @NonNull
@@ -73,6 +80,10 @@ public class GameScreenAssets {
   private void loadTextures() {
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
+  }
+
+  private void loadSkin() {
+    assetManager.load(GameScreenAssetPaths.DIALOG_SKIN, Skin.class);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
