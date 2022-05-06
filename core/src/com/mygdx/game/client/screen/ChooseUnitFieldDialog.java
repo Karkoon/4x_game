@@ -2,7 +2,6 @@ package com.mygdx.game.client.screen;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -11,7 +10,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.SlotComponent;
 import com.mygdx.game.client.model.ActiveEntity;
-import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.model.ActiveEntityType;
 import lombok.extern.java.Log;
 
 import java.util.logging.Level;
@@ -34,8 +33,10 @@ public class ChooseUnitFieldDialog {
       @Override
       protected void result(Object object) {
         if (object.equals("field")) {
+          activeEntity.setEntity(entity, ActiveEntityType.FIELD);
           log.log(Level.INFO, "Selected field.");
         } else if (object.equals("unit")) {
+          activeEntity.setEntity(entity, ActiveEntityType.UNIT);
           log.log(Level.INFO, "Selected unit.");
         }
       }
