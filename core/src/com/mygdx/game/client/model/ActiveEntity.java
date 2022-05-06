@@ -2,7 +2,6 @@ package com.mygdx.game.client.model;
 
 import com.badlogic.ashley.core.Entity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

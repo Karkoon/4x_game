@@ -18,7 +18,6 @@ import com.mygdx.game.client.util.MovementUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
-import javax.inject.Inject;
 import java.util.Map;
 
 @Log
