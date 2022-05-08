@@ -1,15 +1,13 @@
 package com.mygdx.game;
 
-import com.mygdx.game.client.modules.AssetManagerModule;
-import com.mygdx.game.client.modules.EngineModule;
-import com.mygdx.game.client.modules.StageModule;
-import com.mygdx.game.client.modules.ViewportModule;
+import com.mygdx.game.client.modules.*;
 import dagger.Component;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {ViewportModule.class, EngineModule.class, AssetManagerModule.class, StageModule.class})
+@Component(modules = {ViewportModule.class, EngineModule.class, AssetManagerModule.class,
+    StageModule.class, TurnServiceModule.class, GameStateVerifierModule.class})
 public interface GameFactory {
   MyGdxGame providesGame();
 }

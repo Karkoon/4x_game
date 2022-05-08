@@ -18,6 +18,8 @@ import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
 import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.service.GameStateVerifier;
+import com.mygdx.game.client.service.TurnService;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -39,6 +41,8 @@ public class GameScreen extends ScreenAdapter {
   private final ModelInstanceRenderer renderer;
 
   private final GameState gameState;
+  private final TurnService turnService;
+  private final GameStateVerifier gameStateVerifier;
 
   private Stage stage;
 
@@ -49,7 +53,9 @@ public class GameScreen extends ScreenAdapter {
                     @NonNull Viewport viewport,
                     @NonNull FieldFactory fieldFactory,
                     @NonNull UnitFactory unitFactory,
-                    @NonNull GameState gameState) {
+                    @NonNull GameState gameState,
+                    @NonNull TurnService turnService,
+                    @NonNull GameStateVerifier gameStateVerifier) {
     this.assets = assets;
     this.engine = engine;
     this.renderer = renderer;
@@ -57,6 +63,8 @@ public class GameScreen extends ScreenAdapter {
     this.fieldFactory = fieldFactory;
     this.unitFactory = unitFactory;
     this.gameState = gameState;
+    this.turnService = turnService;
+    this.gameStateVerifier = gameStateVerifier;
   }
 
   private void positionCamera(@NonNull Camera camera) {
