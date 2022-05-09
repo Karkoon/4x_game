@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = {ViewportModule.class, EngineModule.class, AssetManagerModule.class,
-    StageModule.class, TurnServiceModule.class, GameStateVerifierModule.class})
+    StageModule.class, TurnServiceModule.class})
 public interface GameFactory {
   MyGdxGame providesGame();
 }
