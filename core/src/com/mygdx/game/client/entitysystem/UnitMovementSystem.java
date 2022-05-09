@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.component.SlotComponent;
 import com.mygdx.game.client.component.UnitMovementComp;
 import com.mygdx.game.client.service.SyncListener;
 import dagger.Provides;
@@ -20,6 +21,7 @@ public class UnitMovementSystem extends IteratingSystem {
 
   ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
   ComponentMapper<PositionComponent> positionComponentMapper = ComponentMapper.getFor(PositionComponent.class);
+  ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
 
   @Inject
   public UnitMovementSystem() {
@@ -35,7 +37,8 @@ public class UnitMovementSystem extends IteratingSystem {
     if (fromEntity != toEntity) {
       PositionComponent unitPositionComponent = positionComponentMapper.get(entity);
       unitPositionComponent.setPosition(positionComponentMapper.get(toEntity).getPosition());
-      positionComponentMapper.get(toEntity).getPosition();
+      slotComponentMapper.get(toEntity).setUnitEntity(entity);
+      slotComponentMapper.get(fromEntity).setUnitEntity(null);
     }
   }
 
