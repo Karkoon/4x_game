@@ -9,8 +9,8 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.SlotComponent;
+import com.mygdx.game.client.component.UnitMovementComp;
 import com.mygdx.game.client.model.ActiveEntity;
-import com.mygdx.game.client.model.ActiveEntityType;
 import lombok.extern.java.Log;
 
 import java.util.logging.Level;
@@ -20,6 +20,7 @@ public class ChooseUnitFieldDialog {
 
   private static final ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
   private static final ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
+  private static final ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
 
   public static Dialog customDialog = null;
 
@@ -29,20 +30,24 @@ public class ChooseUnitFieldDialog {
       customDialog = null;
     }
     Skin skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    var fieldSlotComponent = slotComponentMapper.get(entity);
+
     customDialog = new Dialog("Choose", skin) {
       @Override
       protected void result(Object object) {
         if (object.equals("field")) {
-          activeEntity.setEntity(entity, ActiveEntityType.FIELD);
+          activeEntity.setEntity(entity);
           log.log(Level.INFO, "Selected field.");
         } else if (object.equals("unit")) {
-          activeEntity.setEntity(entity, ActiveEntityType.UNIT);
+          var unitEntity = slotComponentMapper.get(entity).getUnitEntity();
+          activeEntity.setEntity(unitEntity);
+          var unitMovementComp = unitMovementCompMapper.get(unitEntity);
+          unitMovementComp.setFromEntity(entity);
           log.log(Level.INFO, "Selected unit.");
         }
       }
     };
 
-    var fieldSlotComponent = slotComponentMapper.get(entity);
     var fieldNameComponent = nameComponentMapper.get(entity);
     customDialog.text("Choose on of the following:");
     customDialog.button("Field: " + fieldNameComponent.getName(), "field");

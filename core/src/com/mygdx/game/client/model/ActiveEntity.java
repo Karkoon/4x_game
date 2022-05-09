@@ -14,22 +14,19 @@ import java.util.logging.Level;
 @Log
 public class ActiveEntity {
 
-  private ActiveEntityType entityType;
   private Entity entity;
 
   @Inject
   public ActiveEntity() {
   }
 
-  public void setEntity(Entity entity, @NonNull ActiveEntityType entityType) {
+  public void setEntity(Entity entity) {
     this.entity = entity;
-    this.entityType = entityType;
-    log.log(Level.INFO, "Active Entity: " + entityType);
+    log.log(Level.INFO, "Active Entity");
   }
 
   public void clear() {
     this.entity = null;
-    this.entityType = ActiveEntityType.EMPTY;
   }
 
 
