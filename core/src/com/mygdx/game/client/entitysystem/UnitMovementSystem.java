@@ -32,7 +32,6 @@ public class UnitMovementSystem extends IteratingSystem {
     var unitMovementComp = unitMovementCompMapper.get(entity);
     var fromEntity = unitMovementComp.getFromEntity();
     var toEntity = unitMovementComp.getToEntity();
-    System.out.println("HEJKA");
     if (fromEntity != toEntity) {
       PositionComponent unitPositionComponent = positionComponentMapper.get(entity);
       unitPositionComponent.setPosition(positionComponentMapper.get(toEntity).getPosition());
