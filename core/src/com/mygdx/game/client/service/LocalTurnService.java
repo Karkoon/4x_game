@@ -1,9 +1,9 @@
 package com.mygdx.game.client.service;
 
+import com.mygdx.game.client.util.Callback;
 import lombok.extern.java.Log;
 
 import java.util.UUID;
-import java.util.function.Function;
 
 @Log
 public class LocalTurnService implements TurnService {
@@ -17,23 +17,23 @@ public class LocalTurnService implements TurnService {
   }
 
   @Override
-  public void obtainToken(Function<TurnToken, Void> onSuccess, Function<Throwable, Void> onError) {
+  public void obtainToken(Callback<TurnToken> onSuccess, Callback<Throwable> onError) {
     activeToken = generateNewToken();
     log.info("obtained token");
-    onSuccess.apply(activeToken);
+    onSuccess.handle(activeToken);
   }
 
   @Override
-  public void releaseToken(TurnToken token) {
-    if (activeToken.equals(token)) {
+  public void releaseToken(TurnToken token, Callback<Boolean> onSuccess, Callback<Throwable> onError) {
+    if (token.equals(activeToken)) {
       activeToken = null;
+      onSuccess.handle(true);
     } else {
-      log.info("wrong token tried to be released");
+      onSuccess.handle(false);
     }
   }
 
   private TurnToken generateNewToken() {
     return new TurnToken(UUID.randomUUID().toString());
   }
-
 }
