@@ -8,7 +8,6 @@ import com.mygdx.game.client.component.PositionComponent;
 import com.mygdx.game.client.component.SlotComponent;
 import com.mygdx.game.client.component.UnitMovementComp;
 import com.mygdx.game.client.service.SyncListener;
-import dagger.Provides;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -25,7 +24,7 @@ public class UnitMovementSystem extends IteratingSystem {
 
   @Inject
   public UnitMovementSystem() {
-    super(Family.all(UnitMovementComp.class).get());
+    super(Family.all(UnitMovementComp.class, PositionComponent.class).get());
 //    this.movementSyncer = movementSyncer;
   }
 
@@ -35,7 +34,7 @@ public class UnitMovementSystem extends IteratingSystem {
     var fromEntity = unitMovementComp.getFromEntity();
     var toEntity = unitMovementComp.getToEntity();
     if (fromEntity != toEntity) {
-      PositionComponent unitPositionComponent = positionComponentMapper.get(entity);
+      var unitPositionComponent = positionComponentMapper.get(entity);
       unitPositionComponent.setPosition(positionComponentMapper.get(toEntity).getPosition());
       slotComponentMapper.get(toEntity).setUnitEntity(entity);
       slotComponentMapper.get(fromEntity).setUnitEntity(null);
