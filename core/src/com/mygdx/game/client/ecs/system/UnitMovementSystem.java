@@ -13,14 +13,16 @@ import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Singleton
 public class UnitMovementSystem extends IteratingSystem {
 
 //  private final MovementSyncer movementSyncer;
 
-  ComponentMapper<UnitMovement> unitMovementCompMapper = ComponentMapper.getFor(UnitMovement.class);
-  ComponentMapper<Position> positionMapper = ComponentMapper.getFor(Position.class);
-  ComponentMapper<Slot> slotMapper = ComponentMapper.getFor(Slot.class);
+  private final ComponentMapper<UnitMovement> unitMovementMapper = getFor(UnitMovement.class);
+  private final ComponentMapper<Position> positionMapper = getFor(Position.class);
+  private final ComponentMapper<Slot> slotMapper = getFor(Slot.class);
 
   @Inject
   public UnitMovementSystem() {
@@ -30,9 +32,9 @@ public class UnitMovementSystem extends IteratingSystem {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    var unitMovementComp = unitMovementCompMapper.get(entity);
-    var fromEntity = unitMovementComp.getFromEntity();
-    var toEntity = unitMovementComp.getToEntity();
+    var unitMovement = unitMovementMapper.get(entity);
+    var fromEntity = unitMovement.getFromEntity();
+    var toEntity = unitMovement.getToEntity();
     if (fromEntity != toEntity) {
       var unitPosition = positionMapper.get(entity);
       unitPosition.setValue(positionMapper.get(toEntity).getValue());

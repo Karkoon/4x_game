@@ -12,6 +12,8 @@ import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Singleton
 public class RenderSystem extends IteratingSystem {
 
@@ -19,8 +21,8 @@ public class RenderSystem extends IteratingSystem {
       ModelInstanceComp.class, Position.class
   ).get();
 
-  private final ComponentMapper<ModelInstanceComp> modelInstanceMapper = ComponentMapper.getFor(ModelInstanceComp.class);
-  private final ComponentMapper<Position> positionMapper = ComponentMapper.getFor(Position.class);
+  private final ComponentMapper<ModelInstanceComp> modelInstanceMapper = getFor(ModelInstanceComp.class);
+  private final ComponentMapper<Position> positionMapper = getFor(Position.class);
   private final ModelInstanceRenderer renderer;
 
   @Inject

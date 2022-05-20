@@ -14,15 +14,17 @@ import lombok.extern.java.Log;
 
 import java.util.logging.Level;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Log
 public final class ChooseUnitFieldDialog {
 
   private ChooseUnitFieldDialog() {
   }
 
-  private static final ComponentMapper<Slot> slotMapper = ComponentMapper.getFor(Slot.class);
-  private static final ComponentMapper<Name> nameMapper = ComponentMapper.getFor(Name.class);
-  private static final ComponentMapper<UnitMovement> unitMovementCompMapper = ComponentMapper.getFor(UnitMovement.class);
+  private static final ComponentMapper<Slot> slotMapper = getFor(Slot.class);
+  private static final ComponentMapper<Name> nameMapper = getFor(Name.class);
+  private static final ComponentMapper<UnitMovement> unitMovementCompMapper = getFor(UnitMovement.class);
 
   public static Dialog customDialog = null;
 

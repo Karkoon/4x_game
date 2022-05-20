@@ -20,6 +20,8 @@ import lombok.extern.java.Log;
 
 import java.util.Map;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Log
 public class GameScreenInputAdapter extends InputAdapter {
 
@@ -35,7 +37,7 @@ public class GameScreenInputAdapter extends InputAdapter {
     }
   }
 
-  private static final ComponentMapper<UnitMovement> unitMovementCompMapper = ComponentMapper.getFor(UnitMovement.class);
+  private static final ComponentMapper<UnitMovement> unitMovementMapper = getFor(UnitMovement.class);
 
   private final Viewport viewport;
   private final Array<GameObject> gameObjects = new Array<>();
@@ -68,8 +70,8 @@ public class GameScreenInputAdapter extends InputAdapter {
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
     if (selecting != null) {
-      if (activeEntity.getEntity() != null && unitMovementCompMapper.has(activeEntity.getEntity())) {
-        var unitMovementComp = unitMovementCompMapper.get(activeEntity.getEntity());
+      if (activeEntity.getEntity() != null && unitMovementMapper.has(activeEntity.getEntity())) {
+        var unitMovementComp = unitMovementMapper.get(activeEntity.getEntity());
         unitMovementComp.setToEntity(gameState.getFieldList().get(selecting.coords));
         activeEntity.clear();
       } else {
