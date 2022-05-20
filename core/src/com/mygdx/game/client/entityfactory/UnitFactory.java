@@ -2,13 +2,13 @@ package com.mygdx.game.client.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.game.ModelInstanceUtil;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.component.ModelInstanceComponent;
 import com.mygdx.game.client.component.NameComponent;
 import com.mygdx.game.client.component.PositionComponent;
 import com.mygdx.game.client.component.UnitMovementComp;
 import com.mygdx.game.client.model.Coordinates;
+import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 import lombok.extern.java.Log;
