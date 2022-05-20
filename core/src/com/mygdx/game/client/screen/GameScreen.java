@@ -17,6 +17,7 @@ import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
+import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.GameState;
 import lombok.NonNull;
 
@@ -39,6 +40,7 @@ public class GameScreen extends ScreenAdapter {
   private final ModelInstanceRenderer renderer;
 
   private final GameState gameState;
+  private final ActiveEntity activeEntity;
 
   private Stage stage;
 
@@ -49,7 +51,8 @@ public class GameScreen extends ScreenAdapter {
                     @NonNull Viewport viewport,
                     @NonNull FieldFactory fieldFactory,
                     @NonNull UnitFactory unitFactory,
-                    @NonNull GameState gameState) {
+                    @NonNull GameState gameState,
+                    @NonNull ActiveEntity activeEntity) {
     this.assets = assets;
     this.engine = engine;
     this.renderer = renderer;
@@ -57,6 +60,7 @@ public class GameScreen extends ScreenAdapter {
     this.fieldFactory = fieldFactory;
     this.unitFactory = unitFactory;
     this.gameState = gameState;
+    this.activeEntity = activeEntity;
   }
 
   private void positionCamera(@NonNull Camera camera) {
@@ -76,7 +80,7 @@ public class GameScreen extends ScreenAdapter {
     StartUnitInitializer.initializeTestUnit(unitFactory, assets, gameState.getFieldList());
 
     var inputProcessor = new CameraMoverInputProcessor(viewport);
-    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets);
+    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets, activeEntity);
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);
