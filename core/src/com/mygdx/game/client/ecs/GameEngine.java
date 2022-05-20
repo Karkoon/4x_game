@@ -17,7 +17,9 @@ public class GameEngine implements Updatable {
   private final UnitMovementSystem unitMovementSystem;
 
   @Inject
-  public GameEngine(@NonNull Engine engine, @NonNull RenderSystem renderSystem, @NonNull UnitMovementSystem unitMovementSystem) {
+  public GameEngine(@NonNull Engine engine,
+                    @NonNull RenderSystem renderSystem,
+                    @NonNull UnitMovementSystem unitMovementSystem) {
     this.engine = engine;
     this.renderSystem = renderSystem;
     this.unitMovementSystem = unitMovementSystem;
