@@ -1,4 +1,4 @@
-package com.mygdx.game.client.decorations;
+package com.mygdx.game.client.ui.decorations;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;

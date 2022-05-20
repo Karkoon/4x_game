@@ -2,9 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.mygdx.game.client.Updatable;
-import com.mygdx.game.client.component.UnitMovementComp;
-import com.mygdx.game.client.entitysystem.RenderSystem;
-import com.mygdx.game.client.entitysystem.UnitMovementSystem;
+import com.mygdx.game.client.ecs.system.RenderSystem;
+import com.mygdx.game.client.ecs.system.UnitMovementSystem;
 import lombok.NonNull;
 
 import javax.inject.Inject;

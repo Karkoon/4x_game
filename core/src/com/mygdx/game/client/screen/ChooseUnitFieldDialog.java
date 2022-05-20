@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.component.NameComponent;
-import com.mygdx.game.client.component.SlotComponent;
-import com.mygdx.game.client.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.NameComponent;
+import com.mygdx.game.client.ecs.component.SlotComponent;
+import com.mygdx.game.client.ecs.component.UnitMovementComp;
 import com.mygdx.game.client.model.ActiveEntity;
 import lombok.extern.java.Log;
 

@@ -1,12 +1,12 @@
-package com.mygdx.game.client.entitysystem;
+package com.mygdx.game.client.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.game.client.component.PositionComponent;
-import com.mygdx.game.client.component.SlotComponent;
-import com.mygdx.game.client.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.PositionComponent;
+import com.mygdx.game.client.ecs.component.SlotComponent;
+import com.mygdx.game.client.ecs.component.UnitMovementComp;
 import com.mygdx.game.client.service.SyncListener;
 import lombok.NonNull;
 

@@ -2,7 +2,7 @@ package com.mygdx.game.client.initialize;
 
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.entityfactory.FieldFactory;
+import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.config.FieldConfig;
 
