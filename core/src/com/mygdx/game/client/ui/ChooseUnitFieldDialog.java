@@ -1,4 +1,4 @@
-package com.mygdx.game.client.screen;
+package com.mygdx.game.client.ui;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -16,7 +16,10 @@ import lombok.extern.java.Log;
 import java.util.logging.Level;
 
 @Log
-public class ChooseUnitFieldDialog {
+public final class ChooseUnitFieldDialog {
+
+  private ChooseUnitFieldDialog() {
+  }
 
   private static final ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
   private static final ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
