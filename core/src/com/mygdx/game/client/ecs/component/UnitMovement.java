@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UnitMovementComp implements Component, Pool.Poolable {
+public class UnitMovement implements Component, Pool.Poolable {
 
   private Entity fromEntity;
   private Entity toEntity;

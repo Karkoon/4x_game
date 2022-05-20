@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameEngine;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
@@ -19,6 +18,7 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.util.CompositeUpdatable;
 import lombok.NonNull;
 
 import javax.inject.Inject;

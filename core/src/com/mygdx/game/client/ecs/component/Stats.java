@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Pool;
 import lombok.Data;
 
 @Data
-public class StatsComponent implements Component, Pool.Poolable {
+public class Stats implements Component, Pool.Poolable {
   private int maxHp;
   private int hp;
   private int attackPower;

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.Coordinates;
@@ -35,7 +35,7 @@ public class GameScreenInputAdapter extends InputAdapter {
     }
   }
 
-  private static final ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
+  private static final ComponentMapper<UnitMovement> unitMovementCompMapper = ComponentMapper.getFor(UnitMovement.class);
 
   private final Viewport viewport;
   private final Array<GameObject> gameObjects = new Array<>();

@@ -4,9 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.game.client.ecs.component.PositionComponent;
-import com.mygdx.game.client.ecs.component.SlotComponent;
-import com.mygdx.game.client.ecs.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.Slot;
+import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.service.SyncListener;
 import lombok.NonNull;
 
@@ -18,13 +18,13 @@ public class UnitMovementSystem extends IteratingSystem {
 
 //  private final MovementSyncer movementSyncer;
 
-  ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
-  ComponentMapper<PositionComponent> positionComponentMapper = ComponentMapper.getFor(PositionComponent.class);
-  ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
+  ComponentMapper<UnitMovement> unitMovementCompMapper = ComponentMapper.getFor(UnitMovement.class);
+  ComponentMapper<Position> positionMapper = ComponentMapper.getFor(Position.class);
+  ComponentMapper<Slot> slotMapper = ComponentMapper.getFor(Slot.class);
 
   @Inject
   public UnitMovementSystem() {
-    super(Family.all(UnitMovementComp.class, PositionComponent.class).get());
+    super(Family.all(UnitMovement.class, Position.class).get());
 //    this.movementSyncer = movementSyncer;
   }
 
@@ -34,16 +34,16 @@ public class UnitMovementSystem extends IteratingSystem {
     var fromEntity = unitMovementComp.getFromEntity();
     var toEntity = unitMovementComp.getToEntity();
     if (fromEntity != toEntity) {
-      var unitPositionComponent = positionComponentMapper.get(entity);
-      unitPositionComponent.setPosition(positionComponentMapper.get(toEntity).getPosition());
-      slotComponentMapper.get(toEntity).setUnitEntity(entity);
-      slotComponentMapper.get(fromEntity).setUnitEntity(null);
+      var unitPosition = positionMapper.get(entity);
+      unitPosition.setValue(positionMapper.get(toEntity).getValue());
+      slotMapper.get(toEntity).setUnitEntity(entity);
+      slotMapper.get(fromEntity).setUnitEntity(null);
     }
   }
 
   interface MovementSyncer {
     void addSyncListener(@NonNull SyncListener<Boolean> listener);
 
-    void sync(UnitMovementComp unitMovementComp);
+    void sync(UnitMovement unitMovement);
   }
 }

@@ -3,10 +3,10 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.ModelInstanceComponent;
-import com.mygdx.game.client.ecs.component.NameComponent;
-import com.mygdx.game.client.ecs.component.PositionComponent;
-import com.mygdx.game.client.ecs.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.ModelInstanceComp;
+import com.mygdx.game.client.ecs.component.Name;
+import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.UnitConfig;
@@ -29,31 +29,31 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   @Override
   public @NonNull Entity createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
-    var positionComponent = engine.createComponent(PositionComponent.class);
-    var nameComponent = setUpNameComponent(config);
-    var unitMovementComp = engine.createComponent(UnitMovementComp.class);
+    var position = engine.createComponent(Position.class);
+    var name = setUpNameComponent(config);
+    var unitMovementComp = engine.createComponent(UnitMovement.class);
 
-    entity.add(positionComponent);
-    entity.add(nameComponent);
+    entity.add(position);
+    entity.add(name);
     entity.add(unitMovementComp);
-    entity.add(setUpModelInstanceComponent(config));
+    entity.add(setUpModelInstanceComp(config));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a unit.");
     return entity;
   }
 
-  private NameComponent setUpNameComponent(UnitConfig config) {
-    var nameComponent = engine.createComponent(NameComponent.class);
-    nameComponent.setName(config.getName());
-    nameComponent.setPolishName(config.getPolishName());
-    return nameComponent;
+  private Name setUpNameComponent(UnitConfig config) {
+    var name = engine.createComponent(Name.class);
+    name.setName(config.getName());
+    name.setPolishName(config.getPolishName());
+    return name;
   }
 
-  private ModelInstanceComponent setUpModelInstanceComponent(UnitConfig config) {
-    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+  private ModelInstanceComp setUpModelInstanceComp(UnitConfig config) {
+    var modelInstanceComp = engine.createComponent(ModelInstanceComp.class);
+    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
     var texture = assets.getTexture(config.getTextureName());
-    ModelInstanceUtil.setTexture(modelInstanceComponent.getModelInstance(), texture);
-    return modelInstanceComponent;
+    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
+    return modelInstanceComp;
   }
 }

@@ -3,10 +3,10 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.ModelInstanceComponent;
-import com.mygdx.game.client.ecs.component.NameComponent;
-import com.mygdx.game.client.ecs.component.PositionComponent;
-import com.mygdx.game.client.ecs.component.SlotComponent;
+import com.mygdx.game.client.ecs.component.ModelInstanceComp;
+import com.mygdx.game.client.ecs.component.Name;
+import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.Slot;
 import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.util.ModelInstanceUtil;
@@ -31,33 +31,32 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   public @NonNull Entity createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
 
-    var positionComponent = engine.createComponent(PositionComponent.class);
-    positionComponent.setPosition(PositionUtil.generateWorldPositionForCoords(coordinates));
-    var slotComponent = engine.createComponent(SlotComponent.class);
-    var nameComponent = setUpNameComponent(config);
+    var position = engine.createComponent(Position.class);
+    position.setValue(PositionUtil.generateWorldPositionForCoords(coordinates));
+    var slot = engine.createComponent(Slot.class);
+    var name = setUpName(config);
 
-    entity.add(positionComponent);
-    entity.add(nameComponent);
-    entity.add(slotComponent);
-    entity.add(setUpModelInstanceComponent(config));
+    entity.add(position);
+    entity.add(name);
+    entity.add(slot);
+    entity.add(setUpModelInstanceComp(config));
     engine.addEntity(entity);
     log.log(Level.INFO, "Added a field.");
     return entity;
   }
 
-  private NameComponent setUpNameComponent(FieldConfig config) {
-    var nameComponent = engine.createComponent(NameComponent.class);
-    nameComponent.setName(config.getName());
-    nameComponent.setPolishName(config.getPolishName());
-    return nameComponent;
+  private Name setUpName(FieldConfig config) {
+    var name = engine.createComponent(Name.class);
+    name.setName(config.getName());
+    name.setPolishName(config.getPolishName());
+    return name;
   }
 
-  private ModelInstanceComponent setUpModelInstanceComponent(FieldConfig config) {
-    var modelInstanceComponent = engine.createComponent(ModelInstanceComponent.class);
-    modelInstanceComponent.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+  private ModelInstanceComp setUpModelInstanceComp(FieldConfig config) {
+    var modelInstanceComp = engine.createComponent(ModelInstanceComp.class);
+    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
     var texture = assets.getTexture(config.getTextureName());
-    ModelInstanceUtil.setTexture(modelInstanceComponent.getModelInstance(), texture);
-    return modelInstanceComponent;
+    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
+    return modelInstanceComp;
   }
-
 }
