@@ -82,7 +82,7 @@ public class GameScreen extends ScreenAdapter {
     var inputProcessor = new CameraMoverInputProcessor(viewport);
     var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets, activeEntity);
 
-    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    var inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(gameScreenInput);
