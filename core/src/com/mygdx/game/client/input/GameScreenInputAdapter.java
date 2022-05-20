@@ -10,11 +10,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.UnitMovement;
-import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.client.ui.ChooseUnitFieldDialog;
+import com.mygdx.game.client.util.PositionUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

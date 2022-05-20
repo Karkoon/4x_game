@@ -1,4 +1,4 @@
-package com.mygdx.game.client.initialize;
+package com.mygdx.game.client.util;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client.model.Coordinates;
