@@ -14,7 +14,7 @@ import com.mygdx.game.client.initialize.PositionUtil;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.model.GameState;
-import com.mygdx.game.client.screen.ChooseUnitFieldDialog;
+import com.mygdx.game.client.ui.ChooseUnitFieldDialog;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -24,8 +24,6 @@ import java.util.Map;
 public class GameScreenInputAdapter extends InputAdapter {
 
   private static class GameObject {
-
-
     public final Vector3 position;
     public final Coordinates coords;
     public final float radius;
@@ -35,8 +33,6 @@ public class GameScreenInputAdapter extends InputAdapter {
       this.position = PositionUtil.generateWorldPositionForCoords(coords);
       radius = 90f;
     }
-
-
   }
 
   private static final ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
@@ -51,7 +47,8 @@ public class GameScreenInputAdapter extends InputAdapter {
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
                                 @NonNull Stage stage,
-                                @NonNull GameScreenAssets assets, ActiveEntity activeEntity) {
+                                @NonNull GameScreenAssets assets,
+                                @NonNull ActiveEntity activeEntity) {
     this.viewport = viewport;
     this.gameState = gameState;
     loadGameObjects(gameState.getFieldList());
