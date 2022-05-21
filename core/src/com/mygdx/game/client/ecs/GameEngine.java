@@ -1,6 +1,8 @@
 package com.mygdx.game.client.ecs;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.UnitMovementSystem;
 import com.mygdx.game.client.util.Updatable;
@@ -13,22 +15,21 @@ import javax.inject.Singleton;
 public class GameEngine implements Updatable {
 
   private final Engine engine;
-  private final RenderSystem renderSystem;
-  private final UnitMovementSystem unitMovementSystem;
+  private final Array<EntitySystem> array = new Array<>();
 
   @Inject
   public GameEngine(@NonNull Engine engine,
                     @NonNull RenderSystem renderSystem,
                     @NonNull UnitMovementSystem unitMovementSystem) {
     this.engine = engine;
-    this.renderSystem = renderSystem;
-    this.unitMovementSystem = unitMovementSystem;
+    array.add(renderSystem, unitMovementSystem);
     addEntitySystems();
   }
 
   private void addEntitySystems() {
-    this.engine.addSystem(this.renderSystem);
-    this.engine.addSystem(this.unitMovementSystem);
+    for (int i = 0; i < array.size; i++) {
+      this.engine.addSystem(array.get(i));
+    }
   }
 
   @Override
