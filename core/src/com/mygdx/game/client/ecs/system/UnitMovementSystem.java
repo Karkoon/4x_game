@@ -9,6 +9,7 @@ import com.mygdx.game.client.ecs.component.Slot;
 import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.service.SyncListener;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,6 +17,7 @@ import javax.inject.Singleton;
 import static com.badlogic.ashley.core.ComponentMapper.getFor;
 
 @Singleton
+@Log
 public class UnitMovementSystem extends IteratingSystem {
 
 //  private final MovementSyncer movementSyncer;
@@ -31,16 +33,20 @@ public class UnitMovementSystem extends IteratingSystem {
   }
 
   @Override
-  protected void processEntity(Entity entity, float deltaTime) {
-    var unitMovement = unitMovementMapper.get(entity);
-    var fromEntity = unitMovement.getFromEntity();
-    var toEntity = unitMovement.getToEntity();
-    if (fromEntity != toEntity) {
-      var unitPosition = positionMapper.get(entity);
-      unitPosition.setValue(positionMapper.get(toEntity).getValue());
-      slotMapper.get(toEntity).setUnitEntity(entity);
-      slotMapper.get(fromEntity).setUnitEntity(null);
-    }
+  protected void processEntity(Entity unit, float deltaTime) {
+    log.info("processing movement");
+    var unitMovement = unitMovementMapper.get(unit);
+    var fromField = unitMovement.getFromEntity();
+    var toField = unitMovement.getToEntity();
+    slotMapper.get(fromField).getEntities().removeValue(unit, true);
+    slotMapper.get(toField).getEntities().add(unit);
+    unit.remove(UnitMovement.class);
+
+
+
+    var unitPosition = positionMapper.get(unit);
+    var toFieldPosition = positionMapper.get(toField);
+    unitPosition.setPosition(toFieldPosition.getPosition());
   }
 
   interface MovementSyncer {
