@@ -5,18 +5,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
 public class UnitMovement implements Component, Pool.Poolable {
 
-  private Entity fromEntity;
-  private Entity toEntity;
-
-  public void setFromAndTo(Entity from, Entity to) {
-    this.fromEntity = from;
-    this.toEntity = to;
-  }
+  private @NonNull Entity fromEntity;
+  private @NonNull Entity toEntity;
 
   @Override
   public void reset() {
