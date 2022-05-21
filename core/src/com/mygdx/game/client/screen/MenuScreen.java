@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.decorations.Planet;
-import com.mygdx.game.client.decorations.StarBackground;
+import com.mygdx.game.client.ui.decorations.Planet;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.Vector3Util;
 import lombok.NonNull;
 

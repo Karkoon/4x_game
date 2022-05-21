@@ -1,26 +1,28 @@
-package com.mygdx.game.client.entitysystem;
+package com.mygdx.game.client.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.component.ModelInstanceComponent;
-import com.mygdx.game.client.component.PositionComponent;
+import com.mygdx.game.client.ecs.component.ModelInstanceComp;
+import com.mygdx.game.client.ecs.component.Position;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Singleton
 public class RenderSystem extends IteratingSystem {
 
   private static final Family RENDER_SYSTEM_FAMILY = Family.all(
-      ModelInstanceComponent.class, PositionComponent.class
+      ModelInstanceComp.class, Position.class
   ).get();
 
-  private final ComponentMapper<ModelInstanceComponent> modelInstanceMapper = ComponentMapper.getFor(ModelInstanceComponent.class);
-  private final ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);
+  private final ComponentMapper<ModelInstanceComp> modelInstanceMapper = getFor(ModelInstanceComp.class);
+  private final ComponentMapper<Position> positionMapper = getFor(Position.class);
   private final ModelInstanceRenderer renderer;
 
   @Inject
@@ -33,7 +35,7 @@ public class RenderSystem extends IteratingSystem {
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
     var modelInstance = modelInstanceMapper.get(entity).getModelInstance();
-    var position = positionMapper.get(entity).getPosition();
+    var position = positionMapper.get(entity).getValue();
     modelInstance.transform.setTranslation(position);
     renderer.addToCache(modelInstance);
   }

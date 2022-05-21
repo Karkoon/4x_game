@@ -1,4 +1,4 @@
-package com.mygdx.game.client.component;
+package com.mygdx.game.client.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -10,7 +10,7 @@ import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
-public class ModelInstanceComponent implements Component {
+public class ModelInstanceComp implements Component {
   private @NonNull ModelInstance modelInstance;
 
   public void setModelInstanceFromModel(@NonNull Model model) {

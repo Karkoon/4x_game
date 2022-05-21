@@ -1,11 +1,11 @@
-package com.mygdx.game.client.component;
+package com.mygdx.game.client.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
 import lombok.Data;
 
 @Data
-public class StatsComponent implements Component, Pool.Poolable {
+public class Stats implements Component, Pool.Poolable {
   private int maxHp;
   private int hp;
   private int attackPower;

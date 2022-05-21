@@ -1,4 +1,4 @@
-package com.mygdx.game.client.component;
+package com.mygdx.game.client.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
-public class NameComponent implements Component {
+public class Name implements Component {
 
   @NonNull
   private String name;

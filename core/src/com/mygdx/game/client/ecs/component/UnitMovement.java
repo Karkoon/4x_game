@@ -1,4 +1,4 @@
-package com.mygdx.game.client.component;
+package com.mygdx.game.client.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UnitMovementComp implements Component, Pool.Poolable {
+public class UnitMovement implements Component, Pool.Poolable {
 
   private Entity fromEntity;
   private Entity toEntity;

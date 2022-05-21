@@ -2,7 +2,6 @@ package com.mygdx.game.client.model;
 
 import com.badlogic.ashley.core.Entity;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -22,12 +21,10 @@ public class ActiveEntity {
 
   public void setEntity(Entity entity) {
     this.entity = entity;
-    log.log(Level.INFO, "Active Entity");
+    log.log(Level.INFO, "Active Entity set");
   }
 
   public void clear() {
     this.entity = null;
   }
-
-
 }

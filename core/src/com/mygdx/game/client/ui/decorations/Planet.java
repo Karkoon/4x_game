@@ -1,4 +1,4 @@
-package com.mygdx.game.client.decorations;
+package com.mygdx.game.client.ui.decorations;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.Updatable;
+import com.mygdx.game.client.util.Updatable;
 import lombok.NonNull;
 
 public class Planet implements Updatable {

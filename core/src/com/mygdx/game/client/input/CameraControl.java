@@ -2,7 +2,7 @@ package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.client.Updatable;
+import com.mygdx.game.client.util.Updatable;
 import lombok.NonNull;
 
 import java.util.HashSet;

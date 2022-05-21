@@ -7,18 +7,18 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.GameEngine;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.CompositeUpdatable;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.entityfactory.FieldFactory;
-import com.mygdx.game.client.entityfactory.UnitFactory;
+import com.mygdx.game.client.ecs.GameEngine;
+import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
+import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.util.CompositeUpdatable;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -82,7 +82,7 @@ public class GameScreen extends ScreenAdapter {
     var inputProcessor = new CameraMoverInputProcessor(viewport);
     var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets, activeEntity);
 
-    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    var inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(inputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(gameScreenInput);

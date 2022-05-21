@@ -1,4 +1,4 @@
-package com.mygdx.game.client;
+package com.mygdx.game.client.util;
 
 import lombok.NonNull;
 

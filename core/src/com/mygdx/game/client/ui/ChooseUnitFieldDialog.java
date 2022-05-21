@@ -1,26 +1,30 @@
-package com.mygdx.game.client.screen;
+package com.mygdx.game.client.ui;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.component.NameComponent;
-import com.mygdx.game.client.component.SlotComponent;
-import com.mygdx.game.client.component.UnitMovementComp;
+import com.mygdx.game.client.ecs.component.Name;
+import com.mygdx.game.client.ecs.component.Slot;
+import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.model.ActiveEntity;
 import lombok.extern.java.Log;
 
 import java.util.logging.Level;
 
-@Log
-public class ChooseUnitFieldDialog {
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
 
-  private static final ComponentMapper<SlotComponent> slotComponentMapper = ComponentMapper.getFor(SlotComponent.class);
-  private static final ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
-  private static final ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
+@Log
+public final class ChooseUnitFieldDialog {
+
+  private ChooseUnitFieldDialog() {
+  }
+
+  private static final ComponentMapper<Slot> slotMapper = getFor(Slot.class);
+  private static final ComponentMapper<Name> nameMapper = getFor(Name.class);
+  private static final ComponentMapper<UnitMovement> unitMovementCompMapper = getFor(UnitMovement.class);
 
   public static Dialog customDialog = null;
 
@@ -29,8 +33,8 @@ public class ChooseUnitFieldDialog {
       customDialog.hide();
       customDialog = null;
     }
-    Skin skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
-    var fieldSlotComponent = slotComponentMapper.get(entity);
+    var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    var fieldSlotComponent = slotMapper.get(entity);
 
     customDialog = new Dialog("Choose", skin) {
       @Override
@@ -39,7 +43,7 @@ public class ChooseUnitFieldDialog {
           activeEntity.setEntity(entity);
           log.log(Level.INFO, "Selected field.");
         } else if (object.equals("unit")) {
-          var unitEntity = slotComponentMapper.get(entity).getUnitEntity();
+          var unitEntity = slotMapper.get(entity).getUnitEntity();
           activeEntity.setEntity(unitEntity);
           var unitMovementComp = unitMovementCompMapper.get(unitEntity);
           unitMovementComp.setFromEntity(entity);
@@ -48,19 +52,19 @@ public class ChooseUnitFieldDialog {
       }
     };
 
-    var fieldNameComponent = nameComponentMapper.get(entity);
+    var fieldNameComponent = nameMapper.get(entity);
     customDialog.text("Choose on of the following:");
     customDialog.button("Field: " + fieldNameComponent.getName(), "field");
 
     if (fieldHasUnit(fieldSlotComponent)) {
-      var unitNameComponent = nameComponentMapper.get(fieldSlotComponent.getUnitEntity());
+      var unitNameComponent = nameMapper.get(fieldSlotComponent.getUnitEntity());
       customDialog.button("Unit: " + unitNameComponent.getName(), "unit");
     }
     customDialog.show(parentStage);
   }
 
-  private static boolean fieldHasUnit(SlotComponent slotComponent) {
-    return slotComponent.getUnitEntity() != null;
+  private static boolean fieldHasUnit(Slot slot) {
+    return slot.getUnitEntity() != null;
   }
 
 }

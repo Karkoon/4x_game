@@ -1,4 +1,4 @@
-package com.mygdx.game.client.entityfactory;
+package com.mygdx.game.client.ecs.entityfactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;

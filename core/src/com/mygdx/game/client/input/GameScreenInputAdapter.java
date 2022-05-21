@@ -9,23 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.component.UnitMovementComp;
-import com.mygdx.game.client.initialize.PositionUtil;
+import com.mygdx.game.client.ecs.component.UnitMovement;
 import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.Coordinates;
 import com.mygdx.game.client.model.GameState;
-import com.mygdx.game.client.screen.ChooseUnitFieldDialog;
+import com.mygdx.game.client.ui.ChooseUnitFieldDialog;
+import com.mygdx.game.client.util.PositionUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import java.util.Map;
 
+import static com.badlogic.ashley.core.ComponentMapper.getFor;
+
 @Log
 public class GameScreenInputAdapter extends InputAdapter {
 
   private static class GameObject {
-
-
     public final Vector3 position;
     public final Coordinates coords;
     public final float radius;
@@ -35,11 +35,9 @@ public class GameScreenInputAdapter extends InputAdapter {
       this.position = PositionUtil.generateWorldPositionForCoords(coords);
       radius = 90f;
     }
-
-
   }
 
-  private static final ComponentMapper<UnitMovementComp> unitMovementCompMapper = ComponentMapper.getFor(UnitMovementComp.class);
+  private static final ComponentMapper<UnitMovement> unitMovementMapper = getFor(UnitMovement.class);
 
   private final Viewport viewport;
   private final Array<GameObject> gameObjects = new Array<>();
@@ -51,7 +49,8 @@ public class GameScreenInputAdapter extends InputAdapter {
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
                                 @NonNull Stage stage,
-                                @NonNull GameScreenAssets assets, ActiveEntity activeEntity) {
+                                @NonNull GameScreenAssets assets,
+                                @NonNull ActiveEntity activeEntity) {
     this.viewport = viewport;
     this.gameState = gameState;
     loadGameObjects(gameState.getFieldList());
@@ -71,8 +70,8 @@ public class GameScreenInputAdapter extends InputAdapter {
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
     GameObject selecting = getObject(screenX, screenY);
     if (selecting != null) {
-      if (activeEntity.getEntity() != null && unitMovementCompMapper.has(activeEntity.getEntity())) {
-        var unitMovementComp = unitMovementCompMapper.get(activeEntity.getEntity());
+      if (activeEntity.getEntity() != null && unitMovementMapper.has(activeEntity.getEntity())) {
+        var unitMovementComp = unitMovementMapper.get(activeEntity.getEntity());
         unitMovementComp.setToEntity(gameState.getFieldList().get(selecting.coords));
         activeEntity.clear();
       } else {

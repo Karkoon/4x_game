@@ -1,10 +1,9 @@
-package com.mygdx.game;
+package com.mygdx.game.client.ecs;
 
 import com.badlogic.ashley.core.Engine;
-import com.mygdx.game.client.Updatable;
-import com.mygdx.game.client.component.UnitMovementComp;
-import com.mygdx.game.client.entitysystem.RenderSystem;
-import com.mygdx.game.client.entitysystem.UnitMovementSystem;
+import com.mygdx.game.client.ecs.system.RenderSystem;
+import com.mygdx.game.client.ecs.system.UnitMovementSystem;
+import com.mygdx.game.client.util.Updatable;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -18,7 +17,9 @@ public class GameEngine implements Updatable {
   private final UnitMovementSystem unitMovementSystem;
 
   @Inject
-  public GameEngine(@NonNull Engine engine, @NonNull RenderSystem renderSystem, @NonNull UnitMovementSystem unitMovementSystem) {
+  public GameEngine(@NonNull Engine engine,
+                    @NonNull RenderSystem renderSystem,
+                    @NonNull UnitMovementSystem unitMovementSystem) {
     this.engine = engine;
     this.renderSystem = renderSystem;
     this.unitMovementSystem = unitMovementSystem;
