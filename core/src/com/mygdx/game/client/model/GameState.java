@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 public class GameState {
 
-  private Map<Coordinates, Entity> fieldList;
+  private Map<Coordinates, Entity> fields;
 
   @Inject
   public GameState() {

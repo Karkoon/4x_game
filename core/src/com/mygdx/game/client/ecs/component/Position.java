@@ -9,10 +9,10 @@ import lombok.NonNull;
 @Data
 public class Position implements Component, Pool.Poolable {
 
-  private @NonNull Vector3 value = new Vector3();
+  private @NonNull Vector3 position = new Vector3();
 
   @Override
   public void reset() {
-    value.set(Vector3.Zero);
+    position.set(Vector3.Zero);
   }
 }

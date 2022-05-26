@@ -35,7 +35,7 @@ public class RenderSystem extends IteratingSystem {
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
     var modelInstance = modelInstanceMapper.get(entity).getModelInstance();
-    var position = positionMapper.get(entity).getValue();
+    var position = positionMapper.get(entity).getPosition();
     modelInstance.transform.setTranslation(position);
     renderer.addToCache(modelInstance);
   }

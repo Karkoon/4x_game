@@ -5,91 +5,67 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.ecs.GameEngine;
-import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
-import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client.initialize.MapInitializer;
 import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
-import com.mygdx.game.client.model.ActiveEntity;
 import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.modules.StageModule;
 import com.mygdx.game.client.util.CompositeUpdatable;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton
+@Log
 public class GameScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
-  private final GameScreenAssets assets;
   private final GameEngine engine;
+  private final GameState gameState;
 
   private final Viewport viewport;
-
-  private final FieldFactory fieldFactory;
-  private final UnitFactory unitFactory;
-
   private final ModelInstanceRenderer renderer;
 
-  private final GameState gameState;
-  private final ActiveEntity activeEntity;
+  private final MapInitializer mapInitializer;
+  private final StartUnitInitializer startUnitInitializer;
 
-  private Stage stage;
+  private final Stage stage;
+  private final GameScreenInputAdapter gameScreenInputAdapter;
 
   @Inject
-  public GameScreen(@NonNull GameScreenAssets assets,
-                    @NonNull ModelInstanceRenderer renderer,
+  public GameScreen(@NonNull ModelInstanceRenderer renderer,
                     @NonNull GameEngine engine,
                     @NonNull Viewport viewport,
-                    @NonNull FieldFactory fieldFactory,
-                    @NonNull UnitFactory unitFactory,
                     @NonNull GameState gameState,
-                    @NonNull ActiveEntity activeEntity) {
-    this.assets = assets;
+                    @NonNull MapInitializer mapInitializer,
+                    @NonNull StartUnitInitializer startUnitInitializer,
+                    @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+                    @NonNull GameScreenInputAdapter gameScreenInputAdapter) {
     this.engine = engine;
     this.renderer = renderer;
     this.viewport = viewport;
-    this.fieldFactory = fieldFactory;
-    this.unitFactory = unitFactory;
     this.gameState = gameState;
-    this.activeEntity = activeEntity;
-  }
-
-  private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 300, 0);
-    camera.lookAt(0, 0, 0);
+    this.mapInitializer = mapInitializer;
+    this.startUnitInitializer = startUnitInitializer;
+    this.stage = stage;
+    this.gameScreenInputAdapter = gameScreenInputAdapter;
   }
 
   @Override
   public void show() {
+    log.info("GameScreen shown");
     positionCamera(viewport.getCamera());
-
-    stage = new Stage(new ScreenViewport());
-
     compositeUpdatable.addUpdatable(engine);
-
-    gameState.setFieldList(MapInitializer.initializeMap(fieldFactory, assets));
-    StartUnitInitializer.initializeTestUnit(unitFactory, assets, gameState.getFieldList());
-
-    var inputProcessor = new CameraMoverInputProcessor(viewport);
-    var gameScreenInput = new GameScreenInputAdapter(viewport, gameState, stage, assets, activeEntity);
-
-    var inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(inputProcessor);
-    inputMultiplexer.addProcessor(stage);
-    inputMultiplexer.addProcessor(gameScreenInput);
-
-    compositeUpdatable.addUpdatable(inputProcessor.getCameraControl());
-    Gdx.input.setInputProcessor(inputMultiplexer);
-
+    setUpGameState();
+    setUpInput();
   }
 
   @Override
@@ -110,5 +86,22 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     renderer.dispose();
+  }
+
+  private void setUpGameState() {
+    gameState.setFields(mapInitializer.initializeMap());
+    startUnitInitializer.initializeTestUnit(gameState.getFields());
+  }
+
+  private void setUpInput() {
+    var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
+    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage, gameScreenInputAdapter);
+    compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
+    Gdx.input.setInputProcessor(inputMultiplexer);
+  }
+
+  private void positionCamera(@NonNull Camera camera) {
+    camera.position.set(0, 600, 0);
+    camera.lookAt(0, 0, 0);
   }
 }

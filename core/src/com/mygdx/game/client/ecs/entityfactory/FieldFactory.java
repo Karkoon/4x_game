@@ -16,23 +16,23 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.logging.Level;
 
 @Singleton
 @Log
 public class FieldFactory extends EntityFactory<FieldConfig> {
 
   @Inject
-  public FieldFactory(@NonNull Engine engine, @NonNull GameScreenAssets assets) {
+  public FieldFactory(@NonNull Engine engine,
+                      @NonNull GameScreenAssets assets) {
     super(engine, assets);
   }
 
   @Override
-  public @NonNull Entity createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates) {
+  public @NonNull Entity createEntity(@NonNull FieldConfig config,
+                                      @NonNull Coordinates coordinates) {
     var entity = engine.createEntity();
 
-    var position = engine.createComponent(Position.class);
-    position.setValue(PositionUtil.generateWorldPositionForCoords(coordinates));
+    var position = setUpPosition(coordinates);
     var slot = engine.createComponent(Slot.class);
     var name = setUpName(config);
 
@@ -41,18 +41,24 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     entity.add(slot);
     entity.add(setUpModelInstanceComp(config));
     engine.addEntity(entity);
-    log.log(Level.INFO, "Added a field.");
     return entity;
   }
 
-  private Name setUpName(FieldConfig config) {
+  private Name setUpName(@NonNull FieldConfig config) {
     var name = engine.createComponent(Name.class);
     name.setName(config.getName());
     name.setPolishName(config.getPolishName());
     return name;
   }
 
-  private ModelInstanceComp setUpModelInstanceComp(FieldConfig config) {
+  private Position setUpPosition(@NonNull Coordinates coordinates) {
+    var position = engine.createComponent(Position.class);
+    var positionFromCoordinates = PositionUtil.generateWorldPositionForCoords(coordinates);
+    position.setPosition(positionFromCoordinates);
+    return position;
+  }
+
+  private ModelInstanceComp setUpModelInstanceComp(@NonNull FieldConfig config) {
     var modelInstanceComp = engine.createComponent(ModelInstanceComp.class);
     modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
     var texture = assets.getTexture(config.getTextureName());

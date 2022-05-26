@@ -20,8 +20,8 @@ public class ViewportModule {
   public @NonNull Viewport providesViewport() {
     log.log(Level.INFO, "provided viewport");
     Camera camera = new PerspectiveCamera(66, 300, 300);
-    camera.near = 1f;
-    camera.far = 300f;
+    camera.near = 500f;
+    camera.far = 700f;
     return new ExtendViewport(300, 300, camera);
   }
 }
