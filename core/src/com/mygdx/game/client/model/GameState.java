@@ -1,7 +1,10 @@
 package com.mygdx.game.client.model;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.game.client.initialize.MapInitializer;
+import com.mygdx.game.client.initialize.StartUnitInitializer;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.inject.Inject;
@@ -16,6 +19,9 @@ public class GameState {
   private Map<Coordinates, Entity> fields;
 
   @Inject
-  public GameState() {
+  public GameState(@NonNull MapInitializer mapInitializer,
+                   @NonNull StartUnitInitializer startUnitInitializer) {
+    fields = mapInitializer.initializeMap();
+    startUnitInitializer.initializeTestUnit(fields);
   }
 }
