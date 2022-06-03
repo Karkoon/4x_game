@@ -101,6 +101,7 @@ gradle-app.setting
 /desktop/build/
 /html/build/
 /ios/build/
+/desktop_server/build/
 
 ## OS Specific
 .DS_Store
@@ -113,3 +114,5 @@ Thumbs.db
 /ios/xcode/native/
 /ios/IOSLauncher.app
 /ios/IOSLauncher.app.dSYM
+
+

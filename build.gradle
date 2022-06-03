@@ -50,6 +50,20 @@ project(":desktop") {
     }
 }
 
+
+project(":desktop_server") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
+    }
+}
+
+
 project(":core") {
     apply plugin: "java-library"
 
