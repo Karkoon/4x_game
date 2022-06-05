@@ -25,6 +25,8 @@ allprojects {
         gdxVersion = '1.10.0'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
+        wsVersion = '1.9.10.3'
+        vertxVersion = '3.5.0'
     }
 
     repositories {
@@ -42,6 +44,9 @@ project(":desktop") {
     apply plugin: "java-library"
 
     dependencies {
+        implementation "io.vertx:vertx-core:$vertxVersion"
+
+
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
@@ -66,6 +71,10 @@ project(":core") {
         implementation "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
 
         implementation "com.badlogicgames.ashley:ashley:1.7.4"
+
+        implementation  "com.github.MrStahlfelge.gdx-websockets:core:$wsVersion"
+        implementation  "com.github.MrStahlfelge.gdx-websockets:common:$wsVersion"
+        implementation  "com.github.MrStahlfelge.gdx-websockets:core:$wsVersion:sources"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
