@@ -8,6 +8,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import lombok.NonNull;
 
+import java.util.HashMap;
 import java.util.Map;
 // TODO: 04.06.2022 use it for rpc calls??
 public class NetworkMapInitializer implements MapInitializer {
@@ -21,7 +22,7 @@ public class NetworkMapInitializer implements MapInitializer {
 
   @Override
   public Map<Coordinates, Integer> initializeMap() {
-    return null/*connection.getMap()*/; // idk how, maybe the connection.getMap could be implemented here
+    return new HashMap<>();
   }
 
   @AssistedFactory

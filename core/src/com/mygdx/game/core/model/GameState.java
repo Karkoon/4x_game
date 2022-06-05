@@ -21,6 +21,7 @@ public class GameState {
   public GameState(@NonNull MapInitializer mapInitializer,
                    @NonNull StartUnitInitializer startUnitInitializer) {
     fields = mapInitializer.initializeMap();
-    startUnitInitializer.initializeTestUnit(fields.get(Coordinates.of(0, 0)));
+    if (fields.containsKey(Coordinates.of(0, 0)))
+      startUnitInitializer.initializeTestUnit(fields.get(Coordinates.of(0, 0)));
   }
 }

@@ -26,6 +26,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         artemisVersion = '2.3.0'
+        vertxVersion = '3.5.0'
     }
 
     repositories {
@@ -69,6 +70,8 @@ project(":desktop_server") {
 
         implementation 'com.google.dagger:dagger:2.41'
         annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
+
+        implementation "io.vertx:vertx-core:$vertxVersion"
     }
 }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.server.network.Server;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -39,6 +40,8 @@ public class MyGdxGame extends Game {
 
     var server = new Server();
     server.connect();*/
+    var server = new Server();
+    server.runServer();
   }
 
   @Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.client.network.GdxSocket;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -22,6 +23,7 @@ public class MyGdxGame extends Game {
   private final Lazy<GameScreen> gameScreen;
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
+  private GdxSocket socket;
 
   @Inject
   MyGdxGame(@NonNull AssetManager assetManager,
@@ -36,6 +38,8 @@ public class MyGdxGame extends Game {
 
   @Override
   public void create() {
+    socket = new GdxSocket();
+    socket.initializeSocket();
     changeToLoadingScreen();
   }
 
