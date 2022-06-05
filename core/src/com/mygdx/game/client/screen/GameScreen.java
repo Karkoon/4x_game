@@ -1,5 +1,6 @@
 package com.mygdx.game.client.screen;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
@@ -7,12 +8,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.ecs.GameEngine;
-import com.mygdx.game.client.initialize.MapInitializer;
-import com.mygdx.game.client.initialize.StartUnitInitializer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
-import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.client.modules.StageModule;
 import com.mygdx.game.client.util.CompositeUpdatable;
 import lombok.NonNull;
@@ -28,33 +25,23 @@ public class GameScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
-  private final GameEngine engine;
-  private final GameState gameState;
-
+  private final Engine engine;
   private final Viewport viewport;
   private final ModelInstanceRenderer renderer;
 
-  private final MapInitializer mapInitializer;
-  private final StartUnitInitializer startUnitInitializer;
 
   private final Stage stage;
   private final GameScreenInputAdapter gameScreenInputAdapter;
 
   @Inject
   public GameScreen(@NonNull ModelInstanceRenderer renderer,
-                    @NonNull GameEngine engine,
+                    @NonNull Engine engine,
                     @NonNull Viewport viewport,
-                    @NonNull GameState gameState,
-                    @NonNull MapInitializer mapInitializer,
-                    @NonNull StartUnitInitializer startUnitInitializer,
                     @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
                     @NonNull GameScreenInputAdapter gameScreenInputAdapter) {
-    this.engine = engine;
     this.renderer = renderer;
+    this.engine = engine;
     this.viewport = viewport;
-    this.gameState = gameState;
-    this.mapInitializer = mapInitializer;
-    this.startUnitInitializer = startUnitInitializer;
     this.stage = stage;
     this.gameScreenInputAdapter = gameScreenInputAdapter;
   }
@@ -63,14 +50,13 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     log.info("GameScreen shown");
     positionCamera(viewport.getCamera());
-    compositeUpdatable.addUpdatable(engine);
-    setUpGameState();
     setUpInput();
   }
 
   @Override
   public void render(float delta) {
     compositeUpdatable.update(delta);
+    engine.update(delta);
     viewport.getCamera().update();
     renderer.render();
     stage.draw();
@@ -86,11 +72,6 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     renderer.dispose();
-  }
-
-  private void setUpGameState() {
-    gameState.setFields(mapInitializer.initializeMap());
-    startUnitInitializer.initializeTestUnit(gameState.getFields());
   }
 
   private void setUpInput() {
