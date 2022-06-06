@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.client.network.GdxSocket;
+import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -17,29 +17,30 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public class MyGdxGame extends Game {
+public class GdxGame extends Game {
 
   private final AssetManager assetManager;
   private final Lazy<GameScreen> gameScreen;
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
-  private GdxSocket socket;
+  private final WebSocket socket;
 
   @Inject
-  MyGdxGame(@NonNull AssetManager assetManager,
-            @NonNull Lazy<GameScreen> gameScreen,
-            @NonNull Lazy<LoadingScreen> loadingScreen,
-            @NonNull Lazy<MenuScreen> menuScreen) {
+  GdxGame(@NonNull AssetManager assetManager,
+          @NonNull Lazy<GameScreen> gameScreen,
+          @NonNull Lazy<LoadingScreen> loadingScreen,
+          @NonNull Lazy<MenuScreen> menuScreen,
+          @NonNull WebSocket socket) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
     this.loadingScreen = loadingScreen;
     this.menuScreen = menuScreen;
+    this.socket = socket;
   }
 
   @Override
   public void create() {
-    socket = new GdxSocket();
-    socket.initializeSocket();
+    socket.connect();
     changeToLoadingScreen();
   }
 

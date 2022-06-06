@@ -9,5 +9,5 @@ import javax.inject.Singleton;
 @Singleton
 @Component(modules = {AssetManagerModule.class, CoreComponentMapperModule.class})
 public interface GameFactory {
-  MyGdxGame providesGame();
+  GdxServer providesGame();
 }

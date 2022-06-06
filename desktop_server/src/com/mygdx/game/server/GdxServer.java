@@ -2,10 +2,8 @@ package com.mygdx.game.server;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.server.network.Server;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -13,13 +11,16 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public class MyGdxGame extends Game {
+public class GdxServer extends Game {
 
-  private final AssetManager assetManager;
+  private final AllAssets assets;
+  private final Server server;
 
   @Inject
-  MyGdxGame(@NonNull AssetManager assetManager) {
-    this.assetManager = assetManager;
+  GdxServer(AllAssets assets,
+            Server server) {
+    this.assets = assets;
+    this.server = server;
   }
 
   @Override
@@ -35,12 +36,12 @@ public class MyGdxGame extends Game {
     ifAllPlayersInLobbyAreReadyStartGame();
     sendTurnTokenToFirstPlayer();
     CommonWebSockets.initiate();
+*/
+    log.info("Loading assets...");
+    assets.loadAssetsSync();
+    log.info("Assets loaded.");
 
-    // skądś wziąć zależności
-
-    var server = new Server();
-    server.connect();*/
-    var server = new Server();
+    log.info("Starting server.");
     server.runServer();
   }
 
@@ -53,7 +54,6 @@ public class MyGdxGame extends Game {
   @Override
   public void dispose() {
     super.dispose();
-    assetManager.dispose();
     Gdx.app.exit();
   }
 }

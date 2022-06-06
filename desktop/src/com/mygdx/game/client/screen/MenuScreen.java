@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.MyGdxGame;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.core.util.Vector3Util;
@@ -23,7 +23,7 @@ public class MenuScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final MenuScreenAssets assets;
-  private final MyGdxGame game;
+  private final GdxGame game;
   private final StarBackground starBackground;
   private final Planet planet;
 
@@ -32,7 +32,7 @@ public class MenuScreen extends ScreenAdapter {
   @Inject
   public MenuScreen(@NonNull Stage stage,
                     @NonNull MenuScreenAssets assets,
-                    @NonNull MyGdxGame game) {
+                    @NonNull GdxGame game) {
     this.stage = stage;
     this.assets = assets;
     this.game = game;
