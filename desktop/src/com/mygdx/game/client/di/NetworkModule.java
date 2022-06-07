@@ -4,7 +4,7 @@ import com.github.czyzby.websocket.CommonWebSockets;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.WebSockets;
-import com.mygdx.game.client.network.GameCommunicationHandler;
+import com.mygdx.game.client.network.ComponentHandler;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -30,7 +30,7 @@ public class NetworkModule {
 
   @Provides
   @Reusable
-  public WebSocketListener providesWebSocketListener(GameCommunicationHandler handler) {
+  public WebSocketListener providesWebSocketListener(ComponentHandler handler) {
     return handler;
   }
 }

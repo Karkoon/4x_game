@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 @Log
 @Reusable
+// not used
 public class GameCommunicationHandler extends WebSocketHandler {
 
   @Inject
