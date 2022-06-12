@@ -30,15 +30,15 @@ public class LocalMapInitializer implements MapInitializer {
   }
 
   public Map<Coordinates, Integer> initializeMap(int width, int height) {
-    var slotList = new HashMap<Coordinates, Integer>();
+    var fields = new HashMap<Coordinates, Integer>();
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
         var anyConfig = assets.getGameConfigs().getAny(FieldConfig.class);
         var coords = Coordinates.of(i, j);
         var field = fieldFactory.createEntity(anyConfig, coords);
-        slotList.put(coords, field);
+        fields.put(coords, field);
       }
     }
-    return slotList;
+    return fields;
   }
 }
