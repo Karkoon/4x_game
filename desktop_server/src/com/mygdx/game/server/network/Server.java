@@ -1,21 +1,44 @@
 package com.mygdx.game.server.network;
 
+import com.mygdx.game.server.initialize.LocalMapInitializer;
+import com.mygdx.game.server.initialize.LocalStartUnitInitializer;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.WebSocketFrame;
+import io.vertx.core.json.Json;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-// TODO: 04.06.2022 use it for networking??
 @Log
 public final class Server {
 
-  private static final String HOST = "localhost";
+  private static final String HOST = "127.0.0.1";
   private static final int PORT = 10666;
+  private final LocalMapInitializer mapInitializer;
+  private final LocalStartUnitInitializer unitInitializer;
+  private final ClientManager clientManager;
   private HttpServer server;
 
   @Inject
-  public Server() {
+  public Server(
+      LocalMapInitializer mapInitializer,
+      LocalStartUnitInitializer unitInitializer,
+      ClientManager clientManager) {
+    this.mapInitializer = mapInitializer;
+    this.unitInitializer = unitInitializer;
+    this.clientManager = clientManager;
+  }
+
+  private void handle(int client, WebSocketFrame frame) {
+    switch (frame.textData()) {
+      case "map" -> {
+        var map = mapInitializer.initializeMap();
+        clientManager.getClients().values().forEach(webSocket -> webSocket.write(Json.encodeToBuffer(map)));
+      }
+      case "unit" -> unitInitializer.initializeTestUnit(0);
+      default -> log.info("Received packet: " + frame.textData());
+    }
   }
 
   public void runServer() {
@@ -24,11 +47,15 @@ public final class Server {
   }
 
   private void setUpServer() {
-    Vertx vertx = Vertx.vertx();
+    var vertx = Vertx.vertx();
     server = vertx.createHttpServer();
   }
 
   private void setUpWebSocketHandler() {
-    server.websocketHandler(webSocket -> webSocket.frameHandler(frame -> log.info("Received packet: " + frame))).listen(PORT, HOST);
+    server.websocketHandler(websocket -> {
+      int clientId = clientManager.addClient(websocket);
+      websocket.frameHandler(frame -> this.handle(clientId, frame));
+    });
+    server.listen(PORT, HOST);
   }
 }

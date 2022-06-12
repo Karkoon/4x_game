@@ -1,14 +1,14 @@
 package com.mygdx.game.client.input;
 
 import com.artemis.ComponentMapper;
-import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.model.GameState;
+import com.mygdx.game.client.network.MoveEntityService;
 import com.mygdx.game.client.ui.FieldClickedDialogFactory;
 import com.mygdx.game.core.ecs.component.Slot;
 import com.mygdx.game.core.model.Coordinates;
-import com.mygdx.game.core.model.GameState;
 import com.mygdx.game.core.util.PositionUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -23,9 +23,9 @@ public class GameScreenInputAdapter extends InputAdapter {
 
   private final Viewport viewport;
   private final GameState gameState;
-  private final World world;
   private final FieldClickedDialogFactory fieldClickedDialogFactory;
   private final ComponentMapper<Slot> slotMapper;
+  private final MoveEntityService moveEntityService;
 
   private int selectedUnit;
   private int selectedUnitsField;
@@ -33,14 +33,14 @@ public class GameScreenInputAdapter extends InputAdapter {
   @Inject
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
-                                @NonNull World world,
                                 @NonNull FieldClickedDialogFactory dialogFactory,
-                                @NonNull ComponentMapper<Slot> slotMapper) {
+                                @NonNull ComponentMapper<Slot> slotMapper,
+                                @NonNull MoveEntityService moveEntityService) {
     this.viewport = viewport;
     this.gameState = gameState;
-    this.world = world;
     this.fieldClickedDialogFactory = dialogFactory;
     this.slotMapper = slotMapper;
+    this.moveEntityService = moveEntityService;
   }
 
   @Override
@@ -60,16 +60,8 @@ public class GameScreenInputAdapter extends InputAdapter {
   }
 
   private void handleMovement(int toField) {
-    // unit movement przez zapytanie do serwera, przez jakąś usługę, która byłaby wstrzykiwana
-    /*
-    movement.setFromEntity(selectedUnitsField);
-    movement.setToEntity(toField);
-    selectedUnit.add(movement);
-
-    syncer.sync(movement);
-
-    selectedUnit = null;
-    selectedUnitsField = null;*/
+    moveEntityService.moveEntity(selectedUnitsField, toField);
+    selectedUnit = 0;
   }
 
   private void handleFieldClicked(int field) {
@@ -84,7 +76,6 @@ public class GameScreenInputAdapter extends InputAdapter {
       }
     });
   }
-
   private Coordinates getCoordinatesFromClickPosition(int screenX, int screenY) {
     var ray = viewport.getPickRay(screenX, screenY);
     var minDistance = Float.MAX_VALUE;
