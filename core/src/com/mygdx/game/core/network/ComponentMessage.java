@@ -1,4 +1,4 @@
-package com.mygdx.game.client.network;
+package com.mygdx.game.core.network;
 
 import com.artemis.Component;
 
