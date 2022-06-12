@@ -1,7 +1,7 @@
 package com.mygdx.game.client.network;
 
 import com.artemis.Component;
-import com.artemis.ComponentMapper;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.github.czyzby.websocket.AbstractWebSocketListener;
@@ -23,10 +23,10 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
    */
   private static final Handler<Component> unknown = (webSocket, packet) -> NOT_HANDLED;
   private final ObjectMap<Class<?>, Handler<Component>> handlers = new ObjectMap<>();
+  private final Json json = new Json();
 
   @Inject
   public ComponentMessageListener(
-      ComponentMapper<Name> nameMapper,
       NetworkEntityManager networkEntityManager
   ) {
     registerHandler(Name.class, (webSocket, packet) -> {
@@ -35,8 +35,6 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
         /* todo entity needs to be created locally before use */
         throw new RuntimeException("entity needs to be created locally before use");
       }
-      var name = nameMapper.get(entity);
-      System.out.println("lets see " + name);
       return true;
     });
   }
@@ -54,35 +52,17 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
   @Override
   protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
     try {
-      if (packet instanceof JsonValue jsonValue && jsonValue.isArray()) {
-        return false;
+      if (!(packet instanceof JsonValue jsonValue) || jsonValue.isArray()) {
+        return NOT_HANDLED;
       }
 
-      var message = (ComponentMessage) packet;
+
+      var message = json.fromJson(ComponentMessage.class, jsonValue.asString());
       return handlers.get(message.getComponent().getClass(), unknown).handle(webSocket, message);
     } catch (final Exception exception) {
       return onError(webSocket,
           new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
-  }
-
-  @Override
-  public boolean onOpen(WebSocket webSocket) {
-    log.info("openeded" + webSocket.isOpen());
-    webSocket.send("whatattaatta");
-    return super.onOpen(webSocket);
-  }
-
-  @Override
-  public boolean onError(WebSocket webSocket, Throwable error) {
-    log.info("on close" + webSocket.isOpen() + " " + error.getMessage());
-    return super.onError(webSocket, error);
-  }
-
-  @Override
-  public boolean onClose(WebSocket webSocket, int closecCode, String reason) {
-    log.info("on close" + webSocket.isOpen() + " " + reason);
-    return super.onClose(webSocket, closecCode, reason);
   }
 
   /**

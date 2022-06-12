@@ -25,14 +25,11 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
 
   @Inject
   public FieldFactory(@NonNull World world,
-                      @NonNull GameScreenAssets assets,
-                      @NonNull ComponentMapper<Position> positionMapper,
-                      @NonNull ComponentMapper<Name> nameMapper,
-                      @NonNull ComponentMapper<Slot> slotMapper) {
+                      @NonNull GameScreenAssets assets) {
     super(world, assets);
-    this.positionMapper = positionMapper;
-    this.nameMapper = nameMapper;
-    this.slotMapper = slotMapper;
+    this.positionMapper = world.getMapper(Position.class);
+    this.nameMapper = world.getMapper(Name.class);
+    this.slotMapper = world.getMapper(Slot.class);
   }
 
   @Override

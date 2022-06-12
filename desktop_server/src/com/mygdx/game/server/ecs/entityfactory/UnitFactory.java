@@ -22,12 +22,10 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
 
   @Inject
   public UnitFactory(@NonNull World world,
-                     @NonNull GameScreenAssets assets,
-                     @NonNull ComponentMapper<Position> positionMapper,
-                     @NonNull ComponentMapper<Name> nameMapper) {
+                     @NonNull GameScreenAssets assets) {
     super(world, assets);
-    this.positionMapper = positionMapper;
-    this.nameMapper = nameMapper;
+    this.positionMapper = world.getMapper(Position.class);
+    this.nameMapper = world.getMapper(Name.class);
   }
 
   @Override

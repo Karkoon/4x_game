@@ -1,6 +1,7 @@
 package com.mygdx.game.client.ui;
 
 import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mygdx.game.assets.GameScreenAssetPaths;
@@ -27,12 +28,11 @@ public final class FieldClickedDialogFactory {
   @Inject
   public FieldClickedDialogFactory(@NonNull GameScreenAssets assets,
                                    @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-                                   @NonNull ComponentMapper<Slot> slotMapper,
-                                   @NonNull ComponentMapper<Name> nameMapper) {
+                                   @NonNull World world) {
     this.assets = assets;
     this.stage = stage;
-    this.slotMapper = slotMapper;
-    this.nameMapper = nameMapper;
+    this.slotMapper = world.getMapper(Slot.class);
+    this.nameMapper = world.getMapper(Name.class);
   }
 
   public void createAndShow(int field, @NonNull EntityHandler handler) {

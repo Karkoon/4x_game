@@ -1,6 +1,7 @@
 package com.mygdx.game.server.initialize;
 
 import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Slot;
@@ -20,10 +21,10 @@ public final class LocalStartUnitInitializer implements StartUnitInitializer {
   @Inject
   public LocalStartUnitInitializer(@NonNull UnitFactory unitFactory,
                                    @NonNull GameScreenAssets assets,
-                                   @NonNull ComponentMapper<Slot> slotMapper) {
+                                   @NonNull World world) {
     this.unitFactory = unitFactory;
     this.assets = assets;
-    this.slotMapper = slotMapper;
+    this.slotMapper = world.getMapper(Slot.class);
   }
 
   public void initializeTestUnit(int field) {

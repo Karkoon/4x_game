@@ -34,7 +34,13 @@ public final class Server {
     switch (frame.textData()) {
       case "map" -> {
         var map = mapInitializer.initializeMap();
-        clientManager.getClients().values().forEach(webSocket -> webSocket.write(Json.encodeToBuffer(map)));
+        clientManager.getClients().values()
+            .forEach(webSocket -> {
+              var array = map.entrySet().stream()
+                  .map(entry -> new Object[] {entry.getKey(), entry.getValue()})
+                  .toArray();
+              webSocket.write(Json.encodeToBuffer(array));
+            });
       }
       case "unit" -> unitInitializer.initializeTestUnit(0);
       default -> log.info("Received packet: " + frame.textData());

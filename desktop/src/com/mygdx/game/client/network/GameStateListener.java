@@ -1,107 +1,72 @@
 package com.mygdx.game.client.network;
 
-import com.artemis.Component;
-import com.artemis.ComponentMapper;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
+import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client.model.GameState;
-import com.mygdx.game.core.ecs.component.Name;
-import com.mygdx.game.core.network.ComponentMessage;
+import com.mygdx.game.config.FieldConfig;
+import com.mygdx.game.core.model.Coordinates;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 
 @Log
 /* this class will only be used once, for getting the initial game map, because it's a list and
-* a bulk data change, it could probably be done using the normal componentmessagelistener but who has the time
-*  */
+ * a bulk data change, it could probably be done using the normal componentmessagelistener but who has the time
+ *  */
 public class GameStateListener extends AbstractWebSocketListener {
 
-  /**
-   * Used as default value when invoking {@link ObjectMap#get(Object, Object)} on {@link #handlers} to prevent
-   * NPE.
-   */
-  private static final Handler<Component> unknown = (webSocket, packet) -> NOT_HANDLED;
-  private final ObjectMap<Class<?>, Handler<Component>> handlers = new ObjectMap<>();
+  private final NetworkEntityManager networkEntityManager;
+  private final FieldFactory fieldFactory;
+  private final GameState gameState;
+  private final GameScreenAssets assets;
+  private final Json json = new Json();
 
   @Inject
   public GameStateListener(
-      ComponentMapper<Name> nameMapper,
-      NetworkEntityManager networkEntityManager
+      NetworkEntityManager networkEntityManager,
+      FieldFactory fieldFactory,
+      GameState gameState,
+      GameScreenAssets assets // it's suspicious how a network listener has access to factories and assets
   ) {
-    registerHandler(GameState.class, (webSocket, packet) -> {
-      /* this */
-      var entity = networkEntityManager.getWorldEntity(packet.getEntityId());
-      var name = nameMapper.get(entity);
-      System.out.println("lets see " + name);
-      return true;
-    });
-  }
-
-  /**
-   * @param packetClass class of the packet that should be passed to the selected handler.
-   * @param handler     will be notified when the chosen type of packet is received. Should be prepared to handle the
-   *                    specific packet class, otherwise {@link ClassCastException} might be thrown.
-   */
-  @SuppressWarnings("unchecked")
-  public void registerHandler(final Class<?> packetClass, final Handler<? extends Component> handler) {
-    handlers.put(packetClass, (Handler<Component>) handler);
+    this.networkEntityManager = networkEntityManager;
+    this.fieldFactory = fieldFactory;
+    this.gameState = gameState;
+    this.assets = assets;
   }
 
   @Override
   protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
     try {
-      if (!(packet instanceof JsonValue jsonValue && jsonValue.isArray())) {
-        return false;
+      if (!(packet instanceof Array<?> values)) {
+        return NOT_HANDLED;
       }
 
-      var message = (ComponentMessage) packet;
-      return handlers.get(GameState.class, unknown).handle(webSocket, message);
+      var message = ((Array<Array<Object>>) values);
+      var fields = new HashMap<Coordinates, Integer>();
+      for (int i = 0; i < message.size; i++) {
+        var fieldConfig = assets.getGameConfigs().getAny(FieldConfig.class);
+        var coordinate = json.fromJson(Coordinates.class, ((JsonValue) message.get(i).get(0)).toJson(JsonWriter.OutputType.json));
+        var networkEntity = ((Float) message.get(i).get(1)).intValue();
+        var worldEntity = fieldFactory.createEntity(fieldConfig, coordinate);
+        networkEntityManager.putEntity(networkEntity, worldEntity);
+        fields.put(coordinate, worldEntity);
+      }
+      gameState.setFields(fields);
+
+      System.out.println("lets see " + message);
+
+      return true;
     } catch (final Exception exception) {
       return onError(webSocket,
           new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
-  }
-
-  @Override
-  public boolean onOpen(WebSocket webSocket) {
-    log.info("openeded" + webSocket.isOpen());
-    webSocket.send("whatattaatta");
-    return super.onOpen(webSocket);
-  }
-
-  @Override
-  public boolean onError(WebSocket webSocket, Throwable error) {
-    log.info("on close" + webSocket.isOpen() + " " + error.getMessage());
-    return super.onError(webSocket, error);
-  }
-
-  @Override
-  public boolean onClose(WebSocket webSocket, int closecCode, String reason) {
-    log.info("on close" + webSocket.isOpen() + " " + reason);
-    return super.onClose(webSocket, closecCode, reason);
-  }
-
-  /**
-   * Common interface for handlers that consume a specific type of components.
-   *
-   * @param <C> type of handled components.
-   * @author MJ, Kacper Jankowski (lol)
-   */
-  public interface Handler<C extends Component> {
-    /**
-     * Should perform the logic using the received packet.
-     *
-     * @param webSocket this socket received the packet.
-     * @param packet    the deserialized packet instance.
-     * @return true if message was fully handled and other web socket listeners should not be notified.
-     * @see WebSocketListener#FULLY_HANDLED
-     * @see WebSocketListener#NOT_HANDLED
-     */
-    boolean handle(WebSocket webSocket, ComponentMessage<C> packet);
   }
 }

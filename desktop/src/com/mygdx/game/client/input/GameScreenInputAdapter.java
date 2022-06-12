@@ -1,6 +1,7 @@
 package com.mygdx.game.client.input;
 
 import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -34,12 +35,12 @@ public class GameScreenInputAdapter extends InputAdapter {
   public GameScreenInputAdapter(@NonNull Viewport viewport,
                                 @NonNull GameState gameState,
                                 @NonNull FieldClickedDialogFactory dialogFactory,
-                                @NonNull ComponentMapper<Slot> slotMapper,
+                                @NonNull World world,
                                 @NonNull MoveEntityService moveEntityService) {
     this.viewport = viewport;
     this.gameState = gameState;
     this.fieldClickedDialogFactory = dialogFactory;
-    this.slotMapper = slotMapper;
+    this.slotMapper = world.getMapper(Slot.class);
     this.moveEntityService = moveEntityService;
   }
 

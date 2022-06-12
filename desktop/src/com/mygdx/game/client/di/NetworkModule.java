@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @Log
 public class NetworkModule {
 
-  private static final String HOST = "127.0.0.1";
+  private static final String HOST = "127.0.0.1"; // todo put configs in a runtime-provided object
   private static final int PORT = 10666;
 
   @Provides
@@ -30,8 +30,8 @@ public class NetworkModule {
     var socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(HOST, PORT));
     socket.setSendGracefully(true);
     socket.addListener(gameStateListener);
-    socket.addListener(handler);
     socket.addListener(messageListener);
+    socket.addListener(handler);
     log.info("provided socket: " + socket);
     socket.connect();
     while (!socket.isOpen()) {
