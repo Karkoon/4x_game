@@ -1,6 +1,9 @@
 package com.mygdx.game.client;
 
-import com.mygdx.game.client.di.*;
+import com.mygdx.game.client.di.NetworkModule;
+import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.ViewportModule;
+import com.mygdx.game.client.di.WorldModule;
 import com.mygdx.game.core.di.AssetManagerModule;
 import com.mygdx.game.core.di.CoreComponentMapperModule;
 import dagger.Component;
@@ -13,7 +16,6 @@ import javax.inject.Singleton;
     WorldModule.class,
     AssetManagerModule.class,
     StageModule.class,
-    InitializerModule.class,
     CoreComponentMapperModule.class,
     NetworkModule.class
 })
