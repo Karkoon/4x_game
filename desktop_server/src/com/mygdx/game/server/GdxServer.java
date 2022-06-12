@@ -24,7 +24,6 @@ public class GdxServer extends Game {
   }
 
   @Override
-  // TODO: 04.06.2022 start server somehow
   public void create() {
 /* TODO: 04.06.2022 todo loading assets must be separated between client and server,
   it's not game-breaking but it would make the server exec smaller */
@@ -47,7 +46,7 @@ public class GdxServer extends Game {
 
   @Override
   public void render() {
-    ScreenUtils.clear((float) (Math.random() * 255f), 0f, 0f, 1, true);
+    ScreenUtils.clear(0f, 0f, 0f, 1, true);
     super.render();
   }
 
