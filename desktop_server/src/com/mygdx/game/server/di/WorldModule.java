@@ -21,7 +21,7 @@ public class WorldModule {
       @NonNull UnitMovementSystem movementSystem,
       @NonNull SlotPositionSystem slotPositionSystem
   ) {
-    log.log(Level.INFO, "provided Client World");
+    log.log(Level.INFO, "provided Server World");
     var worldConfiguration = new WorldConfiguration();
     worldConfiguration.setSystem(movementSystem);
     worldConfiguration.setSystem(slotPositionSystem);
