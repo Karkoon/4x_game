@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -23,24 +22,20 @@ public class GdxGame extends Game {
   private final Lazy<GameScreen> gameScreen;
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
-  private final WebSocket socket;
 
   @Inject
   GdxGame(@NonNull AssetManager assetManager,
           @NonNull Lazy<GameScreen> gameScreen,
           @NonNull Lazy<LoadingScreen> loadingScreen,
-          @NonNull Lazy<MenuScreen> menuScreen,
-          @NonNull WebSocket socket) {
+          @NonNull Lazy<MenuScreen> menuScreen) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
     this.loadingScreen = loadingScreen;
     this.menuScreen = menuScreen;
-    this.socket = socket;
   }
 
   @Override
   public void create() {
-    socket.connect();
     changeToLoadingScreen();
   }
 
