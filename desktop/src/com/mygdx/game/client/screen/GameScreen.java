@@ -17,6 +17,7 @@ import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.core.model.Coordinates;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;

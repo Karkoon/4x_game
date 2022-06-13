@@ -61,7 +61,7 @@ public class GameScreenInputAdapter extends InputAdapter {
   }
 
   private void handleMovement(int toField) {
-    moveEntityService.moveEntity(selectedUnitsField, toField);
+    moveEntityService.moveEntity(selectedUnit, selectedUnitsField, toField);
     selectedUnit = 0;
   }
 

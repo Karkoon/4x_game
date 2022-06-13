@@ -9,6 +9,8 @@ import io.vertx.core.json.Json;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Log
 public final class Server {
@@ -19,30 +21,57 @@ public final class Server {
   private final LocalStartUnitInitializer unitInitializer;
   private final ClientManager clientManager;
   private HttpServer server;
+  private MoveEntityService moveEntityService;
 
   @Inject
   public Server(
       LocalMapInitializer mapInitializer,
       LocalStartUnitInitializer unitInitializer,
-      ClientManager clientManager) {
+      ClientManager clientManager,
+      MoveEntityService moveEntityService) {
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.clientManager = clientManager;
+    this.moveEntityService = moveEntityService;
   }
 
   private void handle(int client, WebSocketFrame frame) {
-    switch (frame.textData()) {
+    Object[] commands = Arrays.stream(frame.textData().split(":")).toArray();
+    String type = (String) commands[0];
+    switch (type) {
       case "map" -> {
         var map = mapInitializer.initializeMap();
         clientManager.getClients().values()
-            .forEach(webSocket -> {
-              var array = map.entrySet().stream()
-                  .map(entry -> new Object[] {entry.getKey(), entry.getValue()})
-                  .toArray();
-              webSocket.write(Json.encodeToBuffer(array));
-            });
+          .forEach(webSocket -> {
+            var array = map.entrySet().stream()
+                .map(entry -> new Object[] {entry.getKey(), entry.getValue()})
+                .toArray();
+            var header = Arrays.stream(new Object[] {Arrays.stream(new Object[] {"map", "map"}).toArray()}).toArray();
+            var mapArray = Stream.concat(Arrays.stream(header), Arrays.stream(array)).toArray();
+            webSocket.write(Json.encodeToBuffer(mapArray));
+          });
       }
-      case "unit" -> unitInitializer.initializeTestUnit(0);
+      case "unit" -> {
+        var map = unitInitializer.initializeTestUnit(0);
+        clientManager.getClients().values()
+          .forEach(webSocket -> {
+            var array = map.entrySet().stream()
+                    .map(entry -> new Object[] {entry.getKey(), entry.getValue()})
+                    .toArray();
+            var header = Arrays.stream(new Object[] {Arrays.stream(new Object[] {"unit", "unit"}).toArray()}).toArray();
+            var mapArray = Stream.concat(Arrays.stream(header), Arrays.stream(array)).toArray();
+            webSocket.write(Json.encodeToBuffer(mapArray));
+          });
+      }
+      case "move" -> {
+        var componentMessagePosition = moveEntityService.moveEntity((String) commands[1], (String) commands[2], (String) commands[3]);
+
+        clientManager.getClients().values()
+                .forEach(webSocket -> {
+                  System.out.println("Send position component");
+                  webSocket.write(Json.encodeToBuffer(componentMessagePosition));
+                });
+      }
       default -> log.info("Received packet: " + frame.textData());
     }
   }

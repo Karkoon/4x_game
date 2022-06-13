@@ -11,6 +11,8 @@ import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class LocalStartUnitInitializer implements StartUnitInitializer {
 
@@ -27,11 +29,14 @@ public final class LocalStartUnitInitializer implements StartUnitInitializer {
     this.slotMapper = world.getMapper(Slot.class);
   }
 
-  public void initializeTestUnit(int field) {
+  public Map<Coordinates, Integer> initializeTestUnit(int field) {
+    var fields = new HashMap<Coordinates, Integer>();
     var initialCoordinates = new Coordinates(0, 0);
     var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class);
     var id = unitFactory.createEntity(anyConfig, initialCoordinates);
     var slot = slotMapper.get(field);
     slot.getEntities().add(id);
+    fields.put(initialCoordinates, id);
+    return fields;
   }
 }

@@ -1,6 +1,8 @@
 package com.mygdx.game.client.network;
 
 import com.artemis.Component;
+import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -9,6 +11,7 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Position;
 import com.mygdx.game.core.network.ComponentMessage;
 import lombok.extern.java.Log;
 
@@ -24,13 +27,30 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
   private static final Handler<Component> unknown = (webSocket, packet) -> NOT_HANDLED;
   private final ObjectMap<Class<?>, Handler<Component>> handlers = new ObjectMap<>();
   private final Json json = new Json();
+  private final ComponentMapper<Position> positionMapper;
 
   @Inject
   public ComponentMessageListener(
-      NetworkEntityManager networkEntityManager
+      NetworkEntityManager networkEntityManager,
+      World world
   ) {
+    this.positionMapper = world.getMapper(Position.class);
+
     registerHandler(Name.class, (webSocket, packet) -> {
       var entity = networkEntityManager.getWorldEntity(packet.getEntityId());
+      if (entity == -1) {
+        /* todo entity needs to be created locally before use */
+        throw new RuntimeException("entity needs to be created locally before use");
+      }
+      return true;
+    });
+    registerHandler(Position.class, (webSocket, packet) -> {
+      System.out.println("Read position component");
+      var entity = networkEntityManager.getWorldEntity(packet.getEntityId());
+      Position newPosition = (Position) packet.getComponent();
+
+      Position unitPosition = positionMapper.get(entity);
+      unitPosition.setPosition(newPosition.getPosition());
       if (entity == -1) {
         /* todo entity needs to be created locally before use */
         throw new RuntimeException("entity needs to be created locally before use");

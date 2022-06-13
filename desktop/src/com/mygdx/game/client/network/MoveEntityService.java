@@ -16,8 +16,10 @@ public class MoveEntityService {
     this.webSocket = webSocket;
   }
 
-  public void moveEntity(int entityId, int whereTo) {
-    webSocket.send(new MoveRequest(entityId, whereTo));
+  public void moveEntity(int selectedUnit, int entityId, int whereTo) {
+    System.out.println("Send from client to server");
+//    webSocket.send(new MoveRequest(entityId, whereTo));
+    webSocket.send("move:" + selectedUnit + ":" + entityId + ":" + whereTo);
     // todo ensure entityId, whereTo is a server-entity-Id
   }
 

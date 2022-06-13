@@ -1,5 +1,9 @@
 package com.mygdx.game.core.initialize;
 
+import com.mygdx.game.core.model.Coordinates;
+
+import java.util.Map;
+
 public interface StartUnitInitializer {
-  void initializeTestUnit(int field);
+  Map<Coordinates, Integer> initializeTestUnit(int field);
 }
