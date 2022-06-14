@@ -34,26 +34,23 @@ public class GameStateListener extends AbstractWebSocketListener {
   private final GameState gameState;
   private final GameScreenAssets assets;
   private final Json json = new Json();
-  private final World world;
   private final ComponentMapper<Slot> slotMapper;
 
 
   @Inject
   public GameStateListener(
-          NetworkEntityManager networkEntityManager,
-          FieldFactory fieldFactory,
-          UnitFactory unitFactory,
-          GameState gameState,
-          GameScreenAssets assets,// it's suspicious how a network listener has access to factories and assets
-          World world
-
+      NetworkEntityManager networkEntityManager,
+      FieldFactory fieldFactory,
+      UnitFactory unitFactory,
+      GameState gameState,
+      GameScreenAssets assets,// it's suspicious how a network listener has access to factories and assets
+      World world
   ) {
     this.networkEntityManager = networkEntityManager;
     this.fieldFactory = fieldFactory;
     this.unitFactory = unitFactory;
     this.gameState = gameState;
     this.assets = assets;
-    this.world = world;
     this.slotMapper = world.getMapper(Slot.class);
   }
 
@@ -70,7 +67,7 @@ public class GameStateListener extends AbstractWebSocketListener {
       String initType = (String) message.get(0).get(0);
 
       if (initType.equals("map")) {
-        System.out.println("Receiving map");
+        log.info("Receiving map");
         for (int i = 1; i < message.size; i++) {
           var fieldConfig = assets.getGameConfigs().getAny(FieldConfig.class);
           var coordinate = json.fromJson(Coordinates.class, ((JsonValue) message.get(i).get(0)).toJson(JsonWriter.OutputType.json));
@@ -80,9 +77,8 @@ public class GameStateListener extends AbstractWebSocketListener {
           fields.put(coordinate, worldEntity);
         }
         gameState.setFields(fields);
-      }
-      else if (initType.equals("unit")) {
-        System.out.println("Receiving units");
+      } else if (initType.equals("unit")) {
+        log.info("Receiving units");
         for (int i = 1; i < message.size; i++) {
           var unitConfig = assets.getGameConfigs().getAny(UnitConfig.class);
           var coordinate = json.fromJson(Coordinates.class, ((JsonValue) message.get(i).get(0)).toJson(JsonWriter.OutputType.json));
@@ -95,7 +91,7 @@ public class GameStateListener extends AbstractWebSocketListener {
         }
       }
 
-      System.out.println("lets see " + message);
+      log.info("lets see " + message);
 
       return true;
     } catch (final Exception exception) {

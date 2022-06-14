@@ -32,11 +32,13 @@ public class GameScreenInputAdapter extends InputAdapter {
   private int selectedUnitsField;
 
   @Inject
-  public GameScreenInputAdapter(@NonNull Viewport viewport,
-                                @NonNull GameState gameState,
-                                @NonNull FieldClickedDialogFactory dialogFactory,
-                                @NonNull World world,
-                                @NonNull MoveEntityService moveEntityService) {
+  public GameScreenInputAdapter(
+      @NonNull Viewport viewport,
+      @NonNull GameState gameState,
+      @NonNull FieldClickedDialogFactory dialogFactory,
+      @NonNull World world,
+      @NonNull MoveEntityService moveEntityService
+  ) {
     this.viewport = viewport;
     this.gameState = gameState;
     this.fieldClickedDialogFactory = dialogFactory;
@@ -77,6 +79,7 @@ public class GameScreenInputAdapter extends InputAdapter {
       }
     });
   }
+
   private Coordinates getCoordinatesFromClickPosition(int screenX, int screenY) {
     var ray = viewport.getPickRay(screenX, screenY);
     var minDistance = Float.MAX_VALUE;

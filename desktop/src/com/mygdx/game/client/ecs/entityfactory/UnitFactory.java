@@ -3,7 +3,6 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.UnitConfig;
@@ -37,7 +36,6 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates) {
     var entity = world.create();
     positionMapper.create(entity);
-    /* add model instance here again */
     setUpNameComponent(config, entity);
     setUpModelInstanceComp(config, entity);
     return entity;

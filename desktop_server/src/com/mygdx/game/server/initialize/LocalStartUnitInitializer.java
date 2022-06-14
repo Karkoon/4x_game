@@ -21,9 +21,10 @@ public final class LocalStartUnitInitializer implements StartUnitInitializer {
   private final ComponentMapper<Slot> slotMapper;
 
   @Inject
-  public LocalStartUnitInitializer(@NonNull UnitFactory unitFactory,
-                                   @NonNull GameScreenAssets assets,
-                                   @NonNull World world) {
+  public LocalStartUnitInitializer(
+      @NonNull UnitFactory unitFactory,
+      @NonNull GameScreenAssets assets,
+      @NonNull World world) {
     this.unitFactory = unitFactory;
     this.assets = assets;
     this.slotMapper = world.getMapper(Slot.class);

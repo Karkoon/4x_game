@@ -39,22 +39,19 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
     registerHandler(Name.class, (webSocket, packet) -> {
       var entity = networkEntityManager.getWorldEntity(packet.getEntityId());
       if (entity == -1) {
-        /* todo entity needs to be created locally before use */
         throw new RuntimeException("entity needs to be created locally before use");
       }
       return true;
     });
     registerHandler(Position.class, (webSocket, packet) -> {
-      System.out.println("Read position component");
       var entity = networkEntityManager.getWorldEntity(packet.getEntityId());
-      Position newPosition = (Position) packet.getComponent();
-
-      Position unitPosition = positionMapper.get(entity);
-      unitPosition.setPosition(newPosition.getPosition());
       if (entity == -1) {
-        /* todo entity needs to be created locally before use */
         throw new RuntimeException("entity needs to be created locally before use");
       }
+      log.info("Read position component");
+      var newPosition = (Position) packet.getComponent();
+      var unitPosition = positionMapper.get(entity);
+      unitPosition.setPosition(newPosition.getPosition());
       return true;
     });
   }

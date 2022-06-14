@@ -21,7 +21,7 @@ public final class Server {
   private final LocalStartUnitInitializer unitInitializer;
   private final ClientManager clientManager;
   private HttpServer server;
-  private MoveEntityService moveEntityService;
+  private final MoveEntityService moveEntityService;
 
   @Inject
   public Server(
@@ -68,7 +68,7 @@ public final class Server {
 
         clientManager.getClients().values()
                 .forEach(webSocket -> {
-                  System.out.println("Send position component");
+                  log.info("Send position component");
                   webSocket.write(Json.encodeToBuffer(componentMessagePosition));
                 });
       }
