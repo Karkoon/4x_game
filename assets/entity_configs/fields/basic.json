@@ -1,7 +1,8 @@
 {
   "id": 1,
-  "name": "fieldTest",
+  "name": "basic",
   "polishName": "pole",
   "modelPath": "basic.g3db",
-  "textureName": "basic.png"
+  "textureName": "basic.png",
+  "value": 3
 }

@@ -1,0 +1,8 @@
+{
+  "id": 2,
+  "name": "forest",
+  "polishName": "las",
+  "modelPath": "basic.g3db",
+  "textureName": "forest.png",
+  "value": 5
+}

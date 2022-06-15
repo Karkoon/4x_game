@@ -18,4 +18,6 @@ public class FieldConfig implements EntityConfig {
   private String modelPath;
   @NonNull
   private String textureName;
+  @NonNull
+  private Integer value;
 }
