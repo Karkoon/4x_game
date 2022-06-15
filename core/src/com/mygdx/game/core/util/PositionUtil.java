@@ -1,7 +1,7 @@
 package com.mygdx.game.core.util;
 
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.core.model.Coordinates;
+import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
 
 public final class PositionUtil {

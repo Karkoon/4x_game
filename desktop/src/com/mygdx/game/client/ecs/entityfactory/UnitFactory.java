@@ -2,13 +2,14 @@ package com.mygdx.game.client.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
+import com.mygdx.game.client.ecs.component.Movable;
+import com.mygdx.game.client.ecs.component.Name;
+import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.UnitConfig;
-import com.mygdx.game.core.ecs.component.Name;
-import com.mygdx.game.core.ecs.component.Position;
-import com.mygdx.game.core.model.Coordinates;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -19,26 +20,27 @@ import javax.inject.Singleton;
 @Log
 public class UnitFactory extends EntityFactory<UnitConfig> {
 
-  private final ComponentMapper<Position> positionMapper;
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<ModelInstanceComp> modelInstanceCompMapper;
+  private final ComponentMapper<Position> positionMapper;
+  private final ComponentMapper<Movable> movableMapper;
 
   @Inject
   public UnitFactory(@NonNull World world,
                      @NonNull GameScreenAssets assets) {
     super(world, assets);
-    this.positionMapper = world.getMapper(Position.class);
     this.nameMapper = world.getMapper(Name.class);
     this.modelInstanceCompMapper = world.getMapper(ModelInstanceComp.class);
+    this.positionMapper = world.getMapper(Position.class);
+    this.movableMapper = world.getMapper(Movable.class);
   }
 
   @Override
-  public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates) {
-    var entity = world.create();
-    positionMapper.create(entity);
+  public void createEntity(@NonNull UnitConfig config, int entity) {
     setUpNameComponent(config, entity);
     setUpModelInstanceComp(config, entity);
-    return entity;
+    positionMapper.create(entity).setPosition(new Vector3(0, 10, 0));
+    movableMapper.set(entity, true);
   }
 
   private void setUpNameComponent(@NonNull UnitConfig config, int entityId) {

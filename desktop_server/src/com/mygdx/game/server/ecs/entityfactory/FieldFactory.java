@@ -4,11 +4,9 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.FieldConfig;
-import com.mygdx.game.core.ecs.component.Name;
-import com.mygdx.game.core.ecs.component.Position;
-import com.mygdx.game.core.ecs.component.Slot;
-import com.mygdx.game.core.model.Coordinates;
-import com.mygdx.game.core.util.PositionUtil;
+import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.server.network.ComponentSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -19,37 +17,44 @@ import javax.inject.Singleton;
 @Log
 public class FieldFactory extends EntityFactory<FieldConfig> {
 
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Slot> slotMapper;
+  private final ComponentMapper<Coordinates> coordinatesMapper;
+  private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private final ComponentSyncer syncer;
 
   @Inject
-  public FieldFactory(@NonNull World world,
-                      @NonNull GameScreenAssets assets) {
+  public FieldFactory(
+      @NonNull World world,
+      @NonNull GameScreenAssets assets,
+      @NonNull ComponentSyncer componentSyncer
+  ) {
     super(world, assets);
-    this.positionMapper = world.getMapper(Position.class);
-    this.nameMapper = world.getMapper(Name.class);
-    this.slotMapper = world.getMapper(Slot.class);
+    this.coordinatesMapper = world.getMapper(Coordinates.class);
+    this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
+    this.syncer = componentSyncer;
   }
 
   @Override
-  public int createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates) {
+  public int createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates, int clientOwner) {
     var entity = world.create();
-    setUpPosition(coordinates, entity);
-    slotMapper.create(entity);
-    setUpName(config, entity);
+
+    var position = setUpCoordinates(coordinates, entity);
+    var entityConfigId = setUpEntityConfig(entity);
+
+    syncer.sendComponent(position, entity);
+    syncer.sendComponent(entityConfigId, entity);
     return entity;
   }
 
-  private void setUpName(@NonNull FieldConfig config, int entityId) {
-    var name = nameMapper.create(entityId);
-    name.setName(config.getName());
-    name.setPolishName(config.getPolishName());
+  private EntityConfigId setUpEntityConfig(int entityId) {
+    var entityConfigId = assets.getGameConfigs().getAny(FieldConfig.class).getId();
+    var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
+    entityConfigIdComponent.setId(entityConfigId);
+    return entityConfigIdComponent;
   }
 
-  private void setUpPosition(@NonNull Coordinates coordinates, int entityId) {
-    var position = positionMapper.create(entityId);
-    var positionFromCoordinates = PositionUtil.generateWorldPositionForCoords(coordinates);
-    position.setPosition(positionFromCoordinates);
+  private Coordinates setUpCoordinates(Coordinates coordinates, int entityId) {
+    var result = coordinatesMapper.create(entityId);
+    result.setCoordinates(coordinates);
+    return result;
   }
 }

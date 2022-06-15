@@ -4,11 +4,11 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.core.ecs.component.Name;
-import com.mygdx.game.core.ecs.component.Slot;
+import com.mygdx.game.client.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -18,44 +18,36 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public final class FieldClickedDialogFactory {
+public final class CoordinateClickedDialogFactory {
 
   private final GameScreenAssets assets;
   private final Stage stage;
-  private final ComponentMapper<Slot> slotMapper;
   private final ComponentMapper<Name> nameMapper;
 
   @Inject
-  public FieldClickedDialogFactory(@NonNull GameScreenAssets assets,
-                                   @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-                                   @NonNull World world) {
+  public CoordinateClickedDialogFactory(
+      @NonNull GameScreenAssets assets,
+      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull World world
+  ) {
     this.assets = assets;
     this.stage = stage;
-    this.slotMapper = world.getMapper(Slot.class);
     this.nameMapper = world.getMapper(Name.class);
   }
 
-  public void createAndShow(int field, @NonNull EntityHandler handler) {
+  public void createAndShow(IntArray entities, @NonNull EntityHandler handler) {
     var dialog = createEntityDialog(handler);
     dialog.text("Choose on of the following:");
-    addFieldButton(dialog, field);
-    addUnitButtons(dialog, field);
+    addEntityButtons(dialog, entities);
     dialog.show(stage);
     log.info("shown FieldClickedDialog");
   }
 
-  private void addFieldButton(Dialog dialog, int field) {
-    var fieldName = nameMapper.get(field);
-    dialog.button("Field: " + fieldName.getName(), field);
-  }
-
-  private void addUnitButtons(Dialog dialog, int field) {
-    var fieldSlot = slotMapper.get(field);
-    var units = fieldSlot.getEntities();
-    for (int i = 0; i < units.size; i++) {
-      var unit = units.get(i);
-      var unitName = nameMapper.get(unit);
-      dialog.button("Unit: " + unitName.getName(), unit);
+  private void addEntityButtons(Dialog dialog, IntArray entities) {
+    for (int i = 0; i < entities.size; i++) {
+      var entity = entities.get(i);
+      var name = nameMapper.get(entity);
+      dialog.button(name.getName(), entity);
     }
   }
 

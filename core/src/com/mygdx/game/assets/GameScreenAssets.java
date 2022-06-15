@@ -26,11 +26,15 @@ public class GameScreenAssets {
   private final AssetManager assetManager;
 
   @NonNull
-  private final GameConfigs gameConfigs = new GameConfigs();
+  private final GameConfigs gameConfigs;
 
   @Inject
-  public GameScreenAssets(@NonNull AssetManager assetManager) {
+  public GameScreenAssets(
+      @NonNull AssetManager assetManager,
+      @NonNull GameConfigs gameConfigs
+  ) {
     this.assetManager = assetManager;
+    this.gameConfigs = gameConfigs;
     initCustomLoaders();
   }
 
@@ -95,8 +99,8 @@ public class GameScreenAssets {
   }
 
   private void populateGameConfigs() {
-    gameConfigs.putAll(FieldConfig.class, assetManager.getAll(FieldConfig.class, new Array<>()));
-    gameConfigs.putAll(UnitConfig.class, assetManager.getAll(UnitConfig.class, new Array<>()));
+    gameConfigs.putAll(assetManager.getAll(FieldConfig.class, new Array<>()));
+    gameConfigs.putAll(assetManager.getAll(UnitConfig.class, new Array<>()));
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
