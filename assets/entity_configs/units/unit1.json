@@ -3,7 +3,7 @@
   "name": "unitTest",
   "polishName": "jednostka",
   "modelPath": "basic.g3db",
-  "textureName": "unit_test.png",
+  "textureName": "unit.png",
   "maxHp": 100,
   "attackPower": 50,
   "defense": 25,
