@@ -2,6 +2,7 @@ package com.mygdx.game.client.di;
 
 import com.github.czyzby.websocket.CommonWebSockets;
 import com.github.czyzby.websocket.WebSocket;
+import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSockets;
 import com.mygdx.game.client.network.ComponentMessageListener;
 import dagger.Module;
@@ -30,5 +31,15 @@ public class NetworkModule {
       /* wait till connection is ready, later this code should be redone */
     }
     return socket;
+  }
+
+  @Provides
+  public WebSocketHandler providesWebSocketHandler(
+      WebSocket webSocket
+  ) {
+    var handler = new WebSocketHandler();
+    handler.setFailIfNoHandler(false);
+    webSocket.addListener(handler);
+    return handler;
   }
 }

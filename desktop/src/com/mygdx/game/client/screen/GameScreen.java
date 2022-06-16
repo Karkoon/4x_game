@@ -7,12 +7,14 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.initialize.MapService;
 import com.mygdx.game.client.initialize.UnitService;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.MoveEntityInputAdapter;
+import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -35,6 +37,7 @@ public class GameScreen extends ScreenAdapter {
   private final MoveEntityInputAdapter moveEntityInputAdapter;
   private final MapService mapService;
   private final UnitService unitService;
+  private final PlayerRoomDialogFactory roomDialogFactory;
 
   @Inject
   public GameScreen(
@@ -44,7 +47,9 @@ public class GameScreen extends ScreenAdapter {
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull MapService mapService,
-      @NonNull UnitService unitService
+      @NonNull UnitService unitService,
+      @NonNull PlayerRoomDialogFactory roomDialogFactory,
+      @NonNull WebSocket webSocket
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -53,6 +58,9 @@ public class GameScreen extends ScreenAdapter {
     this.moveEntityInputAdapter = moveEntityInputAdapter;
     this.mapService = mapService;
     this.unitService = unitService;
+    this.roomDialogFactory = roomDialogFactory;
+
+    webSocket.send("connect");
   }
 
   @Override
@@ -60,8 +68,10 @@ public class GameScreen extends ScreenAdapter {
     log.info("GameScreen shown");
     positionCamera(viewport.getCamera());
     setUpInput();
-    mapService.initializeMap();
-    unitService.initializeTestUnit();
+    roomDialogFactory.createAndShow(() -> {
+      mapService.initializeMap();
+      unitService.initializeTestUnit();
+    });
   }
 
   @Override

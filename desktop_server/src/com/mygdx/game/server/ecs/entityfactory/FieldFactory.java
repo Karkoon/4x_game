@@ -6,7 +6,8 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.server.network.ComponentSyncer;
+import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -19,22 +20,23 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private final ComponentSyncer syncer;
+  private final GameRoomSyncer syncer;
+
 
   @Inject
   public FieldFactory(
       @NonNull World world,
       @NonNull GameScreenAssets assets,
-      @NonNull ComponentSyncer componentSyncer
+      @NonNull GameRoomSyncer gameRoomSyncer
   ) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
-    this.syncer = componentSyncer;
+    this.syncer = gameRoomSyncer;
   }
 
   @Override
-  public int createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates, int clientOwner) {
+  public int createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates, Client clientOwner) {
     var entity = world.create();
 
     var position = setUpCoordinates(coordinates, entity);

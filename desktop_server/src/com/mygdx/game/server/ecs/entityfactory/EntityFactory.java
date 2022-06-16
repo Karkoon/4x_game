@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 public abstract class EntityFactory<T extends EntityConfig> {
@@ -17,6 +18,6 @@ public abstract class EntityFactory<T extends EntityConfig> {
   }
 
   @NonNull
-  public abstract int createEntity(T entityConfig, Coordinates coordinates, int clientOwner);
+  public abstract int createEntity(T entityConfig, Coordinates coordinates, Client client);
 
 }

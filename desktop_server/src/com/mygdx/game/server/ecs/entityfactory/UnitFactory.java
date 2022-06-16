@@ -6,7 +6,8 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.server.network.ComponentSyncer;
+import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -19,12 +20,14 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private final ComponentSyncer syncer;
+  private final GameRoomSyncer syncer;
 
   @Inject
-  public UnitFactory(@NonNull World world,
-                     @NonNull GameScreenAssets assets,
-                     @NonNull ComponentSyncer syncer) {
+  public UnitFactory(
+      @NonNull World world,
+      @NonNull GameScreenAssets assets,
+      @NonNull GameRoomSyncer syncer
+  ) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
@@ -32,10 +35,10 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   @Override
-  public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates, int clientOwner) {
+  public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates, Client client) {
     var entity = world.create();
 
-    var position = setUpCoordinates(coordinates, clientOwner);
+    var position = setUpCoordinates(coordinates, entity);
     var entityConfigId = setUpEntityConfig(entity);
 
     syncer.sendComponent(position, entity);

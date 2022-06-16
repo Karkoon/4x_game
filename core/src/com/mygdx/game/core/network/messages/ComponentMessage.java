@@ -1,4 +1,4 @@
-package com.mygdx.game.core.network;
+package com.mygdx.game.core.network.messages;
 
 import com.artemis.Component;
 import lombok.AllArgsConstructor;
