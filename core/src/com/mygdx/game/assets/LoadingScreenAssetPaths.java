@@ -2,7 +2,7 @@ package com.mygdx.game.assets;
 
 public final class LoadingScreenAssetPaths {
 
-  public static final String ASSETS_PATH = "./assets/";
+  public static final String ASSETS_PATH = "./";
   public static final String LOADING_SCREEN_TEXTURE_ATLAS = ASSETS_PATH + "loading/loading.pack";
   public static final String LOGO = "libgdx-logo";
   public static final String LOADING_FRAME = "loading-frame";
