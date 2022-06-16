@@ -19,6 +19,8 @@ public final class StartUnitInitializer {
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
 
+  private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
+
   @Inject
   public StartUnitInitializer(
       @NonNull UnitFactory unitFactory,
