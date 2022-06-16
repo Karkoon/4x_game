@@ -13,11 +13,9 @@ import com.mygdx.game.client.initialize.MapService;
 import com.mygdx.game.client.initialize.UnitService;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.GameScreenInputAdapter;
-import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.core.model.Coordinates;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -36,25 +34,24 @@ public class GameScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final GameScreenInputAdapter gameScreenInputAdapter;
-  private final GameState state;
   private final MapService mapService;
   private final UnitService unitService;
 
   @Inject
-  public GameScreen(@NonNull ModelInstanceRenderer renderer,
-                    @NonNull World world,
-                    @NonNull Viewport viewport,
-                    @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-                    @NonNull GameScreenInputAdapter gameScreenInputAdapter,
-                    @NonNull GameState state,
-                    @NonNull MapService mapService,
-                    @NonNull UnitService unitService) {
+  public GameScreen(
+      @NonNull ModelInstanceRenderer renderer,
+      @NonNull World world,
+      @NonNull Viewport viewport,
+      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull GameScreenInputAdapter gameScreenInputAdapter,
+      @NonNull MapService mapService,
+      @NonNull UnitService unitService
+  ) {
     this.renderer = renderer;
     this.world = world;
     this.viewport = viewport;
     this.stage = stage;
     this.gameScreenInputAdapter = gameScreenInputAdapter;
-    this.state = state;
     this.mapService = mapService;
     this.unitService = unitService;
   }
