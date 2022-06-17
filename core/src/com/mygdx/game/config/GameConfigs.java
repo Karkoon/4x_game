@@ -1,74 +1,48 @@
 package com.mygdx.game.config;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.LongMap;
 import lombok.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class GameConfigs {
 
-  @NonNull
-  private final Map<Class<? extends EntityConfig>, Map<Integer, EntityConfig>> entityConfigMap;
+  private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 
+  @Inject
   public GameConfigs() {
-    entityConfigMap = new HashMap<>();
   }
 
   public <T extends EntityConfig> T get(@NonNull final Class<T> entityClass,
-                                        @NonNull final Integer entityId) {
-    return entityClass.cast(entityConfigMap.get(entityClass).get(entityId));
+                                        @NonNull final long entityConfigId) {
+    return entityClass.cast(entityConfigMap.get(entityConfigId));
   }
 
   @NonNull
-  public <T extends EntityConfig> T getAny(@NonNull final Class<T> entityClass) {
-    return entityClass.cast(entityConfigMap.get(entityClass).values()
-        .stream()
-        .findAny().orElseThrow());
-  }
-
-  @NonNull
-  public Array<EntityConfig> getAll() {
-    var array = new Array<EntityConfig>();
-    entityConfigMap.values()
-        .stream()
-        .flatMap(v -> v.values().stream())
-        .forEach(array::add);
-    return array;
+  public <T extends EntityConfig> T getAny(@NonNull final Class<T> entityClass) { // don't use later
+    for (EntityConfig next : entityConfigMap.values()) {
+      if (entityClass.isInstance(next)) {
+        return entityClass.cast(next);
+      }
+    }
+    throw new IllegalArgumentException("No such EntityConfig saved");
   }
 
   public int size() {
-    return entityConfigMap.values()
-        .stream()
-        .map(v -> v.values().size())
-        .reduce(Integer::sum)
-        .orElse(0);
+    return entityConfigMap.size;
   }
 
-  public <T extends EntityConfig> void put(@NonNull final Class<T> entityClass,
-                                           @NonNull final T entityConfig) {
-    var singleItemArray = new Array<T>(1);
-    singleItemArray.add(entityConfig);
-    putAll(entityClass, singleItemArray);
+  public void put(@NonNull final EntityConfig entityConfig) {
+    entityConfigMap.put(entityConfig.getId(), entityConfig);
   }
 
-  public <T extends EntityConfig> void putAll(@NonNull final Class<T> entityClass,
-                                              @NonNull final Array<T> entityArray) {
-    if (entityConfigMap.containsKey(entityClass)) {
-      var entityMap = entityConfigMap.get(entityClass);
-      putEntityConfigsInMap(entityMap, entityArray);
-    } else {
-      var entityMap = new HashMap<Integer, EntityConfig>();
-      putEntityConfigsInMap(entityMap, entityArray);
-      entityConfigMap.put(entityClass, entityMap);
+  public <T extends EntityConfig> void putAll(@NonNull final Array<T> entityConfigArray) {
+    for (int i = 0; i < entityConfigArray.size; i++) {
+      put(entityConfigArray.get(i));
     }
   }
 
-  private <T extends EntityConfig> void putEntityConfigsInMap(Map<Integer, EntityConfig> entityMap,
-                                                              Array<T> entityArray) {
-    for (var i = 0; i < entityArray.size; i++) {
-      var entityConfig = entityArray.get(i);
-      entityMap.put(entityConfig.getId(), entityConfig);
-    }
-  }
 }

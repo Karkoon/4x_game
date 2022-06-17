@@ -22,9 +22,11 @@ allprojects {
     version = '1.0'
     ext {
         appName = "my-gdx-game"
-        gdxVersion = '1.10.0'
+        gdxVersion = '1.11.0'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
+        artemisVersion = '2.3.0'
+        vertxVersion = '3.5.0'
     }
 
     repositories {
@@ -43,12 +45,36 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
+        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
+
+        implementation 'com.google.dagger:dagger:2.41'
+        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
     }
 }
+
+
+project(":desktop_server") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
+
+        implementation 'com.google.dagger:dagger:2.41'
+        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
+
+        implementation "io.vertx:vertx-core:$vertxVersion"
+    }
+}
+
 
 project(":core") {
     apply plugin: "java-library"
@@ -60,12 +86,10 @@ project(":core") {
     dependencies {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         implementation "com.esotericsoftware.spine:spine-libgdx:4.0.18.1"
         implementation "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
-
-        implementation "com.badlogicgames.ashley:ashley:1.7.4"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
