@@ -6,6 +6,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.ecs.component.Name;
 import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.Score;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.FieldConfig;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<ModelInstanceComp> modelMapper;
   private final ComponentMapper<Position> positionMapper;
+  private final ComponentMapper<Score> scoreMapper;
 
   @Inject
   public FieldFactory(@NonNull World world,
@@ -29,13 +31,22 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     this.nameMapper = world.getMapper(Name.class);
     this.modelMapper = world.getMapper(ModelInstanceComp.class);
     this.positionMapper = world.getMapper(Position.class);
+    this.scoreMapper = world.getMapper(Score.class);
   }
 
   @Override
   public void createEntity(@NonNull FieldConfig config, int entity) {
     setUpModelInstanceComp(config, entity);
     setUpName(config, entity);
+    setUpScore(config, entity);
     positionMapper.create(entity);
+  }
+
+  private void setUpModelInstanceComp(@NonNull FieldConfig config, int entityId) {
+    var modelInstanceComp = modelMapper.create(entityId);
+    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+    var texture = assets.getTexture(config.getTextureName());
+    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
   }
 
   private void setUpName(@NonNull FieldConfig config, int entityId) {
@@ -44,10 +55,8 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     name.setPolishName(config.getPolishName());
   }
 
-  private void setUpModelInstanceComp(@NonNull FieldConfig config, int entityId) {
-    var modelInstanceComp = modelMapper.create(entityId);
-    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
-    var texture = assets.getTexture(config.getTextureName());
-    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
+  private void setUpScore(FieldConfig config, int entityId) {
+    var score = scoreMapper.create(entityId);
+    score.setScoreValue(config.getScoreValue());
   }
 }

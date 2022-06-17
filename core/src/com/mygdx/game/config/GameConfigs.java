@@ -10,6 +10,9 @@ import javax.inject.Singleton;
 @Singleton
 public class GameConfigs {
 
+  public final static int FIELD_AMOUNT = 4;
+  public final static int UNIT_AMOUNT = 1;
+
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 
   @Inject
@@ -17,7 +20,7 @@ public class GameConfigs {
   }
 
   public <T extends EntityConfig> T get(@NonNull final Class<T> entityClass,
-                                        @NonNull final long entityConfigId) {
+                                        final long entityConfigId) {
     return entityClass.cast(entityConfigMap.get(entityConfigId));
   }
 

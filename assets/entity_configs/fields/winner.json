@@ -1,0 +1,8 @@
+{
+  "id": 4,
+  "name": "winner",
+  "polishName": "wygrana",
+  "modelPath": "basic.g3db",
+  "textureName": "winner.png",
+  "scoreValue": 250
+}
