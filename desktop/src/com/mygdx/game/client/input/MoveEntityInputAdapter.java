@@ -5,77 +5,74 @@ import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.ecs.component.Movable;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.client.network.MoveEntityService;
-import com.mygdx.game.client.ui.FieldClickedDialogFactory;
-import com.mygdx.game.core.ecs.component.Slot;
-import com.mygdx.game.core.model.Coordinates;
+import com.mygdx.game.client.ui.CoordinateClickedDialogFactory;
+import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.util.PositionUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.logging.Level;
 
 @Log
-public class GameScreenInputAdapter extends InputAdapter {
+public class MoveEntityInputAdapter extends InputAdapter {
 
   public static final float CLICK_RADIUS = 90f;
+  private static final int NO_ENTITY = -0xC0FFEE;
 
   private final Viewport viewport;
   private final GameState gameState;
-  private final FieldClickedDialogFactory fieldClickedDialogFactory;
-  private final ComponentMapper<Slot> slotMapper;
+  private final CoordinateClickedDialogFactory coordinateClickedDialogFactory;
   private final MoveEntityService moveEntityService;
+  private final ComponentMapper<Coordinates> coordinatesMapper;
+  private final ComponentMapper<Movable> movableMapper;
 
-  private int selectedUnit;
-  private int selectedUnitsField;
+  private int selectedUnit = NO_ENTITY;
 
   @Inject
-  public GameScreenInputAdapter(
+  public MoveEntityInputAdapter(
       @NonNull Viewport viewport,
       @NonNull GameState gameState,
-      @NonNull FieldClickedDialogFactory dialogFactory,
+      @NonNull CoordinateClickedDialogFactory dialogFactory,
       @NonNull World world,
       @NonNull MoveEntityService moveEntityService
   ) {
     this.viewport = viewport;
     this.gameState = gameState;
-    this.fieldClickedDialogFactory = dialogFactory;
-    this.slotMapper = world.getMapper(Slot.class);
+    this.coordinateClickedDialogFactory = dialogFactory;
     this.moveEntityService = moveEntityService;
+    this.coordinatesMapper = world.getMapper(Coordinates.class);
+    this.movableMapper = world.getMapper(Movable.class);
   }
 
   @Override
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-    var selectedCoords = getCoordinatesFromClickPosition(screenX, screenY);
-    if (selectedCoords == null) {
+    var clickedCoordinates = getCoordinatesFromClickPosition(screenX, screenY);
+    if (clickedCoordinates == null) {
       return false;
     }
-    var field = gameState.getFields().get(selectedCoords);
 
-    if (selectedUnit == 0) {
-      handleFieldClicked(field);
+    if (selectedUnit == NO_ENTITY) {
+      handleNoSelectedUnit(clickedCoordinates);
     } else {
-      handleMovement(field);
+      handleWithSelectedUnit(clickedCoordinates);
     }
     return true;
   }
 
-  private void handleMovement(int toField) {
-    moveEntityService.moveEntity(selectedUnit, selectedUnitsField, toField);
-    selectedUnit = 0;
+  private void handleWithSelectedUnit(Coordinates clickedCoords) {
+    moveEntityService.moveEntity(selectedUnit, clickedCoords);
+    selectedUnit = NO_ENTITY;
   }
 
-  private void handleFieldClicked(int field) {
-    var units = slotMapper.get(field).getEntities();
-    fieldClickedDialogFactory.createAndShow(field, chosenEntity -> {
-      if (chosenEntity.equals(field)) {
-        log.log(Level.INFO, "Selected field.");
-      } else if (units.contains(chosenEntity)) {
-        selectedUnitsField = field;
+  private void handleNoSelectedUnit(Coordinates clickedCoords) {
+    var entities = gameState.getEntitiesAtCoordinate(clickedCoords);
+    coordinateClickedDialogFactory.createAndShow(entities, chosenEntity -> {
+      if (movableMapper.has(chosenEntity)) {
         selectedUnit = chosenEntity;
-        log.log(Level.INFO, "Selected unit.");
+        log.info("Selected a movable.");
       }
     });
   }
@@ -83,11 +80,10 @@ public class GameScreenInputAdapter extends InputAdapter {
   private Coordinates getCoordinatesFromClickPosition(int screenX, int screenY) {
     var ray = viewport.getPickRay(screenX, screenY);
     var minDistance = Float.MAX_VALUE;
-    var coordinates = gameState.getFields().keySet().stream().toList();
+    var coordinates = gameState.getSavedCoordinates();
 
     Coordinates result = null;
-    for (var i = 0; i < coordinates.size(); i++) {
-      var coordinate = coordinates.get(i);
+    for (var coordinate : coordinates) {
       var worldPosition = PositionUtil.generateWorldPositionForCoords(coordinate);
       var dist2 = ray.origin.dst2(worldPosition);
       if (dist2 > minDistance) {

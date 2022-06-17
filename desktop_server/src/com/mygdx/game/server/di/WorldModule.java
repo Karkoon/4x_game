@@ -2,8 +2,6 @@ package com.mygdx.game.server.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
-import com.mygdx.game.server.ecs.system.SlotPositionSystem;
-import com.mygdx.game.server.ecs.system.UnitMovementSystem;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -18,13 +16,10 @@ public class WorldModule {
   @Provides
   @Singleton
   public @NonNull World providesWorld(
-      @NonNull UnitMovementSystem movementSystem,
-      @NonNull SlotPositionSystem slotPositionSystem
+      /* nothing to process lmao */
   ) {
     log.log(Level.INFO, "provided Server World");
     var worldConfiguration = new WorldConfiguration();
-    worldConfiguration.setSystem(movementSystem);
-    worldConfiguration.setSystem(slotPositionSystem);
     return new World(worldConfiguration);
   }
 }

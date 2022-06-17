@@ -1,11 +1,15 @@
 package com.mygdx.game.server.network;
 
 import io.vertx.core.http.ServerWebSocket;
+import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Singleton
 public class ClientManager {
   private final Map<Integer, ServerWebSocket> clients = new HashMap<>();
 
@@ -16,11 +20,15 @@ public class ClientManager {
 
   }
 
-  public Map<Integer, ServerWebSocket> getClients() {
-    return clients;
+  public @NonNull ServerWebSocket getClient(int clientId) {
+    return clients.get(clientId);
   }
 
-  public int addClient(ServerWebSocket websocket) {
+  public Collection<ServerWebSocket> getClients() {
+    return clients.values();
+  }
+
+  public int addClient(@NonNull ServerWebSocket websocket) {
     clients.put(nextId, websocket);
     return nextId++;
   }

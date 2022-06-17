@@ -1,7 +1,6 @@
 package com.mygdx.game.client.initialize;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.core.model.Coordinates;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -17,8 +16,8 @@ public class UnitService {
     this.webSocket = webSocket;
   }
 
-  public void initializeTestUnit(Coordinates coordinates) {
+  public void initializeTestUnit() {
     log.info("unit initialize request sent");
-    webSocket.send("unit");
+    webSocket.send("unit"); // TODO: 15.06.2022 make this a message for the server to process
   }
 }

@@ -19,7 +19,7 @@ public class ClientSynchronizationSystem extends IntervalSystem {
 
   @Override
   protected void processSystem() {
-    manager.getClients().values().forEach(socket -> {
+    manager.getClients().forEach(socket -> {
           /*
           * dump game state difference from accumulated changes,
           * this is one of the ways to implement the server synchronization,
