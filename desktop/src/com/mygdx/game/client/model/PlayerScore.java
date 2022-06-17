@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 @Getter
 @Setter
 public class PlayerScore {
-  private Integer scoreValue = 0;
+  private int scoreValue = 0;
 
   @Inject
   public PlayerScore() {

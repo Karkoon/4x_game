@@ -38,15 +38,15 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     var entity = world.create();
 
     var position = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(entity);
+    var entityConfigId = setUpEntityConfig(config, entity);
 
     syncer.sendComponent(position, entity);
     syncer.sendComponent(entityConfigId, entity);
     return entity;
   }
 
-  private EntityConfigId setUpEntityConfig(int entityId) {
-    var entityConfigId = assets.getGameConfigs().getAny(FieldConfig.class).getId();
+  private EntityConfigId setUpEntityConfig(@NonNull FieldConfig config, int entityId) {
+    var entityConfigId = config.getId();
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
     entityConfigIdComponent.setId(entityConfigId);
     return entityConfigIdComponent;

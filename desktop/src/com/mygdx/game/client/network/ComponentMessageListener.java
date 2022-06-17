@@ -13,6 +13,7 @@ import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.config.FieldConfig;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -48,12 +49,12 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       // todo bo to jednak nie jest komponent tylko pojedyncza wiadomość xD
       // albo coś
       var entityConfigId = ((EntityConfigId) packet).getId();
-      if (entityConfigId == 1) { // 1, 2 są z plików jsona EntityConfigów
+      if (entityConfigId >= 1  && entityConfigId <= GameConfigs.FIELD_AMOUNT) { // 1, 2 są z plików jsona EntityConfigów
         log.info("field id " + worldEntity);
         var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);
         fieldFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId == 2) {
+      } else if (entityConfigId > GameConfigs.FIELD_AMOUNT && entityConfigId <= GameConfigs.UNIT_AMOUNT + GameConfigs.FIELD_AMOUNT) {
         log.info("unit id " + worldEntity);
         var config = assets.getGameConfigs().get(UnitConfig.class, entityConfigId);
         unitFactory.createEntity(config, worldEntity);

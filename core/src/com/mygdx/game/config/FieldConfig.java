@@ -19,5 +19,5 @@ public class FieldConfig implements EntityConfig {
   @NonNull
   private String textureName;
   @NonNull
-  private Integer value;
+  private Integer scoreValue;
 }

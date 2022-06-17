@@ -1,15 +1,14 @@
 package com.mygdx.game.client.ecs.component;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Pool;
+import com.artemis.PooledComponent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Score implements Component, Pool.Poolable {
+public class Score extends PooledComponent {
 
-  private Integer scoreValue;
+  private int scoreValue;
 
   @Override
   public void reset() {

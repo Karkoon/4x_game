@@ -1,17 +1,20 @@
 package com.mygdx.game.server.initialize;
 
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import java.util.Random;
 
 public final class StartUnitInitializer {
 
   private final UnitFactory unitFactory;
   private final GameScreenAssets assets;
+  private final Random random = new Random();
 
   @Inject
   public StartUnitInitializer(
@@ -23,7 +26,7 @@ public final class StartUnitInitializer {
 
   public void initializeTestUnit(int clientOwner) {
     var initialCoordinates = new Coordinates(0, 0);
-    var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class);
+    var anyConfig = assets.getGameConfigs().get(UnitConfig.class, random.nextInt(GameConfigs.FIELD_AMOUNT + 1, GameConfigs.FIELD_AMOUNT + GameConfigs.UNIT_AMOUNT  + 1));
     unitFactory.createEntity(anyConfig, initialCoordinates, clientOwner);
   }
 }
