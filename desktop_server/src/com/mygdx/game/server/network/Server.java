@@ -55,9 +55,7 @@ public final class Server {
         room.getClients().forEach(ws -> {
           var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-          log.info("aaaaaaaa");
-          client.getSocket().closeHandler(_void -> log.info("WTF"));
-          client.getSocket().write(buffer);
+          ws.getSocket().write(buffer);
         });
       }
       case "map" -> mapInitializer.initializeMap(client);
