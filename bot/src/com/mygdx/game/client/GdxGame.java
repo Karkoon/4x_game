@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.client.bot.BotClient;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -24,10 +25,12 @@ public class GdxGame extends Game {
   private final Lazy<MenuScreen> menuScreen;
 
   @Inject
-  GdxGame(@NonNull AssetManager assetManager,
-          @NonNull Lazy<GameScreen> gameScreen,
-          @NonNull Lazy<LoadingScreen> loadingScreen,
-          @NonNull Lazy<MenuScreen> menuScreen) {
+  public GdxGame(
+      @NonNull AssetManager assetManager,
+      @NonNull Lazy<GameScreen> gameScreen,
+      @NonNull Lazy<LoadingScreen> loadingScreen,
+      @NonNull Lazy<MenuScreen> menuScreen
+  ) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
     this.loadingScreen = loadingScreen;

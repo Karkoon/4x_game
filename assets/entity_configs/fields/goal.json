@@ -1,0 +1,8 @@
+{
+  "id": 5,
+  "name": "goal",
+  "polishName": "cel",
+  "modelPath": "basic.g3db",
+  "textureName": "goal.png",
+  "scoreValue": 250
+}

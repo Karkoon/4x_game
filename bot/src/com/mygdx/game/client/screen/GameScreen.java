@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.ModelInstanceRenderer;
+import com.mygdx.game.client.bot.BotClient;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.initialize.MapService;
 import com.mygdx.game.client.initialize.UnitService;
@@ -36,6 +37,8 @@ public class GameScreen extends ScreenAdapter {
   private final MapService mapService;
   private final UnitService unitService;
 
+  private final BotClient botClient;
+
   @Inject
   public GameScreen(
       @NonNull ModelInstanceRenderer renderer,
@@ -44,7 +47,8 @@ public class GameScreen extends ScreenAdapter {
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull MapService mapService,
-      @NonNull UnitService unitService
+      @NonNull UnitService unitService,
+      @NonNull BotClient botClient
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -53,6 +57,7 @@ public class GameScreen extends ScreenAdapter {
     this.moveEntityInputAdapter = moveEntityInputAdapter;
     this.mapService = mapService;
     this.unitService = unitService;
+    this.botClient = botClient;
   }
 
   @Override
@@ -62,6 +67,13 @@ public class GameScreen extends ScreenAdapter {
     setUpInput();
     mapService.initializeMap();
     unitService.initializeTestUnit();
+    Thread t1 = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        botClient.run();
+      }
+    });
+    t1.start();
   }
 
   @Override
