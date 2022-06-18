@@ -1,6 +1,7 @@
 package com.mygdx.game.server.network;
 
 import com.badlogic.gdx.utils.Json;
+import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import com.mygdx.game.server.initialize.MapInitializer;
 import com.mygdx.game.server.initialize.StartUnitInitializer;
@@ -58,8 +59,17 @@ public final class Server {
           ws.getSocket().write(buffer);
         });
       }
-      case "map" -> mapInitializer.initializeMap(client);
-      case "unit" -> unitInitializer.initializeTestUnit(client);
+      case "start" -> {
+        room.getClients().forEach(ws -> {
+          var msg = new GameStartedMessage();
+          var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
+          ws.getSocket().write(buffer);
+        });
+        var width = Integer.parseInt(commands[1]);
+        var height = Integer.parseInt(commands[2]);
+        mapInitializer.initializeMap(width, height, client);
+        unitInitializer.initializeTestUnit(client);
+      }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);
         var x = Integer.parseInt(commands[2]);

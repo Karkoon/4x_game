@@ -10,8 +10,8 @@ import javax.inject.Singleton;
 @Singleton
 public class GameConfigs {
 
-  public final static int FIELD_AMOUNT = 4;
-  public final static int UNIT_AMOUNT = 1;
+  public static final int FIELD_AMOUNT = 4;
+  public static final int UNIT_AMOUNT = 1;
 
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 
@@ -19,13 +19,12 @@ public class GameConfigs {
   public GameConfigs() {
   }
 
-  public <T extends EntityConfig> T get(@NonNull final Class<T> entityClass,
+  public <T extends EntityConfig> @NonNull T get(@NonNull final Class<T> entityClass,
                                         final long entityConfigId) {
     return entityClass.cast(entityConfigMap.get(entityConfigId));
   }
 
-  @NonNull
-  public <T extends EntityConfig> T getAny(@NonNull final Class<T> entityClass) { // don't use later
+  public <T extends EntityConfig> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later
     for (EntityConfig next : entityConfigMap.values()) {
       if (entityClass.isInstance(next)) {
         return entityClass.cast(next);

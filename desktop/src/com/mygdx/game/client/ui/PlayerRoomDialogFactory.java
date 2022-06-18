@@ -29,7 +29,7 @@ public class PlayerRoomDialogFactory {
       @NonNull GameScreenAssets assets,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull WebSocketHandler handler
-      ) {
+  ) {
     this.assets = assets;
     this.stage = stage;
     this.handler = handler;
@@ -46,7 +46,6 @@ public class PlayerRoomDialogFactory {
       return FULLY_HANDLED;
     }));
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
-      onClose.run();
       dialog.hide();
       return FULLY_HANDLED;
     }));
