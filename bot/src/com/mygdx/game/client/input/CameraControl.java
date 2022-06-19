@@ -11,7 +11,7 @@ import java.util.Set;
 
 class CameraControl implements Updatable {
 
-  private static final float SPEED = 2.5f;
+  private static final float SPEED = 5f;
   private static final BoundingBox validCameraSpace = new BoundingBox(
       new Vector3(0, 0, 0),
       new Vector3(1395.0f, 650f, 1300f) // todo bind camera space to amount of tiles, current values are empirical

@@ -51,6 +51,7 @@ public class BotClient {
     this.random = new Random();
   }
   public void run() {
+    log.info("Run bot");
     try {
       Thread.sleep(3000);
     } catch (InterruptedException e) {
@@ -69,24 +70,16 @@ public class BotClient {
     }
 
     while (true) {
-      List<Integer> availableCoordinates = CoordinateUtil.getAvailableCoordinates(currentCoordinates);
-      int nextMove = random.nextInt(0, availableCoordinates.size());
-      Integer newMove = availableCoordinates.get(nextMove);
-      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, newMove);
 //      List<Integer> availableCoordinates = CoordinateUtil.getAvailableCoordinates(currentCoordinates);
 //      int nextMove = random.nextInt(0, availableCoordinates.size());
 //      Integer newMove = availableCoordinates.get(nextMove);
 //      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, newMove);
       log.info("Old coordinates: " + currentCoordinates);
 
-      nextMove = getAction(currentCoordinates);
-      newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, nextMove);
+      int nextMove = getAction(currentCoordinates);
+      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, nextMove);
       inputAdapter.moveUnit(unitEntityId, newCoordinates);
 
-      log.info("Old coordinates: " + currentCoordinates);
-      currentCoordinates = newCoordinates;
-      inputAdapter.moveUnit(unitEntityId, currentCoordinates);
-      log.info("New coordinates: " + currentCoordinates);
       int reward = getReward(currentCoordinates, newCoordinates);
       updateQ(currentCoordinates, newCoordinates, nextMove, reward);
       log.info("New coordinates: " + newCoordinates);
@@ -103,15 +96,25 @@ public class BotClient {
       log.info("CURRENT QMAP: " + qMap.toString());
 
       try {
-//        Thread.sleep(1000);
-        Thread.sleep(250);
+        Thread.sleep(50);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
+
   }
+
   private void getInitialUnit() {
+    log.info("wait for map");
     var entities = gameState.getEntitiesAtCoordinate(currentCoordinates);
+    while (entities == null) {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      entities = gameState.getEntitiesAtCoordinate(currentCoordinates);
+    }
     for (int i = 0; i < entities.size; i++) {
       if (movableMapper.has(entities.get(i)))
         unitEntityId = entities.get(i);
@@ -148,7 +151,7 @@ public class BotClient {
 
     int epsilon = random.nextInt(0, 1000);
 
-    if (epsilon < 50) {
+    if (epsilon < 100) {
       int nextMove = random.nextInt(0, availableCoordinates.size());
       int newMove = availableCoordinates.get(nextMove);
 
