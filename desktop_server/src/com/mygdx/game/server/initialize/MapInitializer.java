@@ -42,22 +42,20 @@ public class MapInitializer {
     }
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        fieldFactory.createEntity(assets
-                        .getGameConfigs()
-                        .get(FieldConfig.class, 1),
-                new Coordinates(i, j),
-                clientOwner
-        );
-        var anyConfig = assets.getGameConfigs().get(FieldConfig.class, random.nextInt(1, GameConfigs.FIELD_AMOUNT+1));
-        var coords = new Coordinates(i, j);
-        fieldFactory.createEntity(anyConfig, coords, owner);
+        if (i != 8 || j != 8)
+          fieldFactory.createEntity(assets
+                          .getGameConfigs()
+                          .get(FieldConfig.class, random.nextInt(1, GameConfigs.FIELD_AMOUNT)),
+                  new Coordinates(i, j),
+                  owner
+          );
       }
     }
     fieldFactory.createEntity(assets
             .getGameConfigs()
             .get(FieldConfig.class, 5),
             new Coordinates(8, 8),
-            clientOwner
+            owner
     );
 
   }

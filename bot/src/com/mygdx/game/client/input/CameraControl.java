@@ -2,6 +2,7 @@ package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.mygdx.game.core.util.Updatable;
 import lombok.NonNull;
 
@@ -11,6 +12,10 @@ import java.util.Set;
 class CameraControl implements Updatable {
 
   private static final float SPEED = 2.5f;
+  private static final BoundingBox validCameraSpace = new BoundingBox(
+      new Vector3(0, 0, 0),
+      new Vector3(1395.0f, 650f, 1300f) // todo bind camera space to amount of tiles, current values are empirical
+  );
   private final Camera camera;
   private final Set<Direction> activeDirections = new HashSet<>();
 
@@ -38,23 +43,28 @@ class CameraControl implements Updatable {
     return !activeDirections.isEmpty();
   }
 
-  enum Direction {
-    RIGHT, LEFT, UP, ANY, DOWN
-  }
-
   @Override
   public void update(float delta) {
     var translationVector = new Vector3(0, 0, 0);
-    activeDirections.forEach(direction -> {
-      switch (direction) {
-        case RIGHT -> translationVector.x += SPEED;
-        case LEFT -> translationVector.x -= SPEED;
-        case UP -> translationVector.z -= SPEED;
-        case DOWN -> translationVector.z += SPEED;
-        default -> throw new IllegalStateException("Unhandled direction: " + direction);
-      }
-    });
+    activeDirections.forEach(direction -> translationVector.add(direction.velocity));
+    var cameraTranslationResult = camera.position.add(translationVector);
+    if (!validCameraSpace.contains(cameraTranslationResult)) {
+      camera.position.sub(translationVector);
+    }
+  }
 
-    camera.position.add(translationVector);
+
+  enum Direction {
+    RIGHT(new Vector3(SPEED, 0, 0)),
+    LEFT(new Vector3(-SPEED, 0, 0)),
+    UP(new Vector3(0, 0, -SPEED)),
+    ANY(Vector3.Zero),
+    DOWN(new Vector3(0, 0, SPEED));
+
+    final Vector3 velocity;
+
+    Direction(Vector3 velocity) {
+      this.velocity = velocity;
+    }
   }
 }

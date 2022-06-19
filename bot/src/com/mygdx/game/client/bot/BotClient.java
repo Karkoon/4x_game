@@ -1,5 +1,4 @@
 package com.mygdx.game.client.bot;
-
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.client.ecs.component.Movable;
@@ -13,6 +12,10 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.*;
 
 import java.lang.Math.*;
@@ -20,8 +23,6 @@ import java.lang.Math.*;
 @Singleton
 @Log
 public class BotClient {
-
-
   private final PlayerScore playerScore;
   private final GameState gameState;
   private final MoveEntityBotInputAdapter inputAdapter;
@@ -49,7 +50,6 @@ public class BotClient {
     this.currentCoordinates = new Coordinates(0, 0);
     this.random = new Random();
   }
-
   public void run() {
     try {
       Thread.sleep(3000);
@@ -69,16 +69,24 @@ public class BotClient {
     }
 
     while (true) {
+      List<Integer> availableCoordinates = CoordinateUtil.getAvailableCoordinates(currentCoordinates);
+      int nextMove = random.nextInt(0, availableCoordinates.size());
+      Integer newMove = availableCoordinates.get(nextMove);
+      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, newMove);
 //      List<Integer> availableCoordinates = CoordinateUtil.getAvailableCoordinates(currentCoordinates);
 //      int nextMove = random.nextInt(0, availableCoordinates.size());
 //      Integer newMove = availableCoordinates.get(nextMove);
 //      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, newMove);
       log.info("Old coordinates: " + currentCoordinates);
 
-      int nextMove = getAction(currentCoordinates);
-      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, nextMove);
+      nextMove = getAction(currentCoordinates);
+      newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, nextMove);
       inputAdapter.moveUnit(unitEntityId, newCoordinates);
 
+      log.info("Old coordinates: " + currentCoordinates);
+      currentCoordinates = newCoordinates;
+      inputAdapter.moveUnit(unitEntityId, currentCoordinates);
+      log.info("New coordinates: " + currentCoordinates);
       int reward = getReward(currentCoordinates, newCoordinates);
       updateQ(currentCoordinates, newCoordinates, nextMove, reward);
       log.info("New coordinates: " + newCoordinates);
@@ -95,14 +103,13 @@ public class BotClient {
       log.info("CURRENT QMAP: " + qMap.toString());
 
       try {
-        Thread.sleep(50);
+//        Thread.sleep(1000);
+        Thread.sleep(250);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-
   }
-
   private void getInitialUnit() {
     var entities = gameState.getEntitiesAtCoordinate(currentCoordinates);
     for (int i = 0; i < entities.size; i++) {

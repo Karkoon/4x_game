@@ -18,9 +18,9 @@ public class ViewportModule {
   @Singleton
   public @NonNull Viewport providesViewport() {
     log.log(Level.INFO, "provided viewport");
-    var camera = new PerspectiveCamera(66, 300, 300);
+    var camera = new PerspectiveCamera(100, 500, 500);
     camera.near = 500f;
     camera.far = 700f;
-    return new ExtendViewport(300, 300, camera);
+    return new ExtendViewport(500, 500, camera);
   }
 }

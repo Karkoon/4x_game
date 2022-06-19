@@ -40,7 +40,7 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
           @NonNull World world,
           @NonNull MoveEntityService moveEntityService,
           @NonNull PlayerScore playerScore
-          ) {
+  ) {
     this.gameState = gameState;
     this.moveEntityService = moveEntityService;
     this.coordinatesMapper = world.getMapper(Coordinates.class);

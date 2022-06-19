@@ -26,11 +26,11 @@ public class CoordinateToPositionSystem extends IteratingSystem {
   @Override
   protected void process(int entityId) {
     // todo maybe make it more based on events? does it go against the ecs philosophy?
-    var previousPosition = positionMapper.get(entityId);
-    var y = previousPosition.getPosition().y;
-    previousPosition.setPosition(
+    var position = positionMapper.get(entityId);
+    var retainedY = position.getPosition().y;
+    position.setPosition(
         PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId))
     );
-    previousPosition.getPosition().y = y;
+    position.getPosition().y = retainedY;
   }
 }
