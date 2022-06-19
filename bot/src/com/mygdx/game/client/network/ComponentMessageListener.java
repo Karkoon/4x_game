@@ -8,7 +8,6 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client.model.GameState;
@@ -42,7 +41,6 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       GameState gameState
   ) {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
-    final var positionMapper = world.getMapper(Position.class);
     final var coordinatesMapper = world.getMapper(Coordinates.class);
 
     registerHandler(EntityConfigId.class, (webSocket, worldEntity, packet) -> { // todo zmienić znowu na serwisy i fabryki,
@@ -62,15 +60,6 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       }
       return NOT_HANDLED;
     });
-
-    registerHandler(Position.class, (webSocket, worldEntity, component) -> { // Position should be changed to CoordinatesComponent
-      log.info("Read position component " + worldEntity);
-      var newPosition = (Position) component;
-      var entityPosition = positionMapper.create(worldEntity);
-      entityPosition.setPosition(newPosition.getPosition());
-      return FULLY_HANDLED;
-    });
-
 
     registerHandler(Coordinates.class, (webSocket, worldEntity, component) -> {
       log.info("Read coordinates component " + worldEntity);
