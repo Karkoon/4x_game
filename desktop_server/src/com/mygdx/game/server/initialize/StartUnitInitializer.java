@@ -11,7 +11,7 @@ import lombok.NonNull;
 import javax.inject.Inject;
 import java.util.Random;
 
-public final class StartUnitInitializer {
+public class StartUnitInitializer {
 
   private final UnitFactory unitFactory;
   private final GameScreenAssets assets;
