@@ -2,7 +2,7 @@ package com.mygdx.game.assets;
 
 public final class GameScreenAssetPaths {
 
-  public static final String ASSETS_PATH = "./assets/";
+  public static final String ASSETS_PATH = "./";
   public static final String DEMO_TEXTURE_PATH = ASSETS_PATH + "badlogic.jpg";
   public static final String MODEL_DIR = ASSETS_PATH + "models/";
   public static final String ENTITY_CONFIG_DIR = ASSETS_PATH + "entity_configs/";

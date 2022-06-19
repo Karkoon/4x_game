@@ -11,10 +11,10 @@ import javax.inject.Inject;
 public class MoveEntityService {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
-  private final ComponentSyncer syncer;
+  private final GameRoomSyncer syncer;
 
   @Inject
-  MoveEntityService(World world, ComponentSyncer syncer) {
+  MoveEntityService(World world, GameRoomSyncer syncer) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.syncer = syncer;
   }

@@ -17,7 +17,7 @@ import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.core.network.ComponentMessage;
+import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
