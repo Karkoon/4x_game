@@ -13,7 +13,8 @@ public class AllAssets {
   @Inject
   public AllAssets(
       AssetManager manager,
-      GameScreenAssets gameScreenAssets) {
+      GameScreenAssets gameScreenAssets
+  ) {
     this.manager = manager;
     this.gameScreenAssets = gameScreenAssets;
   }

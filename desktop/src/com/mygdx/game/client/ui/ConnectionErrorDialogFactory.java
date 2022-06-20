@@ -5,7 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.module.StageModule;
+import com.mygdx.game.client.di.scope.GameScreenScope;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -15,6 +16,7 @@ import javax.inject.Named;
 @Log
 // TODO: 04.06.2022 use it when server disconnects, it's s similar to a crash
 // you have to first be able to detect when the server disconnects though
+@GameScreenScope
 public class ConnectionErrorDialogFactory {
   private final GameScreenAssets assets;
   private final Stage stage;

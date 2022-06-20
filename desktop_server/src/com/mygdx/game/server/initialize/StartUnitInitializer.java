@@ -9,8 +9,10 @@ import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Random;
 
+@Singleton
 public final class StartUnitInitializer {
 
   private final UnitFactory unitFactory;
@@ -19,12 +21,11 @@ public final class StartUnitInitializer {
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
 
-  private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
-
   @Inject
   public StartUnitInitializer(
       @NonNull UnitFactory unitFactory,
-      @NonNull GameScreenAssets assets) {
+      @NonNull GameScreenAssets assets
+  ) {
     this.unitFactory = unitFactory;
     this.assets = assets;
   }
@@ -36,7 +37,7 @@ public final class StartUnitInitializer {
       initialized = true;
     }
     var initialCoordinates = new Coordinates(0, 0);
-    var anyConfig = assets.getGameConfigs().get(UnitConfig.class, random.nextInt(GameConfigs.FIELD_AMOUNT + 1, GameConfigs.FIELD_AMOUNT + GameConfigs.UNIT_AMOUNT  + 1));
+    var anyConfig = assets.getGameConfigs().get(UnitConfig.class, random.nextInt(GameConfigs.FIELD_AMOUNT + 1, GameConfigs.FIELD_AMOUNT + GameConfigs.UNIT_AMOUNT + 1));
     unitFactory.createEntity(anyConfig, initialCoordinates, owner);
   }
 }

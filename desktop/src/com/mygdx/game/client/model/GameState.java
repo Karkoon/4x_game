@@ -3,15 +3,15 @@ package com.mygdx.game.client.model;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
+import com.mygdx.game.client.di.scope.SingleGameScope;
 import com.mygdx.game.core.ecs.component.Coordinates;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Singleton
+@SingleGameScope
 public class GameState {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
@@ -20,7 +20,7 @@ public class GameState {
   @Inject
   public GameState(World world) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
-    entitiesAtCoordinate = new HashMap<>();
+    this.entitiesAtCoordinate = new HashMap<>();
   }
 
   public IntArray getEntitiesAtCoordinate(Coordinates coordinates) {

@@ -1,14 +1,14 @@
-package com.mygdx.game.client.di;
+package com.mygdx.game.client.di.module;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.client.di.scope.GameScreenScope;
 import dagger.Module;
 import dagger.Provides;
 import lombok.extern.java.Log;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Module
 @Log
@@ -29,7 +29,7 @@ public class StageModule {
   public static final String GAME_SCREEN = "game_screen";
 
   @Provides
-  @Singleton
+  @GameScreenScope
   @Named(GAME_SCREEN)
   public Stage providesGameStage() {
     var stage = new Stage(new ScreenViewport());

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import lombok.NonNull;
 
-// TODO: 04.06.2022 bind the modelinstancecomp to the local entity which will be created from calls to server
 public final class ModelInstanceUtil {
 
   private ModelInstanceUtil() {

@@ -2,20 +2,22 @@ package com.mygdx.game.client.network;
 
 import com.artemis.World;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.mygdx.game.client.di.scope.SingleGameScope;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 @Log
+@SingleGameScope
 public class NetworkWorldEntityMapper {
   private final IntIntMap networkToWorldEntity = new IntIntMap();
   private final IntIntMap worldToNetworkEntity = new IntIntMap();
   private final World world;
 
   @Inject
-  public NetworkWorldEntityMapper(World world) {
+  public NetworkWorldEntityMapper(
+      World world
+  ) {
     this.world = world;
   }
 

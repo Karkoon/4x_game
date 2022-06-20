@@ -6,8 +6,10 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Log
+@Singleton
 public class MoveEntityService {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;

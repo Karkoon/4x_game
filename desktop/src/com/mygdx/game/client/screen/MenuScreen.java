@@ -9,9 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.GdxGame;
+import com.mygdx.game.client.Navigator;
+import com.mygdx.game.client.di.scope.MenuScreenScope;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.core.util.Vector3Util;
@@ -19,23 +21,25 @@ import lombok.NonNull;
 
 import javax.inject.Inject;
 
+@MenuScreenScope
 public class MenuScreen extends ScreenAdapter {
 
+  private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
   private final Stage stage;
   private final MenuScreenAssets assets;
-  private final GdxGame game;
+  private final Navigator navigator;
   private final StarBackground starBackground;
   private final Planet planet;
 
-  private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
-
   @Inject
-  public MenuScreen(@NonNull Stage stage,
-                    @NonNull MenuScreenAssets assets,
-                    @NonNull GdxGame game) {
+  public MenuScreen(
+      @NonNull Stage stage,
+      @NonNull MenuScreenAssets assets,
+      @NonNull Navigator navigator
+  ) {
     this.stage = stage;
     this.assets = assets;
-    this.game = game;
+    this.navigator = navigator;
 
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
@@ -70,15 +74,15 @@ public class MenuScreen extends ScreenAdapter {
   }
 
   private Button createStartButton() {
-    return createFunctionalButton(game::changeToGameScreen, "START");
+    return createFunctionalButton(navigator::changeToGameScreen, "START");
   }
 
   private Button createAboutButton() {
-    return createFunctionalButton(game::changeToAboutScreen, "ABOUT");
+    return createFunctionalButton(navigator::changeToAboutScreen, "ABOUT");
   }
 
   private Button createExitButton() {
-    return createFunctionalButton(game::dispose, "EXIT");
+    return createFunctionalButton(navigator::exit, "EXIT");
   }
 
   private Button createFunctionalButton(final Runnable runnable, String text) {
@@ -95,6 +99,7 @@ public class MenuScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    ScreenUtils.clear(0.5f, 0f, 0.5f, 1, true);
     planet.update(delta);
     starBackground.update(delta);
 

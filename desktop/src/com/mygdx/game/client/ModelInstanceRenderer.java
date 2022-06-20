@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.di.scope.GameScreenScope;
 import lombok.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameScreenScope
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;

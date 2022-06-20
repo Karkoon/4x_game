@@ -7,23 +7,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.LoadingScreenAssetPaths;
 import com.mygdx.game.assets.LoadingScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.GdxGame;
+import com.mygdx.game.client.Navigator;
+import com.mygdx.game.client.di.scope.LoadingScreenScope;
 import com.mygdx.game.client.ui.actor.LoadingBar;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@LoadingScreenScope
 @Log
 public class LoadingScreen extends ScreenAdapter {
 
-  private final GdxGame game;
+  private final Navigator navigator;
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
   private final GameScreenAssets gameScreenAssets;
@@ -40,12 +41,12 @@ public class LoadingScreen extends ScreenAdapter {
   private LoadingBar loadingBar;
 
   @Inject
-  public LoadingScreen(GdxGame game,
+  public LoadingScreen(Navigator navigator,
                        GameScreenAssets gameScreenAssets,
                        LoadingScreenAssets loadingScreenAssets,
                        MenuScreenAssets menuScreenAssets,
                        AssetManager manager) {
-    this.game = game;
+    this.navigator = navigator;
     this.gameScreenAssets = gameScreenAssets;
     this.loadingScreenAssets = loadingScreenAssets;
     this.menuScreenAssets = menuScreenAssets;
@@ -74,8 +75,9 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    ScreenUtils.clear(0f, 0f, 0f, 1, true);
     if (manager.update()) {
-      game.changeToMenuScreen();
+      navigator.changeToMenuScreen();
     }
     updateLoadingBar();
     stage.act();

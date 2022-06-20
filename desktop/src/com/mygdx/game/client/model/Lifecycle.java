@@ -9,17 +9,17 @@ import java.util.List;
 @Log
 public class Lifecycle {
 
+  private final List<LifecycleObserver> observerList = new ArrayList<>();
+  private State currentState = State.SETUP;
+
   @Inject
   public Lifecycle() {
 
   }
 
-  private State currentState = State.SETUP;
-  private final List<LifecycleObserver> observerList = new ArrayList<>();
-
   public void changeState(State state) {
     if (!currentState.isBeforeOf(state)) {
-      throw new IllegalArgumentException("States should go in the right order defined in the enum.");
+      log.warning("potential invalid state change from " + currentState + " to " + state);
     }
     log.info("changed lifecycle state to " + state);
     currentState = state;

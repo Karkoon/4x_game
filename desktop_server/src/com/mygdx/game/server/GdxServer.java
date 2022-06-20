@@ -27,15 +27,6 @@ public class GdxServer extends Game {
   public void create() {
 /* TODO: 04.06.2022 todo loading assets must be separated between client and server,
   it's not game-breaking but it would make the server exec smaller */
-    /*    loadAll();
-    listenForConnections();
-    createLobby();
-    waitForPlayers();
-    listenForGameParamsChanges();
-    ifAllPlayersInLobbyAreReadyStartGame();
-    sendTurnTokenToFirstPlayer();
-    CommonWebSockets.initiate();
-*/
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");

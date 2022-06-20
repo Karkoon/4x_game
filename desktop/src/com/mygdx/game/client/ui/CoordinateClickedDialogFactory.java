@@ -7,17 +7,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.module.StageModule;
+import com.mygdx.game.client.di.scope.SingleGameScope;
 import com.mygdx.game.client.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@SingleGameScope
 public final class CoordinateClickedDialogFactory {
 
   private final GameScreenAssets assets;

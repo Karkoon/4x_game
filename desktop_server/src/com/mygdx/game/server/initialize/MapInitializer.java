@@ -9,8 +9,10 @@ import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Random;
 
+@Singleton
 public class MapInitializer {
 
   public static final int INITIAL_WIDTH = 10;
@@ -18,8 +20,6 @@ public class MapInitializer {
   private final FieldFactory fieldFactory;
   private final GameScreenAssets assets;
   private final Random random = new Random();
-
-  private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
 

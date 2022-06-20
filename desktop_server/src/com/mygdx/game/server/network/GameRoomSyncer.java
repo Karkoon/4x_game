@@ -6,12 +6,14 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
+import dagger.Reusable;
 import io.vertx.core.buffer.Buffer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
+@Reusable
 public class GameRoomSyncer {
   private final GameRoom room;
   private final Json json = new Json(JsonWriter.OutputType.minimal);

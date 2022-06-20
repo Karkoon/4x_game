@@ -5,10 +5,9 @@ import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.di.scope.SingleGameScope;
 import com.mygdx.game.client.ecs.component.Movable;
-import com.mygdx.game.client.ecs.component.Score;
 import com.mygdx.game.client.model.GameState;
-import com.mygdx.game.client.model.PlayerScore;
 import com.mygdx.game.client.network.MoveEntityService;
 import com.mygdx.game.client.ui.CoordinateClickedDialogFactory;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -19,39 +18,32 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@SingleGameScope
 public class MoveEntityInputAdapter extends InputAdapter {
 
   public static final float CLICK_RADIUS = 90f;
   private static final int NO_ENTITY = -0xC0FFEE;
 
   private final Viewport viewport;
-  private final GameState gameState;
   private final CoordinateClickedDialogFactory coordinateClickedDialogFactory;
   private final MoveEntityService moveEntityService;
-  private final ComponentMapper<Coordinates> coordinatesMapper;
+  private final GameState gameState;
   private final ComponentMapper<Movable> movableMapper;
-  private final ComponentMapper<Score> scoreMapper;
-  private final PlayerScore playerScore;
-
   private int selectedUnit = NO_ENTITY;
 
   @Inject
   public MoveEntityInputAdapter(
-          @NonNull Viewport viewport,
-          @NonNull GameState gameState,
-          @NonNull CoordinateClickedDialogFactory dialogFactory,
-          @NonNull World world,
-          @NonNull MoveEntityService moveEntityService,
-          @NonNull PlayerScore playerScore
-          ) {
+      @NonNull Viewport viewport,
+      @NonNull GameState gameState,
+      @NonNull World world,
+      @NonNull CoordinateClickedDialogFactory dialogFactory,
+      @NonNull MoveEntityService moveEntityService
+  ) {
     this.viewport = viewport;
     this.gameState = gameState;
     this.coordinateClickedDialogFactory = dialogFactory;
     this.moveEntityService = moveEntityService;
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.movableMapper = world.getMapper(Movable.class);
-    this.scoreMapper = world.getMapper(Score.class);
-    this.playerScore = playerScore;
   }
 
   @Override
@@ -70,24 +62,8 @@ public class MoveEntityInputAdapter extends InputAdapter {
   }
 
   private void handleWithSelectedUnit(Coordinates clickedCoords) {
-    processScore(clickedCoords);
-
     moveEntityService.moveEntity(selectedUnit, clickedCoords);
     selectedUnit = NO_ENTITY;
-  }
-
-  private void processScore(Coordinates clickedCoords) {
-    var entities = gameState.getEntitiesAtCoordinate(clickedCoords);
-    for (int i = 0; i < entities.size; i++) {
-      var entity = entities.get(i);
-      log.info(String.valueOf(entity));
-      log.info(String.valueOf(i));
-      if (scoreMapper.has(entity)) {
-        var scoreValue = scoreMapper.get(entity).getScoreValue();
-        playerScore.setScoreValue(playerScore.getScoreValue() + scoreValue);
-        log.info("Current score: " + playerScore.getScoreValue());
-      }
-    }
   }
 
   private void handleNoSelectedUnit(Coordinates clickedCoords) {
