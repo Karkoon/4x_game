@@ -47,7 +47,7 @@ public class BotClient {
 
   public void run() {
     log.info("Run bot");
-    int movableEntity = getMovableEntity(currentCoordinates);
+    int movableEntity = getMovableEntityAt(currentCoordinates);
 
     for (int i = 0; i < 10; i++) {
       for (int j = 0; j < 10; j++) {
@@ -94,9 +94,9 @@ public class BotClient {
 
   }
 
-  private int getMovableEntity(Coordinates at) {
+  private int getMovableEntityAt(Coordinates coordinates) {
     log.info("wait for map");
-    var entities = gameState.getEntitiesAtCoordinate(at);
+    var entities = gameState.getEntitiesAtCoordinate(coordinates);
     while (entities == null) {
       try {
         Thread.sleep(1000);
@@ -110,7 +110,7 @@ public class BotClient {
         return entities.get(i);
       }
     }
-    throw new IllegalArgumentException("No movable entity at coordinates " + at);
+    throw new IllegalArgumentException("No movable entity at coordinates " + coordinates);
   }
 
   private int getReward(Coordinates currentCoordinates, Coordinates newCoordinates) {
