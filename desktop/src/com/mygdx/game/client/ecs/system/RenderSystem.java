@@ -6,6 +6,8 @@ import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.Score;
+import com.mygdx.game.client.ecs.component.SubField;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -17,6 +19,8 @@ public class RenderSystem extends IteratingSystem {
 
   private ComponentMapper<ModelInstanceComp> modelInstanceMapper;
   private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Score> scoreMapper;
+  private ComponentMapper<SubField> subFieldMapper;
 
   private final ModelInstanceRenderer renderer;
 
@@ -30,6 +34,9 @@ public class RenderSystem extends IteratingSystem {
     var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
     var position = positionMapper.get(entityId).getPosition();
     modelInstance.transform.setTranslation(position);
-    renderer.addToCache(modelInstance);
+    if (scoreMapper.has(entityId))
+      renderer.addModelToCache(modelInstance);
+    else if (subFieldMapper.has(entityId))
+      renderer.addSubModelToCache(modelInstance);
   }
 }

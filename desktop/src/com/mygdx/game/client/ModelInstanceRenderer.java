@@ -19,6 +19,7 @@ public class ModelInstanceRenderer implements Disposable {
   private final ModelBatch modelBatch;
   private final ModelCache cache;
   private final Array<ModelInstance> modelInstances;
+  private final Array<ModelInstance> subModelInstances;
 
   private final Camera camera;
 
@@ -28,17 +29,26 @@ public class ModelInstanceRenderer implements Disposable {
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();
     this.modelInstances = new Array<>();
+    this.subModelInstances = new Array<>();
   }
 
   public void render() {
-    performFrustumCullingToModelCache();
+    performFrustumCullingToModelCache(modelInstances);
     modelInstances.clear();
     modelBatch.begin(camera);
     modelBatch.render(cache);
     modelBatch.end();
   }
 
-  private void performFrustumCullingToModelCache() {
+  public void subRender() {
+    performFrustumCullingToModelCache(subModelInstances);
+    subModelInstances.clear();
+    modelBatch.begin(camera);
+    modelBatch.render(cache);
+    modelBatch.end();
+  }
+
+  private void performFrustumCullingToModelCache(Array<ModelInstance> modelInstances) {
     cache.begin(camera);
     for (var i = 0; i < modelInstances.size; i++) {
       var modelInstance = modelInstances.get(i);
@@ -57,8 +67,12 @@ public class ModelInstanceRenderer implements Disposable {
         && cam.position.dst(val[Matrix4.M03], val[Matrix4.M13], val[Matrix4.M23]) < 5500f;
   }
 
-  public void addToCache(ModelInstance modelInstance) {
+  public void addModelToCache(ModelInstance modelInstance) {
     modelInstances.add(modelInstance);
+  }
+
+  public void addSubModelToCache(ModelInstance modelInstance) {
+    subModelInstances.add(modelInstance);
   }
 
   public void addToCache(Array<ModelInstance> modelInstances) {
