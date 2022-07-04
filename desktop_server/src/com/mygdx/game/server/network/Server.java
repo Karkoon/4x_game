@@ -60,15 +60,15 @@ public final class Server {
         });
       }
       case "start" -> {
+        var width = Integer.parseInt(commands[1]);
+        var height = Integer.parseInt(commands[2]);
+        mapInitializer.initializeMap(width, height, client);
+        unitInitializer.initializeTestUnit(client);
         room.getClients().forEach(ws -> {
           var msg = new GameStartedMessage();
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
           ws.getSocket().write(buffer);
         });
-        var width = Integer.parseInt(commands[1]);
-        var height = Integer.parseInt(commands[2]);
-        mapInitializer.initializeMap(width, height, client);
-        unitInitializer.initializeTestUnit(client);
       }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);
