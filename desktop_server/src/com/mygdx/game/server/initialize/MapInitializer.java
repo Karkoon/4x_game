@@ -45,7 +45,7 @@ public class MapInitializer {
         if (i != 8 || j != 8)
           fieldFactory.createEntity(assets
                           .getGameConfigs()
-                          .get(FieldConfig.class, random.nextInt(1, GameConfigs.FIELD_AMOUNT)),
+                          .get(FieldConfig.class, random.nextInt(GameConfigs.FIELD_MIN, GameConfigs.FIELD_MAX)),
                   new Coordinates(i, j),
                   owner
           );

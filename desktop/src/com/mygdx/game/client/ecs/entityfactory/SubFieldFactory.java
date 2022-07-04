@@ -6,6 +6,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.ecs.component.Name;
 import com.mygdx.game.client.ecs.component.Position;
+import com.mygdx.game.client.ecs.component.SubField;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.SubFieldConfig;
@@ -22,6 +23,7 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<ModelInstanceComp> modelMapper;
   private final ComponentMapper<Position> positionMapper;
+  private final ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public SubFieldFactory(@NonNull World world,
@@ -30,12 +32,14 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
     this.nameMapper = world.getMapper(Name.class);
     this.modelMapper = world.getMapper(ModelInstanceComp.class);
     this.positionMapper = world.getMapper(Position.class);
+    this.subFieldMapper = world.getMapper(SubField.class);
   }
 
   @Override
   public @NonNull void createEntity(SubFieldConfig config, int entity) {
     setUpModelInstanceComp(config, entity);
     setUpName(config, entity);
+    setUpSubField(config, entity);
     positionMapper.create(entity);
   }
 
@@ -50,5 +54,9 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
     var name = nameMapper.create(entityId);
     name.setName(config.getName());
     name.setPolishName(config.getPolishName());
+  }
+
+  private void setUpSubField(SubFieldConfig config, int entityId) {
+    var field = subFieldMapper.create(entityId);
   }
 }

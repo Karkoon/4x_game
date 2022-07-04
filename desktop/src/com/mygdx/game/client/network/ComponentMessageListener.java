@@ -10,10 +10,12 @@ import com.github.czyzby.websocket.data.WebSocketException;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.client.ecs.entityfactory.FieldFactory;
+import com.mygdx.game.client.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.client.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -27,19 +29,20 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
 
   private static final Handler NO_HANDLER = (webSocket, worldEntity, packet) -> {
     throw new RuntimeException("Every ComponentMessage needs to be handled: id=" + worldEntity
-        + " content=" + packet);
+            + " content=" + packet);
   };
   private final ObjectMap<Class<? extends Component>, Handler> handlers = new ObjectMap<>();
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public ComponentMessageListener(
-      NetworkWorldEntityMapper networkWorldEntityMapper,
-      World world,
-      GameScreenAssets assets,
-      FieldFactory fieldFactory,
-      UnitFactory unitFactory,
-      GameState gameState
+          NetworkWorldEntityMapper networkWorldEntityMapper,
+          World world,
+          GameScreenAssets assets,
+          FieldFactory fieldFactory,
+          UnitFactory unitFactory,
+          SubFieldFactory subFieldFactory,
+          GameState gameState
   ) {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
     final var positionMapper = world.getMapper(Position.class);
@@ -49,18 +52,23 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       // todo bo to jednak nie jest komponent tylko pojedyncza wiadomość xD
       // albo coś
       var entityConfigId = ((EntityConfigId) packet).getId();
-      if (entityConfigId >= 1  && entityConfigId <= GameConfigs.FIELD_AMOUNT) { // 1, 2 są z plików jsona EntityConfigów
+      if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId <= GameConfigs.FIELD_MAX) { // 1, 2 są z plików jsona EntityConfigów
         log.info("field id " + worldEntity);
         var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);
         fieldFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId > GameConfigs.FIELD_AMOUNT && entityConfigId <= GameConfigs.UNIT_AMOUNT + GameConfigs.FIELD_AMOUNT) {
+      } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId <= GameConfigs.UNIT_MAX) {
         log.info("unit id " + worldEntity);
         var config = assets.getGameConfigs().get(UnitConfig.class, entityConfigId);
         unitFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
+      } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId <= GameConfigs.SUBFIELD_MAX) {
+        log.info("subfield id " + worldEntity);
+        var config = assets.getGameConfigs().get(SubFieldConfig.class, entityConfigId);
+        subFieldFactory.createEntity(config, worldEntity);
+        return FULLY_HANDLED;
       }
-      return NOT_HANDLED;
+        return NOT_HANDLED;
     });
 
     registerHandler(Position.class, (webSocket, worldEntity, component) -> { // Position should be changed to CoordinatesComponent
@@ -104,12 +112,12 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       var result = handler.handle(webSocket, worldEntityId, component);
       if (result != FULLY_HANDLED) {
         throw new RuntimeException("Every ComponentMessage needs to be handled: id=" + worldEntityId
-            + " content=" + packet);
+                + " content=" + packet);
       }
       return FULLY_HANDLED;
     } catch (final Exception exception) {
       return onError(webSocket,
-          new WebSocketException("Unable to handle the received packet: " + packet, exception));
+              new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
   }
 

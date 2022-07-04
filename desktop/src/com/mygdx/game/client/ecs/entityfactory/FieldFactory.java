@@ -65,6 +65,6 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   }
 
   private void setUpField(FieldConfig config, int entityId) {
-    var field = scoreMapper.create(entityId);
+    var field = fieldMapper.create(entityId);
   }
 }
