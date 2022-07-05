@@ -1,5 +1,6 @@
 package com.mygdx.game.server.initialize;
 
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
@@ -9,10 +10,12 @@ import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+@Singleton
 public class SubMapInitializer {
 
   private final SubFieldFactory subFieldFactory;
@@ -51,14 +54,16 @@ public class SubMapInitializer {
     this.assets = assets;
   }
 
-  public void initializeSubarea(Client owner) {
-
+  public Array<Integer> initializeSubarea(Client owner) {
+    Array<Integer> subFields = new Array<>();
     for (Coordinates coordinates : coordinatesList) {
-      subFieldFactory.createEntity(assets
+      Integer entityId = subFieldFactory.createEntity(assets
                       .getGameConfigs()
-                      .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN + 1),
+                      .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
               coordinates,
               owner);
+      subFields.add(entityId);
     }
+    return subFields;
   }
 }

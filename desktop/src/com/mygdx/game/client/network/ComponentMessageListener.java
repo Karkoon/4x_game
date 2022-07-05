@@ -52,17 +52,17 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       // todo bo to jednak nie jest komponent tylko pojedyncza wiadomość xD
       // albo coś
       var entityConfigId = ((EntityConfigId) packet).getId();
-      if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId <= GameConfigs.FIELD_MAX) { // 1, 2 są z plików jsona EntityConfigów
+      if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId < GameConfigs.FIELD_MAX) { // 1, 2 są z plików jsona EntityConfigów
         log.info("field id " + worldEntity);
         var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);
         fieldFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId <= GameConfigs.UNIT_MAX) {
+      } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId < GameConfigs.UNIT_MAX) {
         log.info("unit id " + worldEntity);
         var config = assets.getGameConfigs().get(UnitConfig.class, entityConfigId);
         unitFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId <= GameConfigs.SUBFIELD_MAX) {
+      } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId < GameConfigs.SUBFIELD_MAX) {
         log.info("subfield id " + worldEntity);
         var config = assets.getGameConfigs().get(SubFieldConfig.class, entityConfigId);
         subFieldFactory.createEntity(config, worldEntity);

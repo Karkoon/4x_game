@@ -11,11 +11,11 @@ import javax.inject.Singleton;
 public class GameConfigs {
 
   public final static int FIELD_MIN = 1;
-  public final static int FIELD_MAX = 10;
-  public final static int SUBFIELD_MIN = 11;
-  public final static int SUBFIELD_MAX = 20;
-  public final static int UNIT_MIN = 21;
-  public final static int UNIT_MAX = 30;
+  public final static int FIELD_MAX = 6;
+  public final static int UNIT_MIN = 6;
+  public final static int UNIT_MAX = 7;
+  public final static int SUBFIELD_MIN = 7;
+  public final static int SUBFIELD_MAX = 8;
 
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 

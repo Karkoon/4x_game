@@ -3,7 +3,7 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.ecs.component.Name;
 import com.mygdx.game.client.ecs.component.Position;

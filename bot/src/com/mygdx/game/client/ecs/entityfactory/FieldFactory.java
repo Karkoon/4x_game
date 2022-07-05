@@ -3,7 +3,6 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.Field;
 import com.mygdx.game.client.ecs.component.Score;
 import com.mygdx.game.config.FieldConfig;
 import lombok.NonNull;

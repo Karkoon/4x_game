@@ -6,6 +6,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.server.initialize.SubMapInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
