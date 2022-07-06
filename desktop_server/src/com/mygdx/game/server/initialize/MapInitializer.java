@@ -13,8 +13,8 @@ import java.util.Random;
 
 public class MapInitializer {
 
-  public static final int INITIAL_WIDTH = 10;
-  public static final int INITIAL_HEIGHT = 10;
+  public static final int INITIAL_WIDTH = 5;
+  public static final int INITIAL_HEIGHT = 5;
   private final FieldFactory fieldFactory;
   private final GameScreenAssets assets;
   private final Random random = new Random();
@@ -42,7 +42,7 @@ public class MapInitializer {
     }
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        if (i != 8 || j != 8)
+        if (i != 4 || j != 4)
           fieldFactory.createEntity(assets
                           .getGameConfigs()
                           .get(FieldConfig.class, random.nextInt(GameConfigs.FIELD_MIN, GameConfigs.FIELD_MAX)),

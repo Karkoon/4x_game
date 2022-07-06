@@ -22,7 +22,7 @@ public class SubMapInitializer {
   private final GameScreenAssets assets;
   private final Random random = new Random();
 
-  private final ArrayList<Coordinates> coordinatesList = (ArrayList<Coordinates>) Arrays.asList(
+  private final ArrayList<Coordinates> coordinatesList = new ArrayList<>(Arrays.asList(
           new Coordinates(2,0),
           new Coordinates(1,1),
           new Coordinates(3,1),
@@ -42,7 +42,7 @@ public class SubMapInitializer {
           new Coordinates(1,7),
           new Coordinates(3,7),
           new Coordinates(2,8)
-  );
+  ));
 
 
   @Inject

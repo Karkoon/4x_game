@@ -34,7 +34,7 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
   }
 
   @Override
-  public int createEntity(SubFieldConfig config, @NonNull Coordinates coordinates, Client clientOwner) {
+  public int createEntity(@NonNull SubFieldConfig config, @NonNull Coordinates coordinates, Client clientOwner) {
     var entity = world.create();
 
     var position = setUpCoordinates(coordinates, entity);

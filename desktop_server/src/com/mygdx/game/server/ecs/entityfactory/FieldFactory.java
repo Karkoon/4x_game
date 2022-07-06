@@ -2,6 +2,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -47,10 +48,11 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
 
     var position = setUpCoordinates(coordinates, entity);
     var entityConfigId = setUpEntityConfig(config, entity);
-    var fieldComponent = setUpField(entity);
+    var fieldComponent = setUpField(entity, clientOwner);
 
     syncer.sendComponent(position, entity);
     syncer.sendComponent(entityConfigId, entity);
+    syncer.sendComponent(fieldComponent, entity);
     return entity;
   }
 
@@ -67,8 +69,10 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     return result;
   }
 
-  private Field setUpField(int entityId) {
+  private Field setUpField(int entityId, Client clientOwner) {
     var field = fieldMapper.create(entityId);
-
+    Array<Integer> subFields = subMapInitializer.initializeSubarea(clientOwner);
+    field.setSubFields(subFields);
+    return field;
   }
 }
