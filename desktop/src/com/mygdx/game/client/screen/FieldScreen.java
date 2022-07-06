@@ -70,7 +70,7 @@ public class FieldScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-    renderer.subRender();
+    renderer.subRender(choosenField);
     stage.draw();
     stage.act(delta);
   }

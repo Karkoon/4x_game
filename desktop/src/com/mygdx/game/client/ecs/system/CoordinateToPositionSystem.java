@@ -6,7 +6,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.client.ecs.component.Position;
-import com.mygdx.game.client.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.util.PositionUtil;
 import lombok.extern.java.Log;

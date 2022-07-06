@@ -9,17 +9,20 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
 
 @Singleton
+@Log
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;
   private final ModelCache cache;
   private final Array<ModelInstance> modelInstances;
-  private final Array<ModelInstance> subModelInstances;
+  private final HashMap<Integer, Array<ModelInstance>> subModelInstances;
 
   private final Camera camera;
 
@@ -29,7 +32,7 @@ public class ModelInstanceRenderer implements Disposable {
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();
     this.modelInstances = new Array<>();
-    this.subModelInstances = new Array<>();
+    this.subModelInstances = new HashMap<>();
   }
 
   public void render() {
@@ -40,12 +43,14 @@ public class ModelInstanceRenderer implements Disposable {
     modelBatch.end();
   }
 
-  public void subRender() {
-    performFrustumCullingToModelCache(subModelInstances);
-    subModelInstances.clear();
-    modelBatch.begin(camera);
-    modelBatch.render(cache);
-    modelBatch.end();
+  public void subRender(Integer choosenField) {
+    if (subModelInstances.get(choosenField) != null) {
+      performFrustumCullingToModelCache(subModelInstances.get(choosenField));
+      subModelInstances.get(choosenField).clear();
+      modelBatch.begin(camera);
+      modelBatch.render(cache);
+      modelBatch.end();
+    }
   }
 
   private void performFrustumCullingToModelCache(Array<ModelInstance> modelInstances) {
@@ -71,8 +76,10 @@ public class ModelInstanceRenderer implements Disposable {
     modelInstances.add(modelInstance);
   }
 
-  public void addSubModelToCache(ModelInstance modelInstance) {
-    subModelInstances.add(modelInstance);
+  public void addSubModelToCache(Integer parent, ModelInstance modelInstance) {
+    if (!subModelInstances.containsKey(parent))
+      subModelInstances.put(parent, new Array<>());
+    subModelInstances.get(parent).add(modelInstance);
   }
 
   public void addToCache(Array<ModelInstance> modelInstances) {

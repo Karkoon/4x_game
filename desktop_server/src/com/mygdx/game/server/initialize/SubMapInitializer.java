@@ -1,12 +1,17 @@
 package com.mygdx.game.server.initialize;
 
+import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -18,9 +23,12 @@ import java.util.Random;
 @Singleton
 public class SubMapInitializer {
 
+  private final World world;
   private final SubFieldFactory subFieldFactory;
   private final GameScreenAssets assets;
   private final Random random = new Random();
+  private final GameRoomSyncer syncer;
+  private final ComponentMapper<SubField> subFieldMapper;
 
   private final ArrayList<Coordinates> coordinatesList = new ArrayList<>(Arrays.asList(
           new Coordinates(2,0),
@@ -47,14 +55,19 @@ public class SubMapInitializer {
 
   @Inject
   public SubMapInitializer(
+          @NonNull World world,
           @NonNull SubFieldFactory subFieldFactory,
-          @NonNull GameScreenAssets assets
+          @NonNull GameScreenAssets assets,
+          @NonNull GameRoomSyncer gameRoomSyncer
   ) {
+    this.world = world;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
+    this.syncer = gameRoomSyncer;
+    this.subFieldMapper = world.getMapper(SubField.class);
   }
 
-  public Array<Integer> initializeSubarea(Client owner) {
+  public Array<Integer> initializeSubarea(int fieldId, Client owner) {
     Array<Integer> subFields = new Array<>();
     for (Coordinates coordinates : coordinatesList) {
       Integer entityId = subFieldFactory.createEntity(assets
@@ -63,7 +76,11 @@ public class SubMapInitializer {
               coordinates,
               owner);
       subFields.add(entityId);
+      var subField = subFieldMapper.create(entityId);
+      subField.setParent(fieldId);
+      syncer.sendComponent(subField, entityId);
     }
     return subFields;
   }
+
 }

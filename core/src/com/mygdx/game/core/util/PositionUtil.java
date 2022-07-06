@@ -13,7 +13,7 @@ public final class PositionUtil {
 
   @NonNull
   public static Vector3 generateSubWorldPositionForCoords(Coordinates coordinates) {
-    return new Vector3(coordinates.getX() * 142.5f, 0f, coordinates.getY() * 95f);
+    return new Vector3(coordinates.getX() * 145f, 0f, coordinates.getY() * 94f);
   }
 
   private PositionUtil() {

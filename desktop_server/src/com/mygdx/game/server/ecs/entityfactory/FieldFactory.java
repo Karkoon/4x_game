@@ -71,7 +71,7 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
 
   private Field setUpField(int entityId, Client clientOwner) {
     var field = fieldMapper.create(entityId);
-    Array<Integer> subFields = subMapInitializer.initializeSubarea(clientOwner);
+    Array<Integer> subFields = subMapInitializer.initializeSubarea(entityId, clientOwner);
     field.setSubFields(subFields);
     return field;
   }

@@ -3,8 +3,8 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.SubField;
 import com.mygdx.game.config.SubFieldConfig;
+import com.mygdx.game.core.ecs.component.SubField;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

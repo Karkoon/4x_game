@@ -20,6 +20,7 @@ import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
 
@@ -49,6 +50,7 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
     final var positionMapper = world.getMapper(Position.class);
     final var coordinatesMapper = world.getMapper(Coordinates.class);
     final var fieldMapper = world.getMapper(Field.class);
+    final var subFieldMapper = world.getMapper(SubField.class);
 
     registerHandler(EntityConfigId.class, (webSocket, worldEntity, packet) -> { // todo zmienić znowu na serwisy i fabryki,
       // todo bo to jednak nie jest komponent tylko pojedyncza wiadomość xD
@@ -98,6 +100,17 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       var entityField = fieldMapper.create(worldEntity);
       gameState.removeEntity(worldEntity);
       entityField.setSubFields(newField);
+      gameState.saveEntity(worldEntity);
+      return FULLY_HANDLED;
+    });
+
+    registerHandler(SubField.class, (webSocket, worldEntity, component) -> {
+      log.info("Read subfield component " + worldEntity);
+      var newParent = ((SubField) component).getParent();
+      newParent = networkWorldEntityMapper.getWorldEntity(newParent);
+      var SubField = subFieldMapper.create(worldEntity);
+      gameState.removeEntity(worldEntity);
+      SubField.setParent(newParent);
       gameState.saveEntity(worldEntity);
       return FULLY_HANDLED;
     });
