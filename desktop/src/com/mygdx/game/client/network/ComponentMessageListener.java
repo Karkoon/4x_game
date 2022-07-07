@@ -2,6 +2,7 @@ package com.mygdx.game.client.network;
 
 import com.artemis.Component;
 import com.artemis.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
@@ -25,6 +26,9 @@ import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log
 public class ComponentMessageListener extends AbstractWebSocketListener {
@@ -83,7 +87,6 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       return FULLY_HANDLED;
     });
 
-
     registerHandler(Coordinates.class, (webSocket, worldEntity, component) -> {
       log.info("Read coordinates component " + worldEntity);
       var newCoordinates = (Coordinates) component;
@@ -96,10 +99,14 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
 
     registerHandler(Field.class, (webSocket, worldEntity, component) -> {
       log.info("Read field component " + worldEntity);
-      var newField = ((Field) component).getSubFields();
+      var subFields = ((Field) component).getSubFields();
+      for (int i = 0; i < subFields.size; i++) {
+        Integer subField = subFields.get(i);
+        subFields.set(i, networkWorldEntityMapper.getWorldEntity(subField));
+      }
       var entityField = fieldMapper.create(worldEntity);
       gameState.removeEntity(worldEntity);
-      entityField.setSubFields(newField);
+      entityField.setSubFields(subFields);
       gameState.saveEntity(worldEntity);
       return FULLY_HANDLED;
     });

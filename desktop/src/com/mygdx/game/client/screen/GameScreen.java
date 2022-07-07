@@ -65,7 +65,7 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     log.info("GameScreen shown");
     if (!initialized) {
-      roomDialogFactory.createAndShow(() -> gameStartService.startGame(1, 1));
+      roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5));
       webSocket.send("connect");
       initialized = true;
     }

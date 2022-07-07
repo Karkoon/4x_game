@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.client.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -23,6 +24,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Movable> movableMapper;
 
   @Inject
   public CoordinateToPositionSystem() {
@@ -34,7 +36,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     var position = positionMapper.get(entityId);
     var retainedY = position.getPosition().y;
     Vector3 toSet = new Vector3(0, 0, 0);
-    if (fieldMapper.has(entityId))
+    if (fieldMapper.has(entityId) || movableMapper.has(entityId))
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
     else if (subFieldMapper.has(entityId))
       toSet = PositionUtil.generateSubWorldPositionForCoords(coordinatesMapper.get(entityId));
