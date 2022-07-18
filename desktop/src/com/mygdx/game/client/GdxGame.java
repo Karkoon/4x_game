@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.client.screen.FieldScreen;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -20,16 +21,19 @@ public class GdxGame extends Game {
 
   private final AssetManager assetManager;
   private final Lazy<GameScreen> gameScreen;
+  private final Lazy<FieldScreen> fieldScreen;
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
 
   @Inject
   GdxGame(@NonNull AssetManager assetManager,
           @NonNull Lazy<GameScreen> gameScreen,
+          @NonNull Lazy<FieldScreen> fieldScreen,
           @NonNull Lazy<LoadingScreen> loadingScreen,
           @NonNull Lazy<MenuScreen> menuScreen) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
+    this.fieldScreen = fieldScreen;
     this.loadingScreen = loadingScreen;
     this.menuScreen = menuScreen;
   }
@@ -54,6 +58,10 @@ public class GdxGame extends Game {
 
   public void changeToGameScreen() {
     setScreen(gameScreen.get());
+  }
+
+  public void changeToFieldScreen() {
+    setScreen(fieldScreen.get());
   }
 
   public void changeToLoadingScreen() {

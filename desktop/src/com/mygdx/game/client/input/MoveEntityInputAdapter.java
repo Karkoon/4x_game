@@ -5,11 +5,13 @@ import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ecs.component.Movable;
 import com.mygdx.game.client.ecs.component.Score;
 import com.mygdx.game.client.model.GameState;
 import com.mygdx.game.client.model.PlayerScore;
 import com.mygdx.game.client.network.MoveEntityService;
+import com.mygdx.game.client.screen.FieldScreen;
 import com.mygdx.game.client.ui.CoordinateClickedDialogFactory;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.util.PositionUtil;
@@ -24,6 +26,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
   public static final float CLICK_RADIUS = 90f;
   private static final int NO_ENTITY = -0xC0FFEE;
 
+  private final GdxGame game;
   private final Viewport viewport;
   private final GameState gameState;
   private final CoordinateClickedDialogFactory coordinateClickedDialogFactory;
@@ -37,6 +40,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
 
   @Inject
   public MoveEntityInputAdapter(
+          @NonNull GdxGame game,
           @NonNull Viewport viewport,
           @NonNull GameState gameState,
           @NonNull CoordinateClickedDialogFactory dialogFactory,
@@ -44,6 +48,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
           @NonNull MoveEntityService moveEntityService,
           @NonNull PlayerScore playerScore
           ) {
+    this.game = game;
     this.viewport = viewport;
     this.gameState = gameState;
     this.coordinateClickedDialogFactory = dialogFactory;
@@ -92,10 +97,16 @@ public class MoveEntityInputAdapter extends InputAdapter {
 
   private void handleNoSelectedUnit(Coordinates clickedCoords) {
     var entities = gameState.getEntitiesAtCoordinate(clickedCoords);
+    log.info(entities.toString());
     coordinateClickedDialogFactory.createAndShow(entities, chosenEntity -> {
       if (movableMapper.has(chosenEntity)) {
         selectedUnit = chosenEntity;
         log.info("Selected a movable.");
+      }
+      else if (scoreMapper.has(chosenEntity)) {
+        log.info("Selected a score with id " + chosenEntity);
+        FieldScreen.choosenField = chosenEntity;
+        game.changeToFieldScreen();
       }
     });
   }

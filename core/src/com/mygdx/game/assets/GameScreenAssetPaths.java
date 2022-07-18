@@ -8,6 +8,7 @@ public final class GameScreenAssetPaths {
   public static final String ENTITY_CONFIG_DIR = ASSETS_PATH + "entity_configs/";
   public static final String FIELD_CONFIG_DIR = ENTITY_CONFIG_DIR + "fields/";
   public static final String UNIT_CONFIG_DIR = ENTITY_CONFIG_DIR + "units/";
+  public static final String SUB_FIELD_CONFIG_DIR = ENTITY_CONFIG_DIR + "subfields/";
   public static final String TEXTURE_DIR = ASSETS_PATH + "textures/";
   public static final String DIALOG_SKIN = ASSETS_PATH + "dialog/custom/uiskin.json";
 

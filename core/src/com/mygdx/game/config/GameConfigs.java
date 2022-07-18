@@ -10,8 +10,12 @@ import javax.inject.Singleton;
 @Singleton
 public class GameConfigs {
 
-  public final static int FIELD_AMOUNT = 5;
-  public final static int UNIT_AMOUNT = 1;
+  public final static int FIELD_MIN = 1;
+  public final static int FIELD_MAX = 6;
+  public final static int UNIT_MIN = 6;
+  public final static int UNIT_MAX = 7;
+  public final static int SUBFIELD_MIN = 7;
+  public final static int SUBFIELD_MAX = 8;
 
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 

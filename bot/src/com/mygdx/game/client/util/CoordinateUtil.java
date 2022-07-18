@@ -7,8 +7,8 @@ import java.util.List;
 
 public final class CoordinateUtil {
 
-  public static final int INITIAL_WIDTH = 10;
-  public static final int INITIAL_HEIGHT = 10;
+  public static final int INITIAL_WIDTH = 5;
+  public static final int INITIAL_HEIGHT = 5;
 
   private static int[][] coordinateMoves = {
           {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 0}

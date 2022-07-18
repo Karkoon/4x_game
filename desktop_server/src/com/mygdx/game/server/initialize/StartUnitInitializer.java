@@ -34,7 +34,7 @@ public class StartUnitInitializer {
       initialized = true;
     }
     var initialCoordinates = new Coordinates(0, 0);
-    var anyConfig = assets.getGameConfigs().get(UnitConfig.class, random.nextInt(GameConfigs.FIELD_AMOUNT + 1, GameConfigs.FIELD_AMOUNT + GameConfigs.UNIT_AMOUNT  + 1));
+    var anyConfig = assets.getGameConfigs().get(UnitConfig.class, random.nextInt(GameConfigs.UNIT_MAX - GameConfigs.UNIT_MIN) + GameConfigs.UNIT_MIN);
     unitFactory.createEntity(anyConfig, initialCoordinates, owner);
   }
 }

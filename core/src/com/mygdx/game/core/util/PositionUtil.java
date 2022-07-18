@@ -11,6 +11,11 @@ public final class PositionUtil {
     return new Vector3(coordinates.getX() * 190f + (coordinates.getY() % 2) * 95f, 0f, coordinates.getY() * 160f);
   }
 
+  @NonNull
+  public static Vector3 generateSubWorldPositionForCoords(Coordinates coordinates) {
+    return new Vector3(coordinates.getX() * 151.5f, 0f, coordinates.getY() * 89.5f);
+  }
+
   private PositionUtil() {
   }
 }
