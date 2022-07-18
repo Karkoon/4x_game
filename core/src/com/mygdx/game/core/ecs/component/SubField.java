@@ -8,10 +8,11 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class SubField extends PooledComponent {
-  private @NonNull Integer parent = 0;
+
+  private @NonNull int parent = -0xC0FEE;
 
   @Override
   protected void reset() {
-    this.parent = 0;
+    this.parent = -0xC0FEE;
   }
 }

@@ -20,16 +20,12 @@ import java.util.Set;
 public class GameState {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
-  private final ComponentMapper<Field> fieldMapper;
-  private final ComponentMapper<Movable> movableMapper;
   private final ComponentMapper<SubField> subFieldMapper;
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
 
   @Inject
   public GameState(World world) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
-    this.fieldMapper = world.getMapper(Field.class);
-    this.movableMapper = world.getMapper(Movable.class);
     this.subFieldMapper = world.getMapper(SubField.class);
     entitiesAtCoordinateGame = new HashMap<>();
   }

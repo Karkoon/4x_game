@@ -3,6 +3,7 @@ package com.mygdx.game.server.initialize;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
@@ -67,8 +68,8 @@ public class SubMapInitializer {
     this.subFieldMapper = world.getMapper(SubField.class);
   }
 
-  public Array<Integer> initializeSubarea(int fieldId, Client owner) {
-    Array<Integer> subFields = new Array<>();
+  public IntArray initializeSubarea(int fieldId, Client owner) {
+    IntArray subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
       Integer entityId = subFieldFactory.createEntity(assets
                       .getGameConfigs()

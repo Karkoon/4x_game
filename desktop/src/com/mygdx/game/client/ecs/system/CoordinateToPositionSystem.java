@@ -36,10 +36,11 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     var position = positionMapper.get(entityId);
     var retainedY = position.getPosition().y;
     Vector3 toSet = new Vector3(0, 0, 0);
-    if (fieldMapper.has(entityId) || movableMapper.has(entityId))
+    if (fieldMapper.has(entityId) || movableMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
-    else if (subFieldMapper.has(entityId))
+    } else if (subFieldMapper.has(entityId)) {
       toSet = PositionUtil.generateSubWorldPositionForCoords(coordinatesMapper.get(entityId));
+    }
     position.setPosition(toSet);
     position.getPosition().y = retainedY;
   }

@@ -100,6 +100,7 @@ public class GameScreen extends ScreenAdapter {
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage, moveEntityInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
+
   }
 
   private void positionCamera(@NonNull Camera camera) {

@@ -77,8 +77,9 @@ public class ModelInstanceRenderer implements Disposable {
   }
 
   public void addSubModelToCache(Integer parent, ModelInstance modelInstance) {
-    if (!subModelInstances.containsKey(parent))
+    if (!subModelInstances.containsKey(parent)) {
       subModelInstances.put(parent, new Array<>());
+    }
     subModelInstances.get(parent).add(modelInstance);
   }
 
