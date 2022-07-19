@@ -2,41 +2,43 @@ package com.mygdx.game.client.screen;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.GdxGame;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.TextureRenderer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.logging.Level;
 
 @Singleton
 @Log
 public class TechnologyScreen extends ScreenAdapter {
 
-  private final Stage stage;
   private final GdxGame game;
-  private final ExtendViewport viewport;
+  private final Viewport viewport;
+  private final TextureRenderer renderer;
+
+  private final Stage stage;
 
   @Inject
   public TechnologyScreen(
-          @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-          @NonNull GdxGame game
+          @NonNull GdxGame game,
+          @NonNull @Named("orthographic") Viewport viewport,
+          @NonNull TextureRenderer renderer,
+          @NonNull Stage stage
           ) {
-    this.stage = stage;
     this.game = game;
-    this.viewport = setUpCamera();
+    this.viewport = viewport;
+    this.renderer = renderer;
+    this.stage = stage;
   }
 
   @Override
   public void show() {
-    log.info("SubArea shown");
+    log.info("Technology tree shown");
 
     positionCamera(viewport.getCamera());
     setUpInput();
@@ -45,16 +47,15 @@ public class TechnologyScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     viewport.getCamera().update();
+    renderer.render();
     stage.draw();
     stage.act(delta);
   }
 
-  private ExtendViewport setUpCamera() {
-    log.log(Level.INFO, "provided viewport");
-    var camera = new OrthographicCamera(500, 500);
-    camera.near = 500f;
-    camera.far = 700f;
-    return new ExtendViewport(500, 500, camera);
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height);
+    stage.getViewport().update(width, height, true);
   }
 
   private void positionCamera(@NonNull Camera camera) {

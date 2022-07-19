@@ -11,6 +11,8 @@ import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.MoveEntityInputAdapter;
+import com.mygdx.game.client.input.SubFieldUiInputProcessor;
+import com.mygdx.game.client.network.GameStartService;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
 import com.mygdx.game.client_core.network.GameConnectService;
 import com.mygdx.game.client_core.network.GameStartService;
@@ -44,7 +46,7 @@ public class GameScreen extends ScreenAdapter {
   public GameScreen(
       @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
-      @NonNull Viewport viewport,
+      @NonNull @Named("perspective") Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull GameStartService gameStartService,
@@ -97,6 +99,7 @@ public class GameScreen extends ScreenAdapter {
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
+    var gameScreenUiInputAdapter = new GameScreenUiInputAdapter(game);
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage, moveEntityInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);

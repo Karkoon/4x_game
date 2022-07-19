@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class ModelInstanceRenderer implements Disposable {
   private final Camera camera;
 
   @Inject
-  public ModelInstanceRenderer(@NonNull Viewport viewport) {
+  public ModelInstanceRenderer(@NonNull @Named("perspective") Viewport viewport) {
     this.camera = viewport.getCamera();
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();
