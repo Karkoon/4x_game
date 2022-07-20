@@ -1,2 +1,2 @@
-include 'desktop', 'desktop_server', 'core', 'bot'
+include 'desktop', 'desktop_server', 'core', 'bot', 'client_core'
 
