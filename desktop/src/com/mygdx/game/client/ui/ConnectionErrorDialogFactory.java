@@ -20,8 +20,10 @@ public class ConnectionErrorDialogFactory {
   private final Stage stage;
 
   @Inject
-  public ConnectionErrorDialogFactory(@NonNull GameScreenAssets assets,
-                                      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage) {
+  public ConnectionErrorDialogFactory(
+      @NonNull GameScreenAssets assets,
+      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage
+  ) {
     this.assets = assets;
     this.stage = stage;
   }

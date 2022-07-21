@@ -26,11 +26,13 @@ public class GdxGame extends Game {
   private final Lazy<MenuScreen> menuScreen;
 
   @Inject
-  GdxGame(@NonNull AssetManager assetManager,
-          @NonNull Lazy<GameScreen> gameScreen,
-          @NonNull Lazy<FieldScreen> fieldScreen,
-          @NonNull Lazy<LoadingScreen> loadingScreen,
-          @NonNull Lazy<MenuScreen> menuScreen) {
+  GdxGame(
+      @NonNull AssetManager assetManager,
+      @NonNull Lazy<GameScreen> gameScreen,
+      @NonNull Lazy<FieldScreen> fieldScreen,
+      @NonNull Lazy<LoadingScreen> loadingScreen,
+      @NonNull Lazy<MenuScreen> menuScreen
+  ) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
     this.fieldScreen = fieldScreen;

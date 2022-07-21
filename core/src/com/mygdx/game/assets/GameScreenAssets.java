@@ -8,17 +8,10 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
-import com.mygdx.game.assets.assetloaders.JsonLoader;
-import com.mygdx.game.config.FieldConfig;
-import com.mygdx.game.config.GameConfigs;
-import com.mygdx.game.config.SubFieldConfig;
-import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import static com.mygdx.game.assets.assetloaders.ArrayLoader.ArrayLoaderParameter;
 
 @Singleton
 public class GameScreenAssets {
@@ -26,21 +19,15 @@ public class GameScreenAssets {
   @NonNull
   private final AssetManager assetManager;
 
-  @NonNull
-  private final GameConfigs gameConfigs;
-
   @Inject
   public GameScreenAssets(
-      @NonNull AssetManager assetManager,
-      @NonNull GameConfigs gameConfigs
+      @NonNull AssetManager assetManager
   ) {
     this.assetManager = assetManager;
-    this.gameConfigs = gameConfigs;
     initCustomLoaders();
   }
 
   public void loadAssetsAsync() {
-    loadConfigs();
     loadModels();
     loadTextures();
     loadSkin();
@@ -59,14 +46,6 @@ public class GameScreenAssets {
   @NonNull
   public Skin getSkin(@NonNull String path) {
     return assetManager.get(path);
-  }
-
-  @NonNull
-  public GameConfigs getGameConfigs() {
-    if (gameConfigs.size() == 0) {
-      populateGameConfigs();
-    }
-    return gameConfigs;
   }
 
   private <T> void loadDirectory(@NonNull String path,
@@ -92,26 +71,7 @@ public class GameScreenAssets {
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private void loadConfigs() {
-    assetManager.load(GameScreenAssetPaths.FIELD_CONFIG_DIR, Array.class,
-        new ArrayLoaderParameter(FieldConfig.class, "json"));
-    assetManager.load(GameScreenAssetPaths.UNIT_CONFIG_DIR, Array.class,
-        new ArrayLoaderParameter(UnitConfig.class, "json"));
-    assetManager.load(GameScreenAssetPaths.SUB_FIELD_CONFIG_DIR, Array.class,
-            new ArrayLoaderParameter(SubFieldConfig.class, "json"));
-  }
-
-  private void populateGameConfigs() {
-    gameConfigs.putAll(assetManager.getAll(FieldConfig.class, new Array<>()));
-    gameConfigs.putAll(assetManager.getAll(UnitConfig.class, new Array<>()));
-    gameConfigs.putAll(assetManager.getAll(SubFieldConfig.class, new Array<>()));
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
   private void initCustomLoaders() {
     assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    assetManager.setLoader(SubFieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
   }
 }

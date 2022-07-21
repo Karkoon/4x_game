@@ -67,6 +67,7 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
+        implementation project(":client_core")
         implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
@@ -83,6 +84,7 @@ project(":bot") {
 
     dependencies {
         implementation project(":core")
+        implementation project(":client_core")
         implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

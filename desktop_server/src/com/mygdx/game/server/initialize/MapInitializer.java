@@ -1,6 +1,6 @@
 package com.mygdx.game.server.initialize;
 
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -16,7 +16,7 @@ public class MapInitializer {
   public static final int INITIAL_WIDTH = 5;
   public static final int INITIAL_HEIGHT = 5;
   private final FieldFactory fieldFactory;
-  private final GameScreenAssets assets;
+  private final GameConfigAssets assets;
   private final Random random = new Random();
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
@@ -24,7 +24,7 @@ public class MapInitializer {
   @Inject
   public MapInitializer(
           @NonNull FieldFactory fieldFactory,
-          @NonNull GameScreenAssets assets
+          @NonNull GameConfigAssets assets
   ) {
     this.fieldFactory = fieldFactory;
     this.assets = assets;

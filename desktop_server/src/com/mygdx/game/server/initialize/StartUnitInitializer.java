@@ -1,6 +1,6 @@
 package com.mygdx.game.server.initialize;
 
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -14,7 +14,7 @@ import java.util.Random;
 public class StartUnitInitializer {
 
   private final UnitFactory unitFactory;
-  private final GameScreenAssets assets;
+  private final GameConfigAssets assets;
   private final Random random = new Random();
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
@@ -22,7 +22,7 @@ public class StartUnitInitializer {
   @Inject
   public StartUnitInitializer(
       @NonNull UnitFactory unitFactory,
-      @NonNull GameScreenAssets assets) {
+      @NonNull GameConfigAssets assets) {
     this.unitFactory = unitFactory;
     this.assets = assets;
   }
