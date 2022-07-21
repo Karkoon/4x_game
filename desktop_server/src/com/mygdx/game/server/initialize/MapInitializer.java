@@ -54,7 +54,7 @@ public class MapInitializer {
     fieldFactory.createEntity(assets
             .getGameConfigs()
             .get(FieldConfig.class, 5),
-            new Coordinates(8, 8),
+            new Coordinates(4, 4),
             owner
     );
 

@@ -18,6 +18,8 @@ import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
 
@@ -45,22 +47,24 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
   ) {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
     final var coordinatesMapper = world.getMapper(Coordinates.class);
+    final var fieldMapper = world.getMapper(Field.class);
+    final var subFieldMapper = world.getMapper(SubField.class);
 
     registerHandler(EntityConfigId.class, (webSocket, worldEntity, packet) -> { // todo zmienić znowu na serwisy i fabryki,
       // todo bo to jednak nie jest komponent tylko pojedyncza wiadomość xD
       // albo coś
       var entityConfigId = ((EntityConfigId) packet).getId();
-      if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId <= GameConfigs.FIELD_MAX) { // 1, 2 są z plików jsona EntityConfigów
+      if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId < GameConfigs.FIELD_MAX) { // 1, 2 są z plików jsona EntityConfigów
         log.info("field id " + worldEntity);
         var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);
         fieldFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId <= GameConfigs.UNIT_MAX) {
+      } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId < GameConfigs.UNIT_MAX) {
         log.info("unit id " + worldEntity);
         var config = assets.getGameConfigs().get(UnitConfig.class, entityConfigId);
         unitFactory.createEntity(config, worldEntity);
         return FULLY_HANDLED;
-      } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId <= GameConfigs.SUBFIELD_MAX) {
+      } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId < GameConfigs.SUBFIELD_MAX) {
         log.info("subfield id " + worldEntity);
         var config = assets.getGameConfigs().get(SubFieldConfig.class, entityConfigId);
         subFieldFactory.createEntity(config, worldEntity);
@@ -75,6 +79,31 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       var entityCoordinates = coordinatesMapper.create(worldEntity);
       gameState.removeEntity(worldEntity);
       entityCoordinates.setCoordinates(newCoordinates);
+      gameState.saveEntity(worldEntity);
+      return FULLY_HANDLED;
+    });
+
+    registerHandler(Field.class, (webSocket, worldEntity, component) -> {
+      log.info("Read field component " + worldEntity);
+      var subFields = ((Field) component).getSubFields();
+      for (int i = 0; i < subFields.size; i++) {
+        Integer subField = subFields.get(i);
+        subFields.set(i, networkWorldEntityMapper.getWorldEntity(subField));
+      }
+      var entityField = fieldMapper.create(worldEntity);
+      gameState.removeEntity(worldEntity);
+      entityField.setSubFields(subFields);
+      gameState.saveEntity(worldEntity);
+      return FULLY_HANDLED;
+    });
+
+    registerHandler(SubField.class, (webSocket, worldEntity, component) -> {
+      log.info("Read subfield component " + worldEntity);
+      var newParent = ((SubField) component).getParent();
+      newParent = networkWorldEntityMapper.getWorldEntity(newParent);
+      var SubField = subFieldMapper.create(worldEntity);
+      gameState.removeEntity(worldEntity);
+      SubField.setParent(newParent);
       gameState.saveEntity(worldEntity);
       return FULLY_HANDLED;
     });

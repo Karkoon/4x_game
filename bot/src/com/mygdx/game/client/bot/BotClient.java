@@ -76,7 +76,7 @@ public class BotClient {
       log.info("Bot score: " + playerScore.getScoreValue());
       currentCoordinates = newCoordinates;
 
-      if (currentCoordinates.getX() == 8 && currentCoordinates.getY() == 8) {
+      if (currentCoordinates.getX() == 4 && currentCoordinates.getY() == 4) {
         log.info("RESET");
         log.info("NEW ROUND... CURRENT QMAP: " + qMap);
         currentCoordinates = new Coordinates(0, 0);
@@ -122,7 +122,7 @@ public class BotClient {
     var by = newCoordinates.getY();
     var bz = -ax - ay;
 
-    if (newCoordinates.getX() == 8 && newCoordinates.getY() == 8) {
+    if (newCoordinates.getX() == 4 && newCoordinates.getY() == 4) {
       return 25;
     }
 
