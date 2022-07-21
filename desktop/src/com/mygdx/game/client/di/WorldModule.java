@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client_core.ecs.system.CoordinateToPositionSystem;
+import com.mygdx.game.client.ecs.system.TechnologyRenderSystem;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -19,12 +20,14 @@ public class WorldModule {
   @Singleton
   public @NonNull World providesWorld(
       @NonNull RenderSystem renderSystem,
+      @NonNull TechnologyRenderSystem technologyRenderSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
     configuration.setSystem(coordinateToPositionSystem);
     configuration.setSystem(renderSystem);
+    configuration.setSystem(technologyRenderSystem);
     return new World(configuration);
   }
 }

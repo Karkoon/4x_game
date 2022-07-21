@@ -8,6 +8,7 @@ import com.mygdx.game.client.ecs.component.Name;
 import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.config.TechnologyConfig;
+import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -21,6 +22,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
   private final ComponentMapper<TextureComp> textureMapper;
+  private final ComponentMapper<Technology> technologyMapper;
 
   @Inject
   public TechnologyFactory(@NonNull World world,
@@ -29,6 +31,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
     this.textureMapper = world.getMapper(TextureComp.class);
+    this.technologyMapper = world.getMapper(Technology.class);
   }
 
   @Override
@@ -36,6 +39,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     setUpName(config, entity);
     setUpPosition(config, entity);
     setUpTexture(config, entity);
+    setUpTechnology(config, entity);
   }
 
   private void setUpName(@NonNull TechnologyConfig config, int entityId) {
@@ -46,8 +50,12 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   private void setUpPosition(TechnologyConfig config, int entity) {
     var position = positionMapper.create(entity);
-    Vector3 vector = new Vector3(config.getX(), config.getY(), 0);
+    Vector3 vector = new Vector3(config.getX()*100, config.getY()*100, config.getY()*100);
     position.setPosition(vector);
+  }
+
+  private void setUpTechnology(TechnologyConfig config, int entity) {
+    technologyMapper.create(entity);
   }
 
   private void setUpTexture(TechnologyConfig config, int entity) {

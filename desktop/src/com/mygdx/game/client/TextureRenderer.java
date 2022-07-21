@@ -1,7 +1,6 @@
 package com.mygdx.game.client;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector3;
@@ -52,6 +51,7 @@ public class TextureRenderer implements Disposable {
   }
 
   public void addTextureToCache(TextureDraw textureDraw) {
+    textures.add(textureDraw);
   }
 
   @Override

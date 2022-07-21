@@ -30,9 +30,7 @@ public class ViewportModule {
   @Singleton
   public @NonNull Viewport providesOrthographicViewport() {
     log.log(Level.INFO, "Provided Orthographic viewport");
-    var camera = new OrthographicCamera(500, 500);
-    camera.near = 500f;
-    camera.far = 700f;
-    return new ExtendViewport(500, 500, camera);
+    var camera = new OrthographicCamera();
+    return new ExtendViewport(750, 750, camera);
   }
 }
