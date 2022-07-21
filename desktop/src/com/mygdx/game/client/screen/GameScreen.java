@@ -7,13 +7,17 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.MoveEntityInputAdapter;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.network.GameStartService;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
+import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.client_core.network.GameConnectService;
 import com.mygdx.game.client_core.network.GameStartService;
 import com.mygdx.game.core.util.CompositeUpdatable;
@@ -39,6 +43,7 @@ public class GameScreen extends ScreenAdapter {
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final GameConnectService gameConnectService;
+  private final GdxGame game;
 
   private boolean initialized = false;
 
@@ -51,7 +56,8 @@ public class GameScreen extends ScreenAdapter {
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull GameStartService gameStartService,
       @NonNull PlayerRoomDialogFactory roomDialogFactory,
-      @NonNull GameConnectService gameConnectService
+      @NonNull GameConnectService gameConnectService,
+      @NonNull GdxGame game
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -61,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
     this.gameStartService = gameStartService;
     this.roomDialogFactory = roomDialogFactory;
     this.gameConnectService = gameConnectService;
+    this.game = game;
   }
 
   @Override
@@ -100,7 +107,7 @@ public class GameScreen extends ScreenAdapter {
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
     var gameScreenUiInputAdapter = new GameScreenUiInputAdapter(game);
-    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage, moveEntityInputAdapter);
+    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, gameScreenUiInputAdapter, stage, moveEntityInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
   }

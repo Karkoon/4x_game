@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.model.TextureDraw;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -20,7 +22,7 @@ public class TextureRenderer implements Disposable {
 
   private final SpriteBatch spriteBatch;
   private final SpriteCache cache;
-  private final Array<Texture> textures;
+  private final Array<TextureDraw> textures;
 
   private final Camera camera;
 
@@ -43,9 +45,13 @@ public class TextureRenderer implements Disposable {
   }
 
   private void performFrustumCullingToTextureCache() {
-    for (Texture texture : textures) {
-      spriteBatch.draw(texture, 0, 0);
+    for (TextureDraw textureDraw : textures) {
+      Vector3 position = textureDraw.getPosition();
+      spriteBatch.draw(textureDraw.getTexture(), position.x, position.y);
     }
+  }
+
+  public void addTextureToCache(TextureDraw textureDraw) {
   }
 
   @Override

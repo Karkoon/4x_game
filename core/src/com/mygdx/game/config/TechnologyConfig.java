@@ -16,4 +16,6 @@ public class TechnologyConfig implements EntityConfig {
   private String polishName;
   @NonNull
   private String textureName;
+  private int x;
+  private int y;
 }

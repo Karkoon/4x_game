@@ -10,10 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
+import com.mygdx.game.client.GdxGame;
+import com.mygdx.game.client.ecs.entityfactory.TechnologyFactory;
+import com.mygdx.game.client.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
+import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.util.Vector3Util;
 import lombok.NonNull;
 
@@ -27,16 +33,24 @@ public class MenuScreen extends ScreenAdapter {
   private final Navigator navigator;
   private final StarBackground starBackground;
   private final Planet planet;
+  private final TechnologyFactory technologyFactory;
+  private final GameScreenAssets gameAssets;
 
   @Inject
   public MenuScreen(
       @NonNull Stage stage,
       @NonNull MenuScreenAssets assets,
       @NonNull Navigator navigator
+      @NonNull GdxGame game,
+      @NonNull TechnologyFactory technologyFactory,
+      @NonNull GameScreenAssets gameAssets
   ) {
     this.stage = stage;
     this.assets = assets;
     this.navigator = navigator;
+    this.game = game;
+    this.gameAssets = gameAssets;
+    this.technologyFactory = technologyFactory;
 
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
@@ -44,6 +58,8 @@ public class MenuScreen extends ScreenAdapter {
     planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
 
     Gdx.input.setInputProcessor(stage);
+
+    createTechnologies();
   }
 
   @Override
@@ -107,5 +123,13 @@ public class MenuScreen extends ScreenAdapter {
 
     stage.draw();
     stage.act(delta);
+  }
+
+
+  private void createTechnologies() {
+    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
+      var config = gameAssets.getGameConfigs().get(TechnologyConfig.class, entityId);
+      technologyFactory.createEntity(config, 123);
+    }
   }
 }
