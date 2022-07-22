@@ -4,9 +4,9 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.TextureRenderer;
-import com.mygdx.game.client.ecs.component.Position;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.model.TextureDraw;
+import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -19,9 +19,9 @@ import javax.inject.Singleton;
 @Log
 public class TechnologyRenderSystem extends IteratingSystem {
 
-  private ComponentMapper<Technology> technologyMapper;
-  private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<TextureComp> textureMapper;
+  protected ComponentMapper<Technology> technologyMapper;
+  protected ComponentMapper<Position> positionMapper;
+  protected ComponentMapper<TextureComp> textureMapper;
 
   private final TextureRenderer renderer;
 

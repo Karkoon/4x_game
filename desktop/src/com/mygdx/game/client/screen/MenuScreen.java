@@ -10,12 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ecs.entityfactory.TechnologyFactory;
-import com.mygdx.game.client.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.config.GameConfigs;
@@ -34,7 +34,7 @@ public class MenuScreen extends ScreenAdapter {
   private final StarBackground starBackground;
   private final Planet planet;
   private final TechnologyFactory technologyFactory;
-  private final GameScreenAssets gameAssets;
+  private final GameConfigAssets gameAssets;
 
   @Inject
   public MenuScreen(
@@ -43,7 +43,7 @@ public class MenuScreen extends ScreenAdapter {
       @NonNull Navigator navigator
       @NonNull GdxGame game,
       @NonNull TechnologyFactory technologyFactory,
-      @NonNull GameScreenAssets gameAssets
+      @NonNull GameConfigAssets gameAssets
   ) {
     this.stage = stage;
     this.assets = assets;
