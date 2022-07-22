@@ -3,9 +3,10 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.Technology;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
@@ -16,14 +17,15 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class UnitFactory extends EntityFactory<UnitConfig> {
+public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private final ComponentMapper<Technology> technologyMapper;
   private final GameRoomSyncer syncer;
 
   @Inject
-  public UnitFactory(
+  public TechnologyFactory(
       @NonNull World world,
       @NonNull GameConfigAssets assets,
       @NonNull GameRoomSyncer syncer
@@ -31,11 +33,12 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
+    this.technologyMapper = world.getMapper(Technology.class);
     this.syncer = syncer;
   }
 
   @Override
-  public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates, Client client) {
+  public int createEntity(@NonNull TechnologyConfig config, @NonNull Coordinates coordinates, Client client) {
     var entity = world.create();
 
     var position = setUpCoordinates(coordinates, entity);
@@ -43,6 +46,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
 
     syncer.sendComponent(position, entity);
     syncer.sendComponent(entityConfigId, entity);
+
     return entity;
   }
 
@@ -53,7 +57,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   private EntityConfigId setUpEntityConfig(int entityId) {
-    var entityConfigId = assets.getGameConfigs().getAny(UnitConfig.class).getId();
+    var entityConfigId = assets.getGameConfigs().getAny(TechnologyConfig.class).getId();
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
     entityConfigIdComponent.setId(entityConfigId);
     return entityConfigIdComponent;

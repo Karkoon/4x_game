@@ -4,8 +4,11 @@ import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client.ecs.entityfactory.ModelInstanceCompSetter;
+import com.mygdx.game.client.ecs.entityfactory.TextureCompSetter;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
+import com.mygdx.game.config.ModelConfig;
+import com.mygdx.game.config.TextureConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 
 import javax.inject.Inject;
@@ -21,20 +24,34 @@ public class DesktopEntityConfigHandler implements ComponentMessageListener.Hand
 
   private final GameConfigAssets assets;
   private final List<Setter> setterList = new ArrayList<>();
+  private final ModelInstanceCompSetter modelInstanceCompSetter;
+  private final TextureCompSetter textureCompSetter;
 
   @Inject
   public DesktopEntityConfigHandler(
       GameConfigAssets assets,
-      ModelInstanceCompSetter modelInstanceCompSetter
+      ModelInstanceCompSetter modelInstanceCompSetter,
+      TextureCompSetter textureCompSetter
   ) {
     this.assets = assets;
     this.setterList.add(modelInstanceCompSetter);
+    this.modelInstanceCompSetter = modelInstanceCompSetter;
+    this.textureCompSetter = textureCompSetter;
   }
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
     var entityConfigId = ((EntityConfigId) component).getId();
     var config = assets.getGameConfigs().get(entityConfigId);
+    if (config instanceof ModelConfig modelConfig) {
+      modelInstanceCompSetter.set(modelConfig, worldEntity);
+      return FULLY_HANDLED;
+    }
+    if (config instanceof TextureConfig textureConfig) {
+      textureCompSetter.set(textureConfig, worldEntity);
+      return FULLY_HANDLED;
+    }
+    return NOT_HANDLED;
     var setterResults = setterList.stream()
         .map(setter -> setter.set(config, worldEntity))
         .toList();

@@ -1,13 +1,11 @@
-package com.mygdx.game.client.ecs.entityfactory;
+package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
-import com.mygdx.game.client_core.ecs.entityfactory.EntityFactory;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
@@ -22,7 +20,6 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<TextureComp> textureMapper;
   private final ComponentMapper<Technology> technologyMapper;
 
   @Inject
@@ -31,7 +28,6 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     super(world, assets);
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
-    this.textureMapper = world.getMapper(TextureComp.class);
     this.technologyMapper = world.getMapper(Technology.class);
   }
 
@@ -51,7 +47,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   private void setUpPosition(TechnologyConfig config, int entity) {
     var position = positionMapper.create(entity);
-    Vector3 vector = new Vector3(config.getX()*100, config.getY()*100, config.getY()*100);
+    Vector3 vector = new Vector3(config.getX()*100, config.getY()*100, 0);
     position.setPosition(vector);
   }
 
@@ -59,8 +55,5 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     technologyMapper.create(entity);
   }
 
-  private void setUpTexture(TechnologyConfig config, int entity) {
-    var texture = textureMapper.create(entity);
-    texture.setTexture(assets.getTexture(config.getTextureName()));
-  }
+
 }

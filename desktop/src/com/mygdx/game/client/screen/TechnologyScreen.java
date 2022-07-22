@@ -51,7 +51,6 @@ public class TechnologyScreen extends ScreenAdapter {
   public void show() {
     log.info("Technology tree shown");
 
-    positionCamera(viewport.getCamera());
     setUpInput();
   }
 
@@ -68,13 +67,8 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
-    viewport.update(width, height);
+    viewport.update(width, height, true);
 //    stage.getViewport().update(width, height, true);
-  }
-
-  private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 0, 0);
-    camera.lookAt(0, 0, 0);
   }
 
   private void setUpInput() {

@@ -8,7 +8,7 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TechnologyConfig implements EntityConfig {
+public class TechnologyConfig implements EntityConfig, TextureConfig {
   private int id;
   @NonNull
   private String name;

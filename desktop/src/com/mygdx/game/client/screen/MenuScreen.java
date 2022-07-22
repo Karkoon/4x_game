@@ -11,20 +11,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
-import com.mygdx.game.client.ecs.entityfactory.TechnologyFactory;
+import com.mygdx.game.client_core.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.util.Vector3Util;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
+@Log
 public class MenuScreen extends ScreenAdapter {
 
   private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
@@ -127,9 +128,9 @@ public class MenuScreen extends ScreenAdapter {
 
 
   private void createTechnologies() {
-    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
+    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId <= GameConfigs.TECHNOLOGY_MAX; entityId++) {
       var config = gameAssets.getGameConfigs().get(TechnologyConfig.class, entityId);
-      technologyFactory.createEntity(config, 123);
+      technologyFactory.createEntity(config, 40 + entityId-5);
     }
   }
 }

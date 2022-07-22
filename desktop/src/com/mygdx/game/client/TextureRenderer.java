@@ -46,6 +46,7 @@ public class TextureRenderer implements Disposable {
   private void performFrustumCullingToTextureCache() {
     for (TextureDraw textureDraw : textures) {
       Vector3 position = textureDraw.getPosition();
+      log.info("Position: " + textureDraw.getPosition().toString());
       spriteBatch.draw(textureDraw.getTexture(), position.x, position.y);
     }
   }
