@@ -2,7 +2,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -24,7 +24,7 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
 
   @Inject
   public SubFieldFactory(@NonNull World world,
-                         @NonNull GameScreenAssets assets,
+                         @NonNull GameConfigAssets assets,
                          @NonNull GameRoomSyncer gameRoomSyncer) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);

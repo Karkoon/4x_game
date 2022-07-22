@@ -3,6 +3,7 @@ package com.mygdx.game.server;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.server.network.Server;
 import lombok.extern.java.Log;
 
@@ -13,11 +14,11 @@ import javax.inject.Singleton;
 @Singleton
 public class GdxServer extends Game {
 
-  private final AllAssets assets;
+  private final GameConfigAssets assets;
   private final Server server;
 
   @Inject
-  GdxServer(AllAssets assets,
+  GdxServer(GameConfigAssets assets,
             Server server) {
     this.assets = assets;
     this.server = server;

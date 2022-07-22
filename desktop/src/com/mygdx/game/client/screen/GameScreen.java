@@ -7,13 +7,13 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.MoveEntityInputAdapter;
-import com.mygdx.game.client.network.GameStartService;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
+import com.mygdx.game.client_core.network.GameConnectService;
+import com.mygdx.game.client_core.network.GameStartService;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -36,7 +36,7 @@ public class GameScreen extends ScreenAdapter {
   private final MoveEntityInputAdapter moveEntityInputAdapter;
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
-  private final WebSocket webSocket;
+  private final GameConnectService gameConnectService;
 
   private boolean initialized = false;
 
@@ -49,7 +49,7 @@ public class GameScreen extends ScreenAdapter {
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull GameStartService gameStartService,
       @NonNull PlayerRoomDialogFactory roomDialogFactory,
-      @NonNull WebSocket webSocket
+      @NonNull GameConnectService gameConnectService
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -58,7 +58,7 @@ public class GameScreen extends ScreenAdapter {
     this.moveEntityInputAdapter = moveEntityInputAdapter;
     this.gameStartService = gameStartService;
     this.roomDialogFactory = roomDialogFactory;
-    this.webSocket = webSocket;
+    this.gameConnectService = gameConnectService;
   }
 
   @Override
@@ -66,7 +66,7 @@ public class GameScreen extends ScreenAdapter {
     log.info("GameScreen shown");
     if (!initialized) {
       roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5));
-      webSocket.send("connect");
+      gameConnectService.connect();
       initialized = true;
     }
     positionCamera(viewport.getCamera());
@@ -100,7 +100,6 @@ public class GameScreen extends ScreenAdapter {
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage, moveEntityInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
-
   }
 
   private void positionCamera(@NonNull Camera camera) {

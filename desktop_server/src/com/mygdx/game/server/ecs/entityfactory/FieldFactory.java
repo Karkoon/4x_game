@@ -2,9 +2,8 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -31,7 +30,7 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   @Inject
   public FieldFactory(
       @NonNull World world,
-      @NonNull GameScreenAssets assets,
+      @NonNull GameConfigAssets assets,
       @NonNull GameRoomSyncer gameRoomSyncer,
       @NonNull SubMapInitializer subMapInitializer
   ) {

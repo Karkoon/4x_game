@@ -10,22 +10,27 @@ import javax.inject.Singleton;
 @Singleton
 public class GameConfigs {
 
-  public final static int FIELD_MIN = 1;
-  public final static int FIELD_MAX = 6;
-  public final static int UNIT_MIN = 6;
-  public final static int UNIT_MAX = 7;
-  public final static int SUBFIELD_MIN = 7;
-  public final static int SUBFIELD_MAX = 8;
+  public static final int FIELD_MIN = 1;
+  public static final int FIELD_MAX = 6;
+  public static final int UNIT_MIN = 6;
+  public static final int UNIT_MAX = 7;
+  public static final int SUBFIELD_MIN = 7;
+  public static final int SUBFIELD_MAX = 8;
 
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 
   @Inject
   public GameConfigs() {
+    super();
   }
 
   public <T extends EntityConfig> @NonNull T get(@NonNull final Class<T> entityClass,
                                         final long entityConfigId) {
     return entityClass.cast(entityConfigMap.get(entityConfigId));
+  }
+
+  public @NonNull EntityConfig get(long entityConfigId) {
+    return entityConfigMap.get(entityConfigId);
   }
 
   public <T extends EntityConfig> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later

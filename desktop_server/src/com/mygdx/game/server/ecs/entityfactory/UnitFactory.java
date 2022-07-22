@@ -2,7 +2,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -25,7 +25,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   @Inject
   public UnitFactory(
       @NonNull World world,
-      @NonNull GameScreenAssets assets,
+      @NonNull GameConfigAssets assets,
       @NonNull GameRoomSyncer syncer
   ) {
     super(world, assets);

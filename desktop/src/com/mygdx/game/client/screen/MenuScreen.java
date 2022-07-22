@@ -21,18 +21,19 @@ import javax.inject.Inject;
 
 public class MenuScreen extends ScreenAdapter {
 
+  private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
   private final Stage stage;
   private final MenuScreenAssets assets;
   private final GdxGame game;
   private final StarBackground starBackground;
   private final Planet planet;
 
-  private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
-
   @Inject
-  public MenuScreen(@NonNull Stage stage,
-                    @NonNull MenuScreenAssets assets,
-                    @NonNull GdxGame game) {
+  public MenuScreen(
+      @NonNull Stage stage,
+      @NonNull MenuScreenAssets assets,
+      @NonNull GdxGame game
+  ) {
     this.stage = stage;
     this.assets = assets;
     this.game = game;

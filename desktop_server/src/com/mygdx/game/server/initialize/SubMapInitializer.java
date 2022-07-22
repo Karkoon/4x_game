@@ -2,13 +2,11 @@ package com.mygdx.game.server.initialize;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.server.model.Client;
@@ -24,9 +22,8 @@ import java.util.Random;
 @Singleton
 public class SubMapInitializer {
 
-  private final World world;
   private final SubFieldFactory subFieldFactory;
-  private final GameScreenAssets assets;
+  private final GameConfigAssets assets;
   private final Random random = new Random();
   private final GameRoomSyncer syncer;
   private final ComponentMapper<SubField> subFieldMapper;
@@ -58,10 +55,9 @@ public class SubMapInitializer {
   public SubMapInitializer(
           @NonNull World world,
           @NonNull SubFieldFactory subFieldFactory,
-          @NonNull GameScreenAssets assets,
+          @NonNull GameConfigAssets assets,
           @NonNull GameRoomSyncer gameRoomSyncer
   ) {
-    this.world = world;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
     this.syncer = gameRoomSyncer;
@@ -69,9 +65,9 @@ public class SubMapInitializer {
   }
 
   public IntArray initializeSubarea(int fieldId, Client owner) {
-    IntArray subFields = new IntArray();
+    var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
-      Integer entityId = subFieldFactory.createEntity(assets
+      var entityId = subFieldFactory.createEntity(assets
                       .getGameConfigs()
                       .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
               coordinates,

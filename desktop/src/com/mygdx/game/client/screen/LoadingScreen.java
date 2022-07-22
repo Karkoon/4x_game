@@ -8,10 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.assets.LoadingScreenAssetPaths;
-import com.mygdx.game.assets.LoadingScreenAssets;
-import com.mygdx.game.assets.MenuScreenAssets;
+import com.mygdx.game.assets.*;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.actor.LoadingBar;
 import lombok.extern.java.Log;
@@ -27,6 +24,7 @@ public class LoadingScreen extends ScreenAdapter {
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
   private final GameScreenAssets gameScreenAssets;
+  private final GameConfigAssets gameConfigAssets;
   private final AssetManager manager;
   private Stage stage;
   private Image logo;
@@ -40,15 +38,19 @@ public class LoadingScreen extends ScreenAdapter {
   private LoadingBar loadingBar;
 
   @Inject
-  public LoadingScreen(GdxGame game,
-                       GameScreenAssets gameScreenAssets,
-                       LoadingScreenAssets loadingScreenAssets,
-                       MenuScreenAssets menuScreenAssets,
-                       AssetManager manager) {
+  public LoadingScreen(
+      GdxGame game,
+      GameScreenAssets gameScreenAssets,
+      LoadingScreenAssets loadingScreenAssets,
+      MenuScreenAssets menuScreenAssets,
+      GameConfigAssets gameConfigAssets,
+      AssetManager manager
+  ) {
     this.game = game;
     this.gameScreenAssets = gameScreenAssets;
     this.loadingScreenAssets = loadingScreenAssets;
     this.menuScreenAssets = menuScreenAssets;
+    this.gameConfigAssets = gameConfigAssets;
     this.manager = manager;
   }
 
@@ -57,6 +59,7 @@ public class LoadingScreen extends ScreenAdapter {
     loadingScreenAssets.loadAssetsSync();
     stage = new Stage(new ScreenViewport());
     getLoadingScreenAssets();
+    gameConfigAssets.loadAssetsAsync();
     menuScreenAssets.loadAssetsAsync();
     gameScreenAssets.loadAssetsAsync();
   }
