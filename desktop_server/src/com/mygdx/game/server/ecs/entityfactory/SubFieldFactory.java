@@ -23,9 +23,11 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
   private final GameRoomSyncer syncer;
 
   @Inject
-  public SubFieldFactory(@NonNull World world,
-                         @NonNull GameConfigAssets assets,
-                         @NonNull GameRoomSyncer gameRoomSyncer) {
+  public SubFieldFactory(
+      @NonNull World world,
+      @NonNull GameConfigAssets assets,
+      @NonNull GameRoomSyncer gameRoomSyncer
+  ) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
