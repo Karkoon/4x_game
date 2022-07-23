@@ -24,8 +24,10 @@ public class GameConfigs {
     super();
   }
 
-  public <T extends EntityConfig> @NonNull T get(@NonNull final Class<T> entityClass,
-                                        final long entityConfigId) {
+  public <T extends EntityConfig> @NonNull T get(
+      @NonNull final Class<T> entityClass,
+      final long entityConfigId
+  ) {
     return entityClass.cast(entityConfigMap.get(entityConfigId));
   }
 
@@ -34,7 +36,7 @@ public class GameConfigs {
   }
 
   public <T extends EntityConfig> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later
-    for (EntityConfig next : entityConfigMap.values()) {
+    for (var next : entityConfigMap.values()) {
       if (entityClass.isInstance(next)) {
         return entityClass.cast(next);
       }

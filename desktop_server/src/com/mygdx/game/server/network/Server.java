@@ -26,6 +26,7 @@ public final class Server {
   private final StartUnitInitializer unitInitializer;
   private final MoveEntityService moveEntityService;
   private final GameRoom room;
+  private final GameRoomSyncer syncer;
 
 
   private final Json json = new Json();
@@ -36,12 +37,14 @@ public final class Server {
       MapInitializer mapInitializer,
       StartUnitInitializer unitInitializer,
       MoveEntityService moveEntityService,
-      GameRoom room
+      GameRoom room,
+      GameRoomSyncer syncer
   ) {
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.moveEntityService = moveEntityService;
     this.room = room;
+    this.syncer = syncer;
   }
 
   private void handle(
@@ -62,8 +65,10 @@ public final class Server {
       case "start" -> {
         var width = Integer.parseInt(commands[1]);
         var height = Integer.parseInt(commands[2]);
+        syncer.beginTransaction();
         mapInitializer.initializeMap(width, height, client);
         unitInitializer.initializeTestUnit(client);
+        syncer.endTransaction();
         room.getClients().forEach(ws -> {
           var msg = new GameStartedMessage();
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
