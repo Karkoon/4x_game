@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.TextureRenderer;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
+import com.mygdx.game.client.input.GameScreenUiInputAdapter;
+import com.mygdx.game.client.input.TechnologyInputAdapter;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -72,7 +74,8 @@ public class TechnologyScreen extends ScreenAdapter {
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
-    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, stage);
+    var technologyInputAdapter = new TechnologyInputAdapter(game);
+    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, technologyInputAdapter, stage);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
