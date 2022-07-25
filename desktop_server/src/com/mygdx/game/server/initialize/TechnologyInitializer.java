@@ -33,7 +33,7 @@ public class TechnologyInitializer {
     } else {
       initialized = true;
     }
-    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId <= GameConfigs.TECHNOLOGY_MAX; entityId++) {
+    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
       var config = assets.getGameConfigs().get(TechnologyConfig.class, entityId);
       technologyFactory.createEntity(config, new Coordinates(config.getX(), config.getY()), owner);
     }

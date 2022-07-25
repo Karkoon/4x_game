@@ -34,8 +34,6 @@ public class MenuScreen extends ScreenAdapter {
   private final Navigator navigator;
   private final StarBackground starBackground;
   private final Planet planet;
-  private final TechnologyFactory technologyFactory;
-  private final GameConfigAssets gameAssets;
 
   @Inject
   public MenuScreen(
@@ -50,8 +48,6 @@ public class MenuScreen extends ScreenAdapter {
     this.assets = assets;
     this.navigator = navigator;
     this.game = game;
-    this.gameAssets = gameAssets;
-    this.technologyFactory = technologyFactory;
 
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
@@ -59,8 +55,6 @@ public class MenuScreen extends ScreenAdapter {
     planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
 
     Gdx.input.setInputProcessor(stage);
-
-    createTechnologies();
   }
 
   @Override
@@ -126,11 +120,4 @@ public class MenuScreen extends ScreenAdapter {
     stage.act(delta);
   }
 
-
-  private void createTechnologies() {
-    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId <= GameConfigs.TECHNOLOGY_MAX; entityId++) {
-      var config = gameAssets.getGameConfigs().get(TechnologyConfig.class, entityId);
-      technologyFactory.createEntity(config, 40 + entityId-5);
-    }
-  }
 }

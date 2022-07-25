@@ -34,9 +34,8 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
   @Override
   public @NonNull void createEntity(TechnologyConfig config, int entity) {
     setUpName(config, entity);
-    setUpPosition(config, entity);
-    setUpTexture(config, entity);
     setUpTechnology(config, entity);
+    positionMapper.create(entity);
   }
 
   private void setUpName(@NonNull TechnologyConfig config, int entityId) {
@@ -45,15 +44,8 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     name.setPolishName(config.getPolishName());
   }
 
-  private void setUpPosition(TechnologyConfig config, int entity) {
-    var position = positionMapper.create(entity);
-    Vector3 vector = new Vector3(config.getX()*100, config.getY()*100, 0);
-    position.setPosition(vector);
-  }
-
   private void setUpTechnology(TechnologyConfig config, int entity) {
     technologyMapper.create(entity);
   }
-
 
 }

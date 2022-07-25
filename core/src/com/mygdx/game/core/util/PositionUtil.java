@@ -18,4 +18,8 @@ public final class PositionUtil {
 
   private PositionUtil() {
   }
+
+  public static Vector3 generateTechnologyPositionForCoords(Coordinates coordinates) {
+    return new Vector3(coordinates.getX() * 250f,  coordinates.getY() * 250f, 0f);
+  }
 }

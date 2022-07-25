@@ -17,7 +17,7 @@ public class GameConfigs {
   public static final int SUBFIELD_MIN = 7;
   public static final int SUBFIELD_MAX = 8;
   public static final int TECHNOLOGY_MIN = 8;
-  public static final int TECHNOLOGY_MAX = 9;
+  public static final int TECHNOLOGY_MAX = 10;
 
   private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
 

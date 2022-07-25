@@ -33,7 +33,7 @@ public class TextureRenderer implements Disposable {
     this.textures = new Array<>();
   }
 
-  public void render() {
+  public void technologyRender() {
     camera.update();
     spriteBatch.setProjectionMatrix(camera.combined);
 

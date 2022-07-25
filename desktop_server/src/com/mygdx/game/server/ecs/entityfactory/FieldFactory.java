@@ -7,6 +7,7 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.server.initialize.SubfieldMapInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
@@ -23,14 +24,14 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private final ComponentMapper<Field> fieldMapper;
   private final GameRoomSyncer syncer;
-  private final SubMapInitializer subMapInitializer;
+  private final SubfieldMapInitializer subMapInitializer;
 
   @Inject
   public FieldFactory(
       @NonNull World world,
       @NonNull GameConfigAssets assets,
       @NonNull GameRoomSyncer gameRoomSyncer,
-      @NonNull SubMapInitializer subMapInitializer
+      @NonNull SubfieldMapInitializer subMapInitializer
   ) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);

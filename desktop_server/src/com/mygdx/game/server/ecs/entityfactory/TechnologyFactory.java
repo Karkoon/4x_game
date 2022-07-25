@@ -3,6 +3,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -42,7 +43,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     var entity = world.create();
 
     var position = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(entity);
+    var entityConfigId = setUpEntityConfig(config, entity);
 
     syncer.sendComponent(position, entity);
     syncer.sendComponent(entityConfigId, entity);
@@ -56,10 +57,10 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     return result;
   }
 
-  private EntityConfigId setUpEntityConfig(int entityId) {
-    var entityConfigId = assets.getGameConfigs().getAny(TechnologyConfig.class).getId();
+  private EntityConfigId setUpEntityConfig(@NonNull TechnologyConfig config, int entityId) {
+    int configId = config.getId();
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
-    entityConfigIdComponent.setId(entityConfigId);
+    entityConfigIdComponent.setId(configId);
     return entityConfigIdComponent;
   }
 

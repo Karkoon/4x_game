@@ -14,10 +14,12 @@ import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Random;
 
-public class SubMapInitializer {
+@Singleton
+public class SubfieldMapInitializer {
 
   private static final List<Coordinates> coordinatesList = List.of(
       new Coordinates(2, 0),
@@ -47,11 +49,11 @@ public class SubMapInitializer {
   private final ComponentMapper<SubField> subFieldMapper;
 
   @Inject
-  public SubMapInitializer(
-      @NonNull World world,
-      @NonNull SubFieldFactory subFieldFactory,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameRoomSyncer gameRoomSyncer
+  public SubfieldMapInitializer(
+          @NonNull World world,
+          @NonNull SubFieldFactory subFieldFactory,
+          @NonNull GameConfigAssets assets,
+          @NonNull GameRoomSyncer gameRoomSyncer
   ) {
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
