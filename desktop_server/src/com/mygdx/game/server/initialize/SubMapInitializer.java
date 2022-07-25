@@ -14,49 +14,44 @@ import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
-@Singleton
 public class SubMapInitializer {
 
+  private static final List<Coordinates> coordinatesList = List.of(
+      new Coordinates(2, 0),
+      new Coordinates(1, 1),
+      new Coordinates(3, 1),
+      new Coordinates(0, 2),
+      new Coordinates(2, 2),
+      new Coordinates(4, 2),
+      new Coordinates(1, 3),
+      new Coordinates(3, 3),
+      new Coordinates(0, 4),
+      new Coordinates(2, 4),
+      new Coordinates(4, 4),
+      new Coordinates(1, 5),
+      new Coordinates(3, 5),
+      new Coordinates(0, 6),
+      new Coordinates(2, 6),
+      new Coordinates(4, 6),
+      new Coordinates(1, 7),
+      new Coordinates(3, 7),
+      new Coordinates(2, 8)
+  );
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
   private final Random random = new Random();
   private final GameRoomSyncer syncer;
   private final ComponentMapper<SubField> subFieldMapper;
 
-  private final ArrayList<Coordinates> coordinatesList = new ArrayList<>(Arrays.asList(
-          new Coordinates(2,0),
-          new Coordinates(1,1),
-          new Coordinates(3,1),
-          new Coordinates(0,2),
-          new Coordinates(2,2),
-          new Coordinates(4,2),
-          new Coordinates(1,3),
-          new Coordinates(3,3),
-          new Coordinates(0,4),
-          new Coordinates(2,4),
-          new Coordinates(4,4),
-          new Coordinates(1,5),
-          new Coordinates(3,5),
-          new Coordinates(0,6),
-          new Coordinates(2,6),
-          new Coordinates(4,6),
-          new Coordinates(1,7),
-          new Coordinates(3,7),
-          new Coordinates(2,8)
-  ));
-
-
   @Inject
   public SubMapInitializer(
-          @NonNull World world,
-          @NonNull SubFieldFactory subFieldFactory,
-          @NonNull GameConfigAssets assets,
-          @NonNull GameRoomSyncer gameRoomSyncer
+      @NonNull World world,
+      @NonNull SubFieldFactory subFieldFactory,
+      @NonNull GameConfigAssets assets,
+      @NonNull GameRoomSyncer gameRoomSyncer
   ) {
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
@@ -68,10 +63,10 @@ public class SubMapInitializer {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
       var entityId = subFieldFactory.createEntity(assets
-                      .getGameConfigs()
-                      .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
-              coordinates,
-              owner);
+              .getGameConfigs()
+              .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
+          coordinates,
+          owner);
       subFields.add(entityId);
       var subField = subFieldMapper.create(entityId);
       subField.setParent(fieldId);

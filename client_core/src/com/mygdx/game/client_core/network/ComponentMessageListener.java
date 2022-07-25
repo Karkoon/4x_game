@@ -1,6 +1,7 @@
 package com.mygdx.game.client_core.network;
 
 import com.artemis.Component;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Queue;
 import com.github.czyzby.websocket.AbstractWebSocketListener;
@@ -9,6 +10,9 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Log
 public class ComponentMessageListener extends AbstractWebSocketListener {
@@ -39,23 +43,53 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
   @Override
   protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
     try {
-      if (!(packet instanceof ComponentMessage<? extends Component> message)) {
+      var messageList = unpack(packet);
+      if (messageList.isEmpty()) {
         return NOT_HANDLED;
       }
-      var worldEntityId = networkWorldEntityMapper.getWorldEntity(message.getEntityId());
-      var component = message.getComponent();
-      var queue = handlers.get(message.getComponent().getClass());
-      for (var handler : queue) {
-        var result = handler.handle(webSocket, worldEntityId, component);
-        if (result != FULLY_HANDLED) {
-          throw new RuntimeException("Every ComponentMessage needs to be handled: id=" + worldEntityId
-              + " content=" + packet);
-        }
+      for (var message : messageList) {
+        routeMessageToHandler(webSocket, message);
       }
       return FULLY_HANDLED;
     } catch (final Exception exception) {
       return onError(webSocket,
           new WebSocketException("Unable to handle the received packet: " + packet, exception));
+    }
+  }
+
+  private void routeMessageToHandler(WebSocket webSocket, ComponentMessage<?> message) {
+    var worldEntityId = networkWorldEntityMapper.getWorldEntity(message.getEntityId());
+    var component = message.getComponent();
+    var queue = handlers.get(message.getComponent().getClass());
+
+    for (var handler : queue) {
+      var result = handler.handle(webSocket, worldEntityId, component);
+      if (result != FULLY_HANDLED) {
+        throw new RuntimeException("Every ComponentMessage needs to be handled: id="
+            + worldEntityId + " content=" + message);
+      }
+    }
+  }
+
+  private List<ComponentMessage<?>> unpack(final Object object) {
+    var messageList = new ArrayList<ComponentMessage<?>>();
+    if (object instanceof Array<?> array && array.first() instanceof ComponentMessage<?>) {
+      for (var i = 0; i < array.size; i++) {
+        addIfComponentMessage(messageList, array.get(i));
+      }
+    } else {
+      if (object instanceof ComponentMessage<?> message) {
+        messageList.add(message);
+      }
+    }
+    return messageList;
+  }
+
+  private void addIfComponentMessage(List<ComponentMessage<?>> messageList, Object objectToCheck) {
+    if (objectToCheck instanceof ComponentMessage<?> componentMessage) {
+      messageList.add(componentMessage);
+    } else {
+      throw new IllegalArgumentException("Each element must be a ComponentMessage");
     }
   }
 
