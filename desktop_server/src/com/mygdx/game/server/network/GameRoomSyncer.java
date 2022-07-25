@@ -57,7 +57,7 @@ public class GameRoomSyncer {
     messageBuffer.clear();
   }
 
-  public void sendComponent(Component component, int entityId) {
+  public synchronized void sendComponent(Component component, int entityId) {
     if (!transaction) {
       room.getClients().forEach(client -> sendComponentTo(component, entityId, client));
     } else {
@@ -65,7 +65,7 @@ public class GameRoomSyncer {
     }
   }
 
-  public void sendComponentTo(Component component, int entityId, Client client) {
+  public synchronized void sendComponentTo(Component component, int entityId, Client client) {
     if (!transaction) {
       log.info("Sending component " + component + " to " + client);
       var message = new ComponentMessage<>(component, entityId);

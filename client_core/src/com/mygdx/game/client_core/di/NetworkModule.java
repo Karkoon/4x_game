@@ -38,7 +38,6 @@ public class NetworkModule {
       WebSocket webSocket
   ) {
     var handler = new WebSocketHandler();
-    handler.setFailIfNoHandler(true);
     webSocket.addListener(handler);
     return handler;
   }

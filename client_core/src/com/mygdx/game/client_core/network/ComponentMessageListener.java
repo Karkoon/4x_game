@@ -47,8 +47,7 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
       if (messageList.isEmpty()) {
         return NOT_HANDLED;
       }
-      for (int i = 0; i < messageList.size(); i++) {
-        var message = messageList.get(i);
+      for (var message : messageList) {
         routeMessageToHandler(webSocket, message);
       }
       return FULLY_HANDLED;
