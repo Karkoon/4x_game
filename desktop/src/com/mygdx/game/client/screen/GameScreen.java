@@ -36,6 +36,7 @@ public class GameScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final MoveEntityInputAdapter moveEntityInputAdapter;
+  private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final GameConnectService gameConnectService;
@@ -50,6 +51,7 @@ public class GameScreen extends ScreenAdapter {
       @NonNull @Named("perspective") Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
+      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
       @NonNull GameStartService gameStartService,
       @NonNull PlayerRoomDialogFactory roomDialogFactory,
       @NonNull GameConnectService gameConnectService,
@@ -59,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     this.world = world;
     this.viewport = viewport;
     this.stage = stage;
+    this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.moveEntityInputAdapter = moveEntityInputAdapter;
     this.gameStartService = gameStartService;
     this.roomDialogFactory = roomDialogFactory;
@@ -102,7 +105,6 @@ public class GameScreen extends ScreenAdapter {
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
-    var gameScreenUiInputAdapter = new GameScreenUiInputAdapter(game);
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, gameScreenUiInputAdapter, stage, moveEntityInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);

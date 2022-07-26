@@ -19,7 +19,6 @@ import javax.inject.Singleton;
 @Log
 public class TechnologyRenderSystem extends IteratingSystem {
 
-  protected ComponentMapper<Technology> technologyMapper;
   protected ComponentMapper<Position> positionMapper;
   protected ComponentMapper<TextureComp> textureMapper;
 
@@ -34,9 +33,7 @@ public class TechnologyRenderSystem extends IteratingSystem {
   protected void process(int entityId) {
     var texture = textureMapper.get(entityId).getTexture();
     var position = positionMapper.get(entityId).getPosition();
-    TextureDraw textureDraw = new TextureDraw(entityId, texture, position);
-    if (technologyMapper.has(entityId)) {
-      renderer.addTextureToCache(textureDraw);
-    }
+    var textureDraw = new TextureDraw(entityId, texture, position);
+    renderer.addTextureToCache(textureDraw);
   }
 }

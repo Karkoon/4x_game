@@ -17,6 +17,7 @@ public class TextureComp extends PooledComponent {
 
   @Override
   protected void reset() {
+    this.texture.dispose();
     this.texture = null;
   }
 }

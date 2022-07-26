@@ -16,6 +16,9 @@ import java.util.logging.Level;
 @Module
 @Log
 public class ViewportModule {
+
+  public static final String PERSPECTIVE_VIEWPORT = "perspective";
+
   @Provides @Named("perspective")
   @Singleton
   public @NonNull Viewport providesPerspectiveViewport() {

@@ -30,9 +30,8 @@ public class TechnologyInitializer {
   public void initializeTechnologies(Client owner) {
     if (initialized) {
       return;
-    } else {
-      initialized = true;
     }
+    initialized = true;
     for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
       var config = assets.getGameConfigs().get(TechnologyConfig.class, entityId);
       technologyFactory.createEntity(config, new Coordinates(config.getX(), config.getY()), owner);

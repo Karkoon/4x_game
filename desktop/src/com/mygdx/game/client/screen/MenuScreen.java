@@ -41,7 +41,6 @@ public class MenuScreen extends ScreenAdapter {
       @NonNull MenuScreenAssets assets,
       @NonNull Navigator navigator
       @NonNull GdxGame game,
-      @NonNull TechnologyFactory technologyFactory,
       @NonNull GameConfigAssets gameAssets
   ) {
     this.stage = stage;

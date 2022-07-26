@@ -7,11 +7,11 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class TechnologyInputAdapter extends InputAdapter {
+public class TechnologyTreeInputAdapter extends InputAdapter {
 
   private final GdxGame game;
 
-  public TechnologyInputAdapter(@NonNull GdxGame game) {
+  public TechnologyTreeInputAdapter(@NonNull GdxGame game) {
     this.game = game;
   }
 
