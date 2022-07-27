@@ -13,11 +13,14 @@ public interface Navigator {
 
   void changeToAboutScreen();
 
+  void exit();
+
   enum Direction {
     GAME_SCREEN,
     FIELD_SCREEN,
     LOADING_SCREEN,
     MENU_SCREEN,
-    ABOUT_SCREEN
+    ABOUT_SCREEN,
+    EXIT
   }
 }

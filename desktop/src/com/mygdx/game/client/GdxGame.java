@@ -62,6 +62,7 @@ public class GdxGame extends Game implements Navigator {
       case LOADING_SCREEN -> changeToLoadingScreen();
       case MENU_SCREEN -> changeToMenuScreen();
       case ABOUT_SCREEN -> changeToAboutScreen();
+      case EXIT -> exit();
     }
   }
 
@@ -83,5 +84,10 @@ public class GdxGame extends Game implements Navigator {
 
   public void changeToAboutScreen() {
     /* intentionally left empty */
+  }
+
+  @Override
+  public void exit() {
+    dispose();
   }
 }
