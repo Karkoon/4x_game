@@ -28,7 +28,7 @@ public class ModelInstanceRenderer implements Disposable {
   private final Camera camera;
 
   @Inject
-  public ModelInstanceRenderer(@NonNull @Named("perspective") Viewport viewport) {
+  public ModelInstanceRenderer(@NonNull Viewport viewport) {
     this.camera = viewport.getCamera();
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();

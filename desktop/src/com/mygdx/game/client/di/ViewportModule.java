@@ -17,9 +17,8 @@ import java.util.logging.Level;
 @Log
 public class ViewportModule {
 
-  public static final String PERSPECTIVE_VIEWPORT = "perspective";
 
-  @Provides @Named("perspective")
+  @Provides
   @Singleton
   public @NonNull Viewport providesPerspectiveViewport() {
     log.log(Level.INFO, "Provided Perspective viewport");
@@ -29,11 +28,4 @@ public class ViewportModule {
     return new ExtendViewport(500, 500, camera);
   }
 
-  @Provides @Named("orthographic")
-  @Singleton
-  public @NonNull Viewport providesOrthographicViewport() {
-    log.log(Level.INFO, "Provided Orthographic viewport");
-    var camera = new OrthographicCamera();
-    return new ExtendViewport(500, 500, camera);
-  }
 }

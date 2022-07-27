@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter {
   public GameScreen(
       @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
-      @NonNull @Named("perspective") Viewport viewport,
+      @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull MoveEntityInputAdapter moveEntityInputAdapter,
       @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,

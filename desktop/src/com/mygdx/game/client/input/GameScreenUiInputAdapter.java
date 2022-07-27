@@ -6,11 +6,15 @@ import com.mygdx.game.client.GdxGame;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 @Log
 public class GameScreenUiInputAdapter extends InputAdapter {
 
   private final GdxGame game;
 
+  @Inject
   public GameScreenUiInputAdapter(@NonNull GdxGame game) {
     this.game = game;
   }

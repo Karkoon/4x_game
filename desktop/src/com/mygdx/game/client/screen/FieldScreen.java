@@ -38,7 +38,7 @@ public class FieldScreen extends ScreenAdapter {
   public FieldScreen(
       @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
-      @NonNull @Named("perspective") Viewport viewport,
+      @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull GdxGame game
   ) {

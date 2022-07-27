@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
+import com.mygdx.game.client_core.model.GameState;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
@@ -21,14 +22,18 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
   private final ComponentMapper<Technology> technologyMapper;
+  private final GameState gameState;
 
   @Inject
-  public TechnologyFactory(@NonNull World world,
-                         @NonNull GameScreenAssets assets) {
+  public TechnologyFactory(
+          @NonNull World world,
+          @NonNull GameScreenAssets assets,
+          @NonNull GameState gameState) {
     super(world, assets);
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
     this.technologyMapper = world.getMapper(Technology.class);
+    this.gameState = gameState;
   }
 
   @Override
@@ -36,6 +41,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
     setUpName(config, entity);
     setUpTechnology(config, entity);
     positionMapper.create(entity);
+    this.gameState.saveTechnology(entity);
   }
 
   private void setUpName(@NonNull TechnologyConfig config, int entityId) {

@@ -3,6 +3,7 @@ package com.mygdx.game.client_core.model;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -10,7 +11,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,14 +24,18 @@ public class GameState {
   private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<SubField> subFieldMapper;
   private final ComponentMapper<Score> scoreMapper;
+  private final ComponentMapper<Movable> movableMapper;
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
+  private final List<Integer> technologies;
 
   @Inject
   public GameState(World world) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.subFieldMapper = world.getMapper(SubField.class);
     this.scoreMapper = world.getMapper(Score.class);
-    entitiesAtCoordinateGame = new HashMap<>();
+    this.movableMapper = world.getMapper(Movable.class);
+    this.entitiesAtCoordinateGame = new HashMap<>();
+    this.technologies = new ArrayList<>();
   }
 
   public IntArray getEntitiesAtCoordinate(Coordinates coordinates) {
@@ -44,9 +51,18 @@ public class GameState {
    */
   public void saveEntity(int entity) {
     log.info("Save entity with id: " + entity);
-    if (!subFieldMapper.has(entity)) {
+    if (movableMapper.has(entity) || scoreMapper.has(entity)) {
       saveGameEntity(entity);
     }
+  }
+
+  public void saveTechnology(int entity) {
+    log.info("Save technology with id: " + entity);
+    technologies.add(entity);
+  }
+
+  public List<Integer> getAllTechnologies() {
+    return technologies;
   }
 
   private void saveGameEntity(int entity) {

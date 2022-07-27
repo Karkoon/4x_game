@@ -42,10 +42,10 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
   public int createEntity(@NonNull TechnologyConfig config, @NonNull Coordinates coordinates, Client client) {
     var entity = world.create();
 
-    var position = setUpCoordinates(coordinates, entity);
+    var newCoordinates = setUpCoordinates(coordinates, entity);
     var entityConfigId = setUpEntityConfig(config, entity);
 
-    syncer.sendComponent(position, entity);
+    syncer.sendComponent(newCoordinates, entity);
     syncer.sendComponent(entityConfigId, entity);
 
     return entity;
