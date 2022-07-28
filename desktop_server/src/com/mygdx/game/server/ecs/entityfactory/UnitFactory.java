@@ -35,21 +35,10 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   @Override
-  public int createEntity(@NonNull UnitConfig config, @NonNull Coordinates coordinates, Client client) {
-    var entity = world.create();
+  public void createEntity(int entityId, @NonNull UnitConfig config, Client client) {
+    var entityConfigId = setUpEntityConfig(entityId);
 
-    var position = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(entity);
-
-    syncer.sendComponent(position, entity);
-    syncer.sendComponent(entityConfigId, entity);
-    return entity;
-  }
-
-  private Coordinates setUpCoordinates(Coordinates coordinates, int entityId) {
-    var result = coordinatesMapper.create(entityId);
-    result.setCoordinates(coordinates);
-    return result;
+    syncer.sendComponent(entityConfigId, entityId);
   }
 
   private EntityConfigId setUpEntityConfig(int entityId) {

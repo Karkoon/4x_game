@@ -4,6 +4,7 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.server.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.server.model.Client;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 public class TechnologyInitializer {
 
   private final TechnologyFactory technologyFactory;
+  private final ComponentFactory componentFactory;
   private final GameConfigAssets assets;
 
   private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
@@ -21,9 +23,11 @@ public class TechnologyInitializer {
   @Inject
   public TechnologyInitializer(
           @NonNull TechnologyFactory technologyFactory,
+          @NonNull ComponentFactory componentFactory,
           @NonNull GameConfigAssets assets
   ) {
     this.technologyFactory = technologyFactory;
+    this.componentFactory = componentFactory;
     this.assets = assets;
   }
 
@@ -33,8 +37,9 @@ public class TechnologyInitializer {
     }
     initialized = true;
     for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
+      int entityId1 = componentFactory.createEntityId();
       var config = assets.getGameConfigs().get(TechnologyConfig.class, entityId);
-      technologyFactory.createEntity(config, new Coordinates(config.getX(), config.getY()), owner);
+      technologyFactory.createEntity(entityId1, config, owner);
     }
   }
 

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -20,9 +19,10 @@ import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyTreeInputAdapter;
+import com.mygdx.game.client.util.UIElementsCreator;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
-import com.mygdx.game.client_core.model.GameState;
+import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -40,8 +40,8 @@ public class TechnologyScreen extends ScreenAdapter {
   private final GdxGame game;
   private final Stage stage;
   private final MenuScreenAssets assets;
-  private final GameState gameState;
   private final List<Integer> technologies;
+  private final UIElementsCreator uiElementsCreator;
 
   private List<Image> technologyImages;
 
@@ -56,23 +56,23 @@ public class TechnologyScreen extends ScreenAdapter {
           @NonNull World world,
           @NonNull Stage stage,
           @NonNull MenuScreenAssets assets,
-          @NonNull GameState gameState
+          @NonNull Technologies technologies,
+          @NonNull UIElementsCreator uiElementsCreator
           ) {
     this.game = game;
     this.world = world;
     this.stage = stage;
     this.assets = assets;
-    this.gameState = gameState;
 
     this.positionMapper = world.getMapper(Position.class);
     this.technologyMapper = world.getMapper(Technology.class);
     this.textureMapper = world.getMapper(TextureComp.class);
     this.nameMapper = world.getMapper(Name.class);
 
-    this.technologies = gameState.getAllTechnologies();
-    setUpTechnologyButtons();
+    this.technologies = technologies.getAllTechnologies();
+    this.uiElementsCreator = uiElementsCreator;
 
-    Gdx.input.setInputProcessor(stage);
+    setUpTechnologyButtons();
   }
 
   @Override
@@ -107,41 +107,13 @@ public class TechnologyScreen extends ScreenAdapter {
       var texture = textureMapper.get(entityId);
       var name = nameMapper.get(entityId);
 
-      var image = createAndPositionButton(position, texture);
-      createTechnologyDescriptionDisplaying(image, name, position);
+      var image = uiElementsCreator.createImage(position, texture);
+      var textField = uiElementsCreator.createTextField(position, name.getName());
+      uiElementsCreator.addHoverPopupWithActor(image, textField, stage);
 
       technologyImages.add(image);
       stage.addActor(image);
     }
   }
 
-  private Image createAndPositionButton(Vector3 position, TextureComp texture) {
-    var image = new Image(new TextureRegionDrawable(new TextureRegion(texture.getTexture())));
-    image.setPosition(position.x, position.z);
-    return image;
-  }
-
-  private void createTechnologyDescriptionDisplaying(Image image, Name name, Vector3 position) {
-    var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
-    skin.getFont("default-font").getData().scale(1.5f);
-
-    TextField description = new TextField(name.getName(), skin);
-    description.setPosition(position.x + 200, position.z + 200);
-    description.setHeight(150);
-    description.setWidth(300);
-
-    image.addListener(new ClickListener(){
-      @Override
-      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        stage.addActor(description);
-      }
-    });
-
-    image.addListener(new ClickListener(){
-      @Override
-      public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-        description.remove();
-      }
-    });
-  }
 }

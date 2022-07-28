@@ -26,7 +26,6 @@ public class GameState {
   private final ComponentMapper<Score> scoreMapper;
   private final ComponentMapper<Movable> movableMapper;
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
-  private final List<Integer> technologies;
 
   @Inject
   public GameState(World world) {
@@ -35,7 +34,6 @@ public class GameState {
     this.scoreMapper = world.getMapper(Score.class);
     this.movableMapper = world.getMapper(Movable.class);
     this.entitiesAtCoordinateGame = new HashMap<>();
-    this.technologies = new ArrayList<>();
   }
 
   public IntArray getEntitiesAtCoordinate(Coordinates coordinates) {
@@ -54,15 +52,6 @@ public class GameState {
     if (movableMapper.has(entity) || scoreMapper.has(entity)) {
       saveGameEntity(entity);
     }
-  }
-
-  public void saveTechnology(int entity) {
-    log.info("Save technology with id: " + entity);
-    technologies.add(entity);
-  }
-
-  public List<Integer> getAllTechnologies() {
-    return technologies;
   }
 
   private void saveGameEntity(int entity) {

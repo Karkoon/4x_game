@@ -34,18 +34,6 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
     this.syncer = gameRoomSyncer;
   }
 
-  @Override
-  public int createEntity(@NonNull SubFieldConfig config, @NonNull Coordinates coordinates, Client clientOwner) {
-    var entity = world.create();
-
-    var position = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(config, entity);
-
-    syncer.sendComponent(position, entity);
-    syncer.sendComponent(entityConfigId, entity);
-    return entity;
-  }
-
   private EntityConfigId setUpEntityConfig(@NonNull SubFieldConfig config, int entityId) {
     var entityConfigId = config.getId();
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
@@ -53,10 +41,10 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
     return entityConfigIdComponent;
   }
 
-  private Coordinates setUpCoordinates(Coordinates coordinates, int entityId) {
-    var result = coordinatesMapper.create(entityId);
-    result.setCoordinates(coordinates);
-    return result;
+  @Override
+  public void createEntity(int entityId, @NonNull SubFieldConfig config, Client clientOwner) {
+    var entityConfigId = setUpEntityConfig(config, entityId);
+    syncer.sendComponent(entityConfigId, entityId);
   }
 
 }

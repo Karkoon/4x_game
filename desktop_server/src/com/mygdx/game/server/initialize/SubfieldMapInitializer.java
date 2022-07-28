@@ -8,6 +8,7 @@ import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
@@ -42,6 +43,7 @@ public class SubfieldMapInitializer {
       new Coordinates(3, 7),
       new Coordinates(2, 8)
   );
+  private final ComponentFactory componentFactory;
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
   private final Random random = new Random();
@@ -51,10 +53,12 @@ public class SubfieldMapInitializer {
   @Inject
   public SubfieldMapInitializer(
           @NonNull World world,
+          @NonNull ComponentFactory componentFactory,
           @NonNull SubFieldFactory subFieldFactory,
           @NonNull GameConfigAssets assets,
           @NonNull GameRoomSyncer gameRoomSyncer
   ) {
+    this.componentFactory = componentFactory;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
     this.syncer = gameRoomSyncer;
@@ -64,15 +68,16 @@ public class SubfieldMapInitializer {
   public IntArray initializeSubarea(int fieldId, Client owner) {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
-      var entityId = subFieldFactory.createEntity(assets
+      int entityId = componentFactory.createEntityId();
+
+      componentFactory.createCoordinateComponent(coordinates, entityId);
+      subFieldFactory.createEntity(entityId, assets
               .getGameConfigs()
               .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
-          coordinates,
           owner);
+      componentFactory.createSubFieldComponent(fieldId, entityId);
+
       subFields.add(entityId);
-      var subField = subFieldMapper.create(entityId);
-      subField.setParent(fieldId);
-      syncer.sendComponent(subField, entityId);
     }
     return subFields;
   }

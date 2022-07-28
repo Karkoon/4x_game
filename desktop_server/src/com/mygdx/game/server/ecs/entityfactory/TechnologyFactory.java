@@ -20,7 +20,6 @@ import javax.inject.Singleton;
 @Log
 public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
-  private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private final ComponentMapper<Technology> technologyMapper;
   private final GameRoomSyncer syncer;
@@ -32,29 +31,16 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
       @NonNull GameRoomSyncer syncer
   ) {
     super(world, assets);
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
     this.technologyMapper = world.getMapper(Technology.class);
     this.syncer = syncer;
   }
 
   @Override
-  public int createEntity(@NonNull TechnologyConfig config, @NonNull Coordinates coordinates, Client client) {
-    var entity = world.create();
+  public void createEntity(int entityId, @NonNull TechnologyConfig config, Client client) {
+    var entityConfigId = setUpEntityConfig(config, entityId);
+    syncer.sendComponent(entityConfigId, entityId);
 
-    var newCoordinates = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(config, entity);
-
-    syncer.sendComponent(newCoordinates, entity);
-    syncer.sendComponent(entityConfigId, entity);
-
-    return entity;
-  }
-
-  private Coordinates setUpCoordinates(Coordinates coordinates, int entityId) {
-    var result = coordinatesMapper.create(entityId);
-    result.setCoordinates(coordinates);
-    return result;
   }
 
   private EntityConfigId setUpEntityConfig(@NonNull TechnologyConfig config, int entityId) {
