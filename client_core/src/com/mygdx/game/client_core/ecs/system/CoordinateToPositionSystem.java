@@ -35,9 +35,8 @@ public class CoordinateToPositionSystem extends IteratingSystem {
 
   @Override
   protected void process(int entityId) {
-    // todo maybe make it more based on events? does it go against the ecs philosophy?
     var position = positionMapper.get(entityId);
-    var retainedY = position.getPosition().y;
+    var retainedY = position.getValue().y;
     var toSet = new Vector3(0, 0, 0);
     if (fieldMapper.has(entityId) || movableMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
@@ -46,7 +45,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     } else if (technologyMapper.has(entityId)) {
       toSet = PositionUtil.generateTechnologyPositionForCoords(coordinatesMapper.get(entityId));
     }
-    position.setPosition(toSet);
-    position.getPosition().y = retainedY;
+    position.getValue().set(toSet);
+    position.getValue().y = retainedY;
   }
 }

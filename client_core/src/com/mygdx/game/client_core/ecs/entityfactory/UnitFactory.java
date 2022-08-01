@@ -2,7 +2,6 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Name;
@@ -36,7 +35,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   @Override
   public void createEntity(@NonNull UnitConfig config, int entity) {
     setUpNameComponent(config, entity);
-    positionMapper.create(entity).setPosition(new Vector3(0, 10, 0));
+    positionMapper.create(entity).getValue().set(0, 10, 0);
     movableMapper.set(entity, true);
   }
 

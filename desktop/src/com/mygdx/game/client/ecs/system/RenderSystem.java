@@ -37,7 +37,7 @@ public class RenderSystem extends IteratingSystem {
   protected void process(int entityId) {
     try {
       var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
-      var position = positionMapper.get(entityId).getPosition();
+      var position = positionMapper.get(entityId).getValue();
       modelInstance.transform.setTranslation(position);
       if (scoreMapper.has(entityId) || movableMapper.has(entityId)) {
         renderer.addModelToCache(modelInstance);

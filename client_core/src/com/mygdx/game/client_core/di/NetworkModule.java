@@ -20,7 +20,9 @@ public class NetworkModule {
 
   @Provides
   @Singleton
-  public WebSocket providesWebsocket(ComponentMessageListener messageListener) {
+  public WebSocket providesWebsocket(
+      ComponentMessageListener messageListener
+  ) {
     CommonWebSockets.initiate();
     var socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(HOST, PORT));
     socket.setSendGracefully(true);

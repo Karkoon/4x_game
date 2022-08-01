@@ -1,10 +1,8 @@
 package com.mygdx.game.client.ui;
 
-import com.artemis.ComponentMapper;
-import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
@@ -18,24 +16,21 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public final class CoordinateClickedDialogFactory {
+public final class ChooseEntityDialogFactory {
 
   private final GameScreenAssets assets;
   private final Stage stage;
-  private final ComponentMapper<Name> nameMapper;
 
   @Inject
-  public CoordinateClickedDialogFactory(
+  public ChooseEntityDialogFactory(
       @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull World world
+      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage
   ) {
     this.assets = assets;
     this.stage = stage;
-    this.nameMapper = world.getMapper(Name.class);
   }
 
-  public void createAndShow(IntArray entities, @NonNull EntityHandler handler) {
+  public void createAndShow(IntMap<Name> entities, @NonNull EntityHandler handler) {
     var dialog = createEntityDialog(handler);
     dialog.text("Choose on of the following:");
     addEntityButtons(dialog, entities);
@@ -43,10 +38,10 @@ public final class CoordinateClickedDialogFactory {
     log.info("shown FieldClickedDialog");
   }
 
-  private void addEntityButtons(Dialog dialog, IntArray entities) {
-    for (int i = 0; i < entities.size; i++) {
-      var entity = entities.get(i);
-      var name = nameMapper.get(entity);
+  private void addEntityButtons(Dialog dialog, IntMap<Name> entities) {
+    for (var entry : entities) {
+      var entity = entry.key;
+      var name = entry.value;
       dialog.button(name.getName(), entity);
     }
   }

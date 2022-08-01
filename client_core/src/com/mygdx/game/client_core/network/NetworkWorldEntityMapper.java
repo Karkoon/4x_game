@@ -2,6 +2,7 @@ package com.mygdx.game.client_core.network;
 
 import com.artemis.World;
 import com.badlogic.gdx.utils.IntIntMap;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -12,10 +13,12 @@ import javax.inject.Singleton;
 public class NetworkWorldEntityMapper {
   private final IntIntMap networkToWorldEntity = new IntIntMap();
   private final IntIntMap worldToNetworkEntity = new IntIntMap();
-  private final World world;
+  private final Lazy<World> world;
 
   @Inject
-  public NetworkWorldEntityMapper(World world) {
+  public NetworkWorldEntityMapper(
+      Lazy<World> world
+  ) {
     this.world = world;
   }
 
@@ -25,6 +28,7 @@ public class NetworkWorldEntityMapper {
   }
 
   public void removeEntity(int entity, boolean isNetworkEntity) {
+    var world = this.world.get();
     if (isNetworkEntity) {
       var worldEntity = networkToWorldEntity.remove(entity, -1);
       worldToNetworkEntity.remove(worldEntity, -1);
@@ -39,7 +43,7 @@ public class NetworkWorldEntityMapper {
   public int getWorldEntity(int networkEntity) {
     var worldEntity = networkToWorldEntity.get(networkEntity, -1);
     if (worldEntity == -1) {
-      worldEntity = world.create();
+      worldEntity = world.get().create();
       log.info("Creating now entity: network=" + networkEntity + " world=" + worldEntity);
       putEntity(networkEntity, worldEntity);
     }

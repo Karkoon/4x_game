@@ -9,14 +9,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
 
 @Singleton
-@Log
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;
@@ -50,6 +48,8 @@ public class ModelInstanceRenderer implements Disposable {
       modelBatch.begin(camera);
       modelBatch.render(cache);
       modelBatch.end();
+    } else {
+      throw new IllegalArgumentException("wtf");
     }
   }
 

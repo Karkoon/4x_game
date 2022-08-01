@@ -2,28 +2,34 @@ package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.mygdx.game.client.GdxGame;
+import com.mygdx.game.client.screen.Navigator;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
-@Log
+import javax.inject.Inject;
+
 public class SubFieldUiInputProcessor extends InputAdapter {
 
-  private final GdxGame game;
+  private final Navigator navigator;
 
-  public SubFieldUiInputProcessor(@NonNull GdxGame game) {
-    this.game = game;
+  @Inject
+  public SubFieldUiInputProcessor(
+      @NonNull Navigator navigator
+  ) {
+    this.navigator = navigator;
   }
 
   @Override
   public boolean keyDown(int keycode) {
     switch (keycode) {
       case Input.Keys.ESCAPE -> backToGameScreen();
+      default -> {
+        return false;
+      }
     }
     return true;
   }
 
   private void backToGameScreen() {
-    game.changeToGameScreen();
+    navigator.changeToGameScreen();
   }
 }

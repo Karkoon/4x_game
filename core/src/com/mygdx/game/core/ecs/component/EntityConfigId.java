@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class EntityConfigId extends PooledComponent {
-  private long id;
+  private int id;
 
   @Override
   protected void reset() {
