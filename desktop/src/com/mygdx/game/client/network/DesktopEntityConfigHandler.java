@@ -4,13 +4,12 @@ import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client.ecs.entityfactory.ModelInstanceCompSetter;
-import com.mygdx.game.client.ecs.entityfactory.Setter;
+import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.List;
 

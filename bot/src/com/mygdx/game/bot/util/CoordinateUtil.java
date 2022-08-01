@@ -11,10 +11,10 @@ public final class CoordinateUtil {
   public static final int INITIAL_HEIGHT = 5;
 
   private static final int[][] coordinateMoves = {
-          {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 0}
+      {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 0}
   };
   private static final int[][] coordinateMovesEven = {
-          {-1, -1}, {0, -1}, {1, 0}, {0, 1}, {-1, 1}, {-1, 0}
+      {-1, -1}, {0, -1}, {1, 0}, {0, 1}, {-1, 1}, {-1, 0}
   };
 
   private CoordinateUtil() {
@@ -34,8 +34,9 @@ public final class CoordinateUtil {
         cX = coordinates.getX() + coordinateMovesEven[i][0];
         cY = coordinates.getY() + coordinateMovesEven[i][1];
       }
-      if (cX >= 0 && cX < INITIAL_WIDTH && cY >= 0 && cY < INITIAL_HEIGHT)
+      if (cX >= 0 && cX < INITIAL_WIDTH && cY >= 0 && cY < INITIAL_HEIGHT) {
         availableCoordinates.add(i);
+      }
     }
 
     return availableCoordinates;

@@ -1,4 +1,4 @@
-package com.mygdx.game.client.ecs.entityfactory;
+package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.mygdx.game.config.EntityConfig;
 

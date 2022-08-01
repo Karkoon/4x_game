@@ -16,6 +16,6 @@ public final class ModelInstanceUtil {
   public static void setTexture(@NonNull ModelInstance modelInstance,
                                 @NonNull Texture texture) {
     modelInstance.materials.get(0).set(TextureAttribute.createDiffuse(texture));
-    modelInstance.materials.get(0).set( new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
+    modelInstance.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
   }
 }

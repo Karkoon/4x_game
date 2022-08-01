@@ -31,7 +31,6 @@ public class MoveEntityInputAdapter extends InputAdapter {
   private final GameState gameState;
   private final CoordinateClickedDialogFactory coordinateClickedDialogFactory;
   private final MoveEntityService moveEntityService;
-  private final ComponentMapper<Coordinates> coordinatesMapper;
   private final ComponentMapper<Movable> movableMapper;
   private final ComponentMapper<Score> scoreMapper;
   private final PlayerScore playerScore;
@@ -40,20 +39,19 @@ public class MoveEntityInputAdapter extends InputAdapter {
 
   @Inject
   public MoveEntityInputAdapter(
-          @NonNull GdxGame game,
-          @NonNull Viewport viewport,
-          @NonNull GameState gameState,
-          @NonNull CoordinateClickedDialogFactory dialogFactory,
-          @NonNull World world,
-          @NonNull MoveEntityService moveEntityService,
-          @NonNull PlayerScore playerScore
-          ) {
+      @NonNull GdxGame game,
+      @NonNull Viewport viewport,
+      @NonNull GameState gameState,
+      @NonNull CoordinateClickedDialogFactory dialogFactory,
+      @NonNull World world,
+      @NonNull MoveEntityService moveEntityService,
+      @NonNull PlayerScore playerScore
+  ) {
     this.game = game;
     this.viewport = viewport;
     this.gameState = gameState;
     this.coordinateClickedDialogFactory = dialogFactory;
     this.moveEntityService = moveEntityService;
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.movableMapper = world.getMapper(Movable.class);
     this.scoreMapper = world.getMapper(Score.class);
     this.playerScore = playerScore;
@@ -102,8 +100,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
       if (movableMapper.has(chosenEntity)) {
         selectedUnit = chosenEntity;
         log.info("Selected a movable.");
-      }
-      else if (scoreMapper.has(chosenEntity)) {
+      } else if (scoreMapper.has(chosenEntity)) {
         log.info("Selected a score with id " + chosenEntity);
         FieldScreen.choosenField = chosenEntity;
         game.changeToFieldScreen();

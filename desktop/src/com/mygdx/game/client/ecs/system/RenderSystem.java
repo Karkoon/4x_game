@@ -38,9 +38,9 @@ public class RenderSystem extends IteratingSystem {
     var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
     var position = positionMapper.get(entityId).getPosition();
     modelInstance.transform.setTranslation(position);
-    if (scoreMapper.has(entityId) || movableMapper.has(entityId))
+    if (scoreMapper.has(entityId) || movableMapper.has(entityId)) {
       renderer.addModelToCache(modelInstance);
-    else if (subFieldMapper.has(entityId)) {
+    } else if (subFieldMapper.has(entityId)) {
       Integer parent = subFieldMapper.get(entityId).getParent();
       renderer.addSubModelToCache(parent, modelInstance);
     }

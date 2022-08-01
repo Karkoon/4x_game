@@ -5,16 +5,15 @@ import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.util.ModelInstanceUtil;
+import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.config.ModelConfig;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Log
 public class ModelInstanceCompSetter implements Setter {
 
   private final ComponentMapper<ModelInstanceComp> modelMapper;
