@@ -13,13 +13,13 @@ uniform float u_time;
 
 void main()
 {
-	vec4 texColor = texture2D(u_texture, v_texCoords);
+    vec4 texColor = texture2D(u_texture, v_texCoords);
     vec4 noise = texture2D(u_noise, (gl_FragCoord.xy/u_resolution.xy + abs(sin(u_time * 0.2)) * 0.2));
 
-	//determine origin
-	vec2 position = (gl_FragCoord.xy/u_resolution.xy) - 0.5;
-	//determine the vector length of the center position
-	float len = length(position);
+    //determine origin
+    vec2 position = (gl_FragCoord.xy/u_resolution.xy) - 0.5;
+    //determine the vector length of the center position
+    float len = length(position);
     gl_FragColor = texColor *  vec4(vec3(1. - len), 0.7 * ((noise.r) + abs(sin(u_time * 0.2) * 0.2)));
     //gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
 }

@@ -5,16 +5,16 @@ import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.util.ModelInstanceUtil;
+import com.mygdx.game.client_core.ecs.entityfactory.Setter;
+import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.config.ModelConfig;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Log
-public class ModelInstanceCompSetter {
+public class ModelInstanceCompSetter implements Setter {
 
   private final ComponentMapper<ModelInstanceComp> modelMapper;
   private final GameScreenAssets assets;
@@ -26,8 +26,14 @@ public class ModelInstanceCompSetter {
     this.assets = assets;
   }
 
-  public void set(@NonNull ModelConfig config, int entity) {
-    setUpModelInstanceComp(config, entity);
+  @Override
+  public Result set(EntityConfig config, int entityId) {
+    if (config instanceof ModelConfig modelConfig) {
+      setUpModelInstanceComp(modelConfig, entityId);
+      return Result.HANDLED;
+    } else {
+      return Result.REJECTED;
+    }
   }
 
   private void setUpModelInstanceComp(@NonNull ModelConfig config, int entityId) {
@@ -36,4 +42,5 @@ public class ModelInstanceCompSetter {
     var texture = assets.getTexture(config.getTextureName());
     ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
   }
+
 }
