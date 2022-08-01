@@ -13,7 +13,6 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.LoadingScreenAssetPaths;
 import com.mygdx.game.assets.LoadingScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.actor.LoadingBar;
 import lombok.extern.java.Log;
 
@@ -24,9 +23,9 @@ import javax.inject.Singleton;
 @Log
 public class LoadingScreen extends ScreenAdapter {
 
-  private final GdxGame game;
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
+  private final Navigator navigator;
   private final GameScreenAssets gameScreenAssets;
   private final GameConfigAssets gameConfigAssets;
   private final AssetManager manager;
@@ -43,14 +42,14 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Inject
   public LoadingScreen(
-      GdxGame game,
+      Navigator navigator,
       GameScreenAssets gameScreenAssets,
       LoadingScreenAssets loadingScreenAssets,
       MenuScreenAssets menuScreenAssets,
       GameConfigAssets gameConfigAssets,
       AssetManager manager
   ) {
-    this.game = game;
+    this.navigator = navigator;
     this.gameScreenAssets = gameScreenAssets;
     this.loadingScreenAssets = loadingScreenAssets;
     this.menuScreenAssets = menuScreenAssets;
@@ -82,7 +81,7 @@ public class LoadingScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     if (manager.update()) {
-      game.changeToMenuScreen();
+      navigator.changeToMenuScreen();
     }
     updateLoadingBar();
     stage.act();

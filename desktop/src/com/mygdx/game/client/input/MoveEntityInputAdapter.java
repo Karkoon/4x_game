@@ -5,8 +5,8 @@ import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.screen.FieldScreen;
+import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client.ui.CoordinateClickedDialogFactory;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Score;
@@ -26,7 +26,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
   public static final float CLICK_RADIUS = 90f;
   private static final int NO_ENTITY = -0xC0FFEE;
 
-  private final GdxGame game;
+  private final Navigator navigator;
   private final Viewport viewport;
   private final GameState gameState;
   private final CoordinateClickedDialogFactory coordinateClickedDialogFactory;
@@ -39,7 +39,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
 
   @Inject
   public MoveEntityInputAdapter(
-      @NonNull GdxGame game,
+      @NonNull Navigator navigator,
       @NonNull Viewport viewport,
       @NonNull GameState gameState,
       @NonNull CoordinateClickedDialogFactory dialogFactory,
@@ -47,7 +47,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
       @NonNull MoveEntityService moveEntityService,
       @NonNull PlayerScore playerScore
   ) {
-    this.game = game;
+    this.navigator = navigator;
     this.viewport = viewport;
     this.gameState = gameState;
     this.coordinateClickedDialogFactory = dialogFactory;
@@ -103,7 +103,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
       } else if (scoreMapper.has(chosenEntity)) {
         log.info("Selected a score with id " + chosenEntity);
         FieldScreen.choosenField = chosenEntity;
-        game.changeToFieldScreen();
+        navigator.changeToFieldScreen();
       }
     });
   }

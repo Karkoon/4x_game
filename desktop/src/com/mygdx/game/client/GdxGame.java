@@ -8,6 +8,7 @@ import com.mygdx.game.client.screen.FieldScreen;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
+import com.mygdx.game.client.screen.Navigator;
 import dagger.Lazy;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -17,7 +18,7 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public class GdxGame extends Game {
+public class GdxGame extends Game implements Navigator {
 
   private final AssetManager assetManager;
   private final Lazy<GameScreen> gameScreen;
@@ -42,7 +43,7 @@ public class GdxGame extends Game {
 
   @Override
   public void create() {
-    changeToLoadingScreen();
+    changeTo(Direction.LOADING_SCREEN);
   }
 
   @Override
@@ -56,6 +57,17 @@ public class GdxGame extends Game {
     super.dispose();
     assetManager.dispose();
     Gdx.app.exit();
+  }
+
+  public void changeTo(Direction screenDirection) {
+    switch (screenDirection) {
+      case GAME_SCREEN -> changeToGameScreen();
+      case FIELD_SCREEN -> changeToFieldScreen();
+      case LOADING_SCREEN -> changeToLoadingScreen();
+      case MENU_SCREEN -> changeToMenuScreen();
+      case ABOUT_SCREEN -> changeToAboutScreen();
+      case EXIT -> exit();
+    }
   }
 
   public void changeToGameScreen() {
@@ -76,5 +88,10 @@ public class GdxGame extends Game {
 
   public void changeToAboutScreen() {
     /* intentionally left empty */
+  }
+
+  @Override
+  public void exit() {
+    dispose();
   }
 }
