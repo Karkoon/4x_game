@@ -6,6 +6,6 @@ public interface Setter {
   Result set(EntityConfig config, int entityId);
 
   enum Result {
-    HANDLED, NOT_HANDLED, REJECTED
+    HANDLED, HANDLING_ERROR, REJECTED
   }
 }
