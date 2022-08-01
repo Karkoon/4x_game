@@ -26,13 +26,6 @@ public class ModelInstanceCompSetter implements Setter {
     this.assets = assets;
   }
 
-  private void setUpModelInstanceComp(@NonNull ModelConfig config, int entityId) {
-    var modelInstanceComp = modelMapper.create(entityId);
-    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
-    var texture = assets.getTexture(config.getTextureName());
-    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
-  }
-
   @Override
   public Result set(EntityConfig config, int entityId) {
     if (config instanceof ModelConfig modelConfig) {
@@ -42,4 +35,12 @@ public class ModelInstanceCompSetter implements Setter {
       return Result.REJECTED;
     }
   }
+
+  private void setUpModelInstanceComp(@NonNull ModelConfig config, int entityId) {
+    var modelInstanceComp = modelMapper.create(entityId);
+    modelInstanceComp.setModelInstanceFromModel(assets.getModel(config.getModelPath()));
+    var texture = assets.getTexture(config.getTextureName());
+    ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstance(), texture);
+  }
+
 }
