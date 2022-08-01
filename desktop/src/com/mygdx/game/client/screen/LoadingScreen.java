@@ -13,7 +13,6 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.LoadingScreenAssetPaths;
 import com.mygdx.game.assets.LoadingScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.actor.LoadingBar;
 import lombok.extern.java.Log;
 

@@ -5,7 +5,6 @@ import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.screen.FieldScreen;
 import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client.ui.CoordinateClickedDialogFactory;

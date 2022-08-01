@@ -71,7 +71,7 @@ public class MenuScreen extends ScreenAdapter {
   }
 
   private Button createStartButton() {
-    return createFunctionalButton(navigator::changeToFieldScreen, "START");
+    return createFunctionalButton(navigator::changeToGameScreen, "START");
   }
 
   private Button createAboutButton() {
