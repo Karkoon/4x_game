@@ -18,6 +18,7 @@ public interface Navigator {
   enum Direction {
     GAME_SCREEN,
     FIELD_SCREEN,
+    TECHNOLOGY_SCREEN,
     LOADING_SCREEN,
     MENU_SCREEN,
     ABOUT_SCREEN,

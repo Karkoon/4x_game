@@ -8,9 +8,6 @@ import com.mygdx.game.client.ecs.entityfactory.ModelInstanceCompSetter;
 import com.mygdx.game.client.ecs.entityfactory.TextureCompSetter;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
-import com.mygdx.game.config.ModelConfig;
-import com.mygdx.game.config.TechnologyConfig;
-import com.mygdx.game.config.TextureConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 
 import javax.inject.Inject;
@@ -26,9 +23,6 @@ public class DesktopEntityConfigHandler implements ComponentMessageListener.Hand
 
   private final GameConfigAssets assets;
   private final List<Setter> setterList = new ArrayList<>();
-  private final ModelInstanceCompSetter modelInstanceCompSetter;
-  private final TextureCompSetter textureCompSetter;
-  private final DesktopCoordinateSetter desktopCoordinateSetter;
 
   @Inject
   public DesktopEntityConfigHandler(
@@ -39,30 +33,14 @@ public class DesktopEntityConfigHandler implements ComponentMessageListener.Hand
   ) {
     this.assets = assets;
     this.setterList.add(modelInstanceCompSetter);
-    this.modelInstanceCompSetter = modelInstanceCompSetter;
-    this.textureCompSetter = textureCompSetter;
-    this.desktopCoordinateSetter = desktopCoordinateSetter;
+    this.setterList.add(textureCompSetter);
+    this.setterList.add(desktopCoordinateSetter);
   }
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
     var entityConfigId = ((EntityConfigId) component).getId();
     var config = assets.getGameConfigs().get(entityConfigId);
-    boolean handledValue = NOT_HANDLED;
-    if (config instanceof TechnologyConfig technologyConfig) {
-      desktopCoordinateSetter.set(technologyConfig, worldEntity);
-      handledValue = FULLY_HANDLED;
-    }
-    if (config instanceof ModelConfig modelConfig) {
-      modelInstanceCompSetter.set(modelConfig, worldEntity);
-      handledValue = FULLY_HANDLED;
-    }
-    if (config instanceof TextureConfig textureConfig) {
-      textureCompSetter.set(textureConfig, worldEntity);
-      handledValue = FULLY_HANDLED;
-    }
-    return handledValue;
-    return NOT_HANDLED;
     var setterResults = setterList.stream()
         .map(setter -> setter.set(config, worldEntity))
         .toList();

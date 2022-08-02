@@ -44,18 +44,32 @@ public class GameState {
     return entitiesAtCoordinateGame.keySet();
   }
 
+  public IntArray getSpecifiedEntitiesAtCoordinate(Coordinates coordinates, ComponentMapper mappers[]) {
+    var newEntities = new IntArray();
+    var entitiesAtCoords = entitiesAtCoordinateGame.get(coordinates).toArray();
+    for (int entity : entitiesAtCoords) {
+      for (var mapper : mappers) {
+        if (mapper.has(entity)) {
+          newEntities.add(entity);
+          break;
+        }
+      }
+    }
+    return newEntities;
+  }
+
   /**
    * @param entity with an associated coord through world
    */
   public void saveEntity(int entity) {
     log.info("Save entity with id: " + entity);
-    if (movableMapper.has(entity) || scoreMapper.has(entity)) {
-      saveGameEntity(entity);
-    }
+    saveGameEntity(entity);
   }
 
   private void saveGameEntity(int entity) {
     var coordinate = coordinatesMapper.get(entity);
+    log.info("HEREEEE" + entity);
+    log.info(coordinate.toString());
     var entities = entitiesAtCoordinateGame.computeIfAbsent(coordinate, _coords -> new IntArray());
     entities.add(entity);
   }

@@ -2,8 +2,8 @@ package com.mygdx.game.client.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.client.util.ModelInstanceUtil;
-import com.mygdx.game.config.ModelConfig;
+import com.mygdx.game.client_core.ecs.entityfactory.Setter;
+import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
@@ -14,7 +14,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class DesktopCoordinateSetter {
+public class DesktopCoordinateSetter implements Setter {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
 
@@ -23,12 +23,19 @@ public class DesktopCoordinateSetter {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
   }
 
-  public void set(@NonNull TechnologyConfig config, int entity) {
-    setUpCoordinateComp(config, entity);
+  @Override
+  public Result set(EntityConfig config, int entityId) {
+    if (config instanceof TechnologyConfig technologyConfig) {
+      setUpCoordinateComp(technologyConfig, entityId);
+      return Result.HANDLED;
+    } else {
+      return Result.REJECTED;
+    }
   }
 
   private void setUpCoordinateComp(@NonNull TechnologyConfig config, int entityId) {
     var coordinate = coordinatesMapper.create(entityId);
     coordinate.setCoordinates(config.getX(), config.getY());
   }
+
 }

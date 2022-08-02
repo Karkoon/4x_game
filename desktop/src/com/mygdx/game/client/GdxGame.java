@@ -9,6 +9,7 @@ import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
 import com.mygdx.game.client.screen.Navigator;
+import com.mygdx.game.client.screen.TechnologyScreen;
 import dagger.Lazy;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -66,6 +67,7 @@ public class GdxGame extends Game implements Navigator {
     switch (screenDirection) {
       case GAME_SCREEN -> changeToGameScreen();
       case FIELD_SCREEN -> changeToFieldScreen();
+      case TECHNOLOGY_SCREEN -> changeToTechnologyScreen();
       case LOADING_SCREEN -> changeToLoadingScreen();
       case MENU_SCREEN -> changeToMenuScreen();
       case ABOUT_SCREEN -> changeToAboutScreen();
@@ -93,12 +95,13 @@ public class GdxGame extends Game implements Navigator {
     /* intentionally left empty */
   }
 
+  public void changeToTechnologyScreen() {
+    setScreen(technologyScreen.get());
+  }
+
   @Override
   public void exit() {
     dispose();
   }
 
-  public void changeToTechnologyScreen() {
-    setScreen(technologyScreen.get());
-  }
 }

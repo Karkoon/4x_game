@@ -1,6 +1,5 @@
 package com.mygdx.game.client.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
@@ -10,15 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.GdxGame;
-import com.mygdx.game.client_core.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
-import com.mygdx.game.config.GameConfigs;
-import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.util.Vector3Util;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -40,13 +34,10 @@ public class MenuScreen extends ScreenAdapter {
       @NonNull Stage stage,
       @NonNull MenuScreenAssets assets,
       @NonNull Navigator navigator
-      @NonNull GdxGame game,
-      @NonNull GameConfigAssets gameAssets
   ) {
     this.stage = stage;
     this.assets = assets;
     this.navigator = navigator;
-    this.game = game;
 
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
