@@ -3,12 +3,9 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.TechnologyConfig;
-import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Technology;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -37,7 +34,7 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
   }
 
   @Override
-  public void createEntity(int entityId, @NonNull TechnologyConfig config, Client client) {
+  public void createEntity(int entityId, @NonNull TechnologyConfig config) {
     var entityConfigId = setUpEntityConfig(config, entityId);
     syncer.sendComponent(entityConfigId, entityId);
 

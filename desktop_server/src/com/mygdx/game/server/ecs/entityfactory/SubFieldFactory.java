@@ -5,7 +5,6 @@ import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -32,7 +31,7 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
   }
 
   @Override
-  public void createEntity(int entityId, @NonNull SubFieldConfig config, Client clientOwner) {
+  public void createEntity(int entityId, @NonNull SubFieldConfig config) {
     var entityConfigId = setUpEntityConfig(config, entityId);
     syncer.sendComponent(entityConfigId, entityId);
   }

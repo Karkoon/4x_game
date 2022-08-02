@@ -6,7 +6,6 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -35,7 +34,7 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
   }
 
   @Override
-  public void createEntity(int entityId, @NonNull UnitConfig config, Client client) {
+  public void createEntity(int entityId, @NonNull UnitConfig config) {
     var entityConfigId = setUpEntityConfig(entityId);
 
     syncer.sendComponent(entityConfigId, entityId);

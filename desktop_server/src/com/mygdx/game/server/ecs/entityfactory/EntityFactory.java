@@ -3,8 +3,6 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.EntityConfig;
-import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 public abstract class EntityFactory<T extends EntityConfig> {
@@ -18,6 +16,6 @@ public abstract class EntityFactory<T extends EntityConfig> {
   }
 
   @NonNull
-  public abstract void createEntity(int entityId, T entityConfig, Client client);
+  public abstract void createEntity(int entityId, T entityConfig);
 
 }

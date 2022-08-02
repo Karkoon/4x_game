@@ -2,7 +2,6 @@ package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.screen.Navigator;
 import lombok.NonNull;
 

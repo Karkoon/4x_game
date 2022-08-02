@@ -1,17 +1,12 @@
 package com.mygdx.game.server.initialize;
 
-import com.artemis.ComponentMapper;
-import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
-import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -59,7 +54,7 @@ public class SubfieldMapInitializer {
     this.assets = assets;
   }
 
-  public IntArray initializeSubarea(int fieldId, Client owner) {
+  public IntArray initializeSubarea(int fieldId) {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
       int entityId = componentFactory.createEntityId();
@@ -67,8 +62,7 @@ public class SubfieldMapInitializer {
       componentFactory.createCoordinateComponent(coordinates, entityId);
       subFieldFactory.createEntity(entityId, assets
               .getGameConfigs()
-              .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
-          owner);
+              .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN));
       componentFactory.createSubFieldComponent(fieldId, entityId);
 
       subFields.add(entityId);

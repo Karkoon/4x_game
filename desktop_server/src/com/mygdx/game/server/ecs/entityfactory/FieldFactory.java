@@ -8,7 +8,6 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -42,9 +41,9 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   }
 
   @Override
-  public void createEntity(int entityId, @NonNull FieldConfig config, Client clientOwner) {
+  public void createEntity(int entityId, @NonNull FieldConfig config) {
     var entityConfigId = setUpEntityConfig(config, entityId);
-    var fieldComponent = setUpField(entityId, clientOwner);
+    var fieldComponent = setUpField(entityId);
 
     syncer.sendComponent(entityConfigId, entityId);
     syncer.sendComponent(fieldComponent, entityId);
@@ -57,9 +56,9 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     return entityConfigIdComponent;
   }
 
-  private Field setUpField(int entityId, Client clientOwner) {
+  private Field setUpField(int entityId) {
     var field = fieldMapper.create(entityId);
-    var subFields = subMapInitializer.initializeSubarea(entityId, clientOwner);
+    var subFields = subMapInitializer.initializeSubarea(entityId);
     field.setSubFields(subFields);
     return field;
   }

@@ -2,7 +2,6 @@ package com.mygdx.game.core.ecs.component;
 
 import com.artemis.PooledComponent;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class Technology extends PooledComponent {
