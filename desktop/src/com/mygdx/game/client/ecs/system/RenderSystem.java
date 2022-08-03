@@ -46,7 +46,7 @@ public class RenderSystem extends IteratingSystem {
         renderer.addSubModelToCache(parent, modelInstance);
       }
     } catch (Exception exception) {
-      // TODO fix problem with errors when model instance is created but not set
+      // TODO #94 fix problem with errors when model instance is created but not set
       exception.printStackTrace();
     }
   }

@@ -47,22 +47,16 @@ public class SubfieldMapInitializer {
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
   private final Random random = new Random();
-  private final GameRoomSyncer syncer;
-  private final ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public SubfieldMapInitializer(
-          @NonNull World world,
-          @NonNull ComponentFactory componentFactory,
-          @NonNull SubFieldFactory subFieldFactory,
-          @NonNull GameConfigAssets assets,
-          @NonNull GameRoomSyncer gameRoomSyncer
+      @NonNull ComponentFactory componentFactory,
+      @NonNull SubFieldFactory subFieldFactory,
+      @NonNull GameConfigAssets assets
   ) {
     this.componentFactory = componentFactory;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
-    this.syncer = gameRoomSyncer;
-    this.subFieldMapper = world.getMapper(SubField.class);
   }
 
   public IntArray initializeSubarea(int fieldId, Client owner) {

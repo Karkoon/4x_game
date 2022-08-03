@@ -1,6 +1,5 @@
 package com.mygdx.game.client.di;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -9,7 +8,6 @@ import dagger.Provides;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.logging.Level;
 

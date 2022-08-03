@@ -7,6 +7,8 @@ public interface Navigator {
 
   void changeToFieldScreen();
 
+  void changeToTechnologyScreen();
+
   void changeToLoadingScreen();
 
   void changeToMenuScreen();

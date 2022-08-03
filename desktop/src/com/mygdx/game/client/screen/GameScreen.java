@@ -40,7 +40,6 @@ public class GameScreen extends ScreenAdapter {
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final GameConnectService gameConnectService;
-  private final GdxGame game;
 
   private boolean initialized = false;
 
@@ -54,8 +53,7 @@ public class GameScreen extends ScreenAdapter {
       @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
       @NonNull GameStartService gameStartService,
       @NonNull PlayerRoomDialogFactory roomDialogFactory,
-      @NonNull GameConnectService gameConnectService,
-      @NonNull GdxGame game
+      @NonNull GameConnectService gameConnectService
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -66,7 +64,6 @@ public class GameScreen extends ScreenAdapter {
     this.gameStartService = gameStartService;
     this.roomDialogFactory = roomDialogFactory;
     this.gameConnectService = gameConnectService;
-    this.game = game;
   }
 
   @Override

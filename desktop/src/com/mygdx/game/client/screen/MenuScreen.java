@@ -15,11 +15,9 @@ import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.core.util.Vector3Util;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 public class MenuScreen extends ScreenAdapter {
 
   private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);

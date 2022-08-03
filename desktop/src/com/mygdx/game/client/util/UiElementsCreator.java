@@ -8,25 +8,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
-import com.mygdx.game.client_core.ecs.component.Position;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class UIElementsCreator {
+public class UiElementsCreator {
 
   private final MenuScreenAssets assets;
 
   @Inject
-  public UIElementsCreator(
-          @NonNull MenuScreenAssets assets
+  public UiElementsCreator(
+      @NonNull MenuScreenAssets assets
   ) {
     this.assets = assets;
   }
@@ -50,7 +48,7 @@ public class UIElementsCreator {
   }
 
   public void addHoverPopupWithActor(Actor uiElement, Actor popup, Stage stage) {
-    uiElement.addListener(new ClickListener(){
+    uiElement.addListener(new ClickListener() {
       @Override
       public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
         stage.addActor(popup);

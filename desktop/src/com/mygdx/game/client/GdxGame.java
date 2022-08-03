@@ -83,6 +83,10 @@ public class GdxGame extends Game implements Navigator {
     setScreen(fieldScreen.get());
   }
 
+  public void changeToTechnologyScreen() {
+    setScreen(technologyScreen.get());
+  }
+
   public void changeToLoadingScreen() {
     setScreen(loadingScreen.get());
   }
@@ -93,10 +97,6 @@ public class GdxGame extends Game implements Navigator {
 
   public void changeToAboutScreen() {
     /* intentionally left empty */
-  }
-
-  public void changeToTechnologyScreen() {
-    setScreen(technologyScreen.get());
   }
 
   @Override

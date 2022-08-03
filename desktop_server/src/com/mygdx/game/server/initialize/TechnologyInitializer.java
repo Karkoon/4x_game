@@ -22,9 +22,9 @@ public class TechnologyInitializer {
 
   @Inject
   public TechnologyInitializer(
-          @NonNull TechnologyFactory technologyFactory,
-          @NonNull ComponentFactory componentFactory,
-          @NonNull GameConfigAssets assets
+      @NonNull TechnologyFactory technologyFactory,
+      @NonNull ComponentFactory componentFactory,
+      @NonNull GameConfigAssets assets
   ) {
     this.technologyFactory = technologyFactory;
     this.componentFactory = componentFactory;
@@ -36,10 +36,10 @@ public class TechnologyInitializer {
       return;
     }
     initialized = true;
-    for (int entityId = GameConfigs.TECHNOLOGY_MIN; entityId < GameConfigs.TECHNOLOGY_MAX; entityId++) {
-      int entityId1 = componentFactory.createEntityId();
-      var config = assets.getGameConfigs().get(TechnologyConfig.class, entityId);
-      technologyFactory.createEntity(entityId1, config, owner);
+    for (int technologyEntityId = GameConfigs.TECHNOLOGY_MIN; technologyEntityId < GameConfigs.TECHNOLOGY_MAX; technologyEntityId++) {
+      int entityId = componentFactory.createEntityId();
+      var config = assets.getGameConfigs().get(TechnologyConfig.class, technologyEntityId);
+      technologyFactory.createEntity(entityId, config, owner);
     }
   }
 
