@@ -7,4 +7,6 @@ import lombok.Data;
 public class Client {
   private int id;
   private final ServerWebSocket socket;
+  private String playerUsername;
+  private String playerToken;
 }

@@ -10,17 +10,20 @@ import javax.inject.Inject;
 public class GameConnectService {
 
   private final WebSocket webSocket;
+  private final PlayerInfo playerInfo;
 
   @Inject
   public GameConnectService(
-      @NonNull WebSocket webSocket
+      @NonNull WebSocket webSocket,
+      @NonNull PlayerInfo playerInfo
   ) {
     this.webSocket = webSocket;
+    this.playerInfo = playerInfo;
   }
 
   public void connect() {
     log.info("connect request sent");
-    webSocket.send("connect");
+    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken());
   }
 
 }

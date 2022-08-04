@@ -27,6 +27,7 @@ public final class Server {
   private final MapInitializer mapInitializer;
   private final StartUnitInitializer unitInitializer;
   private final MoveEntityService moveEntityService;
+  private final EndTurnService endTurnService;
   private final GameRoom room;
   private final GameRoomSyncer syncer;
 
@@ -39,6 +40,7 @@ public final class Server {
       MapInitializer mapInitializer,
       StartUnitInitializer unitInitializer,
       MoveEntityService moveEntityService,
+      EndTurnService endTurnService,
       GameRoom room,
       GameRoomSyncer syncer
   ) {
@@ -46,6 +48,7 @@ public final class Server {
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.moveEntityService = moveEntityService;
+    this.endTurnService = endTurnService;
     this.room = room;
     this.syncer = syncer;
   }
@@ -59,6 +62,10 @@ public final class Server {
     log.info("Received frame: " + frame.textData() + " from " + client + " clients" + room.getNumberOfClients());
     switch (type) {
       case "connect" -> { // TODO: 16.06.2022 connect to specific room
+        var userName = commands[1];
+        var userToken = commands[2];
+        client.setPlayerUsername(userName);
+        client.setPlayerToken(userToken);
         room.getClients().forEach(ws -> {
           var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
@@ -78,12 +85,17 @@ public final class Server {
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
           ws.getSocket().write(buffer);
         });
+        endTurnService.giveTurnToFirstPlayer();
       }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);
         var x = Integer.parseInt(commands[2]);
         var y = Integer.parseInt(commands[3]);
         moveEntityService.moveEntity(entityId, x, y);
+      }
+      case "end_turn" -> {
+        var playerUsername = commands[1];
+        endTurnService.nextTurn(playerUsername);
       }
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }

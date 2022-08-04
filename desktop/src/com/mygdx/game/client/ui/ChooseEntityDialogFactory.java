@@ -38,6 +38,14 @@ public final class ChooseEntityDialogFactory {
     log.info("shown FieldClickedDialog");
   }
 
+  public void notPlayerTurnDialog() {
+    var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    var dialog = new Dialog("Not your turn", skin);
+    dialog.text("Not your turn");
+    dialog.button("OK");
+    dialog.show(stage);
+  }
+
   private void addEntityButtons(Dialog dialog, IntMap<Name> entities) {
     for (var entry : entities) {
       var entity = entry.key;

@@ -10,7 +10,7 @@ import lombok.NonNull;
 public class PlayerToken extends PooledComponent {
 
   @NonNull
-  private String token;
+  private String token; // TODO change to static string as in Name
 
   @Override
   protected void reset() {
