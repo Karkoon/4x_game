@@ -7,7 +7,7 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.server.initialize.SubMapInitializer;
+import com.mygdx.game.server.initialize.SubfieldMapInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
@@ -24,14 +24,14 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private final ComponentMapper<Field> fieldMapper;
   private final GameRoomSyncer syncer;
-  private final SubMapInitializer subMapInitializer;
+  private final SubfieldMapInitializer subMapInitializer;
 
   @Inject
   public FieldFactory(
       @NonNull World world,
       @NonNull GameConfigAssets assets,
       @NonNull GameRoomSyncer gameRoomSyncer,
-      @NonNull SubMapInitializer subMapInitializer
+      @NonNull SubfieldMapInitializer subMapInitializer
   ) {
     super(world, assets);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
@@ -42,17 +42,12 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   }
 
   @Override
-  public int createEntity(@NonNull FieldConfig config, @NonNull Coordinates coordinates, Client clientOwner) {
-    var entity = world.create();
+  public void createEntity(int entityId, @NonNull FieldConfig config, Client clientOwner) {
+    var entityConfigId = setUpEntityConfig(config, entityId);
+    var fieldComponent = setUpField(entityId, clientOwner);
 
-    var position = setUpCoordinates(coordinates, entity);
-    var entityConfigId = setUpEntityConfig(config, entity);
-    var fieldComponent = setUpField(entity, clientOwner);
-
-    syncer.sendComponent(position, entity);
-    syncer.sendComponent(entityConfigId, entity);
-    syncer.sendComponent(fieldComponent, entity);
-    return entity;
+    syncer.sendComponent(entityConfigId, entityId);
+    syncer.sendComponent(fieldComponent, entityId);
   }
 
   private EntityConfigId setUpEntityConfig(@NonNull FieldConfig config, int entityId) {
@@ -60,12 +55,6 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
     entityConfigIdComponent.setId(entityConfigId);
     return entityConfigIdComponent;
-  }
-
-  private Coordinates setUpCoordinates(Coordinates coordinates, int entityId) {
-    var result = coordinatesMapper.create(entityId);
-    result.setCoordinates(coordinates);
-    return result;
   }
 
   private Field setUpField(int entityId, Client clientOwner) {

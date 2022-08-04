@@ -3,7 +3,9 @@ package com.mygdx.game.core.util;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
+@Log
 public final class PositionUtil {
 
   @NonNull
@@ -17,5 +19,9 @@ public final class PositionUtil {
   }
 
   private PositionUtil() {
+  }
+
+  public static Vector3 generateTechnologyPositionForCoords(Coordinates coordinates) {
+    return new Vector3(coordinates.getX() * 250f,  0f, coordinates.getY() * 250f);
   }
 }

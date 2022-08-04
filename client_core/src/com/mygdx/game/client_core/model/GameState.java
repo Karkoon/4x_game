@@ -5,7 +5,6 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.SubField;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -19,16 +18,14 @@ import java.util.Set;
 public class GameState {
 
   private final ComponentMapper<Coordinates> coordinatesMapper;
-  private final ComponentMapper<SubField> subFieldMapper;
   private final ComponentMapper<Score> scoreMapper;
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
 
   @Inject
   public GameState(World world) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
-    this.subFieldMapper = world.getMapper(SubField.class);
     this.scoreMapper = world.getMapper(Score.class);
-    entitiesAtCoordinateGame = new HashMap<>();
+    this.entitiesAtCoordinateGame = new HashMap<>();
   }
 
   public IntArray getEntitiesAtCoordinate(Coordinates coordinates) {
@@ -39,14 +36,26 @@ public class GameState {
     return entitiesAtCoordinateGame.keySet();
   }
 
+  public IntArray getSpecifiedEntitiesAtCoordinate(Coordinates coordinates, ComponentMapper<?>[] mappers) {
+    var newEntities = new IntArray();
+    var entitiesAtCoords = entitiesAtCoordinateGame.get(coordinates).toArray();
+    for (int entity : entitiesAtCoords) {
+      for (var mapper : mappers) {
+        if (mapper.has(entity)) {
+          newEntities.add(entity);
+          break;
+        }
+      }
+    }
+    return newEntities;
+  }
+
   /**
    * @param entity with an associated coord through world
    */
   public void saveEntity(int entity) {
     log.info("Save entity with id: " + entity);
-    if (!subFieldMapper.has(entity)) {
-      saveGameEntity(entity);
-    }
+    saveGameEntity(entity);
   }
 
   private void saveGameEntity(int entity) {

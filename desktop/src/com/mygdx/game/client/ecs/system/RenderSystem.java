@@ -35,14 +35,19 @@ public class RenderSystem extends IteratingSystem {
 
   @Override
   protected void process(int entityId) {
-    var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
-    var position = positionMapper.get(entityId).getPosition();
-    modelInstance.transform.setTranslation(position);
-    if (scoreMapper.has(entityId) || movableMapper.has(entityId)) {
-      renderer.addModelToCache(modelInstance);
-    } else if (subFieldMapper.has(entityId)) {
-      Integer parent = subFieldMapper.get(entityId).getParent();
-      renderer.addSubModelToCache(parent, modelInstance);
+    try {
+      var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
+      var position = positionMapper.get(entityId).getPosition();
+      modelInstance.transform.setTranslation(position);
+      if (scoreMapper.has(entityId) || movableMapper.has(entityId)) {
+        renderer.addModelToCache(modelInstance);
+      } else if (subFieldMapper.has(entityId)) {
+        Integer parent = subFieldMapper.get(entityId).getParent();
+        renderer.addSubModelToCache(parent, modelInstance);
+      }
+    } catch (Exception exception) {
+      // TODO #94 fix problem with errors when model instance is created but not set
+      exception.printStackTrace();
     }
   }
 }

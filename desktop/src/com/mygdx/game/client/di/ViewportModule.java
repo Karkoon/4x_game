@@ -14,13 +14,16 @@ import java.util.logging.Level;
 @Module
 @Log
 public class ViewportModule {
+
+
   @Provides
   @Singleton
-  public @NonNull Viewport providesViewport() {
-    log.log(Level.INFO, "provided viewport");
+  public @NonNull Viewport providesPerspectiveViewport() {
+    log.log(Level.INFO, "Provided Perspective viewport");
     var camera = new PerspectiveCamera(100, 500, 500);
     camera.near = 500f;
     camera.far = 700f;
     return new ExtendViewport(500, 500, camera);
   }
+
 }

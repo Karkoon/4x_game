@@ -94,8 +94,7 @@ public class MoveEntityInputAdapter extends InputAdapter {
   }
 
   private void handleNoSelectedUnit(Coordinates clickedCoords) {
-    var entities = gameState.getEntitiesAtCoordinate(clickedCoords);
-    log.info(entities.toString());
+    var entities = gameState.getSpecifiedEntitiesAtCoordinate(clickedCoords, new ComponentMapper[]{movableMapper, scoreMapper});
     coordinateClickedDialogFactory.createAndShow(entities, chosenEntity -> {
       if (movableMapper.has(chosenEntity)) {
         selectedUnit = chosenEntity;

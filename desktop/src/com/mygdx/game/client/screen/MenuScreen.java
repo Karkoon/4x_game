@@ -1,6 +1,5 @@
 package com.mygdx.game.client.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
@@ -108,4 +107,5 @@ public class MenuScreen extends ScreenAdapter {
     stage.draw();
     stage.act(delta);
   }
+
 }

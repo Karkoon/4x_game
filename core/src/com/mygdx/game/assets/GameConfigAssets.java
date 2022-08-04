@@ -8,6 +8,7 @@ import com.mygdx.game.assets.assetloaders.JsonLoader;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
+import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
@@ -35,6 +36,7 @@ public class GameConfigAssets {
     assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
     assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
     assetManager.setLoader(SubFieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
+    assetManager.setLoader(TechnologyConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
   }
 
   public void loadAssetsAsync() {
@@ -57,12 +59,15 @@ public class GameConfigAssets {
         new ArrayLoader.ArrayLoaderParameter(UnitConfig.class, "json"));
     assetManager.load(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, Array.class,
         new ArrayLoader.ArrayLoaderParameter(SubFieldConfig.class, "json"));
+    assetManager.load(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, Array.class,
+            new ArrayLoader.ArrayLoaderParameter(TechnologyConfig.class, "json"));
   }
 
   private void populateGameConfigs() {
     gameConfigs.putAll(assetManager.getAll(FieldConfig.class, new Array<>()));
     gameConfigs.putAll(assetManager.getAll(UnitConfig.class, new Array<>()));
     gameConfigs.putAll(assetManager.getAll(SubFieldConfig.class, new Array<>()));
+    gameConfigs.putAll(assetManager.getAll(TechnologyConfig.class, new Array<>()));
   }
 
   public void loadAssetsSync() {

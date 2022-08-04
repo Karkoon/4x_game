@@ -18,6 +18,6 @@ public abstract class EntityFactory<T extends EntityConfig> {
   }
 
   @NonNull
-  public abstract int createEntity(T entityConfig, Coordinates coordinates, Client client);
+  public abstract void createEntity(int entityId, T entityConfig, Client client);
 
 }

@@ -5,6 +5,7 @@ import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import com.mygdx.game.server.initialize.MapInitializer;
 import com.mygdx.game.server.initialize.StartUnitInitializer;
+import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import io.vertx.core.Vertx;
@@ -22,6 +23,7 @@ public final class Server {
   private static final String HOST = "127.0.0.1";
   private static final int PORT = 10666;
 
+  private final TechnologyInitializer technologyInitializer;
   private final MapInitializer mapInitializer;
   private final StartUnitInitializer unitInitializer;
   private final MoveEntityService moveEntityService;
@@ -34,12 +36,14 @@ public final class Server {
 
   @Inject
   public Server(
+      TechnologyInitializer technologyInitializer,
       MapInitializer mapInitializer,
       StartUnitInitializer unitInitializer,
       MoveEntityService moveEntityService,
       GameRoom room,
       GameRoomSyncer syncer
   ) {
+    this.technologyInitializer = technologyInitializer;
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.moveEntityService = moveEntityService;
@@ -66,6 +70,7 @@ public final class Server {
         var width = Integer.parseInt(commands[1]);
         var height = Integer.parseInt(commands[2]);
         syncer.beginTransaction();
+        technologyInitializer.initializeTechnologies(client);
         mapInitializer.initializeMap(width, height, client);
         unitInitializer.initializeTestUnit(client);
         syncer.endTransaction();

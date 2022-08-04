@@ -8,16 +8,19 @@ import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Random;
 
-public class SubMapInitializer {
+@Singleton
+public class SubfieldMapInitializer {
 
   private static final List<Coordinates> coordinatesList = List.of(
       new Coordinates(2, 0),
@@ -40,37 +43,35 @@ public class SubMapInitializer {
       new Coordinates(3, 7),
       new Coordinates(2, 8)
   );
+  private final ComponentFactory componentFactory;
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
   private final Random random = new Random();
-  private final GameRoomSyncer syncer;
-  private final ComponentMapper<SubField> subFieldMapper;
 
   @Inject
-  public SubMapInitializer(
-      @NonNull World world,
+  public SubfieldMapInitializer(
+      @NonNull ComponentFactory componentFactory,
       @NonNull SubFieldFactory subFieldFactory,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameRoomSyncer gameRoomSyncer
+      @NonNull GameConfigAssets assets
   ) {
+    this.componentFactory = componentFactory;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
-    this.syncer = gameRoomSyncer;
-    this.subFieldMapper = world.getMapper(SubField.class);
   }
 
   public IntArray initializeSubarea(int fieldId, Client owner) {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
-      var entityId = subFieldFactory.createEntity(assets
+      int entityId = componentFactory.createEntityId();
+
+      componentFactory.createCoordinateComponent(coordinates, entityId);
+      subFieldFactory.createEntity(entityId, assets
               .getGameConfigs()
               .get(SubFieldConfig.class, random.nextInt(GameConfigs.SUBFIELD_MAX - GameConfigs.SUBFIELD_MIN) + GameConfigs.SUBFIELD_MIN),
-          coordinates,
           owner);
+      componentFactory.createSubFieldComponent(fieldId, entityId);
+
       subFields.add(entityId);
-      var subField = subFieldMapper.create(entityId);
-      subField.setParent(fieldId);
-      syncer.sendComponent(subField, entityId);
     }
     return subFields;
   }

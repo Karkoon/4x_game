@@ -3,7 +3,9 @@ package com.mygdx.game.client.network;
 import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.client.ecs.entityfactory.DesktopCoordinateSetter;
 import com.mygdx.game.client.ecs.entityfactory.ModelInstanceCompSetter;
+import com.mygdx.game.client.ecs.entityfactory.TextureCompSetter;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -25,10 +27,14 @@ public class DesktopEntityConfigHandler implements ComponentMessageListener.Hand
   @Inject
   public DesktopEntityConfigHandler(
       GameConfigAssets assets,
-      ModelInstanceCompSetter modelInstanceCompSetter
+      ModelInstanceCompSetter modelInstanceCompSetter,
+      TextureCompSetter textureCompSetter,
+      DesktopCoordinateSetter desktopCoordinateSetter
   ) {
     this.assets = assets;
     this.setterList.add(modelInstanceCompSetter);
+    this.setterList.add(textureCompSetter);
+    this.setterList.add(desktopCoordinateSetter);
   }
 
   @Override
