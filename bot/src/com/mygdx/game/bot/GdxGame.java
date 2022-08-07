@@ -43,8 +43,9 @@ public class GdxGame extends Game {
     assets.loadAssetsSync();
     log.info("Assets loaded.");
 
-    log.info("Waitinig for game start.");
+    log.info("Waiting for game start.");
 
+    handler.setFailIfNoHandler(false);
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
       log.info("Starting bot.");
       botClient.run();

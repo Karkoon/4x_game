@@ -1,5 +1,7 @@
 package com.mygdx.game.bot.di;
 
+import com.mygdx.game.bot.network.comp_handlers.RemoveFromMapHandler;
+import com.mygdx.game.bot.network.comp_handlers.SaveToMapHandler;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.comp_handlers.CoordinatesHandler;
@@ -24,11 +26,15 @@ public class ComponentMessageListenerModule {
       SubFieldHandler subFieldHandler,
       FieldHandler fieldHandler,
       CoordinatesHandler coordinatesHandler,
-      NetworkWorldEntityMapper mapper
+      NetworkWorldEntityMapper mapper,
+      RemoveFromMapHandler removeFromMapHandler,
+      SaveToMapHandler saveToMapHandler
   ) {
     var listener = new ComponentMessageListener(mapper);
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
+    listener.registerHandler(Coordinates.class, removeFromMapHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
+    listener.registerHandler(Coordinates.class, saveToMapHandler);
     listener.registerHandler(Field.class, fieldHandler);
     listener.registerHandler(SubField.class, subFieldHandler);
     return listener;

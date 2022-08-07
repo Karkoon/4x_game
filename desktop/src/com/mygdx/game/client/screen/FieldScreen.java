@@ -7,11 +7,11 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
+import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -24,7 +24,6 @@ import javax.inject.Singleton;
 @Log
 public class FieldScreen extends ScreenAdapter {
 
-  public static Integer choosenField;
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
   private final World world;
@@ -32,7 +31,10 @@ public class FieldScreen extends ScreenAdapter {
   private final ModelInstanceRenderer renderer;
 
   private final Stage stage;
-  private final GdxGame game;
+  private final ChosenEntity chosenEntity;
+  private final SubFieldUiInputProcessor subFieldUiInputProcessor;
+
+  private int fieldParent = -1;
 
   @Inject
   public FieldScreen(
@@ -40,19 +42,21 @@ public class FieldScreen extends ScreenAdapter {
       @NonNull World world,
       @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull GdxGame game
+      @NonNull ChosenEntity chosenEntity,
+      @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor
   ) {
     this.renderer = renderer;
     this.world = world;
     this.viewport = viewport;
     this.stage = stage;
-    this.game = game;
+    this.chosenEntity = chosenEntity;
+    this.subFieldUiInputProcessor = subFieldUiInputProcessor;
   }
 
   @Override
   public void show() {
     log.info("SubArea shown");
-
+    fieldParent = chosenEntity.pop();
     positionCamera(viewport.getCamera());
     setUpInput();
   }
@@ -63,7 +67,7 @@ public class FieldScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-    renderer.subRender(choosenField);
+    renderer.subRender(fieldParent);
     stage.draw();
     stage.act(delta);
   }
@@ -79,6 +83,11 @@ public class FieldScreen extends ScreenAdapter {
     renderer.dispose();
   }
 
+  @Override
+  public void hide() {
+    fieldParent = -1;
+  }
+
   private void positionCamera(@NonNull Camera camera) {
     camera.position.set(0, 600, 0);
     camera.lookAt(0, 0, 0);
@@ -86,7 +95,6 @@ public class FieldScreen extends ScreenAdapter {
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
-    var subFieldUiInputProcessor = new SubFieldUiInputProcessor(game);
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, subFieldUiInputProcessor, stage);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);

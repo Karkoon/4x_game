@@ -5,6 +5,8 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.SubField;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -22,7 +24,9 @@ public class GameState {
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
 
   @Inject
-  public GameState(World world) {
+  public GameState(
+     @NonNull World world
+  ) {
     this.coordinatesMapper = world.getMapper(Coordinates.class);
     this.scoreMapper = world.getMapper(Score.class);
     this.entitiesAtCoordinateGame = new HashMap<>();
@@ -60,7 +64,7 @@ public class GameState {
 
   private void saveGameEntity(int entity) {
     var coordinate = coordinatesMapper.get(entity);
-    var entities = entitiesAtCoordinateGame.computeIfAbsent(coordinate, _coords -> new IntArray());
+    var entities = entitiesAtCoordinateGame.computeIfAbsent(coordinate, ignored -> new IntArray());
     entities.add(entity);
   }
 

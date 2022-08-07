@@ -86,7 +86,7 @@ public class TechnologyScreen extends ScreenAdapter {
     this.technologyImages = new ArrayList<>();
     for (int i = 0; i < allTechnologies.size; i++) {
       int entityId = allTechnologies.get(i);
-      var position = positionMapper.get(entityId).getPosition();
+      var position = positionMapper.get(entityId).getValue();
       var texture = textureMapper.get(entityId);
       var name = nameMapper.get(entityId);
 
