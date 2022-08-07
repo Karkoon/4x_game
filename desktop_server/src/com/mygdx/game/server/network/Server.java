@@ -30,7 +30,6 @@ public final class Server {
   private final GameRoom room;
   private final GameRoomSyncer syncer;
 
-
   private final Json json = new Json();
   private HttpServer server;
 
@@ -70,9 +69,9 @@ public final class Server {
         var width = Integer.parseInt(commands[1]);
         var height = Integer.parseInt(commands[2]);
         syncer.beginTransaction();
-        technologyInitializer.initializeTechnologies(client);
-        mapInitializer.initializeMap(width, height, client);
-        unitInitializer.initializeTestUnit(client);
+        technologyInitializer.initializeTechnologies();
+        mapInitializer.initializeMap(width, height);
+        unitInitializer.initializeTestUnit();
         syncer.endTransaction();
         room.getClients().forEach(ws -> {
           var msg = new GameStartedMessage();

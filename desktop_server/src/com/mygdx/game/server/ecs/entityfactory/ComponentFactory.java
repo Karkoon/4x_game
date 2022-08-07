@@ -2,7 +2,9 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.mygdx.game.config.EntityConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
@@ -20,6 +22,7 @@ public class ComponentFactory {
 
   private final ComponentMapper<SubField> subFieldMapper;
   private final ComponentMapper<Coordinates> coordinatesMapper;
+  private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
 
   @Inject
   public ComponentFactory(
@@ -31,6 +34,7 @@ public class ComponentFactory {
 
     this.subFieldMapper = world.getMapper(SubField.class);
     this.coordinatesMapper = world.getMapper(Coordinates.class);
+    this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
   }
 
   public int createEntityId() {
@@ -47,5 +51,12 @@ public class ComponentFactory {
     var subField = subFieldMapper.create(entityId);
     subField.setParent(fieldId);
     syncer.sendComponent(subField, entityId);
+  }
+
+  public void setUpEntityConfig(@NonNull EntityConfig config, int entityId) {
+    int configId = config.getId();
+    var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
+    entityConfigIdComponent.setId(configId);
+    syncer.sendComponent(entityConfigIdComponent, entityId);
   }
 }

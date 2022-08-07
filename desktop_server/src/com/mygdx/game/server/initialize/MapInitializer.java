@@ -6,7 +6,6 @@ import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
-import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -35,11 +34,11 @@ public class MapInitializer {
     this.assets = assets;
   }
 
-  public void initializeMap(Client owner) {
-    initializeMap(INITIAL_WIDTH, INITIAL_HEIGHT, owner);
+  public void initializeMap() {
+    initializeMap(INITIAL_WIDTH, INITIAL_HEIGHT);
   }
 
-  public void initializeMap(int width, int height, Client owner) {
+  public void initializeMap(int width, int height) {
     if (initialized) {
       return;
     } else {
@@ -53,18 +52,17 @@ public class MapInitializer {
           var config = assets
               .getGameConfigs()
               .get(FieldConfig.class, random.nextInt(GameConfigs.FIELD_MIN, GameConfigs.FIELD_MAX));
-          fieldFactory.createEntity(entityId, config, owner);
+          fieldFactory.createEntity(entityId, config);
         }
       }
     }
-    createWinningField(owner);
+    createWinningField();
   }
 
-  private void createWinningField(Client owner) {
+  private void createWinningField() {
     var winningConfig = assets.getGameConfigs().get(FieldConfig.class, 5);
-
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(new Coordinates(4, 4), entityId);
-    fieldFactory.createEntity(entityId, winningConfig, owner);
+    fieldFactory.createEntity(entityId, winningConfig);
   }
 }

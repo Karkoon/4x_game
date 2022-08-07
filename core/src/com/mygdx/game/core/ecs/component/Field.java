@@ -1,6 +1,7 @@
 package com.mygdx.game.core.ecs.component;
 
 import com.artemis.PooledComponent;
+import com.artemis.annotations.EntityId;
 import com.badlogic.gdx.utils.IntArray;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class Field extends PooledComponent {
 
-  private @NonNull IntArray subFields = new IntArray();
+  private @NonNull @EntityId IntArray subFields = new IntArray();
 
   @Override
   protected void reset() {

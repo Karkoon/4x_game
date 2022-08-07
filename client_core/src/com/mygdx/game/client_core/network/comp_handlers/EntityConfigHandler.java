@@ -12,7 +12,6 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.TechnologyConfig;
-import com.mygdx.game.config.TextureConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import lombok.extern.java.Log;
