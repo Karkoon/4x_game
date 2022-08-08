@@ -3,7 +3,7 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
@@ -24,7 +24,7 @@ public class DesktopCoordinateSetter implements Setter {
   }
 
   @Override
-  public Result set(EntityConfig config, int entityId) {
+  public Result set(Config config, int entityId) {
     if (config instanceof TechnologyConfig technologyConfig) {
       setUpCoordinateComp(technologyConfig, entityId);
       return Result.HANDLED;

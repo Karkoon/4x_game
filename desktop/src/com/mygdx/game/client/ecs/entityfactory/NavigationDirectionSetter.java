@@ -5,7 +5,7 @@ import com.artemis.World;
 import com.mygdx.game.client.ecs.component.NavigationDirection;
 import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import lombok.NonNull;
 
@@ -21,7 +21,7 @@ public class NavigationDirectionSetter implements Setter {
     this.directionMapper = world.getMapper(NavigationDirection.class);
   }
 
-  public Result set(EntityConfig config, int entity) {
+  public Result set(Config config, int entity) {
     if (config instanceof FieldConfig) {
       directionMapper.create(entity).direction = Navigator.Direction.FIELD_SCREEN;
       return Result.HANDLED;

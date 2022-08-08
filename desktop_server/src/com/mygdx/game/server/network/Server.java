@@ -68,9 +68,10 @@ public final class Server {
       case "start" -> {
         var width = Integer.parseInt(commands[1]);
         var height = Integer.parseInt(commands[2]);
+        var mapType = Long.parseLong(commands[3]);
         syncer.beginTransaction();
         technologyInitializer.initializeTechnologies();
-        mapInitializer.initializeMap(width, height);
+        mapInitializer.initializeMap(width, height, mapType);
         unitInitializer.initializeTestUnit();
         syncer.endTransaction();
         room.getClients().forEach(ws -> {

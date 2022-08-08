@@ -2,10 +2,10 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 import lombok.NonNull;
 
-public abstract class EntityFactory<T extends EntityConfig> {
+public abstract class EntityFactory<T extends Config> {
 
   protected final World world;
   protected final GameScreenAssets assets;

@@ -2,6 +2,7 @@ package com.mygdx.game.client;
 
 import com.mygdx.game.client.di.ComponentMessageListenerModule;
 import com.mygdx.game.client.di.NavigatorModule;
+import com.mygdx.game.client.di.SetterBindingsModule;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.di.ViewportModule;
 import com.mygdx.game.client.di.WorldModule;
@@ -19,7 +20,8 @@ import javax.inject.Singleton;
     StageModule.class,
     NetworkModule.class,
     ComponentMessageListenerModule.class,
-    NavigatorModule.class
+    NavigatorModule.class,
+    SetterBindingsModule.class
 })
 public interface GameFactory {
   GdxGame providesGame();

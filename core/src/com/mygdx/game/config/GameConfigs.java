@@ -18,43 +18,55 @@ public class GameConfigs {
   public static final int SUBFIELD_MAX = 8;
   public static final int TECHNOLOGY_MIN = 8;
   public static final int TECHNOLOGY_MAX = 10;
+  public static final int MAP_TYPE_MIN = 10;
+  public static final int MAP_TYPE_MAX = 11;
 
-  private final LongMap<EntityConfig> entityConfigMap = new LongMap<>();
+  private final LongMap<Config> configMap = new LongMap<>();
 
   @Inject
   public GameConfigs() {
     super();
   }
 
-  public <T extends EntityConfig> @NonNull T get(
+  public <T extends Config> @NonNull T get(
       @NonNull final Class<T> entityClass,
       final long entityConfigId
   ) {
-    return entityClass.cast(entityConfigMap.get(entityConfigId));
+    return entityClass.cast(configMap.get(entityConfigId));
   }
 
-  public @NonNull EntityConfig get(long entityConfigId) {
-    return entityConfigMap.get(entityConfigId);
+  public @NonNull Config get(long entityConfigId) {
+    return configMap.get(entityConfigId);
   }
 
-  public <T extends EntityConfig> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later
-    for (var next : entityConfigMap.values()) {
+  public <T extends Config> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later
+    for (var next : configMap.values()) {
       if (entityClass.isInstance(next)) {
         return entityClass.cast(next);
       }
     }
-    throw new IllegalArgumentException("No such EntityConfig saved");
+    throw new IllegalArgumentException("No such Config saved");
+  }
+
+  public <T extends Config> Array<T> getAll(Class<T> configClass) {
+    var array = new Array<T>(false, 16);
+    configMap.values().forEach(config -> {
+      if (configClass.isInstance(config)) {
+        array.add(configClass.cast(config));
+      }
+    });
+    return array;
   }
 
   public int size() {
-    return entityConfigMap.size;
+    return configMap.size;
   }
 
-  public void put(@NonNull final EntityConfig entityConfig) {
-    entityConfigMap.put(entityConfig.getId(), entityConfig);
+  public void put(@NonNull final Config entityConfig) {
+    configMap.put(entityConfig.getId(), entityConfig);
   }
 
-  public <T extends EntityConfig> void putAll(@NonNull final Array<T> entityConfigArray) {
+  public <T extends Config> void putAll(@NonNull final Array<T> entityConfigArray) {
     for (int i = 0; i < entityConfigArray.size; i++) {
       put(entityConfigArray.get(i));
     }

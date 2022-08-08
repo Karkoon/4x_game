@@ -2,7 +2,7 @@ package com.mygdx.game.config;
 
 import lombok.NonNull;
 
-public interface EntityConfig {
+public interface Config {
   @NonNull
-  int getId();
+  long getId();
 }
