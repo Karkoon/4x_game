@@ -5,10 +5,13 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client.ui.TurnDialogFactory;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
+import com.mygdx.game.client_core.network.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -22,14 +25,20 @@ public class MovementSystem extends IteratingSystem {
   private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
+  private final PlayerInfo playerInfo;
+  private final TurnDialogFactory turnDialogFactory;
 
   @Inject
   public MovementSystem(
-      ChosenEntity chosenEntity,
-      MoveEntityService moveEntityService
+      @NonNull ChosenEntity chosenEntity,
+      @NonNull MoveEntityService moveEntityService,
+      @NonNull PlayerInfo playerInfo,
+      @NonNull TurnDialogFactory turnDialogFactory
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
+    this.playerInfo = playerInfo;
+    this.turnDialogFactory = turnDialogFactory;
   }
 
   @Override
@@ -37,8 +46,16 @@ public class MovementSystem extends IteratingSystem {
     if (chosenEntity.isAnyChosen() && fieldMapper.has(chosenEntity.peek())) {
       log.info("some are chosen and there's a movable highlighted entity");
       var targetCoordinate = coordinatesMapper.get(chosenEntity.pop());
-      moveEntityService.moveEntity(entityId, targetCoordinate);
+      moveEntityIfPossible(entityId, targetCoordinate);
       highlightedMapper.remove(entityId);
+    }
+  }
+
+  private void moveEntityIfPossible(int entityId, Coordinates targetCoordinate) {
+    if (playerInfo.isPlayerTurn()) {
+      moveEntityService.moveEntity(entityId, targetCoordinate);
+    } else {
+      turnDialogFactory.notPlayerTurnDialog();
     }
   }
 }
