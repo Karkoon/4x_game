@@ -1,6 +1,7 @@
 package com.mygdx.game.client_core.network;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -23,7 +24,7 @@ public class GameConnectService {
 
   public void connect() {
     log.info("connect request sent");
-    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken());
+    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getSecretToken());
   }
 
 }

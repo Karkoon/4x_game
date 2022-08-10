@@ -5,6 +5,8 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSockets;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
+import com.mygdx.game.client_core.network.message_handlers.ActivePlayerMessageHandler;
+import com.mygdx.game.core.network.messages.ActivePlayerMessage;
 import dagger.Module;
 import dagger.Provides;
 import lombok.extern.java.Log;
@@ -37,9 +39,11 @@ public class NetworkModule {
 
   @Provides
   public WebSocketHandler providesWebSocketHandler(
-      WebSocket webSocket
+      WebSocket webSocket,
+      ActivePlayerMessageHandler activePlayerMessageHandler
   ) {
     var handler = new WebSocketHandler();
+    handler.registerHandler(ActivePlayerMessage.class, activePlayerMessageHandler);
     webSocket.addListener(handler);
     return handler;
   }

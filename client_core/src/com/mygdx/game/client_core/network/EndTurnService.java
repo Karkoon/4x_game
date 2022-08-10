@@ -10,15 +10,12 @@ import javax.inject.Inject;
 public class EndTurnService {
 
   private final WebSocket socket;
-  private final PlayerInfo playerInfo;
 
   @Inject
   public EndTurnService(
-      @NonNull WebSocket socket,
-      @NonNull PlayerInfo playerInfo
+      @NonNull WebSocket socket
   ) {
     this.socket = socket;
-    this.playerInfo = playerInfo;
   }
 
   public void endTurn() {

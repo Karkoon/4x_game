@@ -65,7 +65,7 @@ public final class Server {
         var userName = commands[1];
         var userToken = commands[2];
         client.setPlayerUsername(userName);
-        client.setPlayerToken(userToken);
+        client.setSecretToken(userToken);
         room.getClients().forEach(ws -> {
           var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
@@ -81,11 +81,11 @@ public final class Server {
         unitInitializer.initializeTestUnit();
         syncer.endTransaction();
         room.getClients().forEach(ws -> {
-          var msg = new GameStartedMessage(room.getClient(0).getPlayerToken());
+          var msg = new GameStartedMessage();
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
           ws.getSocket().write(buffer);
         });
-        endTurnService.init();
+        endTurnService.nextTurn(client);
       }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);

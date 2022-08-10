@@ -14,6 +14,8 @@ import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
+import com.mygdx.game.client_core.model.ActivePlayerInfo;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;

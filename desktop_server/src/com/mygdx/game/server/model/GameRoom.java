@@ -4,40 +4,39 @@ import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Queue;
 
 @Singleton
 public class GameRoom {
 
-  private final Map<Integer, Client> clients = new HashMap<>();
-  private int nextId = 0;
+  private final Queue<Client> clients = new ArrayDeque<>();
+  private Client activePlayer;
 
   @Inject
   public GameRoom() {
-
+    super();
   }
 
-  public @NonNull Client getClient(int clientId) {
-    return clients.get(clientId);
+  public void setNextActivePlayer() {
+    activePlayer = clients.remove();
+    clients.add(activePlayer);
   }
 
   public Collection<Client> getClients() {
-    return clients.values();
+    return clients;
   }
 
   public void addClient(@NonNull Client client) {
-    client.setId(nextId);
-    clients.put(nextId++, client);
-  }
-
-  public void removeClient(int id) {
-    clients.remove(id);
+    clients.add(client);
   }
 
   public int getNumberOfClients() {
     return clients.size();
   }
 
+  public Client getActivePlayer() {
+    return activePlayer;
+  }
 }
