@@ -9,9 +9,11 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Log
+@Singleton
 public class EndTurnService {
 
   private final int playerTokenComponentId;
@@ -32,26 +34,28 @@ public class EndTurnService {
     this.gameRoomSyncer = gameRoomSyncer;
   }
 
-  public void giveTurnToFirstPlayer() {
-    var clients = gameRoom.getClients().stream().toList();
-    log.info("First turn, start player " + clients.get(0).getPlayerUsername());
-    giveControlToPlayer(0, clients);
+  public void init() {
+    this.playerToken.setToken(gameRoom.getClient(0).getPlayerToken());
   }
 
-  public void nextTurn(String playerNickname) {
-    log.info("Give control to player " + playerNickname);
-    var clients = gameRoom.getClients().stream().toList();
-    for (int i = 0; i < clients.size(); i++) {
-      if (clients.get(i).getPlayerUsername().equals(playerNickname)) {
-        giveControlToPlayer(i + 1, clients);
+  public void nextTurn(@NonNull Client client) {
+    if (client.getPlayerToken().equals(playerToken.getToken())) {
+      var clients = gameRoom.getClients().stream().toList();
+      for (int i = 0; i < clients.size(); i++) {
+        if (clients.get(i).getPlayerToken().equals(client.getPlayerToken())) {
+          giveControlToPlayer(i + 1, clients);
+        }
       }
+    } else {
+      log.info("Player " + client.getPlayerUsername() + " tried to end turn");
     }
   }
 
   private void giveControlToPlayer(int clientIndex, List<Client> clients) {
-     var nextClient = getNextClient(clientIndex, clients);
-     editPlayerTokenComponent(nextClient);
-     gameRoomSyncer.sendComponent(playerToken, playerTokenComponentId);
+    var nextClient = getNextClient(clientIndex, clients);
+    editPlayerTokenComponent(nextClient);
+    log.info("Give control to player " + nextClient.getPlayerUsername());
+    gameRoomSyncer.sendComponent(playerToken, playerTokenComponentId);
   }
 
   private Client getNextClient(int clientIndex, List<Client> clients) {

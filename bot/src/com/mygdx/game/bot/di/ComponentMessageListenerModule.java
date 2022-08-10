@@ -30,8 +30,8 @@ public class ComponentMessageListenerModule {
       CoordinatesHandler coordinatesHandler,
       NetworkWorldEntityMapper mapper,
       RemoveFromMapHandler removeFromMapHandler,
-      SaveToMapHandler saveToMapHandler
-      PlayerTokenHandler playerTokenHandler,
+      SaveToMapHandler saveToMapHandler,
+      PlayerTokenHandler playerTokenHandler
   ) {
     var listener = new ComponentMessageListener(mapper);
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);

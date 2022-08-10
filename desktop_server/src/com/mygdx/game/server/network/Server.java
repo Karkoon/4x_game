@@ -81,11 +81,11 @@ public final class Server {
         unitInitializer.initializeTestUnit();
         syncer.endTransaction();
         room.getClients().forEach(ws -> {
-          var msg = new GameStartedMessage();
+          var msg = new GameStartedMessage(room.getClient(0).getPlayerToken());
           var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
           ws.getSocket().write(buffer);
         });
-        endTurnService.giveTurnToFirstPlayer();
+        endTurnService.init();
       }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);
@@ -93,10 +93,7 @@ public final class Server {
         var y = Integer.parseInt(commands[3]);
         moveEntityService.moveEntity(entityId, x, y);
       }
-      case "end_turn" -> {
-        var playerUsername = commands[1];
-        endTurnService.nextTurn(playerUsername);
-      }
+      case "end_turn" -> endTurnService.nextTurn(client);
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }
   }
