@@ -32,7 +32,7 @@ public class PlayerTokenHandler implements ComponentMessageListener.Handler {
     if (isTokenEqualPlayerToken(token)) {
       playerInfo.activatePlayer();
     } else {
-      playerInfo.disactivatePlayer();
+      playerInfo.deactivatePlayer();
     }
 
     return FULLY_HANDLED;

@@ -25,7 +25,7 @@ public class PlayerInfo {
     playerTurn = true;
   }
 
-  public void disactivatePlayer() {
+  public void deactivatePlayer() {
     playerTurn = false;
   }
 

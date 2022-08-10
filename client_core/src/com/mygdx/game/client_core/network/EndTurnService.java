@@ -23,6 +23,6 @@ public class EndTurnService {
 
   public void endTurn() {
     log.info("end turn request send");
-    socket.send("end_turn" + ":" + playerInfo.getUserName());
+    socket.send("end_turn");
   }
 }
