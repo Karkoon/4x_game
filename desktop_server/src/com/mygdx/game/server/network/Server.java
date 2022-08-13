@@ -1,6 +1,5 @@
 package com.mygdx.game.server.network;
 
-import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import com.mygdx.game.server.initialize.MapInitializer;
@@ -9,7 +8,6 @@ import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.WebSocketFrame;
 import lombok.NonNull;
@@ -29,8 +27,8 @@ public final class Server {
   private final MoveEntityService moveEntityService;
   private final GameRoom room;
   private final GameRoomSyncer syncer;
+  private final MessageSender messageSender;
 
-  private final Json json = new Json();
   private HttpServer server;
 
   @Inject
@@ -40,7 +38,8 @@ public final class Server {
       StartUnitInitializer unitInitializer,
       MoveEntityService moveEntityService,
       GameRoom room,
-      GameRoomSyncer syncer
+      GameRoomSyncer syncer,
+      MessageSender messageSender
   ) {
     this.technologyInitializer = technologyInitializer;
     this.mapInitializer = mapInitializer;
@@ -48,6 +47,7 @@ public final class Server {
     this.moveEntityService = moveEntityService;
     this.room = room;
     this.syncer = syncer;
+    this.messageSender = messageSender;
   }
 
   private void handle(
@@ -59,11 +59,8 @@ public final class Server {
     log.info("Received frame: " + frame.textData() + " from " + client + " clients" + room.getNumberOfClients());
     switch (type) {
       case "connect" -> { // TODO: 16.06.2022 connect to specific room
-        room.getClients().forEach(ws -> {
-          var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
-          var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-          ws.getSocket().write(buffer);
-        });
+        var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
+        messageSender.sendToAll(msg, room.getClients());
       }
       case "start" -> {
         var width = Integer.parseInt(commands[1]);
@@ -74,11 +71,8 @@ public final class Server {
         mapInitializer.initializeMap(width, height, mapType);
         unitInitializer.initializeTestUnit();
         syncer.endTransaction();
-        room.getClients().forEach(ws -> {
-          var msg = new GameStartedMessage();
-          var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-          ws.getSocket().write(buffer);
-        });
+        var msg = new GameStartedMessage();
+        messageSender.sendToAll(msg, room.getClients());
       }
       case "move" -> {
         var entityId = Integer.parseInt(commands[1]);
