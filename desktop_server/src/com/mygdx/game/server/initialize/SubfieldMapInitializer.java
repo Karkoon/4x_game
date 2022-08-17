@@ -5,9 +5,9 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.server.initialize.generators.SubfieldMapGeneratorsContainer;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.mygdx.game.server.di.GameInstanceScope;
 
-@Singleton
+@GameInstanceScope
 public class SubfieldMapInitializer {
 
   private final SubfieldMapGeneratorsContainer subfieldMapGeneratorsContainer;

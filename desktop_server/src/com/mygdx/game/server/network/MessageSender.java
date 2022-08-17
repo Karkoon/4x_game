@@ -2,11 +2,13 @@ package com.mygdx.game.server.network;
 
 import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.server.model.Client;
+import dagger.Reusable;
 import io.vertx.core.buffer.Buffer;
 
 import javax.inject.Inject;
 import java.util.Collection;
 
+@Reusable
 public class MessageSender {
 
   private final Json json = new Json();

@@ -1,12 +1,10 @@
 package com.mygdx.game.server.network;
 
-import com.mygdx.game.core.network.messages.GameStartedMessage;
-import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
-import com.mygdx.game.server.initialize.MapInitializer;
-import com.mygdx.game.server.initialize.StartUnitInitializer;
-import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.handlers.CloseHandler;
+import com.mygdx.game.server.network.handlers.ConnectHandler;
+import com.mygdx.game.server.network.handlers.MoveHandler;
+import com.mygdx.game.server.network.handlers.StartHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.WebSocketFrame;
@@ -21,33 +19,24 @@ public final class Server {
   private static final String HOST = "127.0.0.1";
   private static final int PORT = 10666;
 
-  private final TechnologyInitializer technologyInitializer;
-  private final MapInitializer mapInitializer;
-  private final StartUnitInitializer unitInitializer;
-  private final MoveEntityService moveEntityService;
-  private final GameRoom room;
-  private final GameRoomSyncer syncer;
-  private final MessageSender messageSender;
+  private final StartHandler startHandler;
+  private final MoveHandler moveHandler;
+  private final ConnectHandler connectHandler;
+  private final CloseHandler closeHandler;
 
   private HttpServer server;
 
   @Inject
   public Server(
-      TechnologyInitializer technologyInitializer,
-      MapInitializer mapInitializer,
-      StartUnitInitializer unitInitializer,
-      MoveEntityService moveEntityService,
-      GameRoom room,
-      GameRoomSyncer syncer,
-      MessageSender messageSender
+      StartHandler startHandler,
+      MoveHandler moveHandler,
+      ConnectHandler connectHandler,
+      CloseHandler closeHandler
   ) {
-    this.technologyInitializer = technologyInitializer;
-    this.mapInitializer = mapInitializer;
-    this.unitInitializer = unitInitializer;
-    this.moveEntityService = moveEntityService;
-    this.room = room;
-    this.syncer = syncer;
-    this.messageSender = messageSender;
+    this.startHandler = startHandler;
+    this.moveHandler = moveHandler;
+    this.connectHandler = connectHandler;
+    this.closeHandler = closeHandler;
   }
 
   private void handle(
@@ -56,30 +45,11 @@ public final class Server {
   ) {
     var commands = frame.textData().split(":");
     var type = commands[0];
-    log.info("Received frame: " + frame.textData() + " from " + client + " clients" + room.getNumberOfClients());
+    log.info("Received frame: " + frame.textData() + " from " + client);
     switch (type) {
-      case "connect" -> { // TODO: 16.06.2022 connect to specific room
-        var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
-        messageSender.sendToAll(msg, room.getClients());
-      }
-      case "start" -> {
-        var width = Integer.parseInt(commands[1]);
-        var height = Integer.parseInt(commands[2]);
-        var mapType = Long.parseLong(commands[3]);
-        syncer.beginTransaction();
-        technologyInitializer.initializeTechnologies();
-        mapInitializer.initializeMap(width, height, mapType);
-        unitInitializer.initializeTestUnit();
-        syncer.endTransaction();
-        var msg = new GameStartedMessage();
-        messageSender.sendToAll(msg, room.getClients());
-      }
-      case "move" -> {
-        var entityId = Integer.parseInt(commands[1]);
-        var x = Integer.parseInt(commands[2]);
-        var y = Integer.parseInt(commands[3]);
-        moveEntityService.moveEntity(entityId, x, y);
-      }
+      case "connect" -> connectHandler.handle(commands, client);
+      case "start" -> startHandler.handle(commands, client);
+      case "move" -> moveHandler.handle(commands, client);
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }
   }
@@ -97,8 +67,19 @@ public final class Server {
   private void setUpWebSocketHandler() {
     server.websocketHandler(websocket -> {
       var client = new Client(websocket);
-      room.addClient(client);
-      websocket.frameHandler(frame -> this.handle(client, frame));
+      websocket
+          .frameHandler(frame -> this.handle(client, frame))
+          .closeHandler(event -> {
+            log.info("the client closed? " + client.getId());
+            closeHandler.handle(client);
+          }).endHandler(event -> {
+            log.info("the client ended? " + client.getId());
+            // TODO: 13.08.2022 cleanup after client
+          }).exceptionHandler(throwable -> {
+            log.info("the client threw up? " + client.getId());
+            throwable.printStackTrace();
+            // TODO: 13.08.2022 cleanup after client
+          });
     });
     server.listen(PORT, HOST);
   }

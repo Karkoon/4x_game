@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.multibindings.IntoSet;
 
 @Module
+@GameInstanceScope
 public interface GeneratorBindingsModule {
   @Binds
   @IntoSet

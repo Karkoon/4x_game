@@ -20,7 +20,7 @@ public class GameConnectService {
 
   public void connect() {
     log.info("connect request sent");
-    webSocket.send("connect");
+    webSocket.send("connect:defaultGameRoom");
   }
 
 }

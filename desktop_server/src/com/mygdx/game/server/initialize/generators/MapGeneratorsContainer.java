@@ -1,6 +1,7 @@
 package com.mygdx.game.server.initialize.generators;
 
 import com.badlogic.gdx.utils.LongMap;
+import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -8,7 +9,7 @@ import javax.inject.Singleton;
 import java.util.Set;
 
 
-@Singleton
+@GameInstanceScope
 public class MapGeneratorsContainer {
   private final LongMap<MapGenerator> mapTypes = new LongMap<>();
 

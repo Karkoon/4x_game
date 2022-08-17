@@ -1,6 +1,5 @@
 package com.mygdx.game.server.di;
 
-import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import dagger.Module;
 import dagger.Provides;
@@ -12,14 +11,13 @@ import java.util.logging.Level;
 
 @Module
 @Log
-public class WorldModule {
+@GameInstanceScope
+public class WorldConfigurationModule {
   @Provides
-  @Singleton
-  public @NonNull World providesWorld(
+  public @NonNull WorldConfiguration providesWorld(
       /* nothing to process lmao */
   ) {
-    log.log(Level.INFO, "provided Server World");
-    var worldConfiguration = new WorldConfiguration();
-    return new World(worldConfiguration);
+    log.log(Level.INFO, "provided Server World Configuration");
+    return new WorldConfiguration();
   }
 }
