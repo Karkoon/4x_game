@@ -4,6 +4,7 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.di.GameInstanceScope;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
 
 import javax.inject.Inject;
