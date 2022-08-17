@@ -9,6 +9,7 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client_core.network.PlayerInfo;
+import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import lombok.NonNull;
@@ -54,6 +55,19 @@ public class PlayerRoomDialogFactory {
       if (message.getPlayerToken().equals(playerInfo.getToken()))
         playerInfo.activatePlayer();
       dialog.hide();
+      return FULLY_HANDLED;
+    }));
+    handler.registerHandler(ChangeTurnMessage.class, ((webSocket, o) -> {
+      var message = (ChangeTurnMessage) o;
+      var playerToken = message.getPlayerToken();
+      log.info("Receiver token = " + playerToken);
+
+      if (playerInfo.getToken().equals(playerToken)) {
+        playerInfo.activatePlayer();
+      } else {
+        playerInfo.deactivatePlayer();
+      }
+
       return FULLY_HANDLED;
     }));
     dialog.text(numberOfPlayersLabel);

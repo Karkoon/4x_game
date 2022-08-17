@@ -44,6 +44,8 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
     if (playerInfo.isPlayerTurn()) {
       processScore(clickedCoords);
       moveEntityService.moveEntity(entityId, clickedCoords);
+    } else {
+      log.info("Not your turn");
     }
   }
 

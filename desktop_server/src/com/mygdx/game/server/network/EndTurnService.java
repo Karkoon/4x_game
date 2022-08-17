@@ -1,10 +1,12 @@
 package com.mygdx.game.server.network;
 
 import com.artemis.World;
-import com.mygdx.game.core.ecs.component.PlayerToken;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
+import io.vertx.core.buffer.Buffer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -16,10 +18,11 @@ import java.util.List;
 @Singleton
 public class EndTurnService {
 
-  private final int playerTokenComponentId;
-  private final PlayerToken playerToken;
   private final GameRoom gameRoom;
   private final GameRoomSyncer gameRoomSyncer;
+  private String currentToken;
+
+  private final Json json = new Json();
 
   @Inject
   EndTurnService(
@@ -28,18 +31,16 @@ public class EndTurnService {
       @NonNull GameRoom gameRoom,
       @NonNull GameRoomSyncer gameRoomSyncer
   ) {
-    this.playerTokenComponentId = componentFactory.createEntityId();
-    this.playerToken = world.getMapper(PlayerToken.class).create(this.playerTokenComponentId);
     this.gameRoom = gameRoom;
     this.gameRoomSyncer = gameRoomSyncer;
   }
 
   public void init() {
-    this.playerToken.setToken(gameRoom.getClient(0).getPlayerToken());
+    this.currentToken = gameRoom.getClient(0).getPlayerToken();
   }
 
   public void nextTurn(@NonNull Client client) {
-    if (client.getPlayerToken().equals(playerToken.getToken())) {
+    if (client.getPlayerToken().equals(currentToken)) {
       var clients = gameRoom.getClients().stream().toList();
       for (int i = 0; i < clients.size(); i++) {
         if (clients.get(i).getPlayerToken().equals(client.getPlayerToken())) {
@@ -53,9 +54,9 @@ public class EndTurnService {
 
   private void giveControlToPlayer(int clientIndex, List<Client> clients) {
     var nextClient = getNextClient(clientIndex, clients);
-    editPlayerTokenComponent(nextClient);
+    editPlayerToken(nextClient);
     log.info("Give control to player " + nextClient.getPlayerUsername());
-    gameRoomSyncer.sendComponent(playerToken, playerTokenComponentId);
+    sendMessages();
   }
 
   private Client getNextClient(int clientIndex, List<Client> clients) {
@@ -66,7 +67,16 @@ public class EndTurnService {
     }
   }
 
-  private void editPlayerTokenComponent(Client nextClient) {
-    playerToken.setToken(nextClient.getPlayerToken());
+  private void sendMessages() {
+    var msg = new ChangeTurnMessage(this.currentToken);
+    gameRoom.getClients().forEach(ws -> {
+      var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
+      ws.getSocket().write(buffer);
+    });
   }
+
+  private void editPlayerToken(Client nextClient) {
+    this.currentToken = nextClient.getPlayerToken();
+  }
+
 }
