@@ -37,12 +37,12 @@ public class FieldFactory implements EntityFactory<FieldConfig> {
   @Override
   public void createEntity(int entityId, @NonNull FieldConfig config) {
     componentFactory.setUpEntityConfig(config, entityId);
-    setUpField(entityId);
+    setUpField(entityId, config);
   }
 
-  private void setUpField(int entityId) {
+  private void setUpField(int entityId, FieldConfig config) {
     var field = fieldMapper.create(entityId);
-    var subFields = subMapInitializer.initializeSubarea(entityId);
+    var subFields = subMapInitializer.initializeSubarea(entityId, config);
     field.setSubFields(subFields);
     syncer.sendComponent(field, entityId);
   }

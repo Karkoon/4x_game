@@ -8,8 +8,8 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnitConfig implements EntityConfig, ModelConfig {
-  private int id;
+public class UnitConfig implements Config, ModelConfig {
+  private long id;
   @NonNull
   private String name;
   @NonNull

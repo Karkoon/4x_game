@@ -5,20 +5,32 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import com.mygdx.game.assets.assetloaders.JsonLoader;
+import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.config.MapTypeConfig;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class GameConfigAssets {
 
   @NonNull
   private final GameConfigs gameConfigs;
   private final AssetManager assetManager;
+
+  private final List<Class<? extends Config>> configClasses =
+      List.of(
+          FieldConfig.class,
+          UnitConfig.class,
+          SubFieldConfig.class,
+          TechnologyConfig.class,
+          MapTypeConfig.class
+      );
 
   @Inject
   public GameConfigAssets(
@@ -28,15 +40,6 @@ public class GameConfigAssets {
     this.assetManager = assetManager;
     this.gameConfigs = gameConfigs;
     initCustomLoaders();
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  private void initCustomLoaders() {
-    assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(FieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    assetManager.setLoader(UnitConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    assetManager.setLoader(SubFieldConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
-    assetManager.setLoader(TechnologyConfig.class, new JsonLoader<>(new InternalFileHandleResolver()));
   }
 
   public void loadAssetsAsync() {
@@ -51,27 +54,39 @@ public class GameConfigAssets {
     return gameConfigs;
   }
 
+  public void loadAssetsSync() {
+    loadConfigs();
+    assetManager.finishLoading();
+  }
+
   @SuppressWarnings({"unchecked", "rawtypes"})
+  private void initCustomLoaders() {
+    assetManager.setLoader(Array.class, new ArrayLoader(new InternalFileHandleResolver()));
+    for (var aClass : configClasses) {
+      setJsonLoader(aClass);
+    }
+  }
+
+  private void setJsonLoader(Class<?> type) {
+    assetManager.setLoader(type, new JsonLoader<>(new InternalFileHandleResolver()));
+  }
+
   private void loadConfigs() {
-    assetManager.load(GameConfigAssetPaths.FIELD_CONFIG_DIR, Array.class,
-        new ArrayLoader.ArrayLoaderParameter(FieldConfig.class, "json"));
-    assetManager.load(GameConfigAssetPaths.UNIT_CONFIG_DIR, Array.class,
-        new ArrayLoader.ArrayLoaderParameter(UnitConfig.class, "json"));
-    assetManager.load(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, Array.class,
-        new ArrayLoader.ArrayLoaderParameter(SubFieldConfig.class, "json"));
-    assetManager.load(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, Array.class,
-            new ArrayLoader.ArrayLoaderParameter(TechnologyConfig.class, "json"));
+    loadArrayAsset(GameConfigAssetPaths.FIELD_CONFIG_DIR, FieldConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.UNIT_CONFIG_DIR, UnitConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, SubFieldConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, TechnologyConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.MAP_TYPE_CONFIG_DIR, MapTypeConfig.class);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void loadArrayAsset(String path, Class<?> type) {
+    assetManager.load(path, Array.class, new ArrayLoader.ArrayLoaderParameter(type, "json"));
   }
 
   private void populateGameConfigs() {
-    gameConfigs.putAll(assetManager.getAll(FieldConfig.class, new Array<>()));
-    gameConfigs.putAll(assetManager.getAll(UnitConfig.class, new Array<>()));
-    gameConfigs.putAll(assetManager.getAll(SubFieldConfig.class, new Array<>()));
-    gameConfigs.putAll(assetManager.getAll(TechnologyConfig.class, new Array<>()));
-  }
-
-  public void loadAssetsSync() {
-    loadAssetsAsync();
-    assetManager.finishLoading();
+    for (var configClass : configClasses) {
+      gameConfigs.putAll(assetManager.getAll(configClass, new Array<>()));
+    }
   }
 }

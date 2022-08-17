@@ -8,7 +8,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.util.ModelInstanceUtil;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 import com.mygdx.game.config.ModelConfig;
 import lombok.NonNull;
 
@@ -22,14 +22,16 @@ public class ModelInstanceCompSetter implements Setter {
   private final GameScreenAssets assets;
 
   @Inject
-  public ModelInstanceCompSetter(@NonNull World world,
-                                 @NonNull GameScreenAssets assets) {
+  public ModelInstanceCompSetter(
+      @NonNull World world,
+      @NonNull GameScreenAssets assets
+  ) {
     this.modelMapper = world.getMapper(ModelInstanceComp.class);
     this.assets = assets;
   }
 
   @Override
-  public Result set(EntityConfig config, int entityId) {
+  public Result set(Config config, int entityId) {
     if (config instanceof ModelConfig modelConfig) {
       setUpModelInstanceComp(modelConfig, entityId);
       return Result.HANDLED;

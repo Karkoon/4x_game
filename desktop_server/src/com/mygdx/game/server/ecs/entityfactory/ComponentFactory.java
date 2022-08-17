@@ -2,7 +2,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -53,8 +53,8 @@ public class ComponentFactory {
     syncer.sendComponent(subField, entityId);
   }
 
-  public void setUpEntityConfig(@NonNull EntityConfig config, int entityId) {
-    int configId = config.getId();
+  public void setUpEntityConfig(@NonNull Config config, int entityId) {
+    var configId = config.getId();
     var entityConfigIdComponent = entityConfigIdMapper.create(entityId);
     entityConfigIdComponent.setId(configId);
     syncer.sendComponent(entityConfigIdComponent, entityId);

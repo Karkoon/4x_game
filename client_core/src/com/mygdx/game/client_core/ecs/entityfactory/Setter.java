@@ -1,9 +1,9 @@
 package com.mygdx.game.client_core.ecs.entityfactory;
 
-import com.mygdx.game.config.EntityConfig;
+import com.mygdx.game.config.Config;
 
 public interface Setter {
-  Result set(EntityConfig config, int entityId);
+  Result set(Config config, int entityId);
 
   enum Result {
     HANDLED, HANDLING_ERROR, REJECTED

@@ -16,8 +16,8 @@ public class GameStartService {
     this.socket = socket;
   }
 
-  public void startGame(int width, int height) {
+  public void startGame(int width, int height, int mapType) {
     log.info("start game request sent");
-    socket.send(String.format("start:%d:%d", width, height));
+    socket.send(String.format("start:%d:%d:%d", width, height, mapType));
   }
 }
