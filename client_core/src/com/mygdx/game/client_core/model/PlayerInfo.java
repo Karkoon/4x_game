@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.network;
+package com.mygdx.game.client_core.model;
 
 import lombok.Getter;
 

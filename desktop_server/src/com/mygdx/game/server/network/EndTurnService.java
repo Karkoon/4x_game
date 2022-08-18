@@ -19,20 +19,15 @@ import java.util.List;
 public class EndTurnService {
 
   private final GameRoom gameRoom;
-  private final GameRoomSyncer gameRoomSyncer;
   private String currentToken;
 
   private final Json json = new Json();
 
   @Inject
   EndTurnService(
-      @NonNull World world,
-      @NonNull ComponentFactory componentFactory,
-      @NonNull GameRoom gameRoom,
-      @NonNull GameRoomSyncer gameRoomSyncer
+      @NonNull GameRoom gameRoom
   ) {
     this.gameRoom = gameRoom;
-    this.gameRoomSyncer = gameRoomSyncer;
   }
 
   public void init() {
@@ -56,7 +51,7 @@ public class EndTurnService {
     var nextClient = getNextClient(clientIndex, clients);
     editPlayerToken(nextClient);
     log.info("Give control to player " + nextClient.getPlayerUsername());
-    sendMessages();
+    sendChangeTurnMessages();
   }
 
   private Client getNextClient(int clientIndex, List<Client> clients) {
@@ -67,7 +62,7 @@ public class EndTurnService {
     }
   }
 
-  private void sendMessages() {
+  private void sendChangeTurnMessages() {
     var msg = new ChangeTurnMessage(this.currentToken);
     gameRoom.getClients().forEach(ws -> {
       var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));

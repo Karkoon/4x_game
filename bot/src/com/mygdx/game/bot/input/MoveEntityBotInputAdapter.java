@@ -7,7 +7,7 @@ import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.client_core.model.GameState;
 import com.mygdx.game.client_core.model.PlayerScore;
 import com.mygdx.game.client_core.network.MoveEntityService;
-import com.mygdx.game.client_core.network.PlayerInfo;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
 import lombok.extern.java.Log;

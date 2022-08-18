@@ -6,7 +6,7 @@ import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.di.bot.BotClient;
 import com.mygdx.game.client_core.network.GameConnectService;
-import com.mygdx.game.client_core.network.PlayerInfo;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import lombok.NonNull;
@@ -59,21 +59,6 @@ public class GdxGame extends Game {
       botClient.run();
       return FULLY_HANDLED;
     }));
-
-    handler.registerHandler(ChangeTurnMessage.class, ((webSocket, o) -> {
-      var message = (ChangeTurnMessage) o;
-      var playerToken = message.getPlayerToken();
-      log.info("Receiver token = " + playerToken);
-
-      if (playerInfo.getToken().equals(playerToken)) {
-        playerInfo.activatePlayer();
-      } else {
-        playerInfo.deactivatePlayer();
-      }
-
-      return FULLY_HANDLED;
-    }));
-
 
     gameConnectService.connect();
   }

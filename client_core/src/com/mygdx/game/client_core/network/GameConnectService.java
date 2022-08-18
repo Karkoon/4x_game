@@ -1,6 +1,7 @@
 package com.mygdx.game.client_core.network;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

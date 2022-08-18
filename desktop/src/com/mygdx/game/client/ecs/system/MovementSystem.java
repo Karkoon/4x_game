@@ -5,10 +5,9 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
-import com.mygdx.game.client.ui.TurnDialogFactory;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
-import com.mygdx.game.client_core.network.PlayerInfo;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import lombok.NonNull;
@@ -26,19 +25,16 @@ public class MovementSystem extends IteratingSystem {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
   private final PlayerInfo playerInfo;
-  private final TurnDialogFactory turnDialogFactory;
 
   @Inject
   public MovementSystem(
       @NonNull ChosenEntity chosenEntity,
       @NonNull MoveEntityService moveEntityService,
-      @NonNull PlayerInfo playerInfo,
-      @NonNull TurnDialogFactory turnDialogFactory
+      @NonNull PlayerInfo playerInfo
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
     this.playerInfo = playerInfo;
-    this.turnDialogFactory = turnDialogFactory;
   }
 
   @Override
@@ -52,10 +48,6 @@ public class MovementSystem extends IteratingSystem {
   }
 
   private void moveEntityIfPossible(int entityId, Coordinates targetCoordinate) {
-    if (playerInfo.isPlayerTurn()) {
-      moveEntityService.moveEntity(entityId, targetCoordinate);
-    } else {
-      turnDialogFactory.notPlayerTurnDialog();
-    }
+    moveEntityService.moveEntity(entityId, targetCoordinate);
   }
 }
