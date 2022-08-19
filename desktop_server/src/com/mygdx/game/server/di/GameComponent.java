@@ -1,8 +1,7 @@
-package com.mygdx.game.server;
+package com.mygdx.game.server.di;
 
 import com.mygdx.game.core.di.AssetManagerModule;
-import com.mygdx.game.server.di.GeneratorBindingsModule;
-import com.mygdx.game.server.di.WorldModule;
+import com.mygdx.game.server.GdxServer;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -13,6 +12,6 @@ import javax.inject.Singleton;
     GeneratorBindingsModule.class,
     WorldModule.class
 })
-public interface GameFactory {
+public interface GameComponent {
   GdxServer providesGame();
 }
