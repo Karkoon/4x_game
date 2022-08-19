@@ -28,7 +28,6 @@ public class GameRoom {
   }
 
   public void addClient(@NonNull Client client) {
-    client.setId(nextId);
     clients.put(nextId++, client);
   }
 

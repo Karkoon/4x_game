@@ -8,23 +8,22 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
-public class GameConnectService {
+public class EndTurnService {
 
-  private final WebSocket webSocket;
+  private final WebSocket socket;
   private final PlayerInfo playerInfo;
 
   @Inject
-  public GameConnectService(
-      @NonNull WebSocket webSocket,
+  public EndTurnService(
+      @NonNull WebSocket socket,
       @NonNull PlayerInfo playerInfo
   ) {
-    this.webSocket = webSocket;
+    this.socket = socket;
     this.playerInfo = playerInfo;
   }
 
-  public void connect() {
-    log.info("connect request sent");
-    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken());
+  public void endTurn() {
+    log.info("end turn request send");
+    socket.send("end_turn");
   }
-
 }

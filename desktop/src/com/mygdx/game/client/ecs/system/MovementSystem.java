@@ -7,8 +7,10 @@ import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -25,8 +27,8 @@ public class MovementSystem extends IteratingSystem {
 
   @Inject
   public MovementSystem(
-      ChosenEntity chosenEntity,
-      MoveEntityService moveEntityService
+      @NonNull ChosenEntity chosenEntity,
+      @NonNull MoveEntityService moveEntityService
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
@@ -41,4 +43,5 @@ public class MovementSystem extends IteratingSystem {
       highlightedMapper.remove(entityId);
     }
   }
+
 }

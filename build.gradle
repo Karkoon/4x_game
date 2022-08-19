@@ -27,6 +27,7 @@ allprojects {
         aiVersion = '1.8.2'
         artemisVersion = '2.3.0'
         vertxVersion = '3.5.0'
+        daggerVersion = '2.43'
     }
 
     repositories {
@@ -48,17 +49,10 @@ project(":client_core") {
     }
 
     dependencies {
-        dependencies {
-            implementation project(":core")
-            implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-            api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-            api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-            api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-            api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
-
-            implementation 'com.google.dagger:dagger:2.41'
-            annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
-        }
+        api project(":core")
+        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
+        api 'io.reactivex.rxjava3:rxjava:3.1.5'
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }
 
@@ -66,16 +60,8 @@ project(":desktop") {
     apply plugin: "java-library"
 
     dependencies {
-        implementation project(":core")
         implementation project(":client_core")
-        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
-
-        implementation 'com.google.dagger:dagger:2.41'
-        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }
 
@@ -83,16 +69,8 @@ project(":bot") {
     apply plugin: "java-library"
 
     dependencies {
-        implementation project(":core")
         implementation project(":client_core")
-        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
-
-        implementation 'com.google.dagger:dagger:2.41'
-        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }
 
@@ -102,15 +80,7 @@ project(":desktop_server") {
 
     dependencies {
         implementation project(":core")
-        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        api "com.github.MrStahlfelge.gdx-websockets:common:1.9.10.3"
-
-        implementation 'com.google.dagger:dagger:2.41'
-        annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
-
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
         implementation "io.vertx:vertx-core:$vertxVersion"
     }
 }
@@ -124,12 +94,14 @@ project(":core") {
     }
 
     dependencies {
-        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        implementation "com.esotericsoftware.spine:spine-libgdx:4.1.0"
-        implementation "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
+        api "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -138,7 +110,7 @@ project(":core") {
         testImplementation 'org.mockito:mockito-junit-jupiter:3.+'
         testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 
-        implementation 'com.google.dagger:dagger:2.43'
-        annotationProcessor 'com.google.dagger:dagger-compiler:2.43'
+        api "com.google.dagger:dagger:$daggerVersion"
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }

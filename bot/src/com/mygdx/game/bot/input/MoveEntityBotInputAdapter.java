@@ -7,6 +7,7 @@ import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.client_core.model.GameState;
 import com.mygdx.game.client_core.model.PlayerScore;
 import com.mygdx.game.client_core.network.MoveEntityService;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -22,23 +23,30 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
   private final MoveEntityService moveEntityService;
   private final ComponentMapper<Score> scoreMapper;
   private final PlayerScore playerScore;
+  private final PlayerInfo playerInfo;
 
   @Inject
   public MoveEntityBotInputAdapter(
       @NonNull GameState gameState,
       @NonNull World world,
       @NonNull MoveEntityService moveEntityService,
-      @NonNull PlayerScore playerScore
+      @NonNull PlayerScore playerScore,
+      @NonNull PlayerInfo playerInfo
   ) {
     this.gameState = gameState;
     this.moveEntityService = moveEntityService;
     this.scoreMapper = world.getMapper(Score.class);
     this.playerScore = playerScore;
+    this.playerInfo = playerInfo;
   }
 
   public void moveUnit(int entityId, Coordinates clickedCoords) {
-    processScore(clickedCoords);
-    moveEntityService.moveEntity(entityId, clickedCoords);
+    if (playerInfo.isPlayerTurn()) {
+      processScore(clickedCoords);
+      moveEntityService.moveEntity(entityId, clickedCoords);
+    } else {
+      log.info("Not your turn");
+    }
   }
 
   private void processScore(Coordinates clickedCoords) {

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameStartedMessage {
+public class ChangeTurnMessage {
   String playerToken;
 }

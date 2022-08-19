@@ -39,7 +39,7 @@ public class GameRoomSyncer {
     if (messageBuffer.isEmpty() || !transaction) {
       throw new IllegalStateException("No messages to send");
     }
-    log.info("sending " + messageBuffer + " to " + client.getId());
+    log.info("sending " + messageBuffer + " to " + client.getPlayerUsername());
     sendSavingClassInJson(messageBuffer, client);
     transaction = false;
     messageBuffer.clear();
@@ -50,7 +50,7 @@ public class GameRoomSyncer {
       throw new IllegalStateException("No messages to send");
     }
     room.getClients().forEach(client -> {
-      log.info("sending " + messageBuffer.size() + " of " + messageBuffer + " to " + client.getId());
+      log.info("sending " + messageBuffer.size() + " of " + messageBuffer + " to " + client.getPlayerUsername());
       sendSavingClassInJson(messageBuffer, client);
     });
     transaction = false;

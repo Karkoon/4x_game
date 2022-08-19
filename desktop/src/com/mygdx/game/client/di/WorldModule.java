@@ -2,6 +2,7 @@ package com.mygdx.game.client.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.mygdx.game.client.ecs.system.BlockInputSystem;
 import com.mygdx.game.client.ecs.system.ChooseSystem;
 import com.mygdx.game.client.ecs.system.MovementSystem;
 import com.mygdx.game.client.ecs.system.NavigationSystem;
@@ -27,10 +28,12 @@ public class WorldModule {
       @NonNull RenderSystem renderSystem,
       @NonNull SetHighlightSystem setHighlightSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
-      @NonNull NavigationSystem navigationSystem
+      @NonNull NavigationSystem navigationSystem,
+      @NonNull BlockInputSystem blockInputSystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
+    configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
     configuration.setSystem(coordinateToPositionSystem);

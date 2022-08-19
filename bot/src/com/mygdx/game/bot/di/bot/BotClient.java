@@ -2,6 +2,7 @@ package com.mygdx.game.bot.di.bot;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.bot.input.MoveEntityBotInputAdapter;
 import com.mygdx.game.bot.util.CoordinateUtil;
 import com.mygdx.game.client_core.ecs.component.Movable;
