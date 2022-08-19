@@ -34,8 +34,7 @@ public class TechnologyInitializer {
     initialized = true;
     var technologyConfigs = assets.getGameConfigs().getAll(TechnologyConfig.class);
     for (var config : technologyConfigs) {
-      int entityId = componentFactory.createEntityId();
-      technologyFactory.createEntity(entityId, config);
+      technologyFactory.createEntity(config);
     }
   }
 

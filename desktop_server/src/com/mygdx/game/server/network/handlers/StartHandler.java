@@ -1,5 +1,6 @@
 package com.mygdx.game.server.network.handlers;
 
+import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.server.initialize.MapInitializer;
 import com.mygdx.game.server.initialize.StartUnitInitializer;
 import com.mygdx.game.server.initialize.TechnologyInitializer;
@@ -43,11 +44,11 @@ public class StartHandler {
     var width = Integer.parseInt(commands[1]);
     var height = Integer.parseInt(commands[2]);
     var mapType = Long.parseLong(commands[3]);
-    syncer.beginTransaction();
+    syncer.beginTransaction(room);
     technologyInitializer.initializeTechnologies();
     mapInitializer.initializeMap(width, height, mapType);
     unitInitializer.initializeTestUnit();
-    syncer.endTransaction();
+    syncer.endTransaction(room);
     room.getClients().forEach(ws -> {
       var msg = new GameStartedMessage(room.getClient(0).getPlayerToken());
       var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));

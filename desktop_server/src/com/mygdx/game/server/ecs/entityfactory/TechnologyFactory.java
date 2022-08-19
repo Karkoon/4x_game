@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class TechnologyFactory implements EntityFactory<TechnologyConfig> {
+public class TechnologyFactory {
 
   private final ComponentFactory componentFactory;
 
@@ -20,8 +20,8 @@ public class TechnologyFactory implements EntityFactory<TechnologyConfig> {
     this.componentFactory = componentFactory;
   }
 
-  @Override
-  public void createEntity(int entityId, @NonNull TechnologyConfig config) {
+  public void createEntity(@NonNull TechnologyConfig config) {
+    int entityId = componentFactory.createEntityId();
     componentFactory.setUpEntityConfig(config, entityId);
   }
 

@@ -32,13 +32,8 @@ public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
       var subfieldConfig = assets.getGameConfigs().getRandom(SubFieldConfig.class);
-
-      var entityId = componentFactory.createEntityId();
-      componentFactory.createCoordinateComponent(coordinates, entityId);
-      subFieldFactory.createEntity(entityId, subfieldConfig);
-      componentFactory.createSubFieldComponent(parentId, entityId);
-
-      subFields.add(entityId);
+      var subfieldId = subFieldFactory.createEntity(subfieldConfig, coordinates, parentId);
+      subFields.add(subfieldId);
     }
     return subFields;
   }

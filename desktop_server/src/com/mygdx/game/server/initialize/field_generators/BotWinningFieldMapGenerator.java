@@ -3,7 +3,6 @@ package com.mygdx.game.server.initialize.field_generators;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
 
 import javax.inject.Inject;
@@ -15,19 +14,16 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   private static final int WINNING_Y = 4;
   private final GameConfigs assets;
   private final FieldFactory fieldFactory;
-  private final ComponentFactory componentFactory;
   private final Random random = new Random(0);
 
   @Inject
   public BotWinningFieldMapGenerator(
       GameConfigs assets,
-      FieldFactory fieldFactory,
-      ComponentFactory componentFactory
+      FieldFactory fieldFactory
   ) {
     super(401);
     this.assets = assets;
     this.fieldFactory = fieldFactory;
-    this.componentFactory = componentFactory;
   }
 
   @Override
@@ -37,10 +33,8 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
         if (i == WINNING_X && j == WINNING_Y) {
           continue;
         }
-        var entityId = componentFactory.createEntityId();
-        componentFactory.createCoordinateComponent(new Coordinates(i, j), entityId);
         var fieldConfig = chooseFieldConfig();
-        fieldFactory.createEntity(entityId, fieldConfig);
+        fieldFactory.createEntity(fieldConfig, new Coordinates(i, j));
       }
     }
     createWinningField();
@@ -54,8 +48,6 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
 
   private void createWinningField() {
     var winningConfig = assets.get(FieldConfig.class, 5);
-    int entityId = componentFactory.createEntityId();
-    componentFactory.createCoordinateComponent(new Coordinates(4, 4), entityId);
-    fieldFactory.createEntity(entityId, winningConfig);
+    fieldFactory.createEntity(winningConfig, new Coordinates(4, 4));
   }
 }

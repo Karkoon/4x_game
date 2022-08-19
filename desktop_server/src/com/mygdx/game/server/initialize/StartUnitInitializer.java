@@ -33,9 +33,7 @@ public class StartUnitInitializer {
     } else {
       initialized = true;
     }
-    int entityId = componentFactory.createEntityId();
-    componentFactory.createCoordinateComponent(new Coordinates(0, 0), entityId);
     var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class);
-    unitFactory.createEntity(entityId, anyConfig);
+    unitFactory.createEntity(anyConfig, new Coordinates(0, 0));
   }
 }

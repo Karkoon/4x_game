@@ -1,11 +1,8 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
-import com.artemis.ComponentMapper;
-import com.artemis.World;
 import com.mygdx.game.config.FieldConfig;
-import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
-import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -14,36 +11,25 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class FieldFactory implements EntityFactory<FieldConfig> {
+public class FieldFactory {
 
-  private final ComponentMapper<Field> fieldMapper;
-  private final GameRoomSyncer syncer;
   private final SubfieldMapInitializer subMapInitializer;
   private final ComponentFactory componentFactory;
 
   @Inject
   public FieldFactory(
-      @NonNull World world,
-      @NonNull GameRoomSyncer gameRoomSyncer,
       @NonNull SubfieldMapInitializer subMapInitializer,
       @NonNull ComponentFactory componentFactory
   ) {
-    this.fieldMapper = world.getMapper(Field.class);
-    this.syncer = gameRoomSyncer;
     this.subMapInitializer = subMapInitializer;
     this.componentFactory = componentFactory;
   }
 
-  @Override
-  public void createEntity(int entityId, @NonNull FieldConfig config) {
+  public void createEntity(@NonNull FieldConfig config, Coordinates coordinate) {
+    int entityId = componentFactory.createEntityId();
+    componentFactory.createCoordinateComponent(coordinate, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
-    setUpField(entityId, config);
-  }
-
-  private void setUpField(int entityId, FieldConfig config) {
-    var field = fieldMapper.create(entityId);
-    var subFields = subMapInitializer.initializeSubarea(entityId, config);
-    field.setSubFields(subFields);
-    syncer.sendComponent(field, entityId);
+    var subfields = subMapInitializer.initializeSubarea(entityId, config);
+    componentFactory.createFieldComponent(entityId, subfields);
   }
 }
