@@ -5,7 +5,6 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Set;
 
 

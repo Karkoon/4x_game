@@ -5,7 +5,6 @@ import com.artemis.WorldConfiguration;
 import com.mygdx.game.server.di.GameInstanceScope;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @GameInstanceScope
 public class WorldFactory {

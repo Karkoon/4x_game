@@ -20,7 +20,7 @@ public class SubfieldMapInitializer {
   }
 
   public IntArray initializeSubarea(int fieldId, FieldConfig config) {
-    return subfieldMapGeneratorsContainer.get(config.getId()).generateSubfield(fieldId);
+    return subfieldMapGeneratorsContainer.get(config.getId()).generateSubfields(fieldId);
   }
 
 }

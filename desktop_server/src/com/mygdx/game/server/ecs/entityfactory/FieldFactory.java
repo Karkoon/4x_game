@@ -25,12 +25,11 @@ public class FieldFactory {
     this.componentFactory = componentFactory;
   }
 
-  public int createEntity(@NonNull FieldConfig config, Coordinates coordinate) {
+  public void createEntity(@NonNull FieldConfig config, Coordinates coordinate) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinate, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
     var subfields = subMapInitializer.initializeSubarea(entityId, config);
     componentFactory.createFieldComponent(entityId, subfields);
-    return entityId;
   }
 }

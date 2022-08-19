@@ -28,7 +28,7 @@ public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
   }
 
   @Override
-  public IntArray generateSubfield(int parentId) {
+  public IntArray generateSubfields(int parentId) {
     var subFields = new IntArray();
     for (var coordinates : coordinatesList) {
       var subfieldConfig = assets.getGameConfigs().getAny(SubFieldConfig.class);

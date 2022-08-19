@@ -19,10 +19,9 @@ public class UnitFactory {
     this.componentFactory = componentFactory;
   }
 
-  public int createEntity(@NonNull UnitConfig config, Coordinates coordinates) {
+  public void createEntity(@NonNull UnitConfig config, Coordinates coordinates) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
-    return entityId;
   }
 }

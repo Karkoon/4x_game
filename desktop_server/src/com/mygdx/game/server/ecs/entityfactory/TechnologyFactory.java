@@ -18,9 +18,8 @@ public class TechnologyFactory {
     this.componentFactory = componentFactory;
   }
 
-  public int createEntity(@NonNull TechnologyConfig config) {
+  public void createEntity(@NonNull TechnologyConfig config) {
     int entityId = componentFactory.createEntityId();
     componentFactory.setUpEntityConfig(config, entityId);
-    return entityId;
   }
 }

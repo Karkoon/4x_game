@@ -2,10 +2,16 @@ package com.mygdx.game.server.initialize.generators;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
+@EqualsAndHashCode
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SubfieldMapGenerator {
 
   protected static final List<Coordinates> coordinatesList =
@@ -33,31 +39,6 @@ public abstract class SubfieldMapGenerator {
 
   private final int id;
 
-  protected SubfieldMapGenerator(int id) {
-    this.id = id;
-  }
-
-  public abstract IntArray generateSubfield(int parentId);
-
-  public int getId() {
-    return id;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    SubfieldMapGenerator that = (SubfieldMapGenerator) o;
-    return id == that.id;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
+  public abstract IntArray generateSubfields(int parentId);
 
 }

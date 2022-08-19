@@ -48,16 +48,6 @@ public class GameConfigs {
     throw new IllegalArgumentException("No such Config saved");
   }
 
-  public <T extends Config> Array<T> getAll(Class<T> configClass) {
-    var array = new Array<T>(false, 16);
-    configMap.values().forEach(config -> {
-      if (configClass.isInstance(config)) {
-        array.add(configClass.cast(config));
-      }
-    });
-    return array;
-  }
-
   public int size() {
     return configMap.size;
   }
