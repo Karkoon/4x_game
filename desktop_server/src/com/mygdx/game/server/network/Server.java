@@ -1,15 +1,12 @@
 package com.mygdx.game.server.network;
 
-import com.badlogic.gdx.utils.Json;
-import com.mygdx.game.core.network.messages.GameStartedMessage;
-import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
-import com.mygdx.game.server.initialize.MapInitializer;
-import com.mygdx.game.server.initialize.StartUnitInitializer;
-import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.handlers.ConnectHandler;
+import com.mygdx.game.server.network.handlers.EndTurnHandler;
+import com.mygdx.game.server.network.handlers.MoveHandler;
+import com.mygdx.game.server.network.handlers.StartHandler;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.WebSocketFrame;
 import lombok.NonNull;
@@ -23,34 +20,27 @@ public final class Server {
   private static final String HOST = "127.0.0.1";
   private static final int PORT = 10666;
 
-  private final TechnologyInitializer technologyInitializer;
-  private final MapInitializer mapInitializer;
-  private final StartUnitInitializer unitInitializer;
-  private final MoveEntityService moveEntityService;
-  private final EndTurnService endTurnService;
   private final GameRoom room;
-  private final GameRoomSyncer syncer;
+  private final StartHandler startHandler;
+  private final MoveHandler moveHandler;
+  private final EndTurnHandler endTurnHandler;
+  private final ConnectHandler connectHandler;
 
-  private final Json json = new Json();
   private HttpServer server;
 
   @Inject
   public Server(
-      TechnologyInitializer technologyInitializer,
-      MapInitializer mapInitializer,
-      StartUnitInitializer unitInitializer,
-      MoveEntityService moveEntityService,
-      EndTurnService endTurnService,
       GameRoom room,
-      GameRoomSyncer syncer
+      StartHandler startHandler,
+      MoveHandler moveHandler,
+      EndTurnHandler endTurnHandler,
+      ConnectHandler connectHandler
   ) {
-    this.technologyInitializer = technologyInitializer;
-    this.mapInitializer = mapInitializer;
-    this.unitInitializer = unitInitializer;
-    this.moveEntityService = moveEntityService;
-    this.endTurnService = endTurnService;
     this.room = room;
-    this.syncer = syncer;
+    this.startHandler = startHandler;
+    this.moveHandler = moveHandler;
+    this.endTurnHandler = endTurnHandler;
+    this.connectHandler = connectHandler;
   }
 
   private void handle(
@@ -61,40 +51,10 @@ public final class Server {
     var type = commands[0];
     log.info("Received frame: " + frame.textData() + " from " + client + " clients" + room.getNumberOfClients());
     switch (type) {
-      case "connect" -> { // TODO: 16.06.2022 connect to specific room
-        var userName = commands[1];
-        var userToken = commands[2];
-        client.setPlayerUsername(userName);
-        client.setPlayerToken(userToken);
-        room.getClients().forEach(ws -> {
-          var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
-          var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-          ws.getSocket().write(buffer);
-        });
-      }
-      case "start" -> {
-        var width = Integer.parseInt(commands[1]);
-        var height = Integer.parseInt(commands[2]);
-        var mapType = Long.parseLong(commands[3]);
-        syncer.beginTransaction();
-        technologyInitializer.initializeTechnologies();
-        mapInitializer.initializeMap(width, height, mapType);
-        unitInitializer.initializeTestUnit();
-        syncer.endTransaction();
-        room.getClients().forEach(ws -> {
-          var msg = new GameStartedMessage(room.getClient(0).getPlayerToken());
-          var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-          ws.getSocket().write(buffer);
-        });
-        endTurnService.init();
-      }
-      case "move" -> {
-        var entityId = Integer.parseInt(commands[1]);
-        var x = Integer.parseInt(commands[2]);
-        var y = Integer.parseInt(commands[3]);
-        moveEntityService.moveEntity(entityId, x, y);
-      }
-      case "end_turn" -> endTurnService.nextTurn(client);
+      case "connect" -> connectHandler.handle(commands, client);
+      case "start" -> startHandler.handle(commands);
+      case "move" -> moveHandler.handle(commands);
+      case "end_turn" -> endTurnHandler.handle(client);
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }
   }
