@@ -28,7 +28,7 @@ public class NotPlayerTurnDialogFactory {
     this.stage = stage;
   }
 
-  public void createNotPlayerTurnDialog() {
+  public void createAndShow() {
     var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
     var dialog = new Dialog("Turn", skin);
     dialog.text("Not your turn");

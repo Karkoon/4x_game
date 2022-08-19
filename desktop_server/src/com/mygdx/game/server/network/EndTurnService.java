@@ -48,18 +48,10 @@ public class EndTurnService {
   }
 
   private void giveControlToPlayer(int clientIndex, List<Client> clients) {
-    var nextClient = getNextClient(clientIndex, clients);
-    editPlayerToken(nextClient);
+    var nextClient = clients.get(clientIndex % clients.size());
+    this.currentToken = nextClient.getPlayerToken();
     log.info("Give control to player " + nextClient.getPlayerUsername());
     sendChangeTurnMessages();
-  }
-
-  private Client getNextClient(int clientIndex, List<Client> clients) {
-    if (clients.size() == clientIndex) {
-      return clients.get(0);
-    } else {
-      return clients.get(clientIndex);
-    }
   }
 
   private void sendChangeTurnMessages() {
@@ -69,9 +61,4 @@ public class EndTurnService {
       ws.getSocket().write(buffer);
     });
   }
-
-  private void editPlayerToken(Client nextClient) {
-    this.currentToken = nextClient.getPlayerToken();
-  }
-
 }

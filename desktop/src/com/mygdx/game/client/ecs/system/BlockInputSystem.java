@@ -34,7 +34,7 @@ public class BlockInputSystem extends BaseSystem {
       if (!playerInfo.isPlayerTurn()) {
         log.info("Blocked click");
         clickInput.clear();
-        notPlayerTurnDialogFactory.createNotPlayerTurnDialog();
+        notPlayerTurnDialogFactory.createAndShow();
       }
     }
   }

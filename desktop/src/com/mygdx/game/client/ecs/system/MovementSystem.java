@@ -24,17 +24,14 @@ public class MovementSystem extends IteratingSystem {
   private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
-  private final PlayerInfo playerInfo;
 
   @Inject
   public MovementSystem(
       @NonNull ChosenEntity chosenEntity,
-      @NonNull MoveEntityService moveEntityService,
-      @NonNull PlayerInfo playerInfo
+      @NonNull MoveEntityService moveEntityService
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
-    this.playerInfo = playerInfo;
   }
 
   @Override
@@ -42,12 +39,9 @@ public class MovementSystem extends IteratingSystem {
     if (chosenEntity.isAnyChosen() && fieldMapper.has(chosenEntity.peek())) {
       log.info("some are chosen and there's a movable highlighted entity");
       var targetCoordinate = coordinatesMapper.get(chosenEntity.pop());
-      moveEntityIfPossible(entityId, targetCoordinate);
+      moveEntityService.moveEntity(entityId, targetCoordinate);
       highlightedMapper.remove(entityId);
     }
   }
 
-  private void moveEntityIfPossible(int entityId, Coordinates targetCoordinate) {
-    moveEntityService.moveEntity(entityId, targetCoordinate);
-  }
 }

@@ -52,8 +52,9 @@ public class PlayerRoomDialogFactory {
     }));
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
       var message = (GameStartedMessage) o;
-      if (message.getPlayerToken().equals(playerInfo.getToken()))
+      if (message.getPlayerToken().equals(playerInfo.getToken())) {
         playerInfo.activatePlayer();
+      }
       dialog.hide();
       return FULLY_HANDLED;
     }));
