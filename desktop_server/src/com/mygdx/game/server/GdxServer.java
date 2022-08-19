@@ -35,12 +35,6 @@ public class GdxServer extends Game {
   }
 
   @Override
-  public void render() {
-    ScreenUtils.clear(0f, 0f, 0f, 1, true);
-    super.render();
-  }
-
-  @Override
   public void dispose() {
     super.dispose();
     Gdx.app.exit();
