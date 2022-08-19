@@ -29,22 +29,18 @@ public class BotClient {
   private final Random random;
   private final Map<Integer, Map<Integer, Double>> qMap = new HashMap<>();
   private Coordinates currentCoordinates;
-  private WebSocketHandler handler;
 
   @Inject
   BotClient(
       @NonNull PlayerScore playerScore,
       @NonNull GameState gameState,
       @NonNull MoveEntityBotInputAdapter inputAdapter,
-      @NonNull WebSocketHandler handler,
       @NonNull World world
   ) {
     this.playerScore = playerScore;
     this.gameState = gameState;
     this.inputAdapter = inputAdapter;
     this.movableMapper = world.getMapper(Movable.class);
-    this.handler = handler;
-    this.handler.setFailIfNoHandler(false);
 
     this.currentCoordinates = new Coordinates(0, 0);
     this.random = new Random();

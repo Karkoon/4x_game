@@ -39,6 +39,7 @@ public class NetworkModule {
   }
 
   @Provides
+  @Singleton
   public WebSocketHandler providesWebSocketHandler(
       @NonNull WebSocket webSocket,
       @NonNull ChangeTurnMessageHandler changeTurnMessageHandler
