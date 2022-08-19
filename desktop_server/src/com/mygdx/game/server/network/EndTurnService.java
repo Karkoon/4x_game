@@ -1,9 +1,7 @@
 package com.mygdx.game.server.network;
 
-import com.artemis.World;
 import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
-import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import io.vertx.core.buffer.Buffer;

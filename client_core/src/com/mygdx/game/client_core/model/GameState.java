@@ -5,7 +5,6 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.SubField;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

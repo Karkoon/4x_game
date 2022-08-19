@@ -2,7 +2,6 @@ package com.mygdx.game.server;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.server.network.Server;
 import lombok.extern.java.Log;
