@@ -15,6 +15,7 @@ import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
 import com.mygdx.game.client_core.network.GameConnectService;
 import com.mygdx.game.client_core.network.GameStartService;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -69,7 +70,7 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     log.info("GameScreen shown");
     if (!initialized) {
-      roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5, 10));
+      roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5, GameConfigs.MAP_TYPE_MIN));
       gameConnectService.connect();
       initialized = true;
     }

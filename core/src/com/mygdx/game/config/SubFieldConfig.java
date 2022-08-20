@@ -18,4 +18,5 @@ public class SubFieldConfig implements Config, ModelConfig {
   private String modelPath;
   @NonNull
   private String textureName;
+  private int parentField;
 }
