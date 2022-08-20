@@ -3,11 +3,13 @@ package com.mygdx.game.server.initialize.field_generators;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
 
 import javax.inject.Inject;
 import java.util.Random;
 
+@GameInstanceScope
 public class BotWinningFieldMapGenerator extends MapGenerator {
 
   private static final int WINNING_X = 4;

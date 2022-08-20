@@ -1,10 +1,12 @@
 package com.mygdx.game.server.initialize;
 
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.field_generators.MapGeneratorsContainer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class MapInitializer {
 
   private final MapGeneratorsContainer generators;

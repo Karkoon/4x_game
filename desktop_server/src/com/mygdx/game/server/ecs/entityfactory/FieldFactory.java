@@ -2,14 +2,14 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class FieldFactory {
 

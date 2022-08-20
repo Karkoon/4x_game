@@ -4,25 +4,23 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
 
-  private final ComponentFactory componentFactory;
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
 
   @Inject
   protected BasicSubfieldMapGenerator(
-      @NonNull ComponentFactory componentFactory,
       @NonNull SubFieldFactory subFieldFactory,
       @NonNull GameConfigAssets assets) {
     super(0);
-    this.componentFactory = componentFactory;
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
   }

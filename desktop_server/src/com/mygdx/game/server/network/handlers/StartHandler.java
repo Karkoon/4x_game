@@ -1,59 +1,36 @@
 package com.mygdx.game.server.network.handlers;
 
 import com.mygdx.game.core.network.messages.GameStartedMessage;
-import com.mygdx.game.server.initialize.MapInitializer;
-import com.mygdx.game.server.initialize.StartUnitInitializer;
-import com.mygdx.game.server.initialize.TechnologyInitializer;
-import com.mygdx.game.server.model.GameRoom;
-import com.mygdx.game.server.network.EndTurnService;
+import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.GameRoomSyncer;
-import io.vertx.core.buffer.Buffer;
+import com.mygdx.game.server.network.MessageSender;
 
 import javax.inject.Inject;
-
-import static com.badlogic.gdx.net.HttpRequestBuilder.json;
 
 public class StartHandler {
 
   private final GameRoomSyncer syncer;
-  private final TechnologyInitializer technologyInitializer;
-  private final MapInitializer mapInitializer;
-  private final StartUnitInitializer unitInitializer;
-  private final GameRoom room;
-  private final EndTurnService endTurnService;
+  private final MessageSender sender;
 
   @Inject
   public StartHandler(
       GameRoomSyncer syncer,
-      TechnologyInitializer technologyInitializer,
-      MapInitializer mapInitializer,
-      StartUnitInitializer unitInitializer,
-      GameRoom room,
-      EndTurnService endTurnService
+      MessageSender sender
   ) {
-
     this.syncer = syncer;
-    this.technologyInitializer = technologyInitializer;
-    this.mapInitializer = mapInitializer;
-    this.unitInitializer = unitInitializer;
-    this.room = room;
-    this.endTurnService = endTurnService;
+    this.sender = sender;
   }
 
-  public void handle(String[] commands) {
+  public void handle(String[] commands, Client client) {
     var width = Integer.parseInt(commands[1]);
     var height = Integer.parseInt(commands[2]);
     var mapType = Long.parseLong(commands[3]);
+    var room = client.getGameRoom();
+    room.setupGameInstance();
     syncer.beginTransaction(room);
-    technologyInitializer.initializeTechnologies();
-    mapInitializer.initializeMap(width, height, mapType);
-    unitInitializer.initializeTestUnit();
+    room.getGameInstance().startGame(width, height, mapType, room.getClients());
     syncer.endTransaction(room);
-    room.getClients().forEach(ws -> {
-      var msg = new GameStartedMessage(room.getClient(0).getPlayerToken());
-      var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-      ws.getSocket().write(buffer);
-    });
-    endTurnService.init();
+    var msg = new GameStartedMessage(room.getClients().get(0).getPlayerToken());
+    sender.sendToAll(msg, room.getClients());
   }
 }

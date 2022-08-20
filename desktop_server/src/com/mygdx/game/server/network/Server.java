@@ -1,7 +1,7 @@
 package com.mygdx.game.server.network;
 
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.handlers.CloseHandler;
 import com.mygdx.game.server.network.handlers.ConnectHandler;
 import com.mygdx.game.server.network.handlers.EndTurnHandler;
 import com.mygdx.game.server.network.handlers.MoveHandler;
@@ -20,27 +20,27 @@ public final class Server {
   private static final String HOST = "127.0.0.1";
   private static final int PORT = 10666;
 
-  private final GameRoom room;
   private final StartHandler startHandler;
   private final MoveHandler moveHandler;
   private final EndTurnHandler endTurnHandler;
   private final ConnectHandler connectHandler;
+  private final CloseHandler closeHandler;
 
   private HttpServer server;
 
   @Inject
   public Server(
-      GameRoom room,
       StartHandler startHandler,
       MoveHandler moveHandler,
       EndTurnHandler endTurnHandler,
-      ConnectHandler connectHandler
+      ConnectHandler connectHandler,
+      CloseHandler closeHandler
   ) {
-    this.room = room;
     this.startHandler = startHandler;
     this.moveHandler = moveHandler;
     this.endTurnHandler = endTurnHandler;
     this.connectHandler = connectHandler;
+    this.closeHandler = closeHandler;
   }
 
   private void handle(
@@ -49,11 +49,11 @@ public final class Server {
   ) {
     var commands = frame.textData().split(":");
     var type = commands[0];
-    log.info("Received frame: " + frame.textData() + " from " + client + " clients" + room.getNumberOfClients());
+    log.info("Received frame: " + frame.textData() + " from " + client.getPlayerUsername());
     switch (type) {
       case "connect" -> connectHandler.handle(commands, client);
-      case "start" -> startHandler.handle(commands);
-      case "move" -> moveHandler.handle(commands);
+      case "start" -> startHandler.handle(commands, client);
+      case "move" -> moveHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle(client);
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }
@@ -72,8 +72,19 @@ public final class Server {
   private void setUpWebSocketHandler() {
     server.websocketHandler(websocket -> {
       var client = new Client(websocket);
-      room.addClient(client);
-      websocket.frameHandler(frame -> this.handle(client, frame));
+      websocket
+          .frameHandler(frame -> this.handle(client, frame))
+          .closeHandler(event -> {
+            log.info("the client closed? " + client.getPlayerUsername());
+            closeHandler.handle(client);
+          }).endHandler(event -> {
+            log.info("the client ended? " + client.getPlayerUsername());
+            // TODO: 13.08.2022 cleanup after client
+          }).exceptionHandler(throwable -> {
+            log.info("the client threw up? " + client.getPlayerUsername());
+            throwable.printStackTrace();
+            // TODO: 13.08.2022 cleanup after client
+          });
     });
     server.listen(PORT, HOST);
   }

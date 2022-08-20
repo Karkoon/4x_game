@@ -9,8 +9,7 @@ import javax.inject.Singleton;
 @Singleton
 @Component(modules = {
     AssetManagerModule.class,
-    GeneratorBindingsModule.class,
-    WorldModule.class
+    GameInstanceModule.class
 })
 public interface GameComponent {
   GdxServer providesGame();

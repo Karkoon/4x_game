@@ -8,15 +8,15 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class ComponentFactory {
 

@@ -2,33 +2,35 @@ package com.mygdx.game.server.network.handlers;
 
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.model.GameRoom;
-import io.vertx.core.buffer.Buffer;
+import com.mygdx.game.server.model.GameRoomManager;
+import com.mygdx.game.server.network.MessageSender;
 
 import javax.inject.Inject;
 
-import static com.badlogic.gdx.net.HttpRequestBuilder.json;
-
 public class ConnectHandler {
 
-  private final GameRoom room;
+  private final MessageSender sender;
+  private final GameRoomManager rooms;
 
   @Inject
   public ConnectHandler(
-      GameRoom room
+      MessageSender sender,
+      GameRoomManager rooms
   ) {
-    this.room = room;
+    this.sender = sender;
+    this.rooms = rooms;
   }
 
   public void handle(String[] commands, Client client) {
     var userName = commands[1];
     var userToken = commands[2];
+    var roomId = commands[3];
     client.setPlayerUsername(userName);
     client.setPlayerToken(userToken);
-    room.getClients().forEach(ws -> {
-      var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
-      var buffer = Buffer.buffer(json.toJson(msg, (Class<?>) null));
-      ws.getSocket().write(buffer);
-    });
+    var room = rooms.getRoom(roomId);
+    room.addClient(client);
+    client.setGameRoom(room);
+    var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
+    sender.sendToAll(msg, room.getClients());
   }
 }
