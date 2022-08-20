@@ -48,6 +48,17 @@ public class GameConfigs {
     throw new IllegalArgumentException("No such Config saved");
   }
 
+  public <T extends Config> @NonNull T getRandom(@NonNull final Class<T> entityClass) {
+    Array<Config> configs = configMap.values().toArray();
+    configs.shuffle();
+    for (var next : configs) {
+      if (entityClass.isInstance(next)) {
+        return entityClass.cast(next);
+      }
+    }
+    throw new IllegalArgumentException("No such Config saved");
+  }
+
   public <T extends Config> Array<T> getAll(Class<T> configClass) {
     var array = new Array<T>(false, 16);
     configMap.values().forEach(config -> {
