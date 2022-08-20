@@ -1,4 +1,4 @@
-package com.mygdx.game.server.initialize.generators;
+package com.mygdx.game.server.initialize.field_generators;
 
 
 import lombok.EqualsAndHashCode;

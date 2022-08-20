@@ -3,6 +3,5 @@
   "name": "dune",
   "polishName": "wydmy",
   "modelPath": "subbasic.g3db",
-  "textureName": "dune.png",
-  "parentField": 3
+  "textureName": "dune.png"
 }

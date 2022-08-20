@@ -1,4 +1,4 @@
-package com.mygdx.game.server.initialize.generators;
+package com.mygdx.game.server.initialize.subfield_generators;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;

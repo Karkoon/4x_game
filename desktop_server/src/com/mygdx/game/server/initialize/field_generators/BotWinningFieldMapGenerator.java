@@ -1,4 +1,4 @@
-package com.mygdx.game.server.initialize.generators;
+package com.mygdx.game.server.initialize.field_generators;
 
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
@@ -24,7 +24,7 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
       FieldFactory fieldFactory,
       ComponentFactory componentFactory
   ) {
-    super(10);
+    super(401);
     this.assets = assets;
     this.fieldFactory = fieldFactory;
     this.componentFactory = componentFactory;

@@ -3,6 +3,5 @@
   "name": "subfield",
   "polishName": "podobszar",
   "modelPath": "subbasic.g3db",
-  "textureName": "subbasic.png",
-  "parentField": 1
+  "textureName": "subbasic.png"
 }

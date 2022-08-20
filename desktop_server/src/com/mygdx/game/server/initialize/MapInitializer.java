@@ -1,6 +1,6 @@
 package com.mygdx.game.server.initialize;
 
-import com.mygdx.game.server.initialize.generators.MapGeneratorsContainer;
+import com.mygdx.game.server.initialize.field_generators.MapGeneratorsContainer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
