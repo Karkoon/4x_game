@@ -1,5 +1,13 @@
 package com.mygdx.game.client.util;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -28,6 +36,12 @@ import javax.inject.Singleton;
 public class HUDElementsCreator {
 
   private final MenuScreenAssets assets;
+
+  @Inject
+  public HUDElementsCreator(
+      @NonNull MenuScreenAssets assets
+  ) {
+    this.assets = assets;
   private final GameScreenAssets gameAssets;
 
   @Inject
@@ -49,7 +63,7 @@ public class HUDElementsCreator {
 
   public Button createActionButton(String text, Runnable runnable) {
     var button = new TextButton(text, assets.getSkin(MenuScreenAssetPaths.SKIN));
-    button.getLabel().setFontScale(1.0f);
+    button.getLabel().setFontScale(1.5f);
     button.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

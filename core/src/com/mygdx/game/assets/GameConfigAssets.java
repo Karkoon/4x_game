@@ -81,6 +81,7 @@ public class GameConfigAssets {
     loadArrayAsset(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, SubFieldConfig.class);
     loadArrayAsset(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, TechnologyConfig.class);
     loadArrayAsset(GameConfigAssetPaths.MAP_TYPE_CONFIG_DIR, MapTypeConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.BUILDING_CONFIG_DIR, MapTypeConfig.class);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})

@@ -14,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
+import com.mygdx.game.client.hud.FieldHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
+import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
@@ -39,6 +41,7 @@ public class FieldScreen extends ScreenAdapter {
   private final Viewport viewport;
 
   private final Stage stage;
+  private final FieldHUD fieldHUD;
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
   private final SubFieldUiInputProcessor subFieldUiInputProcessor;
@@ -54,7 +57,8 @@ public class FieldScreen extends ScreenAdapter {
   public FieldScreen(
       @NonNull World world,
       @NonNull Viewport viewport,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull @Named(StageModule.FIELD_SCREEN) Stage stage,
+      @NonNull FieldHUD fieldHUD,
       @NonNull ChosenEntity chosenEntity,
       @NonNull ShowSubfieldService showSubfieldService,
       @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor,
@@ -65,6 +69,7 @@ public class FieldScreen extends ScreenAdapter {
     world.inject(this);
     this.viewport = viewport;
     this.stage = stage;
+    this.fieldHUD = fieldHUD;
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
@@ -104,8 +109,13 @@ public class FieldScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
+    renderer.subRender(fieldParent);
+
     stage.draw();
+    fieldHUD.draw();
+
     stage.act(delta);
+    fieldHUD.act(delta);
   }
 
   @Override
@@ -120,6 +130,7 @@ public class FieldScreen extends ScreenAdapter {
     showSubfieldService.flipSubscriptionState(fieldParent);
     fieldParent = -1;
     inField.setInField(false);
+    disposeInput();
   }
 
   private void positionCamera(@NonNull Camera camera) {
@@ -140,5 +151,9 @@ public class FieldScreen extends ScreenAdapter {
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, subFieldUiInputProcessor, stage);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
+  }
+
+  private void disposeInput() {
+    Gdx.input.setInputProcessor(null);
   }
 }
