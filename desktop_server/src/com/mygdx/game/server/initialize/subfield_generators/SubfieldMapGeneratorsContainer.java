@@ -1,4 +1,4 @@
-package com.mygdx.game.server.initialize.generators;
+package com.mygdx.game.server.initialize.subfield_generators;
 
 import com.badlogic.gdx.utils.LongMap;
 import lombok.NonNull;
@@ -27,6 +27,10 @@ public class SubfieldMapGeneratorsContainer {
 
   @NonNull
   public SubfieldMapGenerator get(long type) {
-    return mapTypes.get(0); // todo prepare other subfield generation strategies for different fields
+    if (mapTypes.containsKey(type)) {
+      return mapTypes.get(type);
+    } else {
+      return mapTypes.get(0);
+    }
   }
 }

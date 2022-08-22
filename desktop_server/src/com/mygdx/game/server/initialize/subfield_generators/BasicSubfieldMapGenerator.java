@@ -1,4 +1,4 @@
-package com.mygdx.game.server.initialize.generators;
+package com.mygdx.game.server.initialize.subfield_generators;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;
@@ -31,7 +31,7 @@ public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
   public IntArray generateSubfield(int parentId) {
     var subFields = new IntArray();
     for (Coordinates coordinates : coordinatesList) {
-      var subfieldConfig = assets.getGameConfigs().getAny(SubFieldConfig.class);
+      var subfieldConfig = assets.getGameConfigs().getRandom(SubFieldConfig.class);
 
       var entityId = componentFactory.createEntityId();
       componentFactory.createCoordinateComponent(coordinates, entityId);

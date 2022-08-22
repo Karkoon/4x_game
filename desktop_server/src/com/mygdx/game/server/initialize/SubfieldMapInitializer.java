@@ -2,7 +2,7 @@ package com.mygdx.game.server.initialize;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.FieldConfig;
-import com.mygdx.game.server.initialize.generators.SubfieldMapGeneratorsContainer;
+import com.mygdx.game.server.initialize.subfield_generators.SubfieldMapGeneratorsContainer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

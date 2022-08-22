@@ -11,15 +11,15 @@ import javax.inject.Singleton;
 public class GameConfigs {
 
   public static final int FIELD_MIN = 1;
-  public static final int FIELD_MAX = 6;
-  public static final int UNIT_MIN = 6;
-  public static final int UNIT_MAX = 7;
-  public static final int SUBFIELD_MIN = 7;
-  public static final int SUBFIELD_MAX = 8;
-  public static final int TECHNOLOGY_MIN = 8;
-  public static final int TECHNOLOGY_MAX = 10;
-  public static final int MAP_TYPE_MIN = 10;
-  public static final int MAP_TYPE_MAX = 11;
+  public static final int FIELD_MAX = 5;
+  public static final int UNIT_MIN = 101;
+  public static final int UNIT_MAX = 101;
+  public static final int SUBFIELD_MIN = 201;
+  public static final int SUBFIELD_MAX = 203;
+  public static final int TECHNOLOGY_MIN = 301;
+  public static final int TECHNOLOGY_MAX = 302;
+  public static final int MAP_TYPE_MIN = 401;
+  public static final int MAP_TYPE_MAX = 401;
 
   private final LongMap<Config> configMap = new LongMap<>();
 
@@ -41,6 +41,17 @@ public class GameConfigs {
 
   public <T extends Config> @NonNull T getAny(@NonNull final Class<T> entityClass) { // don't use later
     for (var next : configMap.values()) {
+      if (entityClass.isInstance(next)) {
+        return entityClass.cast(next);
+      }
+    }
+    throw new IllegalArgumentException("No such Config saved");
+  }
+
+  public <T extends Config> @NonNull T getRandom(@NonNull final Class<T> entityClass) {
+    Array<Config> configs = configMap.values().toArray();
+    configs.shuffle();
+    for (var next : configs) {
       if (entityClass.isInstance(next)) {
         return entityClass.cast(next);
       }
