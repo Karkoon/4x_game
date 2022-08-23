@@ -9,7 +9,6 @@ import dagger.Lazy;
 
 import javax.inject.Inject;
 import java.util.ArrayDeque;
-import java.util.List;
 import java.util.Queue;
 
 @GameInstanceScope
@@ -19,6 +18,7 @@ public class GameInstance {
   private final Lazy<MapInitializer> mapInitializer;
   private final Lazy<StartUnitInitializer> unitInitializer;
   private World world;
+  private final GameRoom room;
   private Queue<Client> playerOrder;
   private Client activePlayer;
 
@@ -27,19 +27,21 @@ public class GameInstance {
       Lazy<TechnologyInitializer> technologyInitializer,
       Lazy<MapInitializer> mapInitializer,
       Lazy<StartUnitInitializer> unitInitializer,
-      World world
+      World world,
+      GameRoom room
   ) {
     this.technologyInitializer = technologyInitializer;
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.world = world;
+    this.room = room;
   }
 
-  public void startGame(int width, int height, long mapType, List<Client> players) {
+  public void startGame(int width, int height, long mapType) {
     technologyInitializer.get().initializeTechnologies();
     mapInitializer.get().initializeMap(width, height, mapType);
     unitInitializer.get().initializeTestUnit();
-    playerOrder = new ArrayDeque<>(players);
+    playerOrder = new ArrayDeque<>(room.getClients());
   }
 
   public Client changeToNextPlayer() {
@@ -54,9 +56,5 @@ public class GameInstance {
 
   public World getWorld() {
     return world;
-  }
-
-  public void setWorld(World world) {
-    this.world = world;
   }
 }

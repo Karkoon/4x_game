@@ -28,7 +28,7 @@ public class StartHandler {
     var room = client.getGameRoom();
     room.setupGameInstance();
     syncer.beginTransaction(room);
-    room.getGameInstance().startGame(width, height, mapType, room.getClients());
+    room.getGameInstance().startGame(width, height, mapType);
     syncer.endTransaction(room);
     var msg = new GameStartedMessage(room.getClients().get(0).getPlayerToken());
     sender.sendToAll(msg, room.getClients());
