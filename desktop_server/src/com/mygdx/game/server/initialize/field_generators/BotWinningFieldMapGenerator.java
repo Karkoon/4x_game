@@ -50,6 +50,6 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
 
   private void createWinningField() {
     var winningConfig = assets.get(FieldConfig.class, 5);
-    fieldFactory.createEntity(winningConfig, new Coordinates(4, 4));
+    fieldFactory.createEntity(winningConfig, new Coordinates(WINNING_X, WINNING_Y));
   }
 }
