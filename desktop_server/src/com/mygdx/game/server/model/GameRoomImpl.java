@@ -16,7 +16,7 @@ public class GameRoomImpl implements GameRoom {
 
   private final Map<String, Client> clients = new HashMap<>();
   private final String roomId;
-  private final GameInstanceSubcomponent gameInstanceSubcomponent;
+  private final GameInstanceSubcomponent.Builder gameInstanceSubcomponentBuilder;
   private GameInstance activeGameInstance;
 
   @AssistedInject
@@ -25,7 +25,7 @@ public class GameRoomImpl implements GameRoom {
       @Assisted String roomId
   ) {
     this.roomId = roomId;
-    this.gameInstanceSubcomponent = gameInstanceSubcomponentBuilder.gameRoom(this).build();
+    this.gameInstanceSubcomponentBuilder = gameInstanceSubcomponentBuilder;
   }
 
   public List<Client> getClients() {
@@ -52,7 +52,7 @@ public class GameRoomImpl implements GameRoom {
 
   public void setupGameInstance() {
     log.info("started game");
-    activeGameInstance = gameInstanceSubcomponent.get();
+    activeGameInstance = gameInstanceSubcomponentBuilder.gameRoom(this).build().get();
   }
 
   public void tearDownGameInstance() {

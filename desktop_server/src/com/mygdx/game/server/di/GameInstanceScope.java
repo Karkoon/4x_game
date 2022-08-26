@@ -1,7 +1,10 @@
 package com.mygdx.game.server.di;
 
-import javax.inject.Qualifier;
+import javax.inject.Scope;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@Qualifier
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
 public @interface GameInstanceScope {
 }

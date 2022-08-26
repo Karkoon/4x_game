@@ -12,12 +12,10 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.GameRoomSyncer;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @GameInstanceScope
-@Log
 public class ComponentFactory {
 
   private final GameRoom room;

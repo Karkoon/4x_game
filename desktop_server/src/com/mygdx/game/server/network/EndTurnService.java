@@ -2,7 +2,6 @@ package com.mygdx.game.server.network;
 
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.model.GameRoom;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

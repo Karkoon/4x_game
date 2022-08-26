@@ -29,7 +29,7 @@ public class GameRoomSyncer {
     if (transaction == null) {
       transactionMap.put(room, new Transaction());
     } else {
-      if (!transaction.isPending()) {
+      if (transaction.isPending()) {
         throw new IllegalStateException("Previous transaction wasn't ended");
       }
     }
@@ -50,8 +50,8 @@ public class GameRoomSyncer {
     if (!transaction.isPending()) {
       throw new IllegalStateException("Transaction not pending");
     }
+    var messageBuffer = transaction.getMessageBuffer();
     room.getClients().forEach(client -> {
-      var messageBuffer = transaction.getMessageBuffer();
       log.info("sending " + messageBuffer + " of " + messageBuffer + " to " + client.getPlayerUsername());
       sendSavingClassInJson(messageBuffer, client);
     });

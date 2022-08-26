@@ -11,15 +11,17 @@ import java.util.logging.Level;
 
 @Module
 @Log
-@GameInstanceScope
 public class WorldModule {
   @Provides
+  @GameInstanceScope
   public @NonNull WorldConfiguration providesWorldConfiguration(
       /* nothing to process lmao */
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
     return new WorldConfiguration();
   }
+
+  @GameInstanceScope
   @Provides
   public @NonNull World providesWorld(WorldConfiguration configuration) {
     return new World(configuration);

@@ -19,6 +19,7 @@ public interface GameInstanceSubcomponent {
   interface Builder {
     @BindsInstance
     Builder gameRoom(GameRoom gameRoom);
+
     GameInstanceSubcomponent build();
   }
 }

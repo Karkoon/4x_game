@@ -43,9 +43,8 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   }
 
   private FieldConfig chooseFieldConfig() {
-    var fieldConfigs = assets.getAll(FieldConfig.class);
-    var chosenField = random.nextInt(fieldConfigs.size);
-    return fieldConfigs.get(chosenField);
+    var chosenField = random.nextInt(GameConfigs.FIELD_MIN, GameConfigs.FIELD_MAX);
+    return assets.get(FieldConfig.class, chosenField);
   }
 
   private void createWinningField() {
