@@ -15,8 +15,6 @@ public class StartUnitInitializer {
   private final UnitFactory unitFactory;
   private final GameConfigAssets assets;
 
-  private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
-
   @Inject
   public StartUnitInitializer(
       @NonNull UnitFactory unitFactory,
@@ -26,11 +24,6 @@ public class StartUnitInitializer {
   }
 
   public void initializeTestUnit() {
-    if (initialized) {
-      return;
-    } else {
-      initialized = true;
-    }
     var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class);
     unitFactory.createEntity(anyConfig, new Coordinates(0, 0));
   }
