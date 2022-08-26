@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter {
       @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
       @NonNull Viewport viewport,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull @Named(Names.GAME_SCREEN) Stage stage,
       @NonNull ClickInputAdapter clickInputAdapter,
       @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
       @NonNull GameStartService gameStartService,

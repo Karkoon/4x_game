@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client_core.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -24,7 +24,7 @@ public final class ChooseEntityDialogFactory {
   @Inject
   public ChooseEntityDialogFactory(
       @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage
+      @NonNull @Named(Names.GAME_SCREEN) Stage stage
   ) {
     this.assets = assets;
     this.stage = stage;

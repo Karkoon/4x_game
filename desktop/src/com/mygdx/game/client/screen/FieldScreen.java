@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.ModelInstanceRenderer;
+import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
@@ -41,7 +42,7 @@ public class FieldScreen extends ScreenAdapter {
       @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
       @NonNull Viewport viewport,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull @Named(Names.GAME_SCREEN) Stage stage,
       @NonNull ChosenEntity chosenEntity,
       @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor
   ) {

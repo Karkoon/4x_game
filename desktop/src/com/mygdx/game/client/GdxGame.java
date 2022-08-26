@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.client.screen.FieldScreen;
+import com.mygdx.game.client.screen.GameRoomListScreen;
+import com.mygdx.game.client.screen.GameRoomScreen;
 import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
 import com.mygdx.game.client.screen.MenuScreen;
@@ -27,6 +29,8 @@ public class GdxGame extends Game implements Navigator {
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
   private final Lazy<TechnologyScreen> technologyScreen;
+  private final Lazy<GameRoomScreen> gameRoomScreen;
+  private final Lazy<GameRoomListScreen> gameRoomListScreen;
 
   @Inject
   GdxGame(
@@ -35,7 +39,9 @@ public class GdxGame extends Game implements Navigator {
       @NonNull Lazy<FieldScreen> fieldScreen,
       @NonNull Lazy<LoadingScreen> loadingScreen,
       @NonNull Lazy<MenuScreen> menuScreen,
-      @NonNull Lazy<TechnologyScreen> technologyScreen
+      @NonNull Lazy<TechnologyScreen> technologyScreen,
+      @NonNull Lazy<GameRoomScreen> gameRoomScreen,
+      @NonNull Lazy<GameRoomListScreen> gameRoomListScreen
   ) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;
@@ -43,11 +49,13 @@ public class GdxGame extends Game implements Navigator {
     this.loadingScreen = loadingScreen;
     this.menuScreen = menuScreen;
     this.technologyScreen = technologyScreen;
+    this.gameRoomScreen = gameRoomScreen;
+    this.gameRoomListScreen = gameRoomListScreen;
   }
 
   @Override
   public void create() {
-    changeTo(Direction.LOADING_SCREEN);
+    changeToGameRoomListScreen();
   }
 
   @Override
@@ -102,6 +110,16 @@ public class GdxGame extends Game implements Navigator {
   @Override
   public void exit() {
     dispose();
+  }
+
+  @Override
+  public void changeToGameRoomScreen() {
+    setScreen(gameRoomScreen.get());
+  }
+
+  @Override
+  public void changeToGameRoomListScreen() {
+    setScreen(gameRoomListScreen.get());
   }
 
 }

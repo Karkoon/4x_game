@@ -26,12 +26,20 @@ public class StageModule {
     return stage;
   }
 
-  public static final String GAME_SCREEN = "game_screen";
+  @Provides
+  @Singleton
+  @Named(Names.GAME_SCREEN)
+  public Stage providesGameStage() {
+    var stage = new Stage(new ScreenViewport());
+    stage.setDebugAll(true);
+    log.info("provided GameScreen Stage");
+    return stage;
+  }
 
   @Provides
   @Singleton
-  @Named(GAME_SCREEN)
-  public Stage providesGameStage() {
+  @Named(Names.GAME_ROOM_LIST_SCREEN)
+  public Stage providesGameRoomListScreen() {
     var stage = new Stage(new ScreenViewport());
     stage.setDebugAll(true);
     log.info("provided GameScreen Stage");

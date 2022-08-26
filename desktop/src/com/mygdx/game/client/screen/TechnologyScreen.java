@@ -43,7 +43,7 @@ public class TechnologyScreen extends ScreenAdapter {
           @NonNull Technologies technologies,
           @NonNull UiElementsCreator uiElementsCreator,
           @NonNull TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter
-          ) {
+  ) {
     this.stage = stage;
 
     this.positionMapper = world.getMapper(Position.class);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
@@ -29,7 +29,7 @@ public class PlayerRoomDialogFactory {
   @Inject
   public PlayerRoomDialogFactory(
       @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull @Named(Names.GAME_SCREEN) Stage stage,
       @NonNull WebSocketHandler handler,
       @NonNull PlayerInfo playerInfo
   ) {
