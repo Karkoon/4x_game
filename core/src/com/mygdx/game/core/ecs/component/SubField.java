@@ -12,11 +12,11 @@ import lombok.NonNull;
 public class SubField extends PooledComponent {
 
   private @NonNull int parent = -0xC0FEE;
-  private @NonNull IntArray buildings = new IntArray();
+  private @NonNull int building = -0xC0FEE;
 
   @Override
   protected void reset() {
     this.parent = -0xC0FEE;
-    this.buildings.clear();
+    this.building = -0xC0FEE;
   }
 }

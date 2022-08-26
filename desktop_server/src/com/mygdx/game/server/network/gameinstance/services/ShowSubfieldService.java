@@ -19,6 +19,7 @@ public class ShowSubfieldService extends WorldService {
 
   @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class})
   private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private final World world;
 
@@ -38,6 +39,12 @@ public class ShowSubfieldService extends WorldService {
       var changeSubscribersComp = changeSubscribersMapper.get(entityId);
       changeSubscribersComp.getChangedSubscriptionState().set(clientIndex);
       changeSubscribersComp.getClients().flip(clientIndex);
+      var buildingId = subFieldMapper.get(entityId).getBuilding();
+      if (buildingId != -0xC0FEE) {
+        var changeSubscribersCompB = changeSubscribersMapper.get(buildingId);
+        changeSubscribersCompB.getChangedSubscriptionState().set(clientIndex);
+        changeSubscribersCompB.getClients().flip(clientIndex);
+      }
     }
     log.info("Shown subfield");
     world.process();

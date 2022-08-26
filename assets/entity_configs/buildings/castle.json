@@ -1,0 +1,7 @@
+{
+  "id": 502,
+  "name": "castle",
+  "polishName": "zamek",
+  "modelPath": "subbasic.g3db",
+  "textureName": "castle.png"
+}

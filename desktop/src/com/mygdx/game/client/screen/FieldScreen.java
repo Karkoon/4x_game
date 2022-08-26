@@ -41,6 +41,7 @@ public class FieldScreen extends ScreenAdapter {
   private final Viewport viewport;
 
   private final Stage stage;
+  private final ClickInputAdapter clickInputAdapter;
   private final FieldHUD fieldHUD;
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
@@ -58,6 +59,7 @@ public class FieldScreen extends ScreenAdapter {
       @NonNull World world,
       @NonNull Viewport viewport,
       @NonNull @Named(StageModule.FIELD_SCREEN) Stage stage,
+      @NonNull ClickInputAdapter clickInputAdapter,
       @NonNull FieldHUD fieldHUD,
       @NonNull ChosenEntity chosenEntity,
       @NonNull ShowSubfieldService showSubfieldService,
@@ -69,6 +71,7 @@ public class FieldScreen extends ScreenAdapter {
     world.inject(this);
     this.viewport = viewport;
     this.stage = stage;
+    this.clickInputAdapter = clickInputAdapter;
     this.fieldHUD = fieldHUD;
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
@@ -109,7 +112,6 @@ public class FieldScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-    renderer.subRender(fieldParent);
 
     stage.draw();
     fieldHUD.draw();
@@ -148,7 +150,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
-    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, subFieldUiInputProcessor, stage);
+    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, subFieldUiInputProcessor, stage, clickInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
   }

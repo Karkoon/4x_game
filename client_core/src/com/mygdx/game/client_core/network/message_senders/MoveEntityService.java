@@ -1,6 +1,7 @@
-package com.mygdx.game.client_core.network;
+package com.mygdx.game.client_core.network.message_senders;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import dagger.Lazy;
 import lombok.NonNull;

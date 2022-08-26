@@ -1,13 +1,17 @@
 package com.mygdx.game.client.util;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.assets.GameScreenAssetPaths;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -36,10 +40,12 @@ import javax.inject.Singleton;
 public class HUDElementsCreator {
 
   private final MenuScreenAssets assets;
+  private final GameScreenAssets gameAssets;
 
   @Inject
   public HUDElementsCreator(
-      @NonNull MenuScreenAssets assets
+      @NonNull MenuScreenAssets assets,
+      @NonNull GameScreenAssets gameAssets
   ) {
     this.assets = assets;
   private final GameScreenAssets gameAssets;
@@ -50,6 +56,7 @@ public class HUDElementsCreator {
       @NonNull GameScreenAssets gameAssets
   ) {
     this.assets = assets;
+    this.gameAssets = gameAssets;
     this.gameAssets = gameAssets;
   }
 
