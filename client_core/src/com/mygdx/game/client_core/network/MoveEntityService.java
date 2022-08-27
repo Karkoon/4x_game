@@ -1,6 +1,7 @@
 package com.mygdx.game.client_core.network;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import dagger.Lazy;
 import lombok.NonNull;
@@ -9,6 +10,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class MoveEntityService {
 
   private final Lazy<WebSocket> webSocket;

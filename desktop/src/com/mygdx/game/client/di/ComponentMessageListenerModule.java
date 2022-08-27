@@ -1,6 +1,7 @@
 package com.mygdx.game.client.di;
 
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.comp_handlers.CoordinatesHandler;
@@ -20,6 +21,7 @@ import lombok.extern.java.Log;
 public class ComponentMessageListenerModule {
 
   @Provides
+  @GameInstanceScope
   public ComponentMessageListener provideComponentMessageListener(
       EntityConfigHandler entityConfigHandler,
       SubFieldHandler subFieldHandler,

@@ -13,6 +13,7 @@ import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope // todo introduce SubfieldScope?
 @Log
 public class FieldScreen extends ScreenAdapter {
 

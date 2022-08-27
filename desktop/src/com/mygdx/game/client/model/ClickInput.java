@@ -1,6 +1,7 @@
 package com.mygdx.game.client.model;
 
 import com.badlogic.gdx.math.collision.Ray;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.Data;
 import lombok.extern.java.Log;
 
@@ -8,7 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Data
-@Singleton
+@GameInstanceScope
 @Log
 public class ClickInput {
   private Ray value = null;

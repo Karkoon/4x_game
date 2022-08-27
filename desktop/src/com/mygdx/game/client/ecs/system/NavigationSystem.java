@@ -5,11 +5,13 @@ import com.artemis.ComponentMapper;
 import com.mygdx.game.client.ecs.component.NavigationDirection;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.screen.Navigator;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class NavigationSystem extends BaseSystem {
 
   private final ChosenEntity chosenEntity;

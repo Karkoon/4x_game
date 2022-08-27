@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 @All({Position.class, Coordinates.class})
 public class CoordinateToPositionSystem extends IteratingSystem {
 

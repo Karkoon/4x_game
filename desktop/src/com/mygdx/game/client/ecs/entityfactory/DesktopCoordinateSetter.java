@@ -2,6 +2,7 @@ package com.mygdx.game.client.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.TechnologyConfig;
@@ -12,7 +13,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class DesktopCoordinateSetter implements Setter {
 

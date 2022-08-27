@@ -5,6 +5,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.ecs.component.Score;
@@ -15,7 +16,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @All({ModelInstanceComp.class, Position.class})
 @Log
 public class RenderSystem extends IteratingSystem {

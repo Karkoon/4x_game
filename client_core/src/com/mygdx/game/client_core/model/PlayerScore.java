@@ -1,12 +1,13 @@
 package com.mygdx.game.client_core.model;
 
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Getter
 @Setter
 public class PlayerScore {

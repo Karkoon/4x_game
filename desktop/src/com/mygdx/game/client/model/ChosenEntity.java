@@ -1,13 +1,14 @@
 package com.mygdx.game.client.model;
 
 
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class ChosenEntity {
   private static final int NO_ENTITY = -0xC0FFE;
 

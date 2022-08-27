@@ -12,6 +12,7 @@ import com.mygdx.game.client.ecs.component.Choosable;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import lombok.extern.java.Log;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 
 @Log
 @All({Choosable.class, Position.class, Name.class})
+@GameInstanceScope
 public class ChooseSystem extends IteratingSystem {
 
   private final ClickInput clickInput;

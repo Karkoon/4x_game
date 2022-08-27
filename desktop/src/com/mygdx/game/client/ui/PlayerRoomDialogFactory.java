@@ -8,6 +8,8 @@ import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.Names;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
@@ -24,19 +26,16 @@ public class PlayerRoomDialogFactory {
   private final GameScreenAssets assets;
   private final Stage stage;
   private final WebSocketHandler handler;
-  private final PlayerInfo playerInfo;
 
   @Inject
   public PlayerRoomDialogFactory(
       @NonNull GameScreenAssets assets,
       @NonNull @Named(Names.GAME_SCREEN) Stage stage,
-      @NonNull WebSocketHandler handler,
-      @NonNull PlayerInfo playerInfo
+      @NonNull WebSocketHandler handler
   ) {
     this.assets = assets;
     this.stage = stage;
     this.handler = handler;
-    this.playerInfo = playerInfo;
   }
 
   public void createAndShow(@NonNull OnClose onClose) {
@@ -50,10 +49,6 @@ public class PlayerRoomDialogFactory {
       return FULLY_HANDLED;
     }));
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
-      var message = (GameStartedMessage) o;
-      if (message.getPlayerToken().equals(playerInfo.getToken())) {
-        playerInfo.activatePlayer();
-      }
       dialog.hide();
       return FULLY_HANDLED;
     }));

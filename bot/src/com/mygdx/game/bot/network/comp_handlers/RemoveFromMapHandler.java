@@ -2,7 +2,7 @@ package com.mygdx.game.bot.network.comp_handlers;
 
 import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.client_core.model.GameState;
+import com.mygdx.game.bot.model.GameState;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import lombok.NonNull;
 

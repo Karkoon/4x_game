@@ -5,7 +5,7 @@ import com.artemis.World;
 import com.mygdx.game.bot.input.MoveEntityBotInputAdapter;
 import com.mygdx.game.bot.util.CoordinateUtil;
 import com.mygdx.game.client_core.ecs.component.Movable;
-import com.mygdx.game.client_core.model.GameState;
+import com.mygdx.game.bot.model.GameState;
 import com.mygdx.game.client_core.model.PlayerScore;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;

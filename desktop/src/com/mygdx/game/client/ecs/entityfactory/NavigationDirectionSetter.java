@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.client.ecs.component.NavigationDirection;
 import com.mygdx.game.client.screen.Navigator;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
@@ -11,6 +12,7 @@ import lombok.NonNull;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class NavigationDirectionSetter implements Setter {
   private final ComponentMapper<NavigationDirection> directionMapper;
 

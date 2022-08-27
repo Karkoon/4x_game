@@ -4,6 +4,7 @@ import com.artemis.Component;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.core.ecs.component.Field;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
+@GameInstanceScope
 public class FieldHandler implements ComponentMessageListener.Handler {
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;

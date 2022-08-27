@@ -3,6 +3,7 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -13,7 +14,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class UnitFactory extends EntityFactory<UnitConfig> {
 

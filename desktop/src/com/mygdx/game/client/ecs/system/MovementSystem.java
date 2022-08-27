@@ -5,6 +5,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 
 @All({Highlighted.class, Movable.class})
 @Log
+@GameInstanceScope
 public class MovementSystem extends IteratingSystem {
 
   private final ChosenEntity chosenEntity;

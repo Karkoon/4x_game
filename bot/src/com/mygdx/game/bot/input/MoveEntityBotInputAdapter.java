@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client_core.ecs.component.Score;
-import com.mygdx.game.client_core.model.GameState;
+import com.mygdx.game.bot.model.GameState;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.model.PlayerScore;
 import com.mygdx.game.client_core.network.MoveEntityService;

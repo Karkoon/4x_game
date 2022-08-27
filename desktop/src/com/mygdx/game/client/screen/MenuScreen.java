@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.core.util.Vector3Util;
@@ -23,7 +24,7 @@ public class MenuScreen extends ScreenAdapter {
   private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
   private final Stage stage;
   private final MenuScreenAssets assets;
-  private final Navigator navigator;
+  private final GdxGame game;
   private final StarBackground starBackground;
   private final Planet planet;
 
@@ -31,11 +32,11 @@ public class MenuScreen extends ScreenAdapter {
   public MenuScreen(
       @NonNull Stage stage,
       @NonNull MenuScreenAssets assets,
-      @NonNull Navigator navigator
+      @NonNull GdxGame game
   ) {
     this.stage = stage;
     this.assets = assets;
-    this.navigator = navigator;
+    this.game = game;
 
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
@@ -70,15 +71,15 @@ public class MenuScreen extends ScreenAdapter {
   }
 
   private Button createStartButton() {
-    return createFunctionalButton(navigator::changeToGameScreen, "START");
+    return createFunctionalButton(game::changeToGameRoomListScreen, "START");
   }
 
   private Button createAboutButton() {
-    return createFunctionalButton(navigator::changeToAboutScreen, "ABOUT");
+    return createFunctionalButton(game::changeToAboutScreen, "ABOUT");
   }
 
   private Button createExitButton() {
-    return createFunctionalButton(navigator::exit, "EXIT");
+    return createFunctionalButton(game::exit, "EXIT");
   }
 
   private Button createFunctionalButton(final Runnable runnable, String text) {

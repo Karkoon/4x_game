@@ -1,79 +1,77 @@
 package com.mygdx.game.client.screen;
 
-import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
+import com.mygdx.game.client.di.GameScreenSubcomponent;
 import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
-import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
-import com.mygdx.game.client_core.network.GameConnectService;
-import com.mygdx.game.client_core.network.GameStartService;
-import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.model.GameInstance;
+import com.mygdx.game.core.util.CompositeDisposable;
 import com.mygdx.game.core.util.CompositeUpdatable;
+import dagger.Lazy;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
+  private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-  private final World world;
+  private final GdxGame game;
+  private final Lazy<FieldScreen> fieldScreen;
+  private final Lazy<TechnologyScreen> technologyScreen;
   private final Viewport viewport;
-  private final ModelInstanceRenderer renderer;
 
   private final Stage stage;
   private final ClickInputAdapter clickInputAdapter;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
-  private final GameStartService gameStartService;
-  private final PlayerRoomDialogFactory roomDialogFactory;
-  private final GameConnectService gameConnectService;
 
-  private boolean initialized = false;
 
   @Inject
   public GameScreen(
+      @NonNull GdxGame game,
+      @NonNull Lazy<FieldScreen> fieldScreen,
+      @NonNull Lazy<TechnologyScreen> technologyScreen,
+      @NonNull Lazy<GameInstance> gameInstance,
       @NonNull ModelInstanceRenderer renderer,
-      @NonNull World world,
       @NonNull Viewport viewport,
       @NonNull @Named(Names.GAME_SCREEN) Stage stage,
       @NonNull ClickInputAdapter clickInputAdapter,
-      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
-      @NonNull GameStartService gameStartService,
-      @NonNull PlayerRoomDialogFactory roomDialogFactory,
-      @NonNull GameConnectService gameConnectService
+      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter
   ) {
-    this.renderer = renderer;
-    this.world = world;
+    this.game = game;
+    this.fieldScreen = fieldScreen;
+    this.technologyScreen = technologyScreen;
     this.viewport = viewport;
     this.stage = stage;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
-    this.gameStartService = gameStartService;
-    this.roomDialogFactory = roomDialogFactory;
-    this.gameConnectService = gameConnectService;
+    this.compositeDisposable.addDisposable(renderer);
+    this.compositeUpdatable.addUpdatable(delta -> renderer.render());
+    this.compositeUpdatable.addUpdatable(delta -> gameInstance.get().update(delta));
+    this.compositeUpdatable.addUpdatable(delta -> {
+      stage.draw();
+      stage.act(delta);
+    });
   }
 
   @Override
   public void show() {
     log.info("GameScreen shown");
-    if (!initialized) {
-      roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5, GameConfigs.MAP_TYPE_MIN));
-      gameConnectService.connect();
-      initialized = true;
-    }
     positionCamera(viewport.getCamera());
     setUpInput();
   }
@@ -81,12 +79,7 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     compositeUpdatable.update(delta);
-    world.setDelta(delta);
-    world.process();
     viewport.getCamera().update();
-    renderer.render();
-    stage.draw();
-    stage.act(delta);
   }
 
   @Override
@@ -97,7 +90,7 @@ public class GameScreen extends ScreenAdapter {
 
   @Override
   public void dispose() {
-    renderer.dispose();
+    compositeDisposable.dispose();
   }
 
   private void setUpInput() {
@@ -110,5 +103,31 @@ public class GameScreen extends ScreenAdapter {
   private void positionCamera(@NonNull Camera camera) {
     camera.position.set(0, 600, 0);
     camera.lookAt(0, 0, 0);
+  }
+
+  public void changeTo(Direction screenDirection) {
+    switch (screenDirection) {
+      case FIELD_SCREEN -> changeToFieldScreen();
+      case TECHNOLOGY_SCREEN -> changeToTechnologyScreen();
+      case EXIT -> exit();
+    }
+  }
+
+  @Override
+  public void changeToGameScreen() {
+    game.setScreen(this);
+  }
+
+  public void changeToFieldScreen() {
+    game.setScreen(fieldScreen.get());
+  }
+
+  public void changeToTechnologyScreen() {
+    game.setScreen(technologyScreen.get());
+  }
+  @Override
+  public void exit() {
+    dispose();
+    game.exit();
   }
 }

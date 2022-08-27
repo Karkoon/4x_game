@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.ModelInstanceComp;
 import com.mygdx.game.client.util.ModelInstanceUtil;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.ModelConfig;
@@ -15,7 +16,7 @@ import lombok.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 public class ModelInstanceCompSetter implements Setter {
 
   private final ComponentMapper<ModelInstanceComp> modelMapper;

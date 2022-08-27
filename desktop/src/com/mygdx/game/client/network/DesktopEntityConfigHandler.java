@@ -3,6 +3,7 @@ package com.mygdx.game.client.network;
 import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -15,6 +16,7 @@ import static com.github.czyzby.websocket.WebSocketListener.NOT_HANDLED;
 import static com.mygdx.game.client_core.ecs.entityfactory.Setter.Result.HANDLED;
 import static com.mygdx.game.client_core.ecs.entityfactory.Setter.Result.HANDLING_ERROR;
 
+@GameInstanceScope
 public class DesktopEntityConfigHandler implements ComponentMessageListener.Handler {
 
   private final GameConfigAssets assets;

@@ -1,12 +1,13 @@
 package com.mygdx.game.client_core.model;
 
 import com.badlogic.gdx.utils.IntArray;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class Technologies {
 
