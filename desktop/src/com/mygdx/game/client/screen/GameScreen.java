@@ -6,15 +6,16 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
-import com.mygdx.game.client.di.GameScreenSubcomponent;
 import com.mygdx.game.client.di.Names;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.GameInstance;
+import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.util.CompositeDisposable;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import dagger.Lazy;
@@ -38,6 +39,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final Stage stage;
   private final ClickInputAdapter clickInputAdapter;
+  private final Lazy<ComponentMessageListener> messageListener;
+  private final WebSocket webSocket;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
 
 
@@ -51,7 +54,9 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       @NonNull Viewport viewport,
       @NonNull @Named(Names.GAME_SCREEN) Stage stage,
       @NonNull ClickInputAdapter clickInputAdapter,
-      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter
+      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
+      @NonNull Lazy<ComponentMessageListener> messageListener,
+      @NonNull WebSocket webSocket
   ) {
     this.game = game;
     this.fieldScreen = fieldScreen;
@@ -60,6 +65,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.stage = stage;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
+    this.messageListener = messageListener;
+    this.webSocket = webSocket;
     this.compositeDisposable.addDisposable(renderer);
     this.compositeUpdatable.addUpdatable(delta -> renderer.render());
     this.compositeUpdatable.addUpdatable(delta -> gameInstance.get().update(delta));
@@ -74,6 +81,11 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "GameScreen shown");
     positionCamera(viewport.getCamera());
     setUpInput();
+    setupHandlers();
+  }
+
+  private void setupHandlers() {
+    webSocket.addListener(messageListener.get());
   }
 
   @Override
@@ -125,6 +137,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   public void changeToTechnologyScreen() {
     game.setScreen(technologyScreen.get());
   }
+
   @Override
   public void exit() {
     dispose();

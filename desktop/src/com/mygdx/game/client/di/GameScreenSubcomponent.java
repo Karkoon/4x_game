@@ -9,7 +9,9 @@ import dagger.Subcomponent;
     modules = {
         WorldModule.class,
         NavigatorModule.class,
-        WorldConfigurationModule.class
+        WorldConfigurationModule.class,
+        ComponentMessageListenerModule.class,
+        SetterBindingsModule.class,
     }
 )
 @GameInstanceScope
