@@ -22,7 +22,7 @@ public class EndTurnService {
   }
 
   public void endTurn() {
-    log.info("end turn request send");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "end turn request send");
     socket.send("end_turn");
   }
 }

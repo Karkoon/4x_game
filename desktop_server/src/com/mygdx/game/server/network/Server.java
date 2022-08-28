@@ -49,13 +49,13 @@ public final class Server {
   ) {
     var commands = frame.textData().split(":");
     var type = commands[0];
-    log.info("Received frame: " + frame.textData() + " from " + client.getPlayerUsername());
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Received frame: " + frame.textData() + " from " + client.getPlayerUsername());
     switch (type) {
       case "connect" -> connectHandler.handle(commands, client);
       case "start" -> startHandler.handle(commands, client);
       case "move" -> moveHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle(client);
-      default -> log.info("Couldn't handle packet: " + frame.textData());
+      default -> log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Couldn't handle packet: " + frame.textData());
     }
   }
 
@@ -75,13 +75,13 @@ public final class Server {
       websocket
           .frameHandler(frame -> this.handle(client, frame))
           .closeHandler(event -> {
-            log.info("the client closed? " + client.getPlayerUsername());
+            log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "the client closed? " + client.getPlayerUsername());
             closeHandler.handle(client);
           }).endHandler(event -> {
-            log.info("the client ended? " + client.getPlayerUsername());
+            log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "the client ended? " + client.getPlayerUsername());
             // TODO: 13.08.2022 cleanup after client
           }).exceptionHandler(throwable -> {
-            log.info("the client threw up? " + client.getPlayerUsername());
+            log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "the client threw up? " + client.getPlayerUsername());
             throwable.printStackTrace();
             // TODO: 13.08.2022 cleanup after client
           });

@@ -26,7 +26,7 @@ public class MoveEntityService {
   }
 
   public void moveEntity(int selectedUnit, Coordinates coordinates) {
-    log.info("Send from client to server");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Send from client to server");
     selectedUnit = networkWorldEntityMapper.getNetworkEntity(selectedUnit);
     webSocket.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
   }

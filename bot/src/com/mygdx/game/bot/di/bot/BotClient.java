@@ -46,7 +46,7 @@ public class BotClient {
   }
 
   public void run() {
-    log.info("Run bot");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Run bot");
     int movableEntity = getMovableEntityAt(currentCoordinates);
 
     for (int i = 0; i < 10; i++) {
@@ -64,7 +64,7 @@ public class BotClient {
 //      int nextMove = random.nextInt(0, availableCoordinates.size());
 //      Integer newMove = availableCoordinates.get(nextMove);
 //      Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, newMove);
-      log.info("Old coordinates: " + currentCoordinates);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Old coordinates: " + currentCoordinates);
 
       int nextMove = getAction(currentCoordinates);
       Coordinates newCoordinates = CoordinateUtil.mapMoveToCoordinate(currentCoordinates, nextMove);
@@ -72,18 +72,18 @@ public class BotClient {
 
       int reward = getReward(currentCoordinates, newCoordinates);
       updateQ(currentCoordinates, newCoordinates, nextMove, reward);
-      log.info("New coordinates: " + newCoordinates);
-      log.info("Bot score: " + playerScore.getScoreValue());
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "New coordinates: " + newCoordinates);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Bot score: " + playerScore.getScoreValue());
       currentCoordinates = newCoordinates;
 
       if (currentCoordinates.getX() == 4 && currentCoordinates.getY() == 4) {
-        log.info("RESET");
-        log.info("NEW ROUND... CURRENT QMAP: " + qMap);
+        log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "RESET");
+        log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "NEW ROUND... CURRENT QMAP: " + qMap);
         currentCoordinates = new Coordinates(0, 0);
         inputAdapter.moveUnit(movableEntity, currentCoordinates);
       }
 
-      log.info("CURRENT QMAP: " + qMap);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "CURRENT QMAP: " + qMap);
 
       try {
         Thread.sleep(50);
@@ -95,7 +95,7 @@ public class BotClient {
   }
 
   private int getMovableEntityAt(Coordinates coordinates) {
-    log.info("wait for map");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "wait for map");
     var entities = gameState.getEntitiesAtCoordinate(coordinates);
     while (entities == null) {
       try {

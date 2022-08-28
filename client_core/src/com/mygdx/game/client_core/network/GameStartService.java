@@ -20,7 +20,7 @@ public class GameStartService {
   }
 
   public void startGame(int width, int height, int mapType) {
-    log.info("start game request sent");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "start game request sent");
     socket.send(String.format("start:%d:%d:%d", width, height, mapType));
   }
 }

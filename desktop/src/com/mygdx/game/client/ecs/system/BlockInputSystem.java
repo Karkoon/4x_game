@@ -36,9 +36,9 @@ public class BlockInputSystem extends BaseSystem {
   @Override
   protected void processSystem() {
     if (!clickInput.isHandled()) {
-      log.info("HANDLED");
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "HANDLED");
       if (activeToken.isActiveToken(playerInfo.getToken())) {
-        log.info("Blocked click");
+        log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Blocked click");
         clickInput.clear();
         notPlayerTurnDialogFactory.createAndShow();
       }

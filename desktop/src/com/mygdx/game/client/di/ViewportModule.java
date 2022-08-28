@@ -15,7 +15,6 @@ import java.util.logging.Level;
 @Log
 public class ViewportModule {
 
-
   @Provides
   @Singleton
   public @NonNull Viewport providesPerspectiveViewport() {

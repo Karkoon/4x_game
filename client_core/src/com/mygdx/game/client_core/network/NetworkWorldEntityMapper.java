@@ -45,7 +45,7 @@ public class NetworkWorldEntityMapper {
     var worldEntity = networkToWorldEntity.get(networkEntity, -1);
     if (worldEntity == -1) {
       worldEntity = world.get().create();
-      log.info("Creating now entity: network=" + networkEntity + " world=" + worldEntity);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Creating now entity: network=" + networkEntity + " world=" + worldEntity);
       putEntity(networkEntity, worldEntity);
     }
     return worldEntity;

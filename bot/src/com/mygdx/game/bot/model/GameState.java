@@ -57,7 +57,7 @@ public class GameState {
    * @param entity with an associated coord through world
    */
   public void saveEntity(int entity) {
-    log.info("Save entity with id: " + entity);
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Save entity with id: " + entity);
     saveGameEntity(entity);
   }
 

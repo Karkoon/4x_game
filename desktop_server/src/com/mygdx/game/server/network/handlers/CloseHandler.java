@@ -25,6 +25,8 @@ public class CloseHandler {
   }
 
   public void handle(Client client) {
-    client.getGameRoom().removeClient(client);
+    if (client.getGameRoom() != null) {
+      client.getGameRoom().removeClient(client);
+    }
   }
 }

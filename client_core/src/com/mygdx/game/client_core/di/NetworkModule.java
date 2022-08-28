@@ -28,7 +28,7 @@ public class NetworkModule {
     CommonWebSockets.initiate();
     var socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(HOST, PORT));
     socket.setSendGracefully(true);
-    log.info("provided socket: " + socket);
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "provided socket: " + socket);
     socket.connect();
     while (!socket.isOpen()) {
       /* wait till connection is ready, later this code should be redone */

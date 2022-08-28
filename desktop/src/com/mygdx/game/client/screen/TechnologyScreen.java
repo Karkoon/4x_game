@@ -57,7 +57,7 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    log.info("Technology tree shown");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Technology tree shown");
 
     setUpInput();
   }

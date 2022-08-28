@@ -25,11 +25,11 @@ public class GdxServer extends Game {
 
   @Override
   public void create() {
-    log.info("Loading assets...");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Loading assets...");
     assets.loadAssetsSync();
-    log.info("Assets loaded.");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Assets loaded.");
 
-    log.info("Starting server.");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Starting server.");
     server.runServer();
   }
 

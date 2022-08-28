@@ -19,7 +19,7 @@ public class Technologies {
   }
 
   public void saveTechnology(int entity) {
-    log.info("Save technology with entity id: " + entity);
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Save technology with entity id: " + entity);
     allTechnologies.add(entity);
   }
 

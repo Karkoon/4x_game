@@ -1,33 +1,26 @@
 package com.mygdx.game.client.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import com.mygdx.game.client.di.Names;
-import com.mygdx.game.client.util.UiElementsCreator;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class TextInputDialogFactory {
 
-  private final Stage stage;
   private final MenuScreenAssets assets;
 
   @Inject
   public TextInputDialogFactory(
-      MenuScreenAssets assets,
-      @Named(Names.GAME_ROOM_LIST_SCREEN) Stage stage
+      MenuScreenAssets assets
   ) {
     this.assets = assets;
-    this.stage = stage;
   }
 
-  public void createAndShow(
+  public Dialog create(
       String title,
       String prompt,
       String positiveText,
@@ -35,13 +28,12 @@ public class TextInputDialogFactory {
       TextInputDialog.TextInputProcess positiveAction,
       Runnable negativeAction
   ) {
-    var dialog = new TextInputDialog(
+    return new TextInputDialog(
         title, prompt,
         assets.getSkin(MenuScreenAssetPaths.SKIN),
         positiveText, negativeText,
         positiveAction, negativeAction
     );
-    dialog.show(stage);
   }
 
   private static class TextInputDialog extends Dialog {

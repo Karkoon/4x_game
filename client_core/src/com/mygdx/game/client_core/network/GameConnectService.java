@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.logging.Logger;
 
 @Log
 @Singleton
@@ -26,7 +27,7 @@ public class GameConnectService {
   }
 
   public void connect(String roomId) {
-    log.info("connect request sent");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "connect request sent");
     webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + roomId);
   }
 

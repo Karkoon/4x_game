@@ -14,7 +14,7 @@ public class NavigatorModule {
   @GameInstanceScope
   @Provides
   public Navigator providesNavigator(GameScreen game) {
-    log.info("provided Navigator");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "provided Navigator");
     return game;
   }
 }

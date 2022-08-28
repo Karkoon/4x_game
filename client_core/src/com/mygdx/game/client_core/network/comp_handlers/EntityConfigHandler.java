@@ -51,22 +51,22 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler {
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
     var entityConfigId = ((EntityConfigId) component).getId();
     if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId <= GameConfigs.FIELD_MAX) {
-      log.info("field id " + worldEntity);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "field id " + worldEntity);
       var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);
       fieldFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;
     } else if (entityConfigId >= GameConfigs.UNIT_MIN && entityConfigId <= GameConfigs.UNIT_MAX) {
-      log.info("unit id " + worldEntity);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "unit id " + worldEntity);
       var config = assets.getGameConfigs().get(UnitConfig.class, entityConfigId);
       unitFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;
     } else if (entityConfigId >= GameConfigs.SUBFIELD_MIN && entityConfigId <= GameConfigs.SUBFIELD_MAX) {
-      log.info("subfield id " + worldEntity);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "subfield id " + worldEntity);
       var config = assets.getGameConfigs().get(SubFieldConfig.class, entityConfigId);
       subFieldFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;
     } else if (entityConfigId >= GameConfigs.TECHNOLOGY_MIN && entityConfigId <= GameConfigs.TECHNOLOGY_MAX) {
-      log.info("technology id " + worldEntity);
+      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "technology id " + worldEntity);
       var config = assets.getGameConfigs().get(TechnologyConfig.class, entityConfigId);
       technologyFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;

@@ -22,7 +22,7 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   @Inject
   public GameRoomListScreen(
-      @Named(Names.GAME_ROOM_LIST_SCREEN) Stage stage,
+      @Named(Names.SCREEN_VIEWPORT) Stage stage,
       TextInputDialogFactory textInputDialogFactory,
       GameConnectService connectService,
       GdxGame game
@@ -35,19 +35,19 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    textInputDialogFactory.createAndShow(
+    textInputDialogFactory.create(
         "Room List",
         "Type room identifier",
         "Connect",
         "Return",
         positiveInput -> {
-          connectService.connect(positiveInput);
           game.changeToGameRoomScreen();
+          connectService.connect(positiveInput);
         },
         () -> {
 
         }
-    );
+    ).show(stage);
     Gdx.input.setInputProcessor(stage);
     super.show();
   }
@@ -57,5 +57,11 @@ public class GameRoomListScreen extends ScreenAdapter {
     super.render(delta);
     stage.act(delta);
     stage.draw();
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+    stage.getViewport().update(width, height, true);
   }
 }

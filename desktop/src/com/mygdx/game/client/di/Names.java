@@ -6,6 +6,6 @@ public final class Names {
   }
 
   public static final String GAME_SCREEN = "GAME_SCREEN";
-  public static final String GAME_ROOM_LIST_SCREEN = "GAME_ROOM_LIST_SCREEN";
+  public static final String SCREEN_VIEWPORT = "GAME_ROOM_LIST_SCREEN";
 
 }

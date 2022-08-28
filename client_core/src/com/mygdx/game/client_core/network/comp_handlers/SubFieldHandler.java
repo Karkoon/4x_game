@@ -33,7 +33,7 @@ public class SubFieldHandler implements ComponentMessageListener.Handler {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
-    log.info("Read subfield component " + worldEntity);
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Read subfield component " + worldEntity);
     var newParent = ((SubField) component).getParent();
     newParent = networkWorldEntityMapper.getWorldEntity(newParent);
     var subField = subFieldMapper.create(worldEntity);

@@ -57,7 +57,7 @@ public class FieldScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    log.info("SubArea shown");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "SubArea shown");
     fieldParent = chosenEntity.pop();
     positionCamera(viewport.getCamera());
     setUpInput();

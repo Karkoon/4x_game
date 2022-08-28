@@ -33,12 +33,12 @@ public class GameRoomImpl implements GameRoom {
   }
 
   public void addClient(@NonNull Client client) {
-    log.info("added client " + client.getPlayerUsername());
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "added client " + client.getPlayerUsername());
     clients.put(client.getPlayerToken(), client);
   }
 
   public void removeClient(@NonNull Client client) {
-    log.info("removed client " + client.getPlayerUsername());
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "removed client " + client.getPlayerUsername());
     clients.remove(client.getPlayerToken());
   }
 
@@ -51,12 +51,12 @@ public class GameRoomImpl implements GameRoom {
   }
 
   public void setupGameInstance() {
-    log.info("started game");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "started game");
     activeGameInstance = gameInstanceSubcomponentBuilder.gameRoom(this).build().get();
   }
 
   public void tearDownGameInstance() {
-    log.info("stopped game");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "stopped game");
     activeGameInstance = null;
   }
 

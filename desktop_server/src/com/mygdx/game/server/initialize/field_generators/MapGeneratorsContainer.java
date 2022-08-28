@@ -27,6 +27,10 @@ public class MapGeneratorsContainer {
 
   @NonNull
   public MapGenerator get(long type) {
-    return mapTypes.get(type);
+    var generator = mapTypes.get(type);
+    if (generator == null) {
+      throw new IllegalArgumentException("invalid type " + type);
+    }
+    return generator;
   }
 }

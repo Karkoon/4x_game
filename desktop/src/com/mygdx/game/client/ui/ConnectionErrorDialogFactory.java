@@ -33,7 +33,7 @@ public class ConnectionErrorDialogFactory {
     var dialog = createDialog();
     dialog.text("Connection error");
     dialog.button("OK");
-    log.info("shown ErrorConnectionDialog");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "shown ErrorConnectionDialog");
     dialog.show(stage);
   }
 

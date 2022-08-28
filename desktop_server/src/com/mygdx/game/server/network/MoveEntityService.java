@@ -22,7 +22,7 @@ public class MoveEntityService {
     var coordinatesMapper = room.getGameInstance().getWorld().getMapper(Coordinates.class);
     var destination = coordinatesMapper.create(entityId);
     destination.setCoordinates(x, y);
-    log.info("Send position component");
+    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Send position component");
     syncer.sendComponent(destination, entityId, room);
   }
 }
