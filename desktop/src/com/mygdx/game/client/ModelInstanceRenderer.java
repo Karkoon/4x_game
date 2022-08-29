@@ -9,12 +9,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
 
 @Singleton
+@Log
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;
@@ -25,10 +27,14 @@ public class ModelInstanceRenderer implements Disposable {
   private final Camera camera;
 
   @Inject
-  public ModelInstanceRenderer(@NonNull Viewport viewport) {
+  public ModelInstanceRenderer(
+      @NonNull Viewport viewport,
+      @NonNull ModelCache cache,
+      @NonNull ModelBatch modelBatch
+  ) {
     this.camera = viewport.getCamera();
-    this.cache = new ModelCache();
-    this.modelBatch = new ModelBatch();
+    this.cache = cache;
+    this.modelBatch = modelBatch;
     this.modelInstances = new Array<>();
     this.subModelInstances = new HashMap<>();
   }

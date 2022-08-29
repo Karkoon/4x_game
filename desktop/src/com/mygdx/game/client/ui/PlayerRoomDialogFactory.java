@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -37,10 +36,6 @@ public class PlayerRoomDialogFactory {
       var message = (PlayerJoinedRoomMessage) o;
       numberOfPlayersLabel.setText(message.getNumberOfClients());
       log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "A player joined the room: number_of_clients=" + message);
-      return FULLY_HANDLED;
-    }));
-    handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
-      dialog.hide();
       return FULLY_HANDLED;
     }));
     dialog.text(numberOfPlayersLabel);
