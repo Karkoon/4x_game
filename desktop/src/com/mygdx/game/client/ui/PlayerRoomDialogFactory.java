@@ -9,7 +9,6 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client_core.model.PlayerInfo;
-import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import lombok.NonNull;

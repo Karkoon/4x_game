@@ -7,7 +7,6 @@ import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
-import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import lombok.NonNull;

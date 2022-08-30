@@ -1,15 +1,16 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
-public class UnitFactory implements EntityFactory<UnitConfig> {
+public class UnitFactory {
 
   private final ComponentFactory componentFactory;
 
@@ -20,8 +21,9 @@ public class UnitFactory implements EntityFactory<UnitConfig> {
     this.componentFactory = componentFactory;
   }
 
-  @Override
-  public void createEntity(int entityId, @NonNull UnitConfig config) {
+  public void createEntity(@NonNull UnitConfig config, Coordinates coordinates) {
+    int entityId = componentFactory.createEntityId();
+    componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
   }
 

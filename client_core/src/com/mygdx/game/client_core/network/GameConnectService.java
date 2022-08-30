@@ -24,7 +24,7 @@ public class GameConnectService {
 
   public void connect() {
     log.info("connect request sent");
-    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken());
+    webSocket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":default");
   }
 
 }

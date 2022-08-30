@@ -6,7 +6,12 @@ import lombok.EqualsAndHashCode.Exclude;
 
 @Data
 public class Client {
-  @Exclude private final ServerWebSocket socket;
-  @Exclude private String playerUsername;
-  @Exclude private String playerToken;
+  @Exclude
+  private GameRoom gameRoom;
+  @Exclude
+  private final ServerWebSocket socket;
+  @Exclude
+  private String playerUsername;
+  @Exclude
+  private String playerToken;
 }

@@ -1,14 +1,15 @@
 package com.mygdx.game.server.initialize;
 
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.field_generators.MapGeneratorsContainer;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class MapInitializer {
 
   private final MapGeneratorsContainer generators;
-  private boolean initialized = false; // TODO: 16.06.2022 make it support multiple rooms
 
   @Inject
   public MapInitializer(
@@ -18,10 +19,6 @@ public class MapInitializer {
   }
 
   public void initializeMap(int width, int height, long mapType) {
-    if (initialized) {
-      return;
-    }
-    initialized = true;
     generators.get(mapType).generateMap(width, height);
   }
 

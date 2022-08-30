@@ -13,12 +13,14 @@ import dagger.multibindings.IntoSet;
 public interface GeneratorBindingsModule {
   @Binds
   @IntoSet
+  @GameInstanceScope
   MapGenerator provideBotWinningFieldMapGenerator(
       BotWinningFieldMapGenerator generator
   );
 
   @Binds
   @IntoSet
+  @GameInstanceScope
   SubfieldMapGenerator provideBasicSubfieldMapGenerator(
       BasicSubfieldMapGenerator generator
   );

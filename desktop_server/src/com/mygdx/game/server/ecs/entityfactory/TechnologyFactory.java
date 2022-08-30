@@ -1,15 +1,15 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.TechnologyConfig;
+import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
-public class TechnologyFactory implements EntityFactory<TechnologyConfig> {
+public class TechnologyFactory {
 
   private final ComponentFactory componentFactory;
 
@@ -20,8 +20,8 @@ public class TechnologyFactory implements EntityFactory<TechnologyConfig> {
     this.componentFactory = componentFactory;
   }
 
-  @Override
-  public void createEntity(int entityId, @NonNull TechnologyConfig config) {
+  public void createEntity(@NonNull TechnologyConfig config) {
+    int entityId = componentFactory.createEntityId();
     componentFactory.setUpEntityConfig(config, entityId);
   }
 

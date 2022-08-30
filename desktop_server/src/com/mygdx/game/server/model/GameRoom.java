@@ -2,41 +2,22 @@ package com.mygdx.game.server.model;
 
 import lombok.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-@Singleton
-public class GameRoom {
+public interface GameRoom {
+  List<Client> getClients();
 
-  private final Map<Integer, Client> clients = new HashMap<>();
-  private int nextId = 0;
+  void addClient(@NonNull Client client);
 
-  @Inject
-  public GameRoom() {
+  int getNumberOfClients();
 
-  }
+  String getRoomId();
 
-  public @NonNull Client getClient(int clientId) {
-    return clients.get(clientId);
-  }
+  void removeClient(Client client);
 
-  public Collection<Client> getClients() {
-    return clients.values();
-  }
+  void setupGameInstance();
 
-  public void addClient(@NonNull Client client) {
-    clients.put(nextId++, client);
-  }
+  void tearDownGameInstance();
 
-  public void removeClient(int id) {
-    clients.remove(id);
-  }
-
-  public int getNumberOfClients() {
-    return clients.size();
-  }
-
+  GameInstance getGameInstance();
 }
