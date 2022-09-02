@@ -21,10 +21,6 @@ public class MenuScreenAssets {
     this.assetManager = assetManager;
   }
 
-  public boolean update() {
-    return assetManager.update();
-  }
-
   public void loadAssetsAsync() {
     loadDirectory(MenuScreenAssetPaths.SHADER_DIR, ".frag", ShaderProgram.class);
     loadSkin();

@@ -15,6 +15,7 @@ import com.mygdx.game.assets.LoadingScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.actor.LoadingBar;
+import com.mygdx.game.client_core.network.ServerConnection;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ public class LoadingScreen extends ScreenAdapter {
   private final GameScreenAssets gameScreenAssets;
   private final GameConfigAssets gameConfigAssets;
   private final AssetManager manager;
+  private final ServerConnection serverConnection;
   private Stage stage;
   private Image logo;
   private Image loadingFrame;
@@ -48,7 +50,8 @@ public class LoadingScreen extends ScreenAdapter {
       LoadingScreenAssets loadingScreenAssets,
       MenuScreenAssets menuScreenAssets,
       GameConfigAssets gameConfigAssets,
-      AssetManager manager
+      AssetManager manager,
+      ServerConnection serverConnection
   ) {
     this.game = game;
     this.gameScreenAssets = gameScreenAssets;
@@ -56,6 +59,7 @@ public class LoadingScreen extends ScreenAdapter {
     this.menuScreenAssets = menuScreenAssets;
     this.gameConfigAssets = gameConfigAssets;
     this.manager = manager;
+    this.serverConnection = serverConnection;
   }
 
   @Override
@@ -66,6 +70,7 @@ public class LoadingScreen extends ScreenAdapter {
     gameConfigAssets.loadAssetsAsync();
     menuScreenAssets.loadAssetsAsync();
     gameScreenAssets.loadAssetsAsync();
+    serverConnection.connect();
   }
 
   private void getLoadingScreenAssets() {
@@ -81,7 +86,7 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    if (manager.update()) {
+    if (manager.update() && serverConnection.isConnected()) {
       game.changeToMenuScreen();
     }
     updateLoadingBar();

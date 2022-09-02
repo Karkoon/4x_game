@@ -13,7 +13,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @GameInstanceScope
 @Log
@@ -26,9 +25,9 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   @Inject
   public TechnologyFactory(
-          @NonNull World world,
-          @NonNull GameScreenAssets assets,
-          @NonNull Technologies technologies) {
+      @NonNull World world,
+      @NonNull GameScreenAssets assets,
+      @NonNull Technologies technologies) {
     super(world, assets);
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);

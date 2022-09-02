@@ -9,11 +9,11 @@ import java.util.List;
 public class CompositeDisposable implements Disposable {
   private final List<Disposable> disposableList = new ArrayList<>();
 
-  public void addDisposable(@NonNull Disposable disposable) {
+  public void add(@NonNull Disposable disposable) {
     this.disposableList.add(disposable);
   }
 
-  public void removeDisposable(@NonNull Disposable disposable) {
+  public void remove(@NonNull Disposable disposable) {
     this.disposableList.remove(disposable);
   }
 
@@ -22,5 +22,6 @@ public class CompositeDisposable implements Disposable {
     for (Disposable disposable : disposableList) {
       disposable.dispose();
     }
+    disposableList.clear();
   }
 }

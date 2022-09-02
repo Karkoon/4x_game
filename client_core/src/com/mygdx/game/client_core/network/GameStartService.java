@@ -12,11 +12,11 @@ import javax.inject.Singleton;
 @Singleton
 public class GameStartService {
 
-  private final WebSocket socket;
+  private final ServerConnection socket;
 
   @Inject
-  public GameStartService(@NonNull WebSocket socket) {
-    this.socket = socket;
+  public GameStartService(@NonNull ServerConnection connection) {
+    this.socket = connection;
   }
 
   public void startGame(int width, int height, int mapType) {

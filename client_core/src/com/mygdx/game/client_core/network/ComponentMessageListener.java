@@ -8,6 +8,7 @@ import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import lombok.extern.java.Log;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
+@GameInstanceScope
 public class ComponentMessageListener extends AbstractWebSocketListener {
 
   private final ObjectMap<Class<? extends Component>, Queue<Handler>> handlers = new ObjectMap<>();

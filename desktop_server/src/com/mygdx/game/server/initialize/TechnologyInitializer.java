@@ -25,9 +25,9 @@ public class TechnologyInitializer {
   }
 
   public void initializeTechnologies() {
-    for (int technologyEntityId = GameConfigs.TECHNOLOGY_MIN; technologyEntityId < GameConfigs.TECHNOLOGY_MAX; technologyEntityId++) {
-      var config = assets.getGameConfigs().get(TechnologyConfig.class, technologyEntityId);
-      technologyFactory.createEntity(config);
+    var configs = assets.getGameConfigs().getAll(TechnologyConfig.class);
+    for (int i = 0; i < configs.size; i++) {
+      technologyFactory.createEntity(configs.get(i));
     }
   }
 

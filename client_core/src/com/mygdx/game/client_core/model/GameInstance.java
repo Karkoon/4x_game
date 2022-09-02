@@ -4,7 +4,6 @@ import com.artemis.World;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.util.Updatable;
 import lombok.Getter;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
