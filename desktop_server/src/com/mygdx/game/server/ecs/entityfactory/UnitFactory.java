@@ -32,7 +32,8 @@ public class UnitFactory {
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
-    componentFactory.createSightlineSubscribersComponent(entityId, client);
+    componentFactory.createChangeSubscribersComponent(entityId);
+    componentFactory.createSightlineSubscribersComponent(entityId, client, config.getSightRadius());
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class},
         new Class[]{Coordinates.class, EntityConfigId.class}

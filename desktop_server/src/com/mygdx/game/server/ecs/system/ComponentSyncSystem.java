@@ -10,9 +10,11 @@ import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.GameRoomSyncer;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
+@Log
 @All({ChangeSubscribers.class, SharedComponents.class, FriendlyOrFoe.class})
 public class ComponentSyncSystem extends IteratingSystem {
 
@@ -31,6 +33,12 @@ public class ComponentSyncSystem extends IteratingSystem {
   ) {
     this.gameRoomSyncer = gameRoomSyncer;
     this.gameRoom = gameRoom;
+  }
+
+  @Override
+  protected void begin() {
+    super.begin();
+    log.info("process ComponentSyncSystem");
   }
 
   @Override
@@ -60,17 +68,18 @@ public class ComponentSyncSystem extends IteratingSystem {
   }
 
   private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits needAllData) {
-    var dirtyFlags = dirtyComponentsMapper.get(entityId);
+    var dirtyFlags = dirtyComponentsMapper.create(entityId);
     for (
         int clientIndex = clients.nextSetBit(0);
         clientIndex != -1;
-        clientIndex = clients.nextSetBit(clientIndex)
+        clientIndex = clients.nextSetBit(clientIndex + 1)
     ) {
+      gameRoomSyncer.beginTransaction(gameRoom); //problematic
       var client = gameRoom.getClients().get(clientIndex);
       for (
           var mapperIndex = components.nextSetBit(0);
           mapperIndex != -1;
-          mapperIndex = components.nextSetBit(mapperIndex)
+          mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
         if (dirtyFlags.getDirtyComponents().get(mapperIndex) && !needAllData.get(clientIndex)) {
           continue; // skip if component wasn't changed and the client does not need all the data
@@ -80,6 +89,7 @@ public class ComponentSyncSystem extends IteratingSystem {
 
         gameRoomSyncer.sendComponentTo(componentToSend, entityId, client);
       }
+      gameRoomSyncer.endTransactionSingleClient(client);
     }
     dirtyFlags.getDirtyComponents().clear();
   }

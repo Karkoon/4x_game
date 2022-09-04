@@ -71,7 +71,7 @@ public class GameRoomSyncer {
       var message = new ComponentMessage<>(component, entityId);
       sendSavingClassInJson(message, client);
     } else {
-      saveToBuffer(component, entityId, client.getGameRoom());
+      saveToBuffer(component, entityId, client.getGameRoom()); // each client should probably have their own buffer
     }
   }
 

@@ -7,4 +7,5 @@ import lombok.Data;
 @Data
 public class SightlineSubscribers extends Component {
   private Bits clients = new Bits();
+  private int sightlineRadius = 1;
 }

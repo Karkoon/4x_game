@@ -25,7 +25,7 @@ public class TechnologyFactory {
   public void createEntity(@NonNull TechnologyConfig config, Client client) {
     int entityId = componentFactory.createEntityId();
     componentFactory.setUpEntityConfig(config, entityId);
-    componentFactory.createSightlineSubscribersComponent(entityId, client);
+    componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
     componentFactory.createSharedComponents(entityId,
         new Class[]{EntityConfigId.class},

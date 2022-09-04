@@ -12,6 +12,7 @@ import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
+import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
@@ -35,6 +36,7 @@ public class ComponentFactory {
   private final ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private final ComponentMapper<SharedComponents> sharedComponentsMapper;
   private final ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
+  private final ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
 
   @Inject
   public ComponentFactory(
@@ -52,6 +54,7 @@ public class ComponentFactory {
     this.sightlineSubscribersMapper = world.getMapper(SightlineSubscribers.class);
     this.sharedComponentsMapper = world.getMapper(SharedComponents.class);
     this.friendlyOrFoeMapper = world.getMapper(FriendlyOrFoe.class);
+    this.changeSubscribersMapper = world.getMapper(ChangeSubscribers.class);
   }
 
   public int createEntityId() {
@@ -83,7 +86,7 @@ public class ComponentFactory {
       int entityId,
       Client nullableClient
   ) {
-    var friendlyOrFoe = friendlyOrFoeMapper.get(entityId);
+    var friendlyOrFoe = friendlyOrFoeMapper.create(entityId);
     var friendlies = new Bits(room.getNumberOfClients());
     if (nullableClient != null) {
       friendlies.set(room.getClients().indexOf(nullableClient));
@@ -93,9 +96,11 @@ public class ComponentFactory {
 
   public void createSightlineSubscribersComponent(
       int entityId,
-      Client nullableClient
+      Client nullableClient,
+      int sightlineRadius
   ) {
-    var sightlineSubscribers = sightlineSubscribersMapper.get(entityId);
+    var sightlineSubscribers = sightlineSubscribersMapper.create(entityId);
+    sightlineSubscribers.setSightlineRadius(sightlineRadius);
     var subscribedClients = new Bits(room.getNumberOfClients());
     if (nullableClient != null) {
       subscribedClients.set(room.getClients().indexOf(nullableClient));
@@ -108,9 +113,12 @@ public class ComponentFactory {
       Class<? extends Component>[] compsToSyncWithFriendly,
       Class<? extends Component>[] compsToSyncWithEnemy
   ) {
-    var sharedComponents = sharedComponentsMapper.get(entityId);
+    var sharedComponents = sharedComponentsMapper.create(entityId);
     sharedComponents.setFriendlies(componentIndicesCache.getIndicesFor(compsToSyncWithFriendly));
     sharedComponents.setFoes(componentIndicesCache.getIndicesFor(compsToSyncWithEnemy));
   }
 
+  public void createChangeSubscribersComponent(int entityId) {
+    changeSubscribersMapper.create(entityId);
+  }
 }

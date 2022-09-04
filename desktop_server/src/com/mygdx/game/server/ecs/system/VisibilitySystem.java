@@ -1,7 +1,9 @@
 package com.mygdx.game.server.ecs.system;
 
 import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.annotations.All;
+import com.artemis.annotations.AspectDescriptor;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
@@ -9,20 +11,18 @@ import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.util.QuadTreeInt;
-import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@GameInstanceScope
-@All({SightlineSubscribers.class, Coordinates.class, Stats.class})
+@All({Coordinates.class, SightlineSubscribers.class})
+@Log
 public class VisibilitySystem extends IteratingSystem {
 
-  @Inject
-  public VisibilitySystem() {
-    super();
-  }
+  @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class})
+  private EntitySubscription allThatCanBePerceived;
 
   private final QuadTreeInt quadTree = new QuadTreeInt(300, 8); // todo zrobić testy czy faktycznie
   // opłaca się użyć quadtree i porównać do generowania ręcznego w jakimś radiusie koordynatów i sprawdzanie czy coś tam jest
@@ -32,7 +32,11 @@ public class VisibilitySystem extends IteratingSystem {
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Stats> statsMapper;
+
+  @Inject
+  public VisibilitySystem() {
+    super();
+  }
 
   private Bits obtainNewChangeSubscribers(int entityId) {
     var subscribers = entityToNewChangeSubscribers.get(entityId);
@@ -45,34 +49,38 @@ public class VisibilitySystem extends IteratingSystem {
 
   @Override
   protected void begin() {
+    log.info("process VisibilitySystem ");
     quadTree.reset();
     entityToNewChangeSubscribers.clear();
-    for (int i = 0; i < getEntityIds().size(); i++) { // preprocessing
-      var entityId = getEntityIds().get(i);
-      var coordinates = coordinatesMapper.get(i);
+
+    for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) { // preprocessing
+      var entityId = allThatCanBePerceived.getEntities().get(i);
+      var coordinates = coordinatesMapper.get(entityId);
       quadTree.add(entityId, coordinates.getX(), coordinates.getY());
     }
   }
 
   @Override
   protected void process(int entityId) {
-    var coordinates = coordinatesMapper.get(entityId);
-    var stats = statsMapper.get(entityId);
-    var sightlineSubscribers = sightlineSubscribersMapper.get(entityId).getClients();
+    if (sightlineSubscribersMapper.has(entityId)) {
+      var coordinates = coordinatesMapper.get(entityId);
+      var sightlineRadius = sightlineSubscribersMapper.get(entityId).getSightlineRadius();
+      var sightlineSubscribers = sightlineSubscribersMapper.get(entityId).getClients();
 
-    quadTree.query(coordinates.getX(), coordinates.getY(), stats.getSightRadius(), otherEntities); // result through otherEntities
+      quadTree.query(coordinates.getX(), coordinates.getY(), sightlineRadius, otherEntities); // result through otherEntities
 
-    for (int i = 0; i < otherEntities.size; i++) { // filter jednostki tego samego gracza czy cos
-      var otherEntity = otherEntities.get(i);
-      var changeSubscribers = obtainNewChangeSubscribers(otherEntity);
-      changeSubscribers.or(sightlineSubscribers);
+      for (int i = 0; i < otherEntities.size; i++) { // filter jednostki tego samego gracza czy cos
+        var otherEntity = otherEntities.get(i);
+        var changeSubscribers = obtainNewChangeSubscribers(otherEntity);
+        changeSubscribers.or(sightlineSubscribers);
+      }
     }
   }
 
   @Override
   protected void end() {
-    for (int i = 0; i < getEntityIds().size(); i++) { // postprocessing
-      var entityId = getEntityIds().get(i);
+    for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) { // postprocessing
+      var entityId = allThatCanBePerceived.getEntities().get(i);
       var changeSubscribersComp = changeSubscribersMapper.get(entityId);
 
       var newChangeSubscribers = obtainNewChangeSubscribers(entityId);

@@ -33,8 +33,8 @@ public class FieldFactory {
     componentFactory.setUpEntityConfig(config, entityId);
     var subfields = subMapInitializer.initializeSubarea(entityId, config);
     componentFactory.createFieldComponent(entityId, subfields);
+    componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
-    componentFactory.createSightlineSubscribersComponent(entityId, null);
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class, Field.class},
         new Class[]{Coordinates.class, EntityConfigId.class}

@@ -28,8 +28,8 @@ public class SubFieldFactory {
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createSubFieldComponent(parentField, entityId);
+    componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
-    componentFactory.createSightlineSubscribersComponent(entityId, null);
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class, SubField.class},
         new Class[]{});

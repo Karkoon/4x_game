@@ -30,6 +30,9 @@ public class WorldModule {
   @GameInstanceScope
   @Provides
   public @NonNull World providesWorld(WorldConfiguration configuration) {
-    return new World(configuration);
+    log.info("provided world");
+    var world = new World(configuration);
+    world.setDelta(0.5f);
+    return world;
   }
 }
