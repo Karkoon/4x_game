@@ -23,7 +23,7 @@ public class EndTurnService {
   public void nextTurn(@NonNull Client client) {
     var gameInstance = client.getGameRoom().getGameInstance();
     var currentPlayer = gameInstance.getActivePlayer();
-    if (!client.getPlayerToken().equals(currentPlayer)) {
+    if (!client.getPlayerToken().equals(currentPlayer.getPlayerToken())) {
       log.info("Player " + client.getPlayerUsername() + " tried to end turn");
     }
     var nextClient = gameInstance.changeToNextPlayer();
