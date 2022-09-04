@@ -52,7 +52,7 @@ public final class Server {
     log.info("Received frame: " + frame.textData() + " from " + client.getPlayerUsername());
     switch (type) {
       case "connect" -> connectHandler.handle(commands, client);
-      case "start" -> startHandler.handle(commands, client);
+      case "start" -> startHandler.handle(commands, client); // todo move start, move, end_turn to gameinstancescope
       case "move" -> moveHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle(client);
       default -> log.info("Couldn't handle packet: " + frame.textData());

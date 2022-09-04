@@ -17,7 +17,7 @@ public class GameInstance {
   private final Lazy<TechnologyInitializer> technologyInitializer;
   private final Lazy<MapInitializer> mapInitializer;
   private final Lazy<StartUnitInitializer> unitInitializer;
-  private World world;
+  private final World world;
   private final GameRoom room;
   private Queue<Client> playerOrder;
   private Client activePlayer;
@@ -38,9 +38,9 @@ public class GameInstance {
   }
 
   public void startGame(int width, int height, long mapType) {
-    technologyInitializer.get().initializeTechnologies();
     mapInitializer.get().initializeMap(width, height, mapType);
-    unitInitializer.get().initializeTestUnit();
+    technologyInitializer.get().initializeTechnologies();
+    unitInitializer.get().initializeStartingUnits();
     playerOrder = new ArrayDeque<>(room.getClients());
   }
 

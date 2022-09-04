@@ -9,15 +9,12 @@ import javax.inject.Inject;
 
 public class StartHandler {
 
-  private final GameRoomSyncer syncer;
   private final MessageSender sender;
 
   @Inject
   public StartHandler(
-      GameRoomSyncer syncer,
       MessageSender sender
   ) {
-    this.syncer = syncer;
     this.sender = sender;
   }
 
@@ -27,9 +24,7 @@ public class StartHandler {
     var mapType = Long.parseLong(commands[3]);
     var room = client.getGameRoom();
     room.setupGameInstance();
-    syncer.beginTransaction(room);
     room.getGameInstance().startGame(width, height, mapType);
-    syncer.endTransaction(room);
     var msg = new GameStartedMessage(room.getClients().get(0).getPlayerToken());
     sender.sendToAll(msg, room.getClients());
   }

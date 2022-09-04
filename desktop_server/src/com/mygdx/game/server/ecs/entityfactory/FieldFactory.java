@@ -2,6 +2,8 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
 import lombok.NonNull;
@@ -31,5 +33,11 @@ public class FieldFactory {
     componentFactory.setUpEntityConfig(config, entityId);
     var subfields = subMapInitializer.initializeSubarea(entityId, config);
     componentFactory.createFieldComponent(entityId, subfields);
+    componentFactory.createFriendlyOrFoeComponent(entityId, null);
+    componentFactory.createSightlineSubscribersComponent(entityId, null);
+    componentFactory.createSharedComponents(entityId,
+        new Class[]{Coordinates.class, EntityConfigId.class, Field.class},
+        new Class[]{Coordinates.class, EntityConfigId.class}
+    );
   }
 }

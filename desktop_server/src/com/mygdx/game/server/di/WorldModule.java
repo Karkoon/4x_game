@@ -2,6 +2,8 @@ package com.mygdx.game.server.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.mygdx.game.server.ecs.system.ComponentSyncSystem;
+import com.mygdx.game.server.ecs.system.VisibilitySystem;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -15,10 +17,14 @@ public class WorldModule {
   @Provides
   @GameInstanceScope
   public @NonNull WorldConfiguration providesWorldConfiguration(
-      /* nothing to process lmao */
+      ComponentSyncSystem componentSyncSystem,
+      VisibilitySystem visibilitySystem
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
-    return new WorldConfiguration();
+    var conf =  new WorldConfiguration();
+    conf.setSystem(visibilitySystem);
+    conf.setSystem(componentSyncSystem);
+    return conf;
   }
 
   @GameInstanceScope

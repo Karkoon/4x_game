@@ -28,7 +28,7 @@ public class GameRoomImpl implements GameRoom {
     this.gameInstanceSubcomponentBuilder = gameInstanceSubcomponentBuilder;
   }
 
-  public List<Client> getClients() {
+  public List<Client> getClients() { // przesortować jakoś pewnie, ustalić kolejność
     return clients.values().stream().toList();
   }
 
