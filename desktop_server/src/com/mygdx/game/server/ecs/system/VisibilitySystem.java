@@ -4,15 +4,11 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.annotations.All;
 import com.artemis.annotations.AspectDescriptor;
-import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
-import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.SubField;
-import com.mygdx.game.core.util.QuadTreeInt;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import lombok.extern.java.Log;
@@ -25,15 +21,10 @@ public class VisibilitySystem extends IteratingSystem {
 
   @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class })
   private EntitySubscription allThatCanBePerceived;
-
-  private final QuadTreeInt quadTree = new QuadTreeInt(300, 8); // todo zrobić testy czy faktycznie
-  // opłaca się użyć quadtree i porównać do generowania ręcznego w jakimś radiusie koordynatów i sprawdzanie czy coś tam jest
-  // + 3 strony do inżynierki czuję
   private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Name> nameMapper;
 
   @Inject
   public VisibilitySystem() {
@@ -52,14 +43,7 @@ public class VisibilitySystem extends IteratingSystem {
   @Override
   protected void begin() {
     log.info("process VisibilitySystem ");
-    quadTree.reset();
     entityToNewChangeSubscribers.clear();
-
-    for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) { // preprocessing
-      var entityId = allThatCanBePerceived.getEntities().get(i);
-      var coordinates = coordinatesMapper.get(entityId);
-      quadTree.add(entityId, coordinates.getX(), coordinates.getY());
-    }
   }
 
   @Override
@@ -68,9 +52,6 @@ public class VisibilitySystem extends IteratingSystem {
     var sightlineRadius = sightlineSubscribersMapper.get(perceiver).getSightlineRadius();
     var sightlineSubscribers = sightlineSubscribersMapper.get(perceiver).getClients();
     log.info(coordinates.toString());
-    /*var perceivables = new IntArray(false, allThatCanBePerceived.getEntities().size() / 8);
-    quadTree.query(coordinates.getX(), coordinates.getY(), sightlineRadius, perceivables); // result through otherEntities*/
-
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {
       var perceivableCoords = coordinatesMapper.get(allThatCanBePerceived.getEntities().get(i));
       var dst2 = Math.pow(coordinates.getX() - perceivableCoords.getX(), 2) + Math.pow(coordinates.getY() - perceivableCoords.getY(), 2);
@@ -78,12 +59,7 @@ public class VisibilitySystem extends IteratingSystem {
         var changeSubscribers = obtainNewChangeSubscribers(allThatCanBePerceived.getEntities().get(i));
         changeSubscribers.or(sightlineSubscribers);
       }
-    }/*
-    for (int i = 0; i < perceivables.size; i += 4) { // filter jednostki tego samego gracza czy cos
-      var perceivable = perceivables.get(i);
-      var changeSubscribers = obtainNewChangeSubscribers(perceivable);
-      changeSubscribers.or(sightlineSubscribers);
-    }*/
+    }
   }
 
   @Override
@@ -99,7 +75,6 @@ public class VisibilitySystem extends IteratingSystem {
 
       changeSubscribersComp.setChangedSubscriptionState(changedSubscriptionState);
       changeSubscribersComp.setClients(newChangeSubscribers);
-      //log.info(changedSubscriptionState + " " + changeSubscribersComp.getClients() + " " + nameMapper.get(entityId).getName());
     }
   }
 
