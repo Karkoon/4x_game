@@ -9,7 +9,7 @@ import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
-import com.mygdx.game.server.network.GameRoomSyncer;
+import com.mygdx.game.server.network.StateSyncer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 @All({ChangeSubscribers.class, SharedComponents.class, FriendlyOrFoe.class})
 public class ComponentSyncSystem extends IteratingSystem {
 
-  private final GameRoomSyncer gameRoomSyncer;
+  private final StateSyncer stateSyncer;
   private final GameRoom gameRoom;
   private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
@@ -28,10 +28,10 @@ public class ComponentSyncSystem extends IteratingSystem {
 
   @Inject
   public ComponentSyncSystem(
-      GameRoomSyncer gameRoomSyncer,
+      StateSyncer stateSyncer,
       GameRoom gameRoom
   ) {
-    this.gameRoomSyncer = gameRoomSyncer;
+    this.stateSyncer = stateSyncer;
     this.gameRoom = gameRoom;
   }
 
@@ -74,8 +74,8 @@ public class ComponentSyncSystem extends IteratingSystem {
         clientIndex != -1;
         clientIndex = clients.nextSetBit(clientIndex + 1)
     ) {
-      gameRoomSyncer.beginTransaction(gameRoom); //problematic
       var client = gameRoom.getClients().get(clientIndex);
+      stateSyncer.beginTransaction(client); //problematic
       for (
           var mapperIndex = components.nextSetBit(0);
           mapperIndex != -1;
@@ -87,9 +87,9 @@ public class ComponentSyncSystem extends IteratingSystem {
         var mapper = world.getMapper(mapperIndex);
         var componentToSend = mapper.get(entityId);
 
-        gameRoomSyncer.sendComponentTo(componentToSend, entityId, client);
+        stateSyncer.sendComponentTo(componentToSend, entityId, client);
       }
-      gameRoomSyncer.endTransactionSingleClient(client);
+      stateSyncer.endTransaction(client);
     }
     dirtyFlags.getDirtyComponents().clear();
   }

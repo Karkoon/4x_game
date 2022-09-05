@@ -3,7 +3,6 @@ package com.mygdx.game.server.network.handlers;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.GameRoomSyncer;
 import com.mygdx.game.server.network.MessageSender;
 
 import javax.inject.Inject;
