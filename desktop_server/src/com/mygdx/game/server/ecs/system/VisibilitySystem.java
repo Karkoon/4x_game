@@ -55,7 +55,7 @@ public class VisibilitySystem extends IteratingSystem {
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {
       var perceivableCoords = coordinatesMapper.get(allThatCanBePerceived.getEntities().get(i));
       var dst2 = Math.pow(coordinates.getX() - perceivableCoords.getX(), 2) + Math.pow(coordinates.getY() - perceivableCoords.getY(), 2);
-      if (dst2 <= sightlineRadius*sightlineRadius) {
+      if (dst2 <= sightlineRadius * sightlineRadius) {
         var changeSubscribers = obtainNewChangeSubscribers(allThatCanBePerceived.getEntities().get(i));
         changeSubscribers.or(sightlineSubscribers);
       }
