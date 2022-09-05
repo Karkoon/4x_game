@@ -70,7 +70,7 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     log.info("GameScreen shown");
     if (!initialized) {
-      roomDialogFactory.createAndShow(() -> gameStartService.startGame(5, 5, GameConfigs.MAP_TYPE_MIN));
+      roomDialogFactory.createAndShow(() -> gameStartService.startGame(10, 10, GameConfigs.MAP_TYPE_MIN));
       gameConnectService.connect();
       initialized = true;
     }

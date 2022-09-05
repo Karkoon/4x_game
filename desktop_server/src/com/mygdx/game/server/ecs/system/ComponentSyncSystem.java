@@ -47,6 +47,12 @@ public class ComponentSyncSystem extends IteratingSystem {
     handleFriendlies(entityId);
   }
 
+  @Override
+  protected void end() {
+    stateSyncer.flush();
+    super.end();
+  }
+
   private void handleFoes(int entityId) {
     var clientsToUpdate = clientsToUpdateMapper.get(entityId);
     var clients = clientsToUpdate.getClients();
@@ -86,10 +92,8 @@ public class ComponentSyncSystem extends IteratingSystem {
         }
         var mapper = world.getMapper(mapperIndex);
         var componentToSend = mapper.get(entityId);
-
         stateSyncer.sendComponentTo(componentToSend, entityId, client);
       }
-      stateSyncer.endTransaction(client);
     }
     dirtyFlags.getDirtyComponents().clear();
   }

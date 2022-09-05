@@ -16,7 +16,10 @@ public class Transaction {
 
   public Array<ComponentMessage<?>> getMessageBuffer() {
     var value = new Array<>(messageBuffer);
-    messageBuffer.clear();
     return value;
+  }
+
+  public void clear() {
+    messageBuffer.clear();
   }
 }

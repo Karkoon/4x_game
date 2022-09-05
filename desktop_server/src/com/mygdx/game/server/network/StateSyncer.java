@@ -27,19 +27,14 @@ public class StateSyncer {
     var transaction = transactionMap.get(client);
     if (transaction == null) {
       transactionMap.put(client, new Transaction());
-    } else {
-      if (transaction.isPending()) {
-        throw new IllegalStateException("Previous transaction wasn't ended");
-      }
     }
   }
 
-  public synchronized void endTransaction(Client client) {
-    var transaction = transactionMap.remove(client);
-    if (transaction.isPending()) {
-      log.info("sending " + transaction + " to " + client.getPlayerUsername());
-      sendSavingClassInJson(transaction.getMessageBuffer(), client);
-    }
+  private synchronized void endTransaction(Client client) {
+    var transaction = transactionMap.get(client, null);
+    log.info("sending " + transaction .getMessageBuffer()+ " to " + client.getPlayerUsername());
+    sendSavingClassInJson(transaction.getMessageBuffer(), client);
+    transaction.clear();
   }
 
   public synchronized void sendComponentTo(Component component, int entityId, Client client) {
@@ -60,5 +55,12 @@ public class StateSyncer {
   private void sendSavingClassInJson(Object message, Client client) {
     var jsonString = json.toJson(message, (Class<?>) null); // required to save type information inside json
     client.getSocket().write(Buffer.buffer(jsonString));
+  }
+
+  public void flush() {
+    for (var client : transactionMap.keys()) {
+      endTransaction(client);
+    }
+    transactionMap.clear();
   }
 }
