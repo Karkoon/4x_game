@@ -28,10 +28,11 @@ public class StartUnitInitializer {
     this.gameRoom = gameRoom;
   }
 
+  private int y = 0;
   public void initializeStartingUnits() {
     var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class); // todo decide which unitconfig should be the starting unit
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
-      unitFactory.createEntity(anyConfig, new Coordinates(0, 0), gameRoom.getClients().get(i));
+      unitFactory.createEntity(anyConfig, new Coordinates(0, y++), gameRoom.getClients().get(i));
     }
   }
 }

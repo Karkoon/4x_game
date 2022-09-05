@@ -7,6 +7,7 @@ import dagger.assisted.AssistedInject;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class GameRoomImpl implements GameRoom {
   }
 
   public List<Client> getClients() { // przesortować jakoś pewnie, ustalić kolejność
-    return clients.values().stream().toList();
+    return clients.values().stream().sorted(Comparator.comparing(Client::getPlayerUsername)).toList();
   }
 
   public void addClient(@NonNull Client client) {

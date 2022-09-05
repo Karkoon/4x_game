@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.ecs.component;
+package com.mygdx.game.core.ecs.component;
 
 import com.artemis.PooledComponent;
 import lombok.Data;

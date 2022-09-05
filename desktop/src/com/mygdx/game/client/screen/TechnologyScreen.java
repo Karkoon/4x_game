@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.util.UiElementsCreator;
-import com.mygdx.game.client_core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
 import lombok.NonNull;

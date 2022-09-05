@@ -27,6 +27,7 @@ public class SubFieldFactory {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
+    componentFactory.createNameComponent(entityId, "subfield " + config.getName() + " " + entityId + " " + parentField);
     componentFactory.createSubFieldComponent(parentField, entityId);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);

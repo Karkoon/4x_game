@@ -31,6 +31,7 @@ public class UnitFactory {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
+    componentFactory.createNameComponent(entityId, "unit " + config.getName() + " " + entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createSightlineSubscribersComponent(entityId, client, config.getSightRadius());

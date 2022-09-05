@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.ecs.component.Movable;
-import com.mygdx.game.client_core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;

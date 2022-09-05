@@ -9,6 +9,7 @@ import com.mygdx.game.config.Config;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
@@ -29,14 +30,15 @@ public class ComponentFactory {
   private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
 
-  private final ComponentMapper<SubField> subFieldMapper;
-  private final ComponentMapper<Field> fieldMapper;
-  private final ComponentMapper<Coordinates> coordinatesMapper;
-  private final ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private final ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
-  private final ComponentMapper<SharedComponents> sharedComponentsMapper;
-  private final ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
-  private final ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
+  private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
+  private ComponentMapper<SharedComponents> sharedComponentsMapper;
+  private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
+  private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
+  private ComponentMapper<Name> nameMapper;
 
   @Inject
   public ComponentFactory(
@@ -46,19 +48,17 @@ public class ComponentFactory {
   ) {
     this.room = room;
     this.world = world;
+    this.world.inject(this);
     this.componentIndicesCache = componentIndicesCache;
-    this.subFieldMapper = world.getMapper(SubField.class);
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
-    this.entityConfigIdMapper = world.getMapper(EntityConfigId.class);
-    this.fieldMapper = world.getMapper(Field.class);
-    this.sightlineSubscribersMapper = world.getMapper(SightlineSubscribers.class);
-    this.sharedComponentsMapper = world.getMapper(SharedComponents.class);
-    this.friendlyOrFoeMapper = world.getMapper(FriendlyOrFoe.class);
-    this.changeSubscribersMapper = world.getMapper(ChangeSubscribers.class);
   }
 
   public int createEntityId() {
     return world.create();
+  }
+
+  public void createNameComponent(int entityId, String name) {
+    var nameComp = nameMapper.create(entityId);
+    nameComp.setName(name);
   }
 
   public void createCoordinateComponent(Coordinates coordinates, int entityId) {

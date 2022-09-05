@@ -43,8 +43,10 @@ public class ComponentSyncSystem extends IteratingSystem {
 
   @Override
   protected void process(int entityId) {
+    var dirtyFlags = dirtyComponentsMapper.create(entityId);
     handleFoes(entityId);
     handleFriendlies(entityId);
+    dirtyFlags.getDirtyComponents().clear();
   }
 
   @Override
@@ -74,7 +76,7 @@ public class ComponentSyncSystem extends IteratingSystem {
   }
 
   private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits needAllData) {
-    var dirtyFlags = dirtyComponentsMapper.create(entityId);
+    var dirtyFlags = dirtyComponentsMapper.get(entityId);
     for (
         int clientIndex = clients.nextSetBit(0);
         clientIndex != -1;
@@ -87,7 +89,7 @@ public class ComponentSyncSystem extends IteratingSystem {
           mapperIndex != -1;
           mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
-        if (dirtyFlags.getDirtyComponents().get(mapperIndex) && !needAllData.get(clientIndex)) {
+        if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !needAllData.get(clientIndex)) {
           continue; // skip if component wasn't changed and the client does not need all the data
         }
         var mapper = world.getMapper(mapperIndex);
@@ -95,6 +97,5 @@ public class ComponentSyncSystem extends IteratingSystem {
         stateSyncer.sendComponentTo(componentToSend, entityId, client);
       }
     }
-    dirtyFlags.getDirtyComponents().clear();
   }
 }
