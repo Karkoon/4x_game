@@ -32,6 +32,9 @@ public class StateSyncer {
 
   private synchronized void endTransaction(Client client) {
     var transaction = transactionMap.get(client, null);
+    if (!transaction.isPending()) {
+      return;
+    }
     log.info("sending " + transaction .getMessageBuffer()+ " to " + client.getPlayerUsername());
     sendSavingClassInJson(transaction.getMessageBuffer(), client);
     transaction.clear();
