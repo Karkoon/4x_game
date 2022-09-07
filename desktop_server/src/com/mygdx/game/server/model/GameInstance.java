@@ -42,6 +42,7 @@ public class GameInstance {
     technologyInitializer.get().initializeTechnologies();
     unitInitializer.get().initializeStartingUnits();
     playerOrder = new ArrayDeque<>(room.getClients());
+    changeToNextPlayer();
     world.process();
   }
 

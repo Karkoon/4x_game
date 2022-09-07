@@ -6,6 +6,7 @@ import com.mygdx.game.server.network.handlers.ConnectHandler;
 import com.mygdx.game.server.network.handlers.EndTurnHandler;
 import com.mygdx.game.server.network.handlers.MoveHandler;
 import com.mygdx.game.server.network.handlers.StartHandler;
+import com.mygdx.game.server.network.handlers.SubfieldSubscriptionHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.WebSocketFrame;
@@ -25,6 +26,7 @@ public final class Server {
   private final EndTurnHandler endTurnHandler;
   private final ConnectHandler connectHandler;
   private final CloseHandler closeHandler;
+  private final SubfieldSubscriptionHandler subfieldSubscriptionHandler;
 
   private HttpServer server;
 
@@ -34,13 +36,15 @@ public final class Server {
       MoveHandler moveHandler,
       EndTurnHandler endTurnHandler,
       ConnectHandler connectHandler,
-      CloseHandler closeHandler
+      CloseHandler closeHandler,
+      SubfieldSubscriptionHandler subfieldSubscriptionHandler
   ) {
     this.startHandler = startHandler;
     this.moveHandler = moveHandler;
     this.endTurnHandler = endTurnHandler;
     this.connectHandler = connectHandler;
     this.closeHandler = closeHandler;
+    this.subfieldSubscriptionHandler = subfieldSubscriptionHandler;
   }
 
   private void handle(
@@ -54,6 +58,7 @@ public final class Server {
       case "connect" -> connectHandler.handle(commands, client);
       case "start" -> startHandler.handle(commands, client); // todo move start, move, end_turn to gameinstancescope
       case "move" -> moveHandler.handle(commands, client);
+      case "field" -> subfieldSubscriptionHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle(client);
       default -> log.info("Couldn't handle packet: " + frame.textData());
     }

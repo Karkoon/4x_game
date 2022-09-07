@@ -33,7 +33,7 @@ public class SubFieldFactory {
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class, SubField.class},
-        new Class[]{});
+        new Class[]{Coordinates.class, EntityConfigId.class, SubField.class});
     return entityId;
   }
 }

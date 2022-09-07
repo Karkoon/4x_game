@@ -38,7 +38,7 @@ public class FieldFactory {
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class, Field.class},
-        new Class[]{Coordinates.class, EntityConfigId.class}
+        new Class[]{Coordinates.class, EntityConfigId.class, Field.class}
     );
   }
 }

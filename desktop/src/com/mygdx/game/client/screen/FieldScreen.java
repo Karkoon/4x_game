@@ -12,6 +12,7 @@ import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client_core.network.ShowSubfieldService;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -32,6 +33,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final ChosenEntity chosenEntity;
+  private final ShowSubfieldService showSubfieldService;
   private final SubFieldUiInputProcessor subFieldUiInputProcessor;
 
   private int fieldParent = -1;
@@ -43,6 +45,7 @@ public class FieldScreen extends ScreenAdapter {
       @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull ChosenEntity chosenEntity,
+      @NonNull ShowSubfieldService showSubfieldService,
       @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor
   ) {
     this.renderer = renderer;
@@ -50,6 +53,7 @@ public class FieldScreen extends ScreenAdapter {
     this.viewport = viewport;
     this.stage = stage;
     this.chosenEntity = chosenEntity;
+    this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
   }
 
@@ -57,6 +61,7 @@ public class FieldScreen extends ScreenAdapter {
   public void show() {
     log.info("SubArea shown");
     fieldParent = chosenEntity.pop();
+    showSubfieldService.flipSubscriptionState(fieldParent);
     positionCamera(viewport.getCamera());
     setUpInput();
   }
@@ -78,13 +83,10 @@ public class FieldScreen extends ScreenAdapter {
     stage.getViewport().update(width, height, true);
   }
 
-  @Override
-  public void dispose() {
-    renderer.dispose();
-  }
 
   @Override
   public void hide() {
+    showSubfieldService.flipSubscriptionState(fieldParent);
     fieldParent = -1;
   }
 

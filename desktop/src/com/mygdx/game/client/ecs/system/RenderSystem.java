@@ -42,7 +42,7 @@ public class RenderSystem extends IteratingSystem {
       if (scoreMapper.has(entityId) || movableMapper.has(entityId)) {
         renderer.addModelToCache(modelInstance);
       } else if (subFieldMapper.has(entityId)) {
-        Integer parent = subFieldMapper.get(entityId).getParent();
+        int parent = subFieldMapper.get(entityId).getParent();
         renderer.addSubModelToCache(parent, modelInstance);
       }
     } catch (Exception exception) {

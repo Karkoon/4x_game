@@ -1,15 +1,13 @@
 package com.mygdx.game.server.network;
 
-import com.artemis.World;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
-public class MoveEntityService {
+public class MoveEntityService extends WorldService {
 
   @Inject
   MoveEntityService() {
@@ -17,17 +15,12 @@ public class MoveEntityService {
   }
 
   public void moveEntity(int entityId, int x, int y, GameRoom room) {
-    var coordinatesMapper = room.getGameInstance().getWorld().getMapper(Coordinates.class);
+    var world = room.getGameInstance().getWorld();
+    var coordinatesMapper = world.getMapper(Coordinates.class);
     var destination = coordinatesMapper.get(entityId);
     destination.setCoordinates(x, y);
     log.info("Send position component");
-    setDirty(entityId, Coordinates.class, room.getGameInstance().getWorld());
-    room.getGameInstance().getWorld().process();
-  }
-
-  private void setDirty(int entityId, Class component, World world) {
-    var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
-    var dirtyComponentMapper = world.getMapper(DirtyComponents.class);
-    dirtyComponentMapper.get(entityId).getDirtyComponents().set(componentIndex);
+    setDirty(entityId, Coordinates.class, world);
+    world.process();
   }
 }
