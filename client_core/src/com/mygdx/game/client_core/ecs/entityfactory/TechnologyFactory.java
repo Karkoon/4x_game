@@ -17,27 +17,21 @@ import javax.inject.Singleton;
 @Log
 public class TechnologyFactory {
 
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<Technology> technologyMapper;
-  private final Technologies technologies;
+  private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Technology> technologyMapper;
 
   @Inject
   public TechnologyFactory(
-      @NonNull World world,
-      @NonNull Technologies technologies
+      @NonNull World world
   ) {
-    this.nameMapper = world.getMapper(Name.class);
-    this.positionMapper = world.getMapper(Position.class);
-    this.technologyMapper = world.getMapper(Technology.class);
-    this.technologies = technologies;
+    world.inject(this);
   }
 
   public @NonNull void createEntity(TechnologyConfig config, int entity) {
     setUpName(config, entity);
     setUpTechnology(config, entity);
     positionMapper.create(entity);
-    technologies.saveTechnology(entity);
   }
 
   private void setUpName(@NonNull TechnologyConfig config, int entityId) {

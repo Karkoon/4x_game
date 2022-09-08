@@ -17,17 +17,15 @@ import javax.inject.Singleton;
 @Log
 public class SubFieldFactory {
 
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public SubFieldFactory(
       @NonNull World world
   ) {
-    this.nameMapper = world.getMapper(Name.class);
-    this.positionMapper = world.getMapper(Position.class);
-    this.subFieldMapper = world.getMapper(SubField.class);
+    world.inject(this);
   }
 
   public @NonNull void createEntity(SubFieldConfig config, int entity) {
