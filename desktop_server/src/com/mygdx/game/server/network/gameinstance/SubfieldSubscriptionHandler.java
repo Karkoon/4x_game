@@ -1,4 +1,4 @@
-package com.mygdx.game.server.network.handlers;
+package com.mygdx.game.server.network.gameinstance;
 
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.ShowSubfieldService;
@@ -13,7 +13,6 @@ public class SubfieldSubscriptionHandler {
   public SubfieldSubscriptionHandler(
       ShowSubfieldService showSubfieldService
   ) {
-
     this.showSubfieldService = showSubfieldService;
   }
 

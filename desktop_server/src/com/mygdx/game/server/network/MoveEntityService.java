@@ -1,6 +1,7 @@
 package com.mygdx.game.server.network;
 
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.extern.java.Log;
 
