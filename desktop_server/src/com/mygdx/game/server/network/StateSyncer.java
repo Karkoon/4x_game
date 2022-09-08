@@ -8,6 +8,7 @@ import com.mygdx.game.core.network.messages.ComponentMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import io.vertx.core.buffer.Buffer;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -40,7 +41,7 @@ public class StateSyncer {
     transaction.clear();
   }
 
-  public synchronized void sendComponentTo(Component component, int entityId, Client client) {
+  public synchronized void sendComponentTo(@NonNull Component component, int entityId, Client client) {
     if (!transactionMap.containsKey(client)) {
       log.info("Sending component " + component + " to " + client);
       var message = new ComponentMessage<>(component, entityId);

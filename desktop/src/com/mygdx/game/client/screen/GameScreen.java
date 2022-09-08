@@ -84,7 +84,6 @@ public class GameScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-    renderer.render();
     stage.draw();
     stage.act(delta);
   }

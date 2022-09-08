@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.NonNull;
 
@@ -18,9 +17,8 @@ import javax.inject.Singleton;
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;
-  private final ModelCache cache;
+  private ModelCache cache;
   private final Array<ModelInstance> modelInstances;
-  private final IntMap<Array<ModelInstance>> subModelInstances;
 
   private final Camera camera;
 
@@ -30,7 +28,6 @@ public class ModelInstanceRenderer implements Disposable {
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();
     this.modelInstances = new Array<>();
-    this.subModelInstances = new IntMap<>();
   }
 
   public void render() {
@@ -39,16 +36,6 @@ public class ModelInstanceRenderer implements Disposable {
     modelBatch.begin(camera);
     modelBatch.render(cache);
     modelBatch.end();
-  }
-
-  public void subRender(int chosenField) {
-    if (subModelInstances.get(chosenField) != null) {
-      performFrustumCullingToModelCache(subModelInstances.get(chosenField));
-      subModelInstances.get(chosenField).clear();
-      modelBatch.begin(camera);
-      modelBatch.render(cache);
-      modelBatch.end();
-    }
   }
 
   private void performFrustumCullingToModelCache(Array<ModelInstance> modelInstances) {
@@ -72,17 +59,6 @@ public class ModelInstanceRenderer implements Disposable {
 
   public void addModelToCache(ModelInstance modelInstance) {
     modelInstances.add(modelInstance);
-  }
-
-  public void addSubModelToCache(int parent, ModelInstance modelInstance) {
-    if (!subModelInstances.containsKey(parent)) {
-      subModelInstances.put(parent, new Array<>());
-    }
-    subModelInstances.get(parent).add(modelInstance);
-  }
-
-  public void addToCache(Array<ModelInstance> modelInstances) {
-    this.modelInstances.addAll(modelInstances);
   }
 
   @Override

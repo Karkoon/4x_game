@@ -7,6 +7,7 @@ import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.core.ecs.component.Stats;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -17,9 +18,10 @@ import javax.inject.Singleton;
 @Log
 public class UnitFactory extends EntityFactory<UnitConfig> {
 
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<Movable> movableMapper;
+  private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Movable> movableMapper;
+  private ComponentMapper<Stats> statsMapper;
 
   @Inject
   public UnitFactory(
@@ -27,16 +29,25 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
       @NonNull GameScreenAssets assets
   ) {
     super(world, assets);
-    this.nameMapper = world.getMapper(Name.class);
-    this.positionMapper = world.getMapper(Position.class);
-    this.movableMapper = world.getMapper(Movable.class);
+    world.inject(this);
   }
 
   @Override
   public void createEntity(@NonNull UnitConfig config, int entity) {
     setUpNameComponent(config, entity);
     positionMapper.create(entity).getValue().set(0, 10, 0);
+    setupStatsComponent(config, entity);
     movableMapper.set(entity, true);
+  }
+
+  private void setupStatsComponent(@NonNull UnitConfig config, int entityId) {
+    var stats = statsMapper.create(entityId);
+    stats.setHp(config.getMaxHp());
+    stats.setMaxHp(config.getMaxHp());
+    stats.setSpeed(config.getSpeed());
+    stats.setDefense(config.getDefense());
+    stats.setSightRadius(config.getSightRadius());
+    stats.setAttackPower(config.getAttackPower());
   }
 
   private void setUpNameComponent(@NonNull UnitConfig config, int entityId) {

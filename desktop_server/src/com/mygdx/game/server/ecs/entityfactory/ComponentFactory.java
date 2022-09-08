@@ -6,10 +6,12 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
+import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
@@ -39,6 +41,7 @@ public class ComponentFactory {
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Stats> statsMapper;
 
   @Inject
   public ComponentFactory(
@@ -50,6 +53,21 @@ public class ComponentFactory {
     this.world = world;
     this.world.inject(this);
     this.componentIndicesCache = componentIndicesCache;
+    createAndDeleteEntityWithAllComponents();
+  }
+
+  private void createAndDeleteEntityWithAllComponents() {
+    var entity = createEntityId();
+    subFieldMapper.create(entity);
+    fieldMapper.create(entity);
+    coordinatesMapper.create(entity);
+    entityConfigIdMapper.create(entity);
+    friendlyOrFoeMapper.create(entity);
+    changeSubscribersMapper.create(entity);
+    nameMapper.create(entity);
+    sightlineSubscribersMapper.create(entity);
+    sharedComponentsMapper.create(entity);
+    world.delete(entity);
   }
 
   public int createEntityId() {
@@ -120,5 +138,15 @@ public class ComponentFactory {
 
   public void createChangeSubscribersComponent(int entityId) {
     changeSubscribersMapper.create(entityId);
+  }
+
+  public void createStatsComponent(int entityId, UnitConfig config) {
+    var stats = statsMapper.create(entityId);
+    stats.setHp(config.getMaxHp());
+    stats.setMaxHp(config.getMaxHp());
+    stats.setSpeed(config.getSpeed());
+    stats.setDefense(config.getDefense());
+    stats.setSightRadius(config.getSightRadius());
+    stats.setAttackPower(config.getAttackPower());
   }
 }

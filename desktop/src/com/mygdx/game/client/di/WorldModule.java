@@ -8,6 +8,7 @@ import com.mygdx.game.client.ecs.system.MovementSystem;
 import com.mygdx.game.client.ecs.system.NavigationSystem;
 import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.SetHighlightSystem;
+import com.mygdx.game.client.ecs.system.VisibilitySystem;
 import com.mygdx.game.client_core.ecs.system.CoordinateToPositionSystem;
 import dagger.Module;
 import dagger.Provides;
@@ -29,10 +30,12 @@ public class WorldModule {
       @NonNull SetHighlightSystem setHighlightSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull NavigationSystem navigationSystem,
-      @NonNull BlockInputSystem blockInputSystem
+      @NonNull BlockInputSystem blockInputSystem,
+      @NonNull VisibilitySystem visibilitySystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
+    configuration.setSystem(visibilitySystem);
     configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);

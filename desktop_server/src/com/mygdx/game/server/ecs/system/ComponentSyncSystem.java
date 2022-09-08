@@ -9,6 +9,7 @@ import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.RemoveEntityService;
 import com.mygdx.game.server.network.StateSyncer;
 import lombok.extern.java.Log;
 
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 public class ComponentSyncSystem extends IteratingSystem {
 
   private final StateSyncer stateSyncer;
+  private final RemoveEntityService removeEntityService;
   private final GameRoom gameRoom;
   private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
@@ -29,9 +31,11 @@ public class ComponentSyncSystem extends IteratingSystem {
   @Inject
   public ComponentSyncSystem(
       StateSyncer stateSyncer,
+      RemoveEntityService removeEntityService,
       GameRoom gameRoom
   ) {
     this.stateSyncer = stateSyncer;
+    this.removeEntityService = removeEntityService;
     this.gameRoom = gameRoom;
   }
 
@@ -58,38 +62,43 @@ public class ComponentSyncSystem extends IteratingSystem {
   private void handleFoes(int entityId) {
     var clientsToUpdate = clientsToUpdateMapper.get(entityId);
     var clients = clientsToUpdate.getClients();
-    var needAllData = clientsToUpdate.getChangedSubscriptionState();
+    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
     var foes = new Bits(clients);
     foes.andNot(friendlyOrFoeMapper.get(entityId).getFriendlies());
+    changedSubscriptionState.and(foes);
     var foeComponents = sharedComponentsMapper.get(entityId).getFoes();
-    sendComponentsToClients(entityId, foes, foeComponents, needAllData);
+    sendComponentsToClients(entityId, foes, foeComponents, changedSubscriptionState);
   }
 
   private void handleFriendlies(int entityId) {
     var clientsToUpdate = clientsToUpdateMapper.get(entityId);
     var clients = clientsToUpdate.getClients();
-    var needAllData = clientsToUpdate.getChangedSubscriptionState();
+    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
     var friendlies = new Bits(clients);
     friendlies.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
+    changedSubscriptionState.and(friendlies);
     var friendComponents = sharedComponentsMapper.get(entityId).getFriendlies();
-    sendComponentsToClients(entityId, friendlies, friendComponents, needAllData);
+    sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
   }
 
-  private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits needAllData) {
+  private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits changedSubscriptionState) {
     var dirtyFlags = dirtyComponentsMapper.get(entityId);
-    for (
-        int clientIndex = clients.nextSetBit(0);
-        clientIndex != -1;
-        clientIndex = clients.nextSetBit(clientIndex + 1)
-    ) {
+    for (int clientIndex = 0; clientIndex < clients.length(); clientIndex++) {
       var client = gameRoom.getClients().get(clientIndex);
+      // check if client stopped seeing entity and then send remove signal if so
+      if (changedSubscriptionState.get(clientIndex) && !clients.get(clientIndex)) {
+        log.info("removed entity");
+        removeEntityService.removeEntity(entityId, client);
+        continue;
+      }
+
       stateSyncer.beginTransaction(client); //problematic
       for (
           var mapperIndex = components.nextSetBit(0);
           mapperIndex != -1;
           mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
-        if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !needAllData.get(clientIndex)) {
+        if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !changedSubscriptionState.get(clientIndex)) {
           continue; // skip if component wasn't changed and the client does not need all the data
         }
         var mapper = world.getMapper(mapperIndex);

@@ -3,6 +3,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
@@ -35,6 +36,7 @@ public class UnitFactory {
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createSightlineSubscribersComponent(entityId, client, config.getSightRadius());
+    componentFactory.createStatsComponent(entityId, config);
     componentFactory.createSharedComponents(entityId,
         new Class[]{Coordinates.class, EntityConfigId.class},
         new Class[]{Coordinates.class, EntityConfigId.class}
