@@ -9,6 +9,8 @@ public interface GameRoom {
 
   void addClient(@NonNull Client client);
 
+  int getOrderNumber(@NonNull Client client);
+
   int getNumberOfClients();
 
   String getRoomId();
@@ -20,4 +22,6 @@ public interface GameRoom {
   void tearDownGameInstance();
 
   GameInstance getGameInstance();
+
+  Client getClientByToken(String token);
 }

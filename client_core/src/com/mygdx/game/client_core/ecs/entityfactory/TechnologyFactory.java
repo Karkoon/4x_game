@@ -2,11 +2,10 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.config.TechnologyConfig;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -16,7 +15,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
+public class TechnologyFactory {
 
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
@@ -25,17 +24,15 @@ public class TechnologyFactory extends EntityFactory<TechnologyConfig> {
 
   @Inject
   public TechnologyFactory(
-          @NonNull World world,
-          @NonNull GameScreenAssets assets,
-          @NonNull Technologies technologies) {
-    super(world, assets);
+      @NonNull World world,
+      @NonNull Technologies technologies
+  ) {
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
     this.technologyMapper = world.getMapper(Technology.class);
     this.technologies = technologies;
   }
 
-  @Override
   public @NonNull void createEntity(TechnologyConfig config, int entity) {
     setUpName(config, entity);
     setUpTechnology(config, entity);

@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class FieldFactory extends EntityFactory<FieldConfig> {
+public class FieldFactory {
 
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
@@ -24,16 +24,15 @@ public class FieldFactory extends EntityFactory<FieldConfig> {
   private final ComponentMapper<Field> fieldMapper;
 
   @Inject
-  public FieldFactory(@NonNull World world,
-                      @NonNull GameScreenAssets assets) {
-    super(world, assets);
+  public FieldFactory(
+      @NonNull World world
+  ) {
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
     this.scoreMapper = world.getMapper(Score.class);
     this.fieldMapper = world.getMapper(Field.class);
   }
 
-  @Override
   public void createEntity(@NonNull FieldConfig config, int entity) {
     setUpName(config, entity);
     setUpScore(config, entity);

@@ -2,7 +2,6 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -16,7 +15,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class UnitFactory extends EntityFactory<UnitConfig> {
+public class UnitFactory {
 
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
@@ -25,14 +24,11 @@ public class UnitFactory extends EntityFactory<UnitConfig> {
 
   @Inject
   public UnitFactory(
-      @NonNull World world,
-      @NonNull GameScreenAssets assets
+      @NonNull World world
   ) {
-    super(world, assets);
     world.inject(this);
   }
 
-  @Override
   public void createEntity(@NonNull UnitConfig config, int entity) {
     setUpNameComponent(config, entity);
     positionMapper.create(entity).getValue().set(0, 10, 0);

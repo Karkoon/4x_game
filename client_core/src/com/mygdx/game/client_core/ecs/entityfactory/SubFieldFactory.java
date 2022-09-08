@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Log
-public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
+public class SubFieldFactory {
 
   private final ComponentMapper<Name> nameMapper;
   private final ComponentMapper<Position> positionMapper;
@@ -23,16 +23,13 @@ public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
 
   @Inject
   public SubFieldFactory(
-      @NonNull World world,
-      @NonNull GameScreenAssets assets
+      @NonNull World world
   ) {
-    super(world, assets);
     this.nameMapper = world.getMapper(Name.class);
     this.positionMapper = world.getMapper(Position.class);
     this.subFieldMapper = world.getMapper(SubField.class);
   }
 
-  @Override
   public @NonNull void createEntity(SubFieldConfig config, int entity) {
     setUpName(config, entity);
     subFieldMapper.create(entity);

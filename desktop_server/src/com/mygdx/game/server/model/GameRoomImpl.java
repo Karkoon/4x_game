@@ -43,6 +43,14 @@ public class GameRoomImpl implements GameRoom {
     clients.remove(client.getPlayerToken());
   }
 
+  public int getOrderNumber(@NonNull Client client) {
+    return getClients().indexOf(client);
+  }
+
+  public Client getClientByToken(@NonNull String token) {
+    return clients.get(token);
+  }
+
   public int getNumberOfClients() {
     return clients.size();
   }

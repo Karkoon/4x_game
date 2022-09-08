@@ -3,8 +3,8 @@ package com.mygdx.game.server.ecs.entityfactory;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.server.di.GameInstanceScope;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -35,11 +35,12 @@ public class UnitFactory {
     componentFactory.createNameComponent(entityId, "unit " + config.getName() + " " + entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
     componentFactory.createChangeSubscribersComponent(entityId);
-    componentFactory.createSightlineSubscribersComponent(entityId, client, config.getSightRadius());
+    componentFactory.createSightlineSubscribersComponent(entityId, config.getSightRadius());
     componentFactory.createStatsComponent(entityId, config);
+    componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createSharedComponents(entityId,
-        new Class[]{Coordinates.class, EntityConfigId.class},
-        new Class[]{Coordinates.class, EntityConfigId.class}
+        new Class[]{Coordinates.class, EntityConfigId.class, Owner.class},
+        new Class[]{Coordinates.class, EntityConfigId.class, Owner.class}
     );
   }
 

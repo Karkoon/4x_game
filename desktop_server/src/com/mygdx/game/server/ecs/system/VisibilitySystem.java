@@ -8,6 +8,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
@@ -15,7 +16,7 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@All({Coordinates.class, SightlineSubscribers.class})
+@All({Coordinates.class, SightlineSubscribers.class, Owner.class})
 @Log
 public class VisibilitySystem extends IteratingSystem {
 

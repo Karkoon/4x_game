@@ -17,6 +17,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.Client;
@@ -42,6 +43,7 @@ public class ComponentFactory {
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<Owner> ownerMapper;
 
   @Inject
   public ComponentFactory(
@@ -114,15 +116,11 @@ public class ComponentFactory {
 
   public void createSightlineSubscribersComponent(
       int entityId,
-      Client nullableClient,
       int sightlineRadius
   ) {
     var sightlineSubscribers = sightlineSubscribersMapper.create(entityId);
     sightlineSubscribers.setSightlineRadius(sightlineRadius);
     var subscribedClients = new Bits(room.getNumberOfClients());
-    if (nullableClient != null) {
-      subscribedClients.set(room.getClients().indexOf(nullableClient));
-    }
     sightlineSubscribers.setClients(subscribedClients);
   }
 
@@ -148,5 +146,10 @@ public class ComponentFactory {
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
     stats.setAttackPower(config.getAttackPower());
+  }
+
+  public void createOwnerComponent(int entityId, Client owner) {
+    var ownerComp = ownerMapper.create(entityId);
+    ownerComp.setToken(owner.getPlayerToken());
   }
 }

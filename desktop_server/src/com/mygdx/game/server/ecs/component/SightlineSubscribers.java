@@ -8,4 +8,8 @@ import lombok.Data;
 public class SightlineSubscribers extends Component {
   private Bits clients = new Bits();
   private int sightlineRadius = 1;
+
+  public void setClient(int index) {
+    clients.set(index);
+  }
 }
