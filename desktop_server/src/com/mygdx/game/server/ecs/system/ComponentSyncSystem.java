@@ -50,6 +50,7 @@ public class ComponentSyncSystem extends IteratingSystem {
   @Override
   protected void process(int entityId) {
     var dirtyFlags = dirtyComponentsMapper.create(entityId);
+    handleUnsubscribedClients(entityId);
     handleFoes(entityId);
     handleFriendlies(entityId);
     dirtyFlags.getDirtyComponents().clear();
@@ -83,16 +84,25 @@ public class ComponentSyncSystem extends IteratingSystem {
     sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
   }
 
+  private void handleUnsubscribedClients(int entityId) {
+    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
+    var subscribers = clientsToUpdate.getClients();
+    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
+    for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
+      if (!subscribers.get(i) && changedSubscriptionState.getAndClear(i)) {
+          log.info("removed entity " + entityId);
+          var client = gameRoom.getClients().get(i);
+          removeEntityService.removeEntity(entityId, client);
+      }
+    }
+  }
+
   private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits changedSubscriptionState) {
     var dirtyFlags = dirtyComponentsMapper.get(entityId);
     for (int clientIndex = 0; clientIndex < clients.length(); clientIndex++) {
       var client = gameRoom.getClients().get(clientIndex);
       // check if client stopped seeing entity and then send remove signal if so
-      if (changedSubscriptionState.get(clientIndex) && !clients.get(clientIndex)) {
-        log.info("removed entity " + entityId);
-        removeEntityService.removeEntity(entityId, client);
-        continue;
-      }
+
 
       stateSyncer.beginTransaction(client); //problematic
       for (
