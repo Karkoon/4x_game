@@ -6,9 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
@@ -71,6 +71,7 @@ public class FieldScreen extends ScreenAdapter {
     fieldParent = chosenEntity.pop();
     setSubfieldsVisibility(fieldParent, true);
     showSubfieldService.flipSubscriptionState(fieldParent);
+    saveCameraPosition(viewport.getCamera());
     positionCamera(viewport.getCamera());
     setUpInput();
   }
@@ -101,6 +102,7 @@ public class FieldScreen extends ScreenAdapter {
 
   @Override
   public void hide() {
+    restoreCameraPosition(viewport.getCamera());
     inField.setInField(false);
     setSubfieldsVisibility(fieldParent, false);
     showSubfieldService.flipSubscriptionState(fieldParent);
@@ -111,6 +113,16 @@ public class FieldScreen extends ScreenAdapter {
     camera.position.set(0, 600, 0);
     camera.lookAt(0, 0, 0);
   }
+
+  private void restoreCameraPosition(Camera camera) {
+    camera.position.set(pos);
+  }
+
+  private void saveCameraPosition(Camera camera) {
+    pos = new Vector3(camera.position);
+  }
+
+  private Vector3 pos;
 
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);

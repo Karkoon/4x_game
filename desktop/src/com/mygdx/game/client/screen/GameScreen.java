@@ -74,7 +74,6 @@ public class GameScreen extends ScreenAdapter {
       gameConnectService.connect();
       initialized = true;
     }
-    positionCamera(viewport.getCamera());
     setUpInput();
   }
 
@@ -106,8 +105,4 @@ public class GameScreen extends ScreenAdapter {
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
-  private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 600, 0);
-    camera.lookAt(0, 0, 0);
-  }
 }

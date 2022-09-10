@@ -7,6 +7,6 @@
   "maxHp": 100,
   "attackPower": 50,
   "defense": 25,
-  "sightRadius": 3,
+  "sightRadius": 2,
   "speed": 1
 }
