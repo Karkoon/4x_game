@@ -38,8 +38,10 @@ public class UnitFactory {
     componentFactory.createSightlineSubscribersComponent(entityId, config.getSightRadius());
     componentFactory.createStatsComponent(entityId, config);
     componentFactory.createOwnerComponent(entityId, client);
+    var componentsToSend = new Class[]{Coordinates.class, EntityConfigId.class, Owner.class};
+    componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
-        new Class[]{Coordinates.class, EntityConfigId.class, Owner.class},
+        componentsToSend,
         new Class[]{Coordinates.class, EntityConfigId.class, Owner.class}
     );
   }

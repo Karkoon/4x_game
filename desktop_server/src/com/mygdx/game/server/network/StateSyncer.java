@@ -36,7 +36,8 @@ public class StateSyncer {
     if (!transaction.isPending()) {
       return;
     }
-    log.info("sending " + transaction .getMessageBuffer()+ " to " + client.getPlayerUsername());
+    var buffer = transaction.getMessageBuffer();
+    log.info("sending " + buffer.size + " " + buffer + "\nto " + client.getPlayerUsername());
     sendSavingClassInJson(transaction.getMessageBuffer(), client);
     transaction.clear();
   }

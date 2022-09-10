@@ -4,6 +4,7 @@ import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.artemis.utils.IntBag;
+import com.mygdx.game.core.ecs.component.Technology;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import javax.inject.Singleton;
 @Log
 public class Technologies {
 
-  @AspectDescriptor
+  @AspectDescriptor(all = {Technology.class})
   private EntitySubscription allTechnologies;
 
   @Inject

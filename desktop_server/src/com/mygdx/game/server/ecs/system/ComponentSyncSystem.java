@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
@@ -26,6 +27,7 @@ public class ComponentSyncSystem extends IteratingSystem {
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
+  private ComponentMapper<Name> nameComponentMapper;
 
 
   @Inject
@@ -65,7 +67,7 @@ public class ComponentSyncSystem extends IteratingSystem {
     var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
     var foes = new Bits(clients);
     foes.andNot(friendlyOrFoeMapper.get(entityId).getFriendlies());
-    changedSubscriptionState.and(foes);
+    changedSubscriptionState.andNot(friendlyOrFoeMapper.get(entityId).getFriendlies());
     var foeComponents = sharedComponentsMapper.get(entityId).getFoes();
     sendComponentsToClients(entityId, foes, foeComponents, changedSubscriptionState);
   }
@@ -76,7 +78,7 @@ public class ComponentSyncSystem extends IteratingSystem {
     var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
     var friendlies = new Bits(clients);
     friendlies.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
-    changedSubscriptionState.and(friendlies);
+    changedSubscriptionState.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
     var friendComponents = sharedComponentsMapper.get(entityId).getFriendlies();
     sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
   }
@@ -87,7 +89,7 @@ public class ComponentSyncSystem extends IteratingSystem {
       var client = gameRoom.getClients().get(clientIndex);
       // check if client stopped seeing entity and then send remove signal if so
       if (changedSubscriptionState.get(clientIndex) && !clients.get(clientIndex)) {
-        log.info("removed entity");
+        log.info("removed entity " + entityId);
         removeEntityService.removeEntity(entityId, client);
         continue;
       }
@@ -98,7 +100,9 @@ public class ComponentSyncSystem extends IteratingSystem {
           mapperIndex != -1;
           mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
+        log.info("name: " + nameComponentMapper.get(entityId));
         if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !changedSubscriptionState.get(clientIndex)) {
+          log.info("skipped because no changes");
           continue; // skip if component wasn't changed and the client does not need all the data
         }
         var mapper = world.getMapper(mapperIndex);

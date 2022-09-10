@@ -2,6 +2,7 @@ package com.mygdx.game.server.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.mygdx.game.server.ecs.system.AddOwnerToChangeSubscribersSystem;
 import com.mygdx.game.server.ecs.system.AddOwnerToSightlineSubscribersSystem;
 import com.mygdx.game.server.ecs.system.ComponentSyncSystem;
 import com.mygdx.game.server.ecs.system.VisibilitySystem;
@@ -18,12 +19,14 @@ public class WorldModule {
   @Provides
   @GameInstanceScope
   public @NonNull WorldConfiguration providesWorldConfiguration(
+      AddOwnerToChangeSubscribersSystem addOwnerToChangeSubscribersSystem,
       AddOwnerToSightlineSubscribersSystem addOwnerToSightlineSubscribersSystem,
       ComponentSyncSystem componentSyncSystem,
       VisibilitySystem visibilitySystem
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
     var conf =  new WorldConfiguration();
+    conf.setSystem(addOwnerToChangeSubscribersSystem);
     conf.setSystem(addOwnerToSightlineSubscribersSystem);
     conf.setSystem(visibilitySystem);
     conf.setSystem(componentSyncSystem);

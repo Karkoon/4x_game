@@ -16,6 +16,7 @@ import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
+import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.ecs.component.SharedComponents;
@@ -44,6 +45,7 @@ public class ComponentFactory {
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<DirtyComponents> dirtyMapper;
 
   @Inject
   public ComponentFactory(
@@ -69,7 +71,8 @@ public class ComponentFactory {
     nameMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
     sharedComponentsMapper.create(entity);
-    world.delete(entity);
+    dirtyMapper.create(entity);
+    world.delete(entity); //todo create a system to do it automatically?
   }
 
   public int createEntityId() {
@@ -151,5 +154,24 @@ public class ComponentFactory {
   public void createOwnerComponent(int entityId, Client owner) {
     var ownerComp = ownerMapper.create(entityId);
     ownerComp.setToken(owner.getPlayerToken());
+  }
+
+  /**
+   * Use when creating a component that needs to be sent at the beginning to the owner and doesn't change it's state.
+   * For instance the technology entity components don't change at this moment.
+   * It's a workaround to the problem of currently not having a way to
+   * @param entityId
+   * @param dirtyComps
+   */
+  public void createDirtyComponent(int entityId, Class... dirtyComps) {
+    for (int i = 0; i < dirtyComps.length; i++) {
+      var toDirty = dirtyComps[i];
+      setDirty(entityId, toDirty);
+    }
+  }
+
+  private void setDirty(int entityId, Class component) {
+    var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
+    dirtyMapper.create(entityId).getDirtyComponents().set(componentIndex);
   }
 }

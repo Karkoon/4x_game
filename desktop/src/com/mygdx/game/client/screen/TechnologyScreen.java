@@ -18,8 +18,6 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 @Log
@@ -32,7 +30,6 @@ public class TechnologyScreen extends ScreenAdapter {
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<TextureComp> textureMapper;
   private ComponentMapper<Name> nameMapper;
-  private List<Image> technologyImages;
 
   @Inject
   public TechnologyScreen(
@@ -47,13 +44,12 @@ public class TechnologyScreen extends ScreenAdapter {
     this.technologies = technologies;
     this.uiElementsCreator = uiElementsCreator;
     this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
-
-    setUpTechnologyButtons();
   }
 
   @Override
   public void show() {
     log.info("Technology tree shown");
+    setUpTechnologyButtons();
 
     setUpInput();
   }
@@ -77,7 +73,6 @@ public class TechnologyScreen extends ScreenAdapter {
 
   private void setUpTechnologyButtons() {
     var allTechnologies = this.technologies.getAllTechnologies();
-    this.technologyImages = new ArrayList<>();
     for (int i = 0; i < allTechnologies.size(); i++) {
       int entityId = allTechnologies.get(i);
       var position = positionMapper.get(entityId).getValue();
@@ -88,7 +83,6 @@ public class TechnologyScreen extends ScreenAdapter {
       var textField = uiElementsCreator.createTextField(position, name.getName());
       uiElementsCreator.addHoverPopupWithActor(image, textField, stage);
 
-      technologyImages.add(image);
       stage.addActor(image);
     }
   }

@@ -8,6 +8,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -26,19 +27,11 @@ public class VisibilitySystem extends IteratingSystem {
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Name> nameMapper;
 
   @Inject
   public VisibilitySystem() {
     super();
-  }
-
-  private Bits obtainNewChangeSubscribers(int entityId) {
-    var subscribers = entityToNewChangeSubscribers.get(entityId);
-    if (subscribers == null) {
-      subscribers = new Bits();
-      entityToNewChangeSubscribers.put(entityId, subscribers);
-    }
-    return subscribers;
   }
 
   @Override
@@ -52,7 +45,7 @@ public class VisibilitySystem extends IteratingSystem {
     var coordinates = coordinatesMapper.get(perceiver);
     var sightlineRadius = sightlineSubscribersMapper.get(perceiver).getSightlineRadius();
     var sightlineSubscribers = sightlineSubscribersMapper.get(perceiver).getClients();
-    log.info(coordinates.toString());
+    log.info("processing perceiver: " + nameMapper.get(perceiver));
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {
       var perceivableCoords = coordinatesMapper.get(allThatCanBePerceived.getEntities().get(i));
       var dst2 = Math.pow(coordinates.getX() - perceivableCoords.getX(), 2) + Math.pow(coordinates.getY() - perceivableCoords.getY(), 2);
@@ -77,6 +70,15 @@ public class VisibilitySystem extends IteratingSystem {
       changeSubscribersComp.setChangedSubscriptionState(changedSubscriptionState);
       changeSubscribersComp.setClients(newChangeSubscribers);
     }
+  }
+
+  private Bits obtainNewChangeSubscribers(int entityId) {
+    var subscribers = entityToNewChangeSubscribers.get(entityId);
+    if (subscribers == null) {
+      subscribers = new Bits();
+      entityToNewChangeSubscribers.put(entityId, subscribers);
+    }
+    return subscribers;
   }
 
 }

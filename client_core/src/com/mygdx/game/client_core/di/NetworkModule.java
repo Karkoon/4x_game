@@ -6,7 +6,9 @@ import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSockets;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.message_handlers.ChangeTurnMessageHandler;
+import com.mygdx.game.client_core.network.message_handlers.RemoveEntityMessageHandler;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
+import com.mygdx.game.core.network.messages.RemoveEntityMessage;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -42,10 +44,12 @@ public class NetworkModule {
   @Singleton
   public WebSocketHandler providesWebSocketHandler(
       @NonNull WebSocket webSocket,
-      @NonNull ChangeTurnMessageHandler changeTurnMessageHandler
+      @NonNull ChangeTurnMessageHandler changeTurnMessageHandler,
+      @NonNull RemoveEntityMessageHandler removeEntityMessageHandler
   ) {
     var handler = new WebSocketHandler();
     handler.registerHandler(ChangeTurnMessage.class, changeTurnMessageHandler);
+    handler.registerHandler(RemoveEntityMessage.class, removeEntityMessageHandler);
     webSocket.addListener(handler);
     return handler;
   }
