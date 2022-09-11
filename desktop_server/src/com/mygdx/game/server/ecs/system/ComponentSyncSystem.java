@@ -103,9 +103,6 @@ public class ComponentSyncSystem extends IteratingSystem {
     var dirtyFlags = dirtyComponentsMapper.get(entityId);
     for (int clientIndex = 0; clientIndex < clients.length(); clientIndex++) {
       var client = gameRoom.getClients().get(clientIndex);
-      // check if client stopped seeing entity and then send remove signal if so
-
-
       stateSyncer.beginTransaction(client); //problematic
       for (
           var mapperIndex = components.nextSetBit(0);

@@ -14,7 +14,7 @@ public class InField {
   @Inject
   public InField() {
     super();
-    log.info("ONLY ONCE");
   }
+
   private boolean inField = false;
 }

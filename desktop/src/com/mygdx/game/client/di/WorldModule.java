@@ -30,10 +30,12 @@ public class WorldModule {
       @NonNull SetHighlightSystem setHighlightSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull NavigationSystem navigationSystem,
-      @NonNull BlockInputSystem blockInputSystem
+      @NonNull BlockInputSystem blockInputSystem,
+      @NonNull VisibilitySystem visibilitySystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
+    configuration.setSystem(visibilitySystem);
     configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
