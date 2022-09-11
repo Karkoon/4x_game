@@ -1,7 +1,7 @@
-package com.mygdx.game.server.network.gameinstance;
+package com.mygdx.game.server.network.gameinstance.handlers;
 
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.MoveEntityService;
+import com.mygdx.game.server.network.gameinstance.services.MoveEntityService;
 
 import javax.inject.Inject;
 

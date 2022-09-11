@@ -1,4 +1,4 @@
-package com.mygdx.game.server.network.gameinstance;
+package com.mygdx.game.server.network.gameinstance.handlers;
 
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.model.Client;

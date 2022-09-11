@@ -1,10 +1,12 @@
-package com.mygdx.game.server.network.gameinstance;
+package com.mygdx.game.server.network.gameinstance.handlers;
 
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.ShowSubfieldService;
+import com.mygdx.game.server.network.gameinstance.services.ShowSubfieldService;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class SubfieldSubscriptionHandler {
 
   private final ShowSubfieldService showSubfieldService;

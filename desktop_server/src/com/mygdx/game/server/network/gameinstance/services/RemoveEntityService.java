@@ -1,13 +1,16 @@
-package com.mygdx.game.server.network;
+package com.mygdx.game.server.network.gameinstance.services;
 
 import com.mygdx.game.core.network.messages.RemoveEntityMessage;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.MessageSender;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class RemoveEntityService {
 
   private final MessageSender sender;

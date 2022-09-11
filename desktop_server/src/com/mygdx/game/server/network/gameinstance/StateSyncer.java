@@ -1,4 +1,4 @@
-package com.mygdx.game.server.network;
+package com.mygdx.game.server.network.gameinstance;
 
 import com.artemis.Component;
 import com.badlogic.gdx.utils.Json;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.mygdx.game.core.network.messages.ComponentMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.Transaction;
 import io.vertx.core.buffer.Buffer;
 import lombok.NonNull;
 import lombok.extern.java.Log;

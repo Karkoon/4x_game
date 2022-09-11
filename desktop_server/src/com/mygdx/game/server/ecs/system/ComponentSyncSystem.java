@@ -5,19 +5,21 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
-import com.mygdx.game.server.network.RemoveEntityService;
-import com.mygdx.game.server.network.StateSyncer;
+import com.mygdx.game.server.network.gameinstance.services.RemoveEntityService;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
 @All({ChangeSubscribers.class, SharedComponents.class, FriendlyOrFoe.class})
+@GameInstanceScope
 public class ComponentSyncSystem extends IteratingSystem {
 
   private final StateSyncer stateSyncer;

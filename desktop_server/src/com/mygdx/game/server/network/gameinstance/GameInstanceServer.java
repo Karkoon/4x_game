@@ -3,6 +3,9 @@ package com.mygdx.game.server.network.gameinstance;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameInstance;
+import com.mygdx.game.server.network.gameinstance.handlers.EndTurnHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.MoveHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.SubfieldSubscriptionHandler;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;

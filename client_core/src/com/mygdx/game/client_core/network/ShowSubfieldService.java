@@ -1,6 +1,5 @@
 package com.mygdx.game.client_core.network;
 
-import com.artemis.ComponentMapper;
 import com.github.czyzby.websocket.WebSocket;
 import dagger.Lazy;
 import lombok.NonNull;

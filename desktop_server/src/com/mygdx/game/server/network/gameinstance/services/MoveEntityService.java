@@ -1,13 +1,14 @@
-package com.mygdx.game.server.network;
+package com.mygdx.game.server.network.gameinstance.services;
 
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.Owner;
+import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class MoveEntityService extends WorldService {
 
   @Inject
