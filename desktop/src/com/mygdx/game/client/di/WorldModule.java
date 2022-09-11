@@ -10,6 +10,7 @@ import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.SetHighlightSystem;
 import com.mygdx.game.client.ecs.system.VisibilitySystem;
 import com.mygdx.game.client_core.ecs.system.CoordinateToPositionSystem;
+import com.mygdx.game.client_core.ecs.system.RemovalSystem;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -24,6 +25,7 @@ public class WorldModule {
   @Provides
   @Singleton
   public @NonNull World providesWorld(
+      @NonNull RemovalSystem removalSystem,
       @NonNull ChooseSystem chooseSystem,
       @NonNull MovementSystem movementSystem,
       @NonNull RenderSystem renderSystem,
@@ -43,6 +45,7 @@ public class WorldModule {
     configuration.setSystem(renderSystem);
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
+    configuration.setSystem(removalSystem);
     return new World(configuration);
   }
 }
