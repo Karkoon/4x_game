@@ -31,7 +31,7 @@ public class ComponentMessageListenerModule {
       OwnerHandler ownerHandler,
       NetworkWorldEntityMapper mapper
   ) {
-    var listener = new ComponentMessageListener(mapper);
+    var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
