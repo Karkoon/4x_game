@@ -13,6 +13,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -55,8 +56,7 @@ public class VisibilitySystem extends IteratingSystem {
       var perceivableEntity = allThatCanBePerceived.getEntities().get(i);
       var perceivableCoords = coordinatesMapper.get(perceivableEntity);
       visibleMapper.set(perceivableEntity, false);
-      var dst2 = Math.pow(coordinates.getX() - perceivableCoords.getX(), 2) + Math.pow(coordinates.getY() - perceivableCoords.getY(), 2);
-      if (true) {
+      if (DistanceUtil.distance(coordinates, perceivableCoords) <= sightlineRadius) {
         visibles.add(perceivableEntity);
       }
     }

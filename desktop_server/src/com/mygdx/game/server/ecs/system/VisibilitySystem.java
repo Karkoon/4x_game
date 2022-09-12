@@ -11,6 +11,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import lombok.extern.java.Log;
@@ -48,8 +49,7 @@ public class VisibilitySystem extends IteratingSystem {
     log.info("processing perceiver: " + nameMapper.get(perceiver));
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {
       var perceivableCoords = coordinatesMapper.get(allThatCanBePerceived.getEntities().get(i));
-      var dst2 = Math.pow(coordinates.getX() - perceivableCoords.getX(), 2) + Math.pow(coordinates.getY() - perceivableCoords.getY(), 2);
-      if (dst2 <= sightlineRadius * sightlineRadius) {
+      if (DistanceUtil.distance(coordinates, perceivableCoords) <= sightlineRadius) {
         var changeSubscribers = obtainNewChangeSubscribers(allThatCanBePerceived.getEntities().get(i));
         changeSubscribers.or(sightlineSubscribers);
       }
