@@ -33,6 +33,7 @@ public class UnitFactory {
   ) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinates, entityId);
+    componentFactory.createMoveRangeComponent(config.getMoveRange(), entityId);
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createNameComponent(entityId, "unit " + config.getName() + " " + entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
