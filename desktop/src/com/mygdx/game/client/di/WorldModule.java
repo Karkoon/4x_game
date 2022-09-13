@@ -26,22 +26,22 @@ public class WorldModule {
   @Singleton
   public @NonNull World providesWorld(
       @NonNull RemovalSystem removalSystem,
+      @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull ChooseSystem chooseSystem,
       @NonNull MovementSystem movementSystem,
       @NonNull RenderSystem renderSystem,
       @NonNull SetHighlightSystem setHighlightSystem,
-      @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull NavigationSystem navigationSystem,
       @NonNull BlockInputSystem blockInputSystem,
       @NonNull VisibilitySystem visibilitySystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
+    configuration.setSystem(coordinateToPositionSystem);
     configuration.setSystem(visibilitySystem);
     configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
-    configuration.setSystem(coordinateToPositionSystem);
     configuration.setSystem(renderSystem);
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
