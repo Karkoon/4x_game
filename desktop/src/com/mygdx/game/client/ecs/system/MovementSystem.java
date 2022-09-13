@@ -9,6 +9,7 @@ import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.MoveRange;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -22,6 +23,7 @@ public class MovementSystem extends IteratingSystem {
   private final MoveEntityService moveEntityService;
   private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<MoveRange> moveRangeMapper;
   private ComponentMapper<Field> fieldMapper;
 
   @Inject

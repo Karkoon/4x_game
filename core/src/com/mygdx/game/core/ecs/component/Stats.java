@@ -11,6 +11,7 @@ public class Stats extends PooledComponent {
   private int defense;
   private int sightRadius;
   private int speed;
+  private int moveRange;
 
   @Override
   public void reset() {

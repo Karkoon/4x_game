@@ -44,6 +44,7 @@ public class UnitFactory {
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
     stats.setAttackPower(config.getAttackPower());
+    stats.setMoveRange(config.getMoveRange());
   }
 
   private void setUpNameComponent(@NonNull UnitConfig config, int entityId) {

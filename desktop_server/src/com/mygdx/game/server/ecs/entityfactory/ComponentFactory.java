@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.MoveRange;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Name;
@@ -37,6 +38,7 @@ public class ComponentFactory {
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<MoveRange> moveRangeMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
@@ -87,6 +89,11 @@ public class ComponentFactory {
   public void createCoordinateComponent(Coordinates coordinates, int entityId) {
     var position = coordinatesMapper.create(entityId);
     position.setCoordinates(coordinates);
+  }
+
+  public void createMoveRangeComponent(int moveRange, int entityId){
+    var range = moveRangeMapper.create(entityId);
+    range.setMoveRange(moveRange);
   }
 
   public void createSubFieldComponent(int fieldId, int entityId) {
