@@ -1,6 +1,5 @@
 package com.mygdx.game.client_core.network.comp_handlers;
 
-import com.artemis.Component;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
@@ -15,7 +14,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
-public class SubFieldHandler implements ComponentMessageListener.Handler {
+public class SubFieldHandler implements ComponentMessageListener.Handler<SubField> {
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final ComponentMapper<SubField> subFieldMapper;
@@ -30,9 +29,9 @@ public class SubFieldHandler implements ComponentMessageListener.Handler {
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
+  public boolean handle(WebSocket webSocket, int worldEntity, SubField component) {
     log.info("Read subfield component " + worldEntity);
-    var newParent = ((SubField) component).getParent();
+    var newParent = component.getParent();
     newParent = networkWorldEntityMapper.getWorldEntity(newParent);
     var subField = subFieldMapper.create(worldEntity);
     subField.setParent(newParent);

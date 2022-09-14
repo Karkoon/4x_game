@@ -4,26 +4,26 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
-import com.mygdx.game.core.ecs.component.Owner;
+import com.mygdx.game.core.ecs.component.Stats;
 
 import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-public class OwnerHandler implements ComponentMessageListener.Handler<Owner> {
+public class StatsHandler implements ComponentMessageListener.Handler<Stats> {
 
-  private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<Stats> statsComponentMapper;
 
   @Inject
-  public OwnerHandler(
+  public StatsHandler(
       World world
   ) {
     world.inject(this);
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Owner component) {
-    ownerMapper.create(worldEntity).setToken(component.getToken());
+  public boolean handle(WebSocket webSocket, int worldEntity, Stats component) {
+    statsComponentMapper.get(worldEntity).set(component);
     return FULLY_HANDLED;
   }
 }
