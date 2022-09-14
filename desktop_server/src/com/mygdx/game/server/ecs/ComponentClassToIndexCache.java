@@ -29,7 +29,7 @@ public class ComponentClassToIndexCache {
     return bits;
   }
 
-  public int getIndexFor(Class<? extends Component> aClass) {
+  private int getIndexFor(Class<? extends Component> aClass) {
     var index = cache.get(aClass, -1);
     if (index == -1) {
       index = world.getComponentManager().getTypeFactory().getTypeFor(aClass).getIndex();

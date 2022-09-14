@@ -11,8 +11,8 @@ import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
-import com.mygdx.game.server.network.gameinstance.services.RemoveEntityService;
 import com.mygdx.game.server.network.gameinstance.StateSyncer;
+import com.mygdx.game.server.network.gameinstance.services.RemoveEntityService;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -30,7 +30,6 @@ public class ComponentSyncSystem extends IteratingSystem {
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
   private ComponentMapper<Name> nameComponentMapper;
-
 
   @Inject
   public ComponentSyncSystem(
@@ -64,6 +63,19 @@ public class ComponentSyncSystem extends IteratingSystem {
     super.end();
   }
 
+  private void handleUnsubscribedClients(int entityId) {
+    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
+    var subscribers = clientsToUpdate.getClients();
+    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
+    for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
+      if (!subscribers.get(i) && changedSubscriptionState.getAndClear(i)) {
+        log.info("removed entity " + entityId);
+        var client = gameRoom.getClients().get(i);
+        removeEntityService.removeEntity(entityId, client);
+      }
+    }
+  }
+
   private void handleFoes(int entityId) {
     var clientsToUpdate = clientsToUpdateMapper.get(entityId);
     var clients = clientsToUpdate.getClients();
@@ -84,19 +96,6 @@ public class ComponentSyncSystem extends IteratingSystem {
     changedSubscriptionState.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
     var friendComponents = sharedComponentsMapper.get(entityId).getFriendlies();
     sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
-  }
-
-  private void handleUnsubscribedClients(int entityId) {
-    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
-    var subscribers = clientsToUpdate.getClients();
-    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
-    for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
-      if (!subscribers.get(i) && changedSubscriptionState.getAndClear(i)) {
-          log.info("removed entity " + entityId);
-          var client = gameRoom.getClients().get(i);
-          removeEntityService.removeEntity(entityId, client);
-      }
-    }
   }
 
   private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits changedSubscriptionState) {

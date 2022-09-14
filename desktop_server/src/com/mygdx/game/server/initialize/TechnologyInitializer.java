@@ -38,7 +38,7 @@ public class TechnologyInitializer {
   }
 
   private void setupTechnologiesForClient(Client client) {
-    for (int technologyEntityId = GameConfigs.TECHNOLOGY_MIN; technologyEntityId < GameConfigs.TECHNOLOGY_MAX; technologyEntityId++) {
+    for (int technologyEntityId = GameConfigs.TECHNOLOGY_MIN; technologyEntityId <= GameConfigs.TECHNOLOGY_MAX; technologyEntityId++) {
       var config = assets.getGameConfigs().get(TechnologyConfig.class, technologyEntityId);
       technologyFactory.createEntity(config, client);
     }
