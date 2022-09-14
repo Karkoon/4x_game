@@ -1,17 +1,25 @@
 package com.mygdx.game.client.screen;
 
+import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.World;
+import com.artemis.annotations.AspectDescriptor;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client.model.InField;
+import com.mygdx.game.client_core.network.ShowSubfieldService;
+import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -27,29 +35,38 @@ public class FieldScreen extends ScreenAdapter {
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
   private final World world;
+  private final InField inField;
   private final Viewport viewport;
-  private final ModelInstanceRenderer renderer;
 
   private final Stage stage;
   private final ChosenEntity chosenEntity;
+  private final ShowSubfieldService showSubfieldService;
   private final SubFieldUiInputProcessor subFieldUiInputProcessor;
 
   private int fieldParent = -1;
 
+  @AspectDescriptor(all = {SubField.class})
+  private EntitySubscription subscription;
+  private ComponentMapper<Visible> visibleComponentMapper;
+  private Vector3 pos;
+
   @Inject
   public FieldScreen(
-      @NonNull ModelInstanceRenderer renderer,
       @NonNull World world,
       @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull ChosenEntity chosenEntity,
-      @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor
+      @NonNull ShowSubfieldService showSubfieldService,
+      @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor,
+      @NonNull InField inField
   ) {
-    this.renderer = renderer;
     this.world = world;
+    this.inField = inField;
+    world.inject(this);
     this.viewport = viewport;
     this.stage = stage;
     this.chosenEntity = chosenEntity;
+    this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
   }
 
@@ -57,6 +74,26 @@ public class FieldScreen extends ScreenAdapter {
   public void show() {
     log.info("SubArea shown");
     fieldParent = chosenEntity.pop();
+    subscription.addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
+      @Override
+      public void inserted(IntBag entities) {
+        for (int i = 0; i < entities.size(); i++) {
+          var entity = entities.get(i);
+          visibleComponentMapper.set(entity, true);
+        }
+      }
+
+      @Override
+      public void removed(IntBag entities) {
+        for (int i = 0; i < entities.size(); i++) {
+          var entity = entities.get(i);
+          visibleComponentMapper.set(entity, false);
+        }
+      }
+    });
+    inField.setInField(true);
+    showSubfieldService.flipSubscriptionState(fieldParent);
+    saveCameraPosition(viewport.getCamera());
     positionCamera(viewport.getCamera());
     setUpInput();
   }
@@ -67,7 +104,6 @@ public class FieldScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-    renderer.subRender(fieldParent);
     stage.draw();
     stage.act(delta);
   }
@@ -79,18 +115,24 @@ public class FieldScreen extends ScreenAdapter {
   }
 
   @Override
-  public void dispose() {
-    renderer.dispose();
-  }
-
-  @Override
   public void hide() {
+    restoreCameraPosition(viewport.getCamera());
+    showSubfieldService.flipSubscriptionState(fieldParent);
     fieldParent = -1;
+    inField.setInField(false);
   }
 
   private void positionCamera(@NonNull Camera camera) {
     camera.position.set(0, 600, 0);
     camera.lookAt(0, 0, 0);
+  }
+
+  private void restoreCameraPosition(Camera camera) {
+    camera.position.set(pos);
+  }
+
+  private void saveCameraPosition(Camera camera) {
+    pos = new Vector3(camera.position);
   }
 
   private void setUpInput() {

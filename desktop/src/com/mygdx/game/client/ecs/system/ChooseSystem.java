@@ -12,7 +12,7 @@ import com.mygdx.game.client.ecs.component.Choosable;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
-import com.mygdx.game.client_core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import lombok.extern.java.Log;
 
@@ -72,24 +72,14 @@ public class ChooseSystem extends IteratingSystem {
   private class ClickedEntities {
 
     private final IntBag clickedEntitiesIds = new IntBag();
-    private float minDistance = Float.MAX_VALUE;
-    public static final float CLICK_RADIUS = 90f;
+    public static final float CLICK_RADIUS = 60f;
 
     public void reset() {
-      minDistance = Float.MAX_VALUE;
       clickedEntitiesIds.clear();
     }
 
     private boolean isWithinClickRadius(Vector3 worldPosition, Ray ray) {
-      var dist2 = ray.origin.dst2(worldPosition);
-      if (dist2 > minDistance) {
-        return false;
-      }
-      if (Intersector.intersectRaySphere(ray, worldPosition, CLICK_RADIUS, null)) {
-        minDistance = dist2;
-        return true;
-      }
-      return false;
+      return Intersector.intersectRaySphere(ray, worldPosition, CLICK_RADIUS, null);
     }
 
     public void saveIfClicked(int entityId, ClickInput clickInput) {

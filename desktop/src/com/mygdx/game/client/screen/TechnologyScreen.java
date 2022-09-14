@@ -10,16 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.util.UiElementsCreator;
-import com.mygdx.game.client_core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
+import com.mygdx.game.core.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 @Log
@@ -29,37 +27,29 @@ public class TechnologyScreen extends ScreenAdapter {
   private final @NonNull Technologies technologies;
   private final UiElementsCreator uiElementsCreator;
   private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
-
-  private List<Image> technologyImages;
-
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<TextureComp> textureMapper;
-  private final ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<TextureComp> textureMapper;
+  private ComponentMapper<Name> nameMapper;
 
   @Inject
   public TechnologyScreen(
-          @NonNull World world,
-          @NonNull Stage stage,
-          @NonNull Technologies technologies,
-          @NonNull UiElementsCreator uiElementsCreator,
-          @NonNull TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter
-          ) {
+      @NonNull World world,
+      @NonNull Stage stage,
+      @NonNull Technologies technologies,
+      @NonNull UiElementsCreator uiElementsCreator,
+      @NonNull TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter
+  ) {
     this.stage = stage;
-
-    this.positionMapper = world.getMapper(Position.class);
-    this.textureMapper = world.getMapper(TextureComp.class);
-    this.nameMapper = world.getMapper(Name.class);
-
+    world.inject(this);
     this.technologies = technologies;
     this.uiElementsCreator = uiElementsCreator;
     this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
-
-    setUpTechnologyButtons();
   }
 
   @Override
   public void show() {
     log.info("Technology tree shown");
+    setUpTechnologyButtons();
 
     setUpInput();
   }
@@ -83,8 +73,7 @@ public class TechnologyScreen extends ScreenAdapter {
 
   private void setUpTechnologyButtons() {
     var allTechnologies = this.technologies.getAllTechnologies();
-    this.technologyImages = new ArrayList<>();
-    for (int i = 0; i < allTechnologies.size; i++) {
+    for (int i = 0; i < allTechnologies.size(); i++) {
       int entityId = allTechnologies.get(i);
       var position = positionMapper.get(entityId).getValue();
       var texture = textureMapper.get(entityId);
@@ -94,7 +83,6 @@ public class TechnologyScreen extends ScreenAdapter {
       var textField = uiElementsCreator.createTextField(position, name.getName());
       uiElementsCreator.addHoverPopupWithActor(image, textField, stage);
 
-      technologyImages.add(image);
       stage.addActor(image);
     }
   }

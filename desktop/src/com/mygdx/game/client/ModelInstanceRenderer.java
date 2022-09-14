@@ -12,15 +12,13 @@ import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
 
 @Singleton
 public class ModelInstanceRenderer implements Disposable {
 
   private final ModelBatch modelBatch;
-  private final ModelCache cache;
+  private ModelCache cache;
   private final Array<ModelInstance> modelInstances;
-  private final HashMap<Integer, Array<ModelInstance>> subModelInstances;
 
   private final Camera camera;
 
@@ -30,7 +28,6 @@ public class ModelInstanceRenderer implements Disposable {
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();
     this.modelInstances = new Array<>();
-    this.subModelInstances = new HashMap<>();
   }
 
   public void render() {
@@ -39,18 +36,6 @@ public class ModelInstanceRenderer implements Disposable {
     modelBatch.begin(camera);
     modelBatch.render(cache);
     modelBatch.end();
-  }
-
-  public void subRender(Integer choosenField) {
-    if (subModelInstances.get(choosenField) != null) {
-      performFrustumCullingToModelCache(subModelInstances.get(choosenField));
-      subModelInstances.get(choosenField).clear();
-      modelBatch.begin(camera);
-      modelBatch.render(cache);
-      modelBatch.end();
-    } else {
-      throw new IllegalArgumentException("wtf");
-    }
   }
 
   private void performFrustumCullingToModelCache(Array<ModelInstance> modelInstances) {
@@ -74,17 +59,6 @@ public class ModelInstanceRenderer implements Disposable {
 
   public void addModelToCache(ModelInstance modelInstance) {
     modelInstances.add(modelInstance);
-  }
-
-  public void addSubModelToCache(Integer parent, ModelInstance modelInstance) {
-    if (!subModelInstances.containsKey(parent)) {
-      subModelInstances.put(parent, new Array<>());
-    }
-    subModelInstances.get(parent).add(modelInstance);
-  }
-
-  public void addToCache(Array<ModelInstance> modelInstances) {
-    this.modelInstances.addAll(modelInstances);
   }
 
   @Override

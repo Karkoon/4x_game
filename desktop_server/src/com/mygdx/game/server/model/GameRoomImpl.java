@@ -7,6 +7,7 @@ import dagger.assisted.AssistedInject;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,8 @@ public class GameRoomImpl implements GameRoom {
     this.gameInstanceSubcomponentBuilder = gameInstanceSubcomponentBuilder;
   }
 
-  public List<Client> getClients() {
-    return clients.values().stream().toList();
+  public List<Client> getClients() { // przesortować jakoś pewnie, ustalić kolejność
+    return clients.values().stream().sorted(Comparator.comparing(Client::getPlayerUsername)).toList();
   }
 
   public void addClient(@NonNull Client client) {
@@ -40,6 +41,14 @@ public class GameRoomImpl implements GameRoom {
   public void removeClient(@NonNull Client client) {
     log.info("removed client " + client.getPlayerUsername());
     clients.remove(client.getPlayerToken());
+  }
+
+  public int getOrderNumber(@NonNull Client client) {
+    return getClients().indexOf(client);
+  }
+
+  public Client getClientByToken(@NonNull String token) {
+    return clients.get(token);
   }
 
   public int getNumberOfClients() {

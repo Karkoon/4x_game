@@ -8,7 +8,10 @@ import com.mygdx.game.client.ecs.system.MovementSystem;
 import com.mygdx.game.client.ecs.system.NavigationSystem;
 import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.SetHighlightSystem;
+import com.mygdx.game.client.ecs.system.VisibilitySystem;
 import com.mygdx.game.client_core.ecs.system.CoordinateToPositionSystem;
+import com.mygdx.game.client_core.ecs.system.NetworkJobSystem;
+import com.mygdx.game.client_core.ecs.system.RemovalSystem;
 import dagger.Module;
 import dagger.Provides;
 import lombok.NonNull;
@@ -23,23 +26,29 @@ public class WorldModule {
   @Provides
   @Singleton
   public @NonNull World providesWorld(
+      @NonNull RemovalSystem removalSystem,
+      @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull ChooseSystem chooseSystem,
       @NonNull MovementSystem movementSystem,
       @NonNull RenderSystem renderSystem,
       @NonNull SetHighlightSystem setHighlightSystem,
-      @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull NavigationSystem navigationSystem,
-      @NonNull BlockInputSystem blockInputSystem
+      @NonNull BlockInputSystem blockInputSystem,
+      @NonNull VisibilitySystem visibilitySystem,
+      @NonNull NetworkJobSystem networkJobSystem
   ) {
     log.log(Level.INFO, "provided World");
     var configuration = new WorldConfiguration();
+    configuration.setSystem(networkJobSystem);
+    configuration.setSystem(coordinateToPositionSystem);
+    configuration.setSystem(visibilitySystem);
     configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
-    configuration.setSystem(coordinateToPositionSystem);
     configuration.setSystem(renderSystem);
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
+    configuration.setSystem(removalSystem);
     return new World(configuration);
   }
 }

@@ -1,7 +1,6 @@
 package com.mygdx.game.client_core.network;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.client_core.model.PlayerInfo;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -11,15 +10,12 @@ import javax.inject.Inject;
 public class EndTurnService {
 
   private final WebSocket socket;
-  private final PlayerInfo playerInfo;
 
   @Inject
   public EndTurnService(
-      @NonNull WebSocket socket,
-      @NonNull PlayerInfo playerInfo
+      @NonNull WebSocket socket
   ) {
     this.socket = socket;
-    this.playerInfo = playerInfo;
   }
 
   public void endTurn() {

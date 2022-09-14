@@ -5,6 +5,7 @@ buildscript {
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
     }
@@ -100,7 +101,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        api "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
+        api "com.github.karkoon:artemis-odb:master-SNAPSHOT"
         api "com.github.MrStahlfelge.gdx-websockets:core:1.9.10.3"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'

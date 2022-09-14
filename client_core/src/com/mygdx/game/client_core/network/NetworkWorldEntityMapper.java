@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 @Singleton
 @Log
 public class NetworkWorldEntityMapper {
+
   private final IntIntMap networkToWorldEntity = new IntIntMap();
   private final IntIntMap worldToNetworkEntity = new IntIntMap();
   private final Lazy<World> world;
@@ -32,11 +33,19 @@ public class NetworkWorldEntityMapper {
     if (isNetworkEntity) {
       var worldEntity = networkToWorldEntity.remove(entity, -1);
       worldToNetworkEntity.remove(worldEntity, -1);
-      world.delete(worldEntity);
+      if (worldEntity != -1) {
+        world.delete(worldEntity);
+      } else {
+        log.info("suspicious activity " + Thread.currentThread().getId() + " " + Thread.currentThread().getName());
+      }
     } else {
       var networkEntity = worldToNetworkEntity.remove(entity, -1);
       var worldEntity = networkToWorldEntity.remove(networkEntity, -1);
-      world.delete(worldEntity);
+      if (worldEntity != -1) {
+        world.delete(worldEntity);
+      } else {
+        log.info("suspicious activity " + Thread.currentThread().getId() + " " + Thread.currentThread().getName());
+      }
     }
   }
 

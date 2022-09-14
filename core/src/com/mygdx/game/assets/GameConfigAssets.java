@@ -13,10 +13,14 @@ import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
+@Log
 public class GameConfigAssets {
 
   @NonNull
@@ -85,6 +89,7 @@ public class GameConfigAssets {
   }
 
   private void populateGameConfigs() {
+    log.info("populated game configs");
     for (var configClass : configClasses) {
       gameConfigs.putAll(assetManager.getAll(configClass, new Array<>()));
     }

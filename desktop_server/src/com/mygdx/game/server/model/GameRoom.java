@@ -9,11 +9,15 @@ public interface GameRoom {
 
   void addClient(@NonNull Client client);
 
+  void removeClient(Client client);
+
+  int getOrderNumber(@NonNull Client client);
+
+  Client getClientByToken(String token);
+
   int getNumberOfClients();
 
   String getRoomId();
-
-  void removeClient(Client client);
 
   void setupGameInstance();
 
