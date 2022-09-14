@@ -48,9 +48,9 @@ public class WorldModule {
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
     configuration.setSystem(renderSystem);
+    configuration.setSystem(attackSystem);
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
-    configuration.setSystem(attackSystem);
     configuration.setSystem(removalSystem);
     return new World(configuration);
   }

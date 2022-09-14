@@ -160,7 +160,7 @@ public class ComponentFactory {
   }
 
   public void createCanAttackComponent(int entityId) {
-    canAttackMapper.create(entityId);
+    canAttackMapper.create(entityId).setCanAttack(true);
   }
 
   /**
