@@ -1,6 +1,5 @@
 package com.mygdx.game.client.network;
 
-import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
@@ -15,7 +14,7 @@ import static com.github.czyzby.websocket.WebSocketListener.NOT_HANDLED;
 import static com.mygdx.game.client_core.ecs.entityfactory.Setter.Result.HANDLED;
 import static com.mygdx.game.client_core.ecs.entityfactory.Setter.Result.HANDLING_ERROR;
 
-public class DesktopEntityConfigHandler implements ComponentMessageListener.Handler {
+public class DesktopEntityConfigHandler implements ComponentMessageListener.Handler<EntityConfigId> {
 
   private final GameConfigAssets assets;
   private final Set<Setter> setterSet;
@@ -30,9 +29,8 @@ public class DesktopEntityConfigHandler implements ComponentMessageListener.Hand
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
-    var entityConfigId = ((EntityConfigId) component).getId();
-    var config = assets.getGameConfigs().get(entityConfigId);
+  public boolean handle(WebSocket webSocket, int worldEntity, EntityConfigId component) {
+    var config = assets.getGameConfigs().get(component.getId());
     var setterResults = setterSet.stream()
         .map(setter -> setter.set(config, worldEntity))
         .toList();
