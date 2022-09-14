@@ -25,7 +25,7 @@ public class AttackEntityService extends WorldService {
       return;
     }
     var statsMapper = world.getMapper(Stats.class);
-    doAttack(statsMapper.get(attacker), statsMapper.get(attacked));
+    attackAndCounterAttack(statsMapper.get(attacker), statsMapper.get(attacked));
     canAttackMapper.get(attacker).setCanAttack(false);
     log.info("Attack component");
     setDirty(attacker, CanAttack.class, world);
@@ -33,7 +33,14 @@ public class AttackEntityService extends WorldService {
     world.process();
   }
 
-  private void doAttack(Stats attacker, Stats attacked) {
+  private void attackAndCounterAttack(Stats attacker, Stats attacked) {
+    attack(attacker, attacked);
+    if (attacked.getHp() > 0) {
+      attack(attacked, attacker);
+    }
+  }
+
+  private void attack(Stats attacker, Stats attacked) {
     attacked.setHp(attacked.getHp() - Math.max(0, attacker.getAttackPower() - attacked.getDefense()));
   }
 }
