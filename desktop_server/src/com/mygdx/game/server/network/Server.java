@@ -3,8 +3,6 @@ package com.mygdx.game.server.network;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.handlers.CloseHandler;
 import com.mygdx.game.server.network.handlers.ConnectHandler;
-import com.mygdx.game.server.network.handlers.EndTurnHandler;
-import com.mygdx.game.server.network.handlers.MoveHandler;
 import com.mygdx.game.server.network.handlers.StartHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -21,8 +19,6 @@ public final class Server {
   private static final int PORT = 10666;
 
   private final StartHandler startHandler;
-  private final MoveHandler moveHandler;
-  private final EndTurnHandler endTurnHandler;
   private final ConnectHandler connectHandler;
   private final CloseHandler closeHandler;
 
@@ -31,14 +27,10 @@ public final class Server {
   @Inject
   public Server(
       StartHandler startHandler,
-      MoveHandler moveHandler,
-      EndTurnHandler endTurnHandler,
       ConnectHandler connectHandler,
       CloseHandler closeHandler
   ) {
     this.startHandler = startHandler;
-    this.moveHandler = moveHandler;
-    this.endTurnHandler = endTurnHandler;
     this.connectHandler = connectHandler;
     this.closeHandler = closeHandler;
   }
@@ -51,11 +43,9 @@ public final class Server {
     var type = commands[0];
     log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Received frame: " + frame.textData() + " from " + client.getPlayerUsername());
     switch (type) {
-      case "connect" -> connectHandler.handle(commands, client);
       case "start" -> startHandler.handle(commands, client);
-      case "move" -> moveHandler.handle(commands, client);
-      case "end_turn" -> endTurnHandler.handle(client);
-      default -> log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Couldn't handle packet: " + frame.textData());
+      case "connect" -> connectHandler.handle(commands, client);
+      default -> client.getGameRoom().getGameInstance().getServer().handle(commands, client);
     }
   }
 

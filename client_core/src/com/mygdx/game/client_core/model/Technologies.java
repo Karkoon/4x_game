@@ -1,6 +1,10 @@
 package com.mygdx.game.client_core.model;
 
-import com.badlogic.gdx.utils.IntArray;
+import com.artemis.EntitySubscription;
+import com.artemis.World;
+import com.artemis.annotations.AspectDescriptor;
+import com.artemis.utils.IntBag;
+import com.mygdx.game.core.ecs.component.Technology;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import lombok.extern.java.Log;
 
@@ -11,20 +15,18 @@ import javax.inject.Singleton;
 @Log
 public class Technologies {
 
-  private final IntArray allTechnologies;
+  @AspectDescriptor(all = {Technology.class})
+  private EntitySubscription allTechnologies;
 
   @Inject
-  public Technologies() {
-    this.allTechnologies = new IntArray();
+  public Technologies(
+      World world
+  ) {
+    world.inject(this);
   }
 
-  public void saveTechnology(int entity) {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Save technology with entity id: " + entity);
-    allTechnologies.add(entity);
-  }
-
-  public IntArray getAllTechnologies() {
-    return allTechnologies;
+  public IntBag getAllTechnologies() {
+    return allTechnologies.getEntities();
   }
 
 }

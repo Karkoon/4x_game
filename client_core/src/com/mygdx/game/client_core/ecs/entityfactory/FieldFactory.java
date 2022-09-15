@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
-import com.mygdx.game.client_core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.config.FieldConfig;
@@ -17,24 +17,20 @@ import javax.inject.Singleton;
 
 @GameInstanceScope
 @Log
-public class FieldFactory extends EntityFactory<FieldConfig> {
+public class FieldFactory {
 
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<Score> scoreMapper;
-  private final ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Score> scoreMapper;
+  private ComponentMapper<Field> fieldMapper;
 
   @Inject
-  public FieldFactory(@NonNull World world,
-                      @NonNull GameScreenAssets assets) {
-    super(world, assets);
-    this.nameMapper = world.getMapper(Name.class);
-    this.positionMapper = world.getMapper(Position.class);
-    this.scoreMapper = world.getMapper(Score.class);
-    this.fieldMapper = world.getMapper(Field.class);
+  public FieldFactory(
+      @NonNull World world
+  ) {
+    world.inject(this);
   }
 
-  @Override
   public void createEntity(@NonNull FieldConfig config, int entity) {
     setUpName(config, entity);
     setUpScore(config, entity);

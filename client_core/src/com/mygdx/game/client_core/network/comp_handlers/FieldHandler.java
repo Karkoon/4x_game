@@ -18,15 +18,12 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @GameInstanceScope
 public class FieldHandler implements ComponentMessageListener.Handler {
 
-  private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final ComponentMapper<Field> fieldMapper;
 
   @Inject
   public FieldHandler(
-      NetworkWorldEntityMapper networkWorldEntityMapper,
       World world
   ) {
-    this.networkWorldEntityMapper = networkWorldEntityMapper;
     this.fieldMapper = world.getMapper(Field.class);
   }
 
@@ -35,8 +32,7 @@ public class FieldHandler implements ComponentMessageListener.Handler {
     log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Read field component " + worldEntity);
     var subFields = ((Field) component).getSubFields();
     for (int i = 0; i < subFields.size; i++) {
-      var subField = subFields.get(i);
-      subFields.set(i, networkWorldEntityMapper.getWorldEntity(subField));
+      subFields.set(i, subFields.get(i));
     }
     var entityField = fieldMapper.create(worldEntity);
     entityField.setSubFields(subFields);

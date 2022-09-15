@@ -22,6 +22,8 @@ public class ViewportModule {
     var camera = new PerspectiveCamera(100, 500, 500);
     camera.near = 500f;
     camera.far = 700f;
+    camera.position.set(0, 600, 0);
+    camera.lookAt(0, 0, 0);
     return new ExtendViewport(500, 500, camera);
   }
 

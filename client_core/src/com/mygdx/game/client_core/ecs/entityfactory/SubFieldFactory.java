@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
-import com.mygdx.game.client_core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -16,24 +16,19 @@ import javax.inject.Singleton;
 
 @GameInstanceScope
 @Log
-public class SubFieldFactory extends EntityFactory<SubFieldConfig> {
+public class SubFieldFactory {
 
-  private final ComponentMapper<Name> nameMapper;
-  private final ComponentMapper<Position> positionMapper;
-  private final ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public SubFieldFactory(
-      @NonNull World world,
-      @NonNull GameScreenAssets assets
+      @NonNull World world
   ) {
-    super(world, assets);
-    this.nameMapper = world.getMapper(Name.class);
-    this.positionMapper = world.getMapper(Position.class);
-    this.subFieldMapper = world.getMapper(SubField.class);
+    world.inject(this);
   }
 
-  @Override
   public @NonNull void createEntity(SubFieldConfig config, int entity) {
     setUpName(config, entity);
     subFieldMapper.create(entity);
