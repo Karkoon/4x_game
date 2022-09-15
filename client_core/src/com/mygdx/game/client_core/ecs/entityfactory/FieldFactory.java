@@ -2,12 +2,11 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

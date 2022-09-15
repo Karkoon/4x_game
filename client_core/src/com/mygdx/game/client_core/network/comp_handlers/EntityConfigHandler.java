@@ -1,6 +1,5 @@
 package com.mygdx.game.client_core.network.comp_handlers;
 
-import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client_core.ecs.entityfactory.FieldFactory;

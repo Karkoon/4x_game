@@ -7,6 +7,7 @@ import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.CanAttack;
 
 import javax.inject.Inject;
+
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 public class CanAttackHandler implements ComponentMessageListener.Handler<CanAttack> {
