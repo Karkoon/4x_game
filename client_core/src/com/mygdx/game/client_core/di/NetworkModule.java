@@ -47,6 +47,7 @@ public class NetworkModule {
       @NonNull RemoveEntityMessageHandler removeEntityMessageHandler
   ) {
     var handler = new WebSocketHandler();
+    handler.setFailIfNoHandler(false);
     handler.registerHandler(ChangeTurnMessage.class, changeTurnMessageHandler);
     handler.registerHandler(RemoveEntityMessage.class, removeEntityMessageHandler);
     return handler;

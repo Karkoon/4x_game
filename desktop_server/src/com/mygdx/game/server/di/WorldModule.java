@@ -5,6 +5,8 @@ import com.artemis.WorldConfiguration;
 import com.mygdx.game.server.ecs.system.AddOwnerToChangeSubscribersSystem;
 import com.mygdx.game.server.ecs.system.AddOwnerToSightlineSubscribersSystem;
 import com.mygdx.game.server.ecs.system.ComponentSyncSystem;
+import com.mygdx.game.server.ecs.system.MarkDeadEntitiesSystem;
+import com.mygdx.game.server.ecs.system.RemoveDeadSystem;
 import com.mygdx.game.server.ecs.system.VisibilitySystem;
 import dagger.Module;
 import dagger.Provides;
@@ -22,14 +24,18 @@ public class WorldModule {
       AddOwnerToChangeSubscribersSystem addOwnerToChangeSubscribersSystem,
       AddOwnerToSightlineSubscribersSystem addOwnerToSightlineSubscribersSystem,
       ComponentSyncSystem componentSyncSystem,
-      VisibilitySystem visibilitySystem
+      VisibilitySystem visibilitySystem,
+      MarkDeadEntitiesSystem markDeadSystem,
+      RemoveDeadSystem removeDeadSystem
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
     var conf =  new WorldConfiguration();
     conf.setSystem(addOwnerToChangeSubscribersSystem);
     conf.setSystem(addOwnerToSightlineSubscribersSystem);
     conf.setSystem(visibilitySystem);
+    conf.setSystem(markDeadSystem);
     conf.setSystem(componentSyncSystem);
+    conf.setSystem(removeDeadSystem);
     return conf;
   }
 

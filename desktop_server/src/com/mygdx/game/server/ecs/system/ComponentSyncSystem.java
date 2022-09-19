@@ -12,7 +12,8 @@ import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.gameinstance.StateSyncer;
-import com.mygdx.game.server.network.gameinstance.services.RemoveEntityService;
+import com.mygdx.game.server.network.gameinstance.services.RemoveClientEntityService;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
 public class ComponentSyncSystem extends IteratingSystem {
 
   private final StateSyncer stateSyncer;
-  private final RemoveEntityService removeEntityService;
+  private final Lazy<RemoveClientEntityService> removeClientEntityService;
   private final GameRoom gameRoom;
   private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
@@ -34,11 +35,11 @@ public class ComponentSyncSystem extends IteratingSystem {
   @Inject
   public ComponentSyncSystem(
       StateSyncer stateSyncer,
-      RemoveEntityService removeEntityService,
+      Lazy<RemoveClientEntityService> removeClientEntityService,
       GameRoom gameRoom
   ) {
     this.stateSyncer = stateSyncer;
-    this.removeEntityService = removeEntityService;
+    this.removeClientEntityService = removeClientEntityService;
     this.gameRoom = gameRoom;
   }
 
@@ -63,6 +64,14 @@ public class ComponentSyncSystem extends IteratingSystem {
     super.end();
   }
 
+  /*
+  1. entity created -> all data sent
+  2. entity comp updated -> only that data sent
+  3. entity comp updated and then removed from world and then deleted from client
+   - problem -> componentsyncsystem is not the only place which updates the state .......... it can be thought that
+     updating the whole entity is not a "component sync" problem -> this means I can "handle removing stuff in another system"
+   */
+
   private void handleUnsubscribedClients(int entityId) {
     var clientsToUpdate = clientsToUpdateMapper.get(entityId);
     var subscribers = clientsToUpdate.getClients();
@@ -71,7 +80,7 @@ public class ComponentSyncSystem extends IteratingSystem {
       if (!subscribers.get(i) && changedSubscriptionState.getAndClear(i)) {
         log.info("removed entity " + entityId);
         var client = gameRoom.getClients().get(i);
-        removeEntityService.removeEntity(entityId, client);
+        removeClientEntityService.get().removeEntity(entityId, client);
       }
     }
   }

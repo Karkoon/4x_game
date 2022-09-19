@@ -23,7 +23,7 @@ public class StatsHandler implements ComponentMessageListener.Handler<Stats> {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Stats component) {
-    statsComponentMapper.get(worldEntity).set(component);
+    statsComponentMapper.create(worldEntity).set(component);
     return FULLY_HANDLED;
   }
 }
