@@ -2,15 +2,11 @@ package com.mygdx.game.server.initialize.field_generators;
 
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.FieldConfig;
-import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.di.GameInstanceScope;
-import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.FieldFactory;
-import lombok.NonNull;
 
 import javax.inject.Inject;
-import java.util.Random;
 
 @GameInstanceScope
 public class BotWinningFieldMapGenerator extends MapGenerator {
@@ -19,7 +15,6 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   private static final int WINNING_Y = 4;
   private final GameConfigAssets assets;
   private final FieldFactory fieldFactory;
-  private final Random random = new Random(0);
 
   @Inject
   public BotWinningFieldMapGenerator(
@@ -46,7 +41,7 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   }
 
   private FieldConfig chooseFieldConfig() {
-    return assets.getAll(FieldConfig.class).random();
+    return assets.getGameConfigs().getAll(FieldConfig.class).random();
   }
 
   private void createWinningField() {

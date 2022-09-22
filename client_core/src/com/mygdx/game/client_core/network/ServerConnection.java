@@ -118,7 +118,7 @@ public class ServerConnection {
     activeWebSocket.send(text);
   }
 
-  public <T> Disposable registerSingleMessageHandler(
+  public <T> Disposable registerHandler(
       Class<T> aClass,
       SingleWebSocketHandler.Handler<T> handler
   ) {

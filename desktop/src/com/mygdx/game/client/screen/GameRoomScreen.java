@@ -26,7 +26,7 @@ public class GameRoomScreen extends ScreenAdapter {
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final ServerConnection connection;
-  private CompositeDisposable compositeDisposable = new CompositeDisposable();
+  private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
   @Inject
   GameRoomScreen(
@@ -47,14 +47,12 @@ public class GameRoomScreen extends ScreenAdapter {
   public void show() {
     log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + "gameroomscreen shown");
     roomDialogFactory.create(() -> gameStartService.startGame(5, 5, 401)).show(stage);
-    compositeDisposable.add(connection.registerSingleMessageHandler(
+    compositeDisposable.add(connection.registerHandler(
         GameStartedMessage.class,
         (socket, packet) -> {
           log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " game started handled");
-          Gdx.app.postRunnable(() -> {
-            var gameScreen = gameScreenBuilder.build().get();
-            gameScreen.changeToGameScreen();
-          });
+          var gameScreen = gameScreenBuilder.build().get();
+          gameScreen.changeToGameScreen();
           return true;
         }
     ));

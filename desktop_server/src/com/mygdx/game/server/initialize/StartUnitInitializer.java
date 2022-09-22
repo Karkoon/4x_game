@@ -34,5 +34,11 @@ public class StartUnitInitializer {
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
       unitFactory.createEntity(anyConfig, new Coordinates(0, y++), gameRoom.getClients().get(i));
     }
+    for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
+      unitFactory.createEntity(anyConfig, new Coordinates(0, y++), gameRoom.getClients().get(i));
+    }
+    for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
+      unitFactory.createEntity(anyConfig, new Coordinates(0, y++), gameRoom.getClients().get(i));
+    }
   }
 }

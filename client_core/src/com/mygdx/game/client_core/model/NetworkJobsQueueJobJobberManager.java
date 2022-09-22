@@ -2,16 +2,17 @@ package com.mygdx.game.client_core.model;
 
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
+import com.mygdx.game.client_core.network.ServerConnection;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class NetworkJobsQueueJobJobberManager {
 
   private final ComponentMessageListener componentMessageListener;

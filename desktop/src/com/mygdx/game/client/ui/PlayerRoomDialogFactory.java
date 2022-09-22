@@ -32,7 +32,7 @@ public class PlayerRoomDialogFactory {
     var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
     var dialog = createDialog(skin, onClose);
     var numberOfPlayersLabel = new Label("0", skin);
-    serverConnection.registerSingleMessageHandler(PlayerJoinedRoomMessage.class, ((webSocket, msg) -> {
+    serverConnection.registerHandler(PlayerJoinedRoomMessage.class, ((webSocket, msg) -> {
       numberOfPlayersLabel.setText(msg.getNumberOfClients());
       log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "A player joined the room: number_of_clients=" + msg);
       return FULLY_HANDLED;
