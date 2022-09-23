@@ -23,6 +23,7 @@ public class BuildHandler extends EntityCommandHandler {
     var parentField = Integer.parseInt(commands[2]);
     var x = Integer.parseInt(commands[3]);
     var y = Integer.parseInt(commands[4]);
-    buildingService.createBuilding(entityConfig, parentField, x, y, client.getGameRoom());
+    var clientIndex = client.getGameRoom().getClients().indexOf(client);
+    buildingService.createBuilding(entityConfig, parentField, x, y, client.getGameRoom(), clientIndex);
   }
 }

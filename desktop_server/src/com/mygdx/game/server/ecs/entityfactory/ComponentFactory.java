@@ -28,10 +28,12 @@ import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @GameInstanceScope
+@Log
 public class ComponentFactory {
 
   private final GameRoom room;
@@ -156,6 +158,12 @@ public class ComponentFactory {
 
   public void createChangeSubscribersComponent(int entityId) {
     changeSubscribersMapper.create(entityId);
+  }
+
+  public void createChangeSubscribersComponentFast(int entityId, int clientIndex) {
+    var changeSubscribers = changeSubscribersMapper.create(entityId);
+    changeSubscribers.getChangedSubscriptionState().set(clientIndex);
+    changeSubscribers.getClients().flip(clientIndex);
   }
 
   public void createStatsComponent(int entityId, UnitConfig config) {

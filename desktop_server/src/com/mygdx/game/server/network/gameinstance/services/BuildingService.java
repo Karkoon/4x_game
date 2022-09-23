@@ -29,13 +29,14 @@ public class BuildingService extends WorldService {
     this.assets = assets;
   }
 
-  public void createBuilding(int entityConfig, int parentField, int x, int y, GameRoom room) {
+  public void createBuilding(int entityConfig, int parentSubfield, int x, int y, GameRoom room, int clientIndex) {
     var world = room.getGameInstance().getWorld();
     var buildingConfig = assets.getGameConfigs().get(BuildingConfig.class, entityConfig);
     buildingFactory.createEntity(
       buildingConfig,
       new Coordinates(x, y),
-      parentField
+      parentSubfield,
+      clientIndex
     );
     world.process();
   }

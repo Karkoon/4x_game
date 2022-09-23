@@ -73,7 +73,7 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler<Ent
       technologyFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;
     } else if (entityConfigId >= GameConfigs.BUILDING_MIN && entityConfigId <= GameConfigs.BUILDING_MAX) {
-      log.info("technology id " + worldEntity);
+      log.info("building id " + worldEntity);
       var config = assets.getGameConfigs().get(BuildingConfig.class, entityConfigId);
       buildingFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;

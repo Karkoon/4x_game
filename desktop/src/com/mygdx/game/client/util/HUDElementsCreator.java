@@ -48,15 +48,6 @@ public class HUDElementsCreator {
       @NonNull GameScreenAssets gameAssets
   ) {
     this.assets = assets;
-  private final GameScreenAssets gameAssets;
-
-  @Inject
-  public HUDElementsCreator(
-      @NonNull MenuScreenAssets assets,
-      @NonNull GameScreenAssets gameAssets
-  ) {
-    this.assets = assets;
-    this.gameAssets = gameAssets;
     this.gameAssets = gameAssets;
   }
 
@@ -70,7 +61,7 @@ public class HUDElementsCreator {
 
   public Button createActionButton(String text, Runnable runnable) {
     var button = new TextButton(text, assets.getSkin(MenuScreenAssetPaths.SKIN));
-    button.getLabel().setFontScale(1.5f);
+    button.getLabel().setFontScale(1.0f);
     button.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

@@ -18,4 +18,6 @@ public class BuildingConfig implements Config, ModelConfig {
   private String modelPath;
   @NonNull
   private String textureName;
+  @NonNull
+  private String iconName;
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
-public class BuildingHandler implements ComponentMessageListener.Handler {
+public class BuildingHandler implements ComponentMessageListener.Handler<Building> {
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final ComponentMapper<Building> buildingMapper;
@@ -30,7 +30,7 @@ public class BuildingHandler implements ComponentMessageListener.Handler {
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
+  public boolean handle(WebSocket webSocket, int worldEntity, Building component) {
     log.info("Read building component " + worldEntity);
     var newParent = ((Building) component).getParent();
     newParent = networkWorldEntityMapper.getWorldEntity(newParent);

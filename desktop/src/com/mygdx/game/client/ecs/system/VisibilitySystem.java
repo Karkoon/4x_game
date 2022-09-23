@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.model.InField;
 import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
@@ -26,7 +27,7 @@ public class VisibilitySystem extends IteratingSystem {
 
   private final InField inField;
   private final PlayerInfo playerInfo;
-  @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class })
+  @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class, Building.class })
   private EntitySubscription allThatCanBePerceived;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Visible> visibleMapper;

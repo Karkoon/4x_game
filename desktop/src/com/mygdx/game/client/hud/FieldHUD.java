@@ -63,14 +63,14 @@ public class FieldHUD implements Disposable {
 
   private void createBuildingList() {
     var buildings = assets.getGameConfigs().getAll(BuildingConfig.class);
-    var texture = gameAssets.getTexture(buildings.get(0).getTextureName());
-    var container = hudElementsCreator.createVerticalContainer(50, 50, texture.getWidth(), texture.getHeight() * buildings.size);
+    var texture = gameAssets.getTexture(buildings.get(0).getIconName());
+    var container = hudElementsCreator.createVerticalContainer(100, 100, texture.getWidth(), texture.getHeight() * buildings.size);
 
     for (int i = 0; i < buildings.size; i++) {
       var building = buildings.get(i);
       log.info("BUILDING: " + building.getName());
       long buildingId = building.getId();
-      var imageButton = hudElementsCreator.createImageButton(building.getTextureName(), 0, i * texture.getHeight());
+      var imageButton = hudElementsCreator.createImageButton(building.getIconName(), 0, i * texture.getHeight());
       imageButton.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {

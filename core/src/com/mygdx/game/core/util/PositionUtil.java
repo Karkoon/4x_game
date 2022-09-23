@@ -8,6 +8,9 @@ import lombok.extern.java.Log;
 @Log
 public final class PositionUtil {
 
+  private PositionUtil() {
+  }
+
   @NonNull
   public static Vector3 generateWorldPositionForCoords(Coordinates coordinates) {
     return new Vector3(coordinates.getX() * 190f + (coordinates.getY() % 2) * 95f, 0f, coordinates.getY() * 160f);
@@ -18,9 +21,7 @@ public final class PositionUtil {
     return new Vector3(coordinates.getX() * 151.5f, 0f, coordinates.getY() * 89.5f);
   }
 
-  private PositionUtil() {
-  }
-
+  @NonNull
   public static Vector3 generateTechnologyPositionForCoords(Coordinates coordinates) {
     return new Vector3(coordinates.getX() * 250f,  0f, coordinates.getY() * 250f);
   }

@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -31,6 +32,7 @@ public class ComponentSyncSystem extends IteratingSystem {
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
   private ComponentMapper<Name> nameComponentMapper;
+  private ComponentMapper<Building> buildingMapper;
 
   @Inject
   public ComponentSyncSystem(

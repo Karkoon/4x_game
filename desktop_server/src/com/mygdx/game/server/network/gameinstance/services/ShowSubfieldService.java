@@ -3,6 +3,7 @@ package com.mygdx.game.server.network.gameinstance.services;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -16,8 +17,7 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class ShowSubfieldService extends WorldService {
 
-
-  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class})
+  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class, Building.class})
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
@@ -40,6 +40,7 @@ public class ShowSubfieldService extends WorldService {
       changeSubscribersComp.getChangedSubscriptionState().set(clientIndex);
       changeSubscribersComp.getClients().flip(clientIndex);
       var buildingId = subFieldMapper.get(entityId).getBuilding();
+      log.info("field: " + parentId + ", subfield: " + entityId + ", building" + buildingId);
       if (buildingId != -0xC0FEE) {
         var changeSubscribersCompB = changeSubscribersMapper.get(buildingId);
         changeSubscribersCompB.getChangedSubscriptionState().set(clientIndex);
