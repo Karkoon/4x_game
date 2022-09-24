@@ -63,6 +63,7 @@ public class GameScreenAssets {
 
   private void loadTextures() {
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.ICON_DIR, ".png", Texture.class);
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
   }
 

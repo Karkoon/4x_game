@@ -2,8 +2,8 @@ package com.mygdx.game.client.hud;
 
 import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
+import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.utils.Disposable;
@@ -11,10 +11,12 @@ import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.util.HUDElementsCreator;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+@Log
 public class WorldHUD implements Disposable {
 
   private final Stage stage;
@@ -24,11 +26,15 @@ public class WorldHUD implements Disposable {
   @AspectDescriptor(all = {MaterialComponent.class})
   private EntitySubscription subscription;
 
+  private HorizontalGroup materialGroup;
+
   @Inject
   public WorldHUD(
+      World world,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
       @NonNull HUDElementsCreator hudElementsCreator
   ) {
+    world.inject(this);
     this.stage = stage;
     this.hudElementsCreator = hudElementsCreator;
 
@@ -40,6 +46,7 @@ public class WorldHUD implements Disposable {
   }
 
   public void draw() {
+    fillMaterialGroup();
     stage.draw();
   }
 
@@ -48,24 +55,26 @@ public class WorldHUD implements Disposable {
   }
 
   private void prepareHudSceleton() {
-    var materialGroup = createMaterial();
+    this.materialGroup = hudElementsCreator.createHorizontalContainer((int) (stage.getWidth()-150), 0, 150, 50);
+    fillMaterialGroup();
     stage.addActor(materialGroup);
   }
 
-  private HorizontalGroup createMaterial() {
-    var materialGroup = hudElementsCreator.createHorizontalContainer((int) (stage.getWidth()-150), 0, 150, 50);
-
+  public void fillMaterialGroup() {
+    log.info("TRY TO FILL1");
+    this.materialGroup.clear();
     if (subscription != null) {
+      subscription.getEntities();
       for (int i = 0; i < subscription.getEntities().size(); i++) {
+        log.info("TRY TO FILL2");
         int entityId = subscription.getEntities().get(i);
         var materialComponent = materialMapper.get(entityId);
         var image = hudElementsCreator.createImage(materialComponent.getMaterial().iconPath, i * 50, 0);
         var text = hudElementsCreator.createTextField(String.valueOf(materialComponent.getValue()));
-        materialGroup.addActor(image);
-        materialGroup.addActor(text);
+        this.materialGroup.addActor(image);
+        this.materialGroup.addActor(text);
       }
     }
-    return materialGroup;
   }
 
 }

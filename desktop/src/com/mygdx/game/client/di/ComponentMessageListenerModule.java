@@ -7,6 +7,7 @@ import com.mygdx.game.client_core.network.comp_handlers.CanAttackHandler;
 import com.mygdx.game.client_core.network.comp_handlers.CoordinatesHandler;
 import com.mygdx.game.client_core.network.comp_handlers.EntityConfigHandler;
 import com.mygdx.game.client_core.network.comp_handlers.FieldHandler;
+import com.mygdx.game.client_core.network.comp_handlers.MaterialHandler;
 import com.mygdx.game.client_core.network.comp_handlers.OwnerHandler;
 import com.mygdx.game.client_core.network.comp_handlers.StatsHandler;
 import com.mygdx.game.client_core.network.comp_handlers.SubFieldHandler;
@@ -14,6 +15,7 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -31,6 +33,7 @@ public class ComponentMessageListenerModule {
       SubFieldHandler subFieldHandler,
       FieldHandler fieldHandler,
       CoordinatesHandler coordinatesHandler,
+      MaterialHandler materialHandler,
       DesktopEntityConfigHandler desktopEntityConfigHandler,
       OwnerHandler ownerHandler,
       StatsHandler statsHandler,
@@ -40,6 +43,7 @@ public class ComponentMessageListenerModule {
     var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
+    listener.registerHandler(MaterialComponent.class, materialHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
     listener.registerHandler(Field.class, fieldHandler);
     listener.registerHandler(SubField.class, subFieldHandler);
