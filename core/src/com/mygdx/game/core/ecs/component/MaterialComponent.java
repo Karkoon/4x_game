@@ -4,9 +4,10 @@ import com.artemis.PooledComponent;
 import com.mygdx.game.core.model.MaterialBase;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class MaterialComponent  extends PooledComponent {
 
   private MaterialBase material = null;

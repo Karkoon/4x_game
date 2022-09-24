@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.hud.WorldHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
@@ -34,6 +35,7 @@ public class GameScreen extends ScreenAdapter {
   private final ModelInstanceRenderer renderer;
 
   private final Stage stage;
+  private final WorldHUD worldHUD;
   private final ClickInputAdapter clickInputAdapter;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
   private final GameStartService gameStartService;
@@ -48,6 +50,7 @@ public class GameScreen extends ScreenAdapter {
       @NonNull World world,
       @NonNull Viewport viewport,
       @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull WorldHUD worldHUD,
       @NonNull ClickInputAdapter clickInputAdapter,
       @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
       @NonNull GameStartService gameStartService,
@@ -58,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     this.world = world;
     this.viewport = viewport;
     this.stage = stage;
+    this.worldHUD = worldHUD;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
     this.gameStartService = gameStartService;
@@ -83,7 +87,9 @@ public class GameScreen extends ScreenAdapter {
     world.process();
     viewport.getCamera().update();
     stage.draw();
+    worldHUD.draw();
     stage.act(delta);
+    worldHUD.act(delta);
   }
 
   @Override
