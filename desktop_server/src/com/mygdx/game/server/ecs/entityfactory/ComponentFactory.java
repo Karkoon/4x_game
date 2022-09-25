@@ -77,6 +77,7 @@ public class ComponentFactory {
     sightlineSubscribersMapper.create(entity);
     sharedComponentsMapper.create(entity);
     canAttackMapper.create(entity);
+    materialMapper.create(entity);
     dirtyMapper.create(entity);
     world.delete(entity); //todo create a system to do it automatically?
   }

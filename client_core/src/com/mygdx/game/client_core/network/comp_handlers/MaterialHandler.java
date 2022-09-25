@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
-public class MaterialHandler implements ComponentMessageListener.Handler  {
+public class MaterialHandler implements ComponentMessageListener.Handler<MaterialComponent>  {
 
   private final ComponentMapper<MaterialComponent> materialMapper;
 
@@ -26,14 +26,11 @@ public class MaterialHandler implements ComponentMessageListener.Handler  {
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
+  public boolean handle(WebSocket webSocket, int worldEntity, MaterialComponent component) {
     log.info("Read material component " + worldEntity);
-    var material = (MaterialComponent) component;
-    if (!materialMapper.has(worldEntity)) {
-      materialMapper.create(worldEntity);
-      materialMapper.get(worldEntity).setMaterial(material.getMaterial());
-    }
-    materialMapper.get(worldEntity).setValue(material.getValue());
+    var material = materialMapper.create(worldEntity);
+    material.setMaterial(material.getMaterial());
+    material.setValue(material.getValue());
     return FULLY_HANDLED;
   }
 

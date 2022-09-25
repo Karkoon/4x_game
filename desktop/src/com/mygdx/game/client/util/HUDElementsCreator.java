@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -58,14 +59,12 @@ public class HUDElementsCreator {
     return button;
   }
 
-  public TextField createTextField(String message) {
+  public TextField createTextField(String message, int x, int y) {
     var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
 
     var textField = new TextField(message, skin);
-    textField.setPosition(0, 0);
-    textField.setHeight(150);
-    textField.setWidth(300);
-
+    textField.setPosition(x, y);
+    textField.setAlignment(25);
     textField.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -74,6 +73,21 @@ public class HUDElementsCreator {
     });
 
     return textField;
+  }
+
+  public Label createLabel(String message, int x, int y) {
+    var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+
+    var label = new Label(message, skin);
+    label.setPosition(x, y);
+    label.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        label.remove();
+      }
+    });
+
+    return label;
   }
 
   public VerticalGroup createVerticalContainer(int x, int y, int width, int height) {
