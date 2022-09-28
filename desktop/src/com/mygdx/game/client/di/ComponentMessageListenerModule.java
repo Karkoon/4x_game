@@ -10,6 +10,7 @@ import com.mygdx.game.client_core.network.comp_handlers.FieldHandler;
 import com.mygdx.game.client_core.network.comp_handlers.MaterialHandler;
 import com.mygdx.game.client_core.network.comp_handlers.OwnerHandler;
 import com.mygdx.game.client_core.network.comp_handlers.StatsHandler;
+import com.mygdx.game.client_core.network.comp_handlers.MoveRangeHandler;
 import com.mygdx.game.client_core.network.comp_handlers.SubFieldHandler;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -33,6 +34,7 @@ public class ComponentMessageListenerModule {
       SubFieldHandler subFieldHandler,
       FieldHandler fieldHandler,
       CoordinatesHandler coordinatesHandler,
+      MoveRangeHandler moveRangeHandler,
       MaterialHandler materialHandler,
       DesktopEntityConfigHandler desktopEntityConfigHandler,
       OwnerHandler ownerHandler,
@@ -45,6 +47,7 @@ public class ComponentMessageListenerModule {
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
     listener.registerHandler(MaterialComponent.class, materialHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
+    listener.registerHandler(MoveRange.class, moveRangeHandler);
     listener.registerHandler(Field.class, fieldHandler);
     listener.registerHandler(SubField.class, subFieldHandler);
     listener.registerHandler(Owner.class, ownerHandler);
