@@ -1,7 +1,6 @@
 package com.mygdx.game.server.network.gameinstance.handlers;
 
 import com.mygdx.game.server.di.GameInstanceScope;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.gameinstance.services.EndTurnService;
 
 import javax.inject.Inject;
@@ -18,7 +17,7 @@ public class EndTurnHandler {
     this.endTurnService = endTurnService;
   }
 
-  public void handle(Client client) {
-    endTurnService.nextTurn(client);
+  public void handle() {
+    endTurnService.nextTurn();
   }
 }

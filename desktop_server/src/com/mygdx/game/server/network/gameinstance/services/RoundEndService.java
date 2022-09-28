@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.extern.java.Log;
@@ -12,25 +13,31 @@ import javax.inject.Inject;
 
 @Log
 @GameInstanceScope
-public class EndTurnUtils extends WorldService {
+public class RoundEndService extends WorldService {
 
   @AspectDescriptor(all = {Stats.class})
   private EntitySubscription unitSubscriber;
+  @AspectDescriptor(all = {CanAttack.class})
+  private EntitySubscription canAttackSubscriber;
 
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<CanAttack> canAttackMapper;
 
   private final World world;
 
   @Inject
-  EndTurnUtils(
+  RoundEndService(
       World world
   ) {
     world.inject(this);
     this.world = world;
   }
 
-  public void makeEndTurnSteps() {
+  public void makeEndRoundSteps() {
+    log.info("End round, edit components");
     resetUnitMovement();
+    resetCanAttack();
+    world.process();
   }
 
   private void resetUnitMovement() {
@@ -39,7 +46,14 @@ public class EndTurnUtils extends WorldService {
       var stats = statsMapper.get(entityId);
       stats.setMoveRange(stats.getMaxMoveRange());
       setDirty(entityId, Stats.class, world);
-      world.process();
+    }
+  }
+  private void resetCanAttack() {
+    for (int i = 0; i < canAttackSubscriber.getEntities().size(); i++) {
+      int entityId = canAttackSubscriber.getEntities().get(i);
+      var canAttack = canAttackMapper.get(entityId);
+      canAttack.setCanAttack(true);
+      setDirty(entityId, CanAttack.class, world);
     }
   }
 }
