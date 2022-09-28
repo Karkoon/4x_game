@@ -22,5 +22,5 @@ public class AttackHandler extends EntityCommandHandler {
     if (!checkValidity(commands, client)) return;
     var attacker = Integer.parseInt(commands[1]);
     var attacked = Integer.parseInt(commands[2]);
-    attackEntityService.attackEntity(attacker, attacked, client.getGameRoom().getGameInstance().getWorld());
+    attackEntityService.attackEntity(attacker, attacked);
   }}
