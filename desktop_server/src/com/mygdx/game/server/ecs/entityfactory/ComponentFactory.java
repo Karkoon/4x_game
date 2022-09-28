@@ -7,10 +7,12 @@ import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -18,7 +20,6 @@ import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
-import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.ecs.component.SharedComponents;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.Client;
@@ -46,6 +47,7 @@ public class ComponentFactory {
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
+  private ComponentMapper<CanAttack> canAttackMapper;
 
   @Inject
   public ComponentFactory(
@@ -71,6 +73,7 @@ public class ComponentFactory {
     nameMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
     sharedComponentsMapper.create(entity);
+    canAttackMapper.create(entity);
     dirtyMapper.create(entity);
     world.delete(entity); //todo create a system to do it automatically?
   }
@@ -154,6 +157,10 @@ public class ComponentFactory {
   public void createOwnerComponent(int entityId, Client owner) {
     var ownerComp = ownerMapper.create(entityId);
     ownerComp.setToken(owner.getPlayerToken());
+  }
+
+  public void createCanAttackComponent(int entityId) {
+    canAttackMapper.create(entityId).setCanAttack(true);
   }
 
   /**

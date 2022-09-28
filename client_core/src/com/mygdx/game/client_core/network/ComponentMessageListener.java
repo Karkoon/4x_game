@@ -98,7 +98,7 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
    *
    * @author MJ, Kacper Jankowski (lol)
    */
-  public interface Handler {
+  public interface Handler<T> {
     /**
      * Should perform the logic using the received packet.
      *
@@ -107,6 +107,6 @@ public class ComponentMessageListener extends AbstractWebSocketListener {
      * @see WebSocketListener#FULLY_HANDLED
      * @see WebSocketListener#NOT_HANDLED
      */
-    boolean handle(WebSocket webSocket, int worldEntity, Component component);
+    boolean handle(WebSocket webSocket, int worldEntity, T component);
   }
 }

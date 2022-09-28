@@ -5,7 +5,7 @@
   "modelPath": "basic.g3db",
   "textureName": "unit.png",
   "maxHp": 100,
-  "attackPower": 50,
+  "attackPower": 125,
   "defense": 25,
   "sightRadius": 2,
   "speed": 1

@@ -2,6 +2,7 @@ package com.mygdx.game.client.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.mygdx.game.client.ecs.system.AttackSystem;
 import com.mygdx.game.client.ecs.system.BlockInputSystem;
 import com.mygdx.game.client.ecs.system.ChooseSystem;
 import com.mygdx.game.client.ecs.system.MovementSystem;
@@ -35,6 +36,7 @@ public class WorldModule {
       @NonNull NavigationSystem navigationSystem,
       @NonNull BlockInputSystem blockInputSystem,
       @NonNull VisibilitySystem visibilitySystem,
+      @NonNull AttackSystem attackSystem,
       @NonNull NetworkJobSystem networkJobSystem
   ) {
     log.log(Level.INFO, "provided World");
@@ -46,6 +48,7 @@ public class WorldModule {
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
     configuration.setSystem(renderSystem);
+    configuration.setSystem(attackSystem);
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
     configuration.setSystem(removalSystem);

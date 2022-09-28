@@ -1,6 +1,5 @@
 package com.mygdx.game.client_core.network.comp_handlers;
 
-import com.artemis.Component;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
@@ -13,7 +12,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
-public class CoordinatesHandler implements ComponentMessageListener.Handler {
+public class CoordinatesHandler implements ComponentMessageListener.Handler<Coordinates> {
   private final ComponentMapper<Coordinates> coordinatesMapper;
 
   @Inject
@@ -24,11 +23,9 @@ public class CoordinatesHandler implements ComponentMessageListener.Handler {
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
+  public boolean handle(WebSocket webSocket, int worldEntity, Coordinates component) {
     log.info("Read coordinates component " + worldEntity);
-    var newCoordinates = (Coordinates) component;
-    var entityCoordinates = coordinatesMapper.create(worldEntity);
-    entityCoordinates.setCoordinates(newCoordinates);
+    coordinatesMapper.create(worldEntity).setCoordinates(component);
     return FULLY_HANDLED;
   }
 }

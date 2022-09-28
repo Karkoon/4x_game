@@ -1,6 +1,5 @@
 package com.mygdx.game.client_core.network.comp_handlers;
 
-import com.artemis.Component;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client_core.ecs.entityfactory.FieldFactory;
@@ -22,7 +21,7 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 import static com.github.czyzby.websocket.WebSocketListener.NOT_HANDLED;
 
 @Log
-public class EntityConfigHandler implements ComponentMessageListener.Handler {
+public class EntityConfigHandler implements ComponentMessageListener.Handler<EntityConfigId> {
 
   private final GameConfigAssets assets;
   private final FieldFactory fieldFactory;
@@ -46,8 +45,8 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler {
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
-    var entityConfigId = ((EntityConfigId) component).getId();
+  public boolean handle(WebSocket webSocket, int worldEntity, EntityConfigId component) {
+    var entityConfigId = component.getId();
     if (entityConfigId >= GameConfigs.FIELD_MIN && entityConfigId <= GameConfigs.FIELD_MAX) {
       log.info("field id " + worldEntity);
       var config = assets.getGameConfigs().get(FieldConfig.class, entityConfigId);

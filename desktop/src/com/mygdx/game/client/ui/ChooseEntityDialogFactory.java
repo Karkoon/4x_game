@@ -1,11 +1,14 @@
 package com.mygdx.game.client.ui;
 
+import com.artemis.ComponentMapper;
+import com.artemis.World;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.core.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -20,17 +23,21 @@ public final class ChooseEntityDialogFactory {
 
   private final GameScreenAssets assets;
   private final Stage stage;
+  private ComponentMapper<Highlighted> highlightedComponentMapper;
+  private ComponentMapper<Name> nameComponentMapper;
 
   @Inject
   public ChooseEntityDialogFactory(
       @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage
+      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
+      @NonNull World world
   ) {
     this.assets = assets;
     this.stage = stage;
+    world.inject(this);
   }
 
-  public void createAndShow(IntMap<Name> entities, @NonNull EntityHandler handler) {
+  public void createAndShow(IntBag entities, @NonNull EntityHandler handler) {
     var dialog = createEntityDialog(handler);
     dialog.text("Choose on of the following:");
     addEntityButtons(dialog, entities);
@@ -38,11 +45,12 @@ public final class ChooseEntityDialogFactory {
     log.info("shown FieldClickedDialog");
   }
 
-  private void addEntityButtons(Dialog dialog, IntMap<Name> entities) {
-    for (var entry : entities) {
-      var entity = entry.key;
-      var name = entry.value;
-      dialog.button(name.getName(), entity);
+  private void addEntityButtons(Dialog dialog, IntBag entities) {
+    for (int i = 0; i < entities.size(); i++) {
+      var entity = entities.get(i);
+      var name = nameComponentMapper.get(entity).getName();
+      var highlighted = highlightedComponentMapper.has(entity) ? "Selected: " : "";
+      dialog.button(highlighted + name, entity);
     }
   }
 

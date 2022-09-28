@@ -1,7 +1,6 @@
 package com.mygdx.game.server.network.gameinstance.services;
 
 import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.core.ecs.component.Field;

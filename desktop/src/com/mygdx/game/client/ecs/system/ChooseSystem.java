@@ -7,13 +7,14 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.utils.IntMap;
 import com.mygdx.game.client.ecs.component.Choosable;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
-import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.client_core.ecs.component.Position;
+import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Name;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -23,17 +24,18 @@ import javax.inject.Inject;
 public class ChooseSystem extends IteratingSystem {
 
   private final ClickInput clickInput;
-  private final ChooseEntityDialogFactory dialogFactory;
+  private final Lazy<ChooseEntityDialogFactory> dialogFactory;
   private final ChosenEntity chosenEntities;
   private final ClickedEntities clickedEntities;
 
   private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Name> nameMapper;
 
   @Inject
   public ChooseSystem(
       ClickInput clickInput,
-      ChooseEntityDialogFactory dialogFactory,
+      Lazy<ChooseEntityDialogFactory> dialogFactory,
       ChosenEntity chosenEntity
   ) {
     this.clickInput = clickInput;
@@ -65,8 +67,8 @@ public class ChooseSystem extends IteratingSystem {
   }
 
   private void showChooseEntityDialog() {
-    var entitiesWithName = clickedEntities.getAllClickedWithName();
-    dialogFactory.createAndShow(entitiesWithName, chosenEntities::addChosen);
+    var allClicked = clickedEntities.getAllClicked();
+    dialogFactory.get().createAndShow(allClicked, chosenEntities::addChosen);
   }
 
   private class ClickedEntities {
@@ -98,13 +100,8 @@ public class ChooseSystem extends IteratingSystem {
       return clickedEntitiesIds.size() > 1;
     }
 
-    public IntMap<Name> getAllClickedWithName() {
-      var entitiesWithName = new IntMap<Name>();
-      for (var i = 0; i < clickedEntitiesIds.size(); i++) {
-        var entityId = clickedEntitiesIds.get(i);
-        entitiesWithName.put(clickedEntitiesIds.get(i), nameMapper.get(entityId));
-      }
-      return entitiesWithName;
+    public IntBag getAllClicked() {
+      return clickedEntitiesIds;
     }
 
     public int getClickedEntity() {

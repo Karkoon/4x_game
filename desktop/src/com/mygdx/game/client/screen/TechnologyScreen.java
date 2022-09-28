@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.util.UiElementsCreator;
