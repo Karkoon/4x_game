@@ -95,6 +95,8 @@ public class ComponentFactory {
   public void createMoveRangeComponent(int moveRange, int entityId){
     var range = moveRangeMapper.create(entityId);
     range.setMoveRange(moveRange);
+    //TODO: Może current inicjalizowany od 0?
+    range.setCurrentRange(moveRange);
   }
 
   public void createSubFieldComponent(int fieldId, int entityId) {

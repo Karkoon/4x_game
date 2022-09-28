@@ -17,9 +17,4 @@ public class MoveRange extends PooledComponent {
     protected void reset() {
         this.currentRange = this.moveRange;
     }
-
-    public void setMoveRange(int moveRange) {
-        this.moveRange = moveRange;
-        this.currentRange = moveRange;
-    }
 }

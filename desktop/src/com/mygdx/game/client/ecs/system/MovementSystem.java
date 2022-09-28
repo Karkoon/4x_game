@@ -49,8 +49,9 @@ public class MovementSystem extends IteratingSystem {
       var currentCoordinate = coordinatesMapper.get(entityId);
 
       var distance = DistanceUtil.distance(currentCoordinate, targetCoordinate);
-      log.info(String.valueOf(moveRangeMapper.get(entityId).getMoveRange()));
       var range = moveRangeMapper.get(entityId).getCurrentRange();
+
+      log.info("Chce przejsc " + distance + " ale zostało mi " + range);
 
       if (distance > range){
         moveRangeDialog.createAndShow("You have " + range + " move points left!" + "You can't move " + distance + " units!");
