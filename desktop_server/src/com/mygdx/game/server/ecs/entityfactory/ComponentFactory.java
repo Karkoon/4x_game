@@ -67,6 +67,7 @@ public class ComponentFactory {
     subFieldMapper.create(entity);
     fieldMapper.create(entity);
     coordinatesMapper.create(entity);
+    moveRangeMapper.create(entity);
     entityConfigIdMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
     changeSubscribersMapper.create(entity);
@@ -156,6 +157,7 @@ public class ComponentFactory {
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
     stats.setAttackPower(config.getAttackPower());
+    stats.setMoveRange(config.getMoveRange());
   }
 
   public void createOwnerComponent(int entityId, Client owner) {
