@@ -3,6 +3,6 @@
   "name": "river",
   "polishName": "rzeka",
   "modelPath": "basic.g3db",
-  "textureName": "river.png",
+  "textureName": "fields/river.png",
   "scoreValue": 8
 }

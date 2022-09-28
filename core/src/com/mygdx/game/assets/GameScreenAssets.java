@@ -9,11 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
+@Log
 public class GameScreenAssets {
 
   @NonNull
@@ -51,9 +53,17 @@ public class GameScreenAssets {
   private <T> void loadDirectory(@NonNull String path,
                                  @NonNull String suffix,
                                  @NonNull Class<T> assetType) {
-    var dir = Gdx.files.internal(path).list(suffix);
-    for (var i = 0; i < dir.length; i++) {
-      assetManager.load(dir[i].path(), assetType);
+    var assets = Gdx.files.internal(path).list(suffix);
+    var directiories = Gdx.files.internal(path).list();
+    for (var i = 0; i < assets.length; i++) {
+      assetManager.load(assets[i].path(), assetType);
+    }
+    for (int i = 0; i < directiories.length; i++) {
+      log.info("WWWW");
+      log.info(directiories[i].path());
+      if (directiories[i].isDirectory()) {
+        loadDirectory(directiories[i].path(), suffix, assetType);
+      }
     }
   }
 
@@ -63,7 +73,6 @@ public class GameScreenAssets {
 
   private void loadTextures() {
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
-    loadDirectory(GameScreenAssetPaths.ICON_DIR, ".png", Texture.class);
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
   }
 

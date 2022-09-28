@@ -2,6 +2,6 @@
   "id": 201,
   "name": "subfield",
   "polishName": "podobszar",
-  "modelPath": "subbasic.g3db",
-  "textureName": "subbasic.png"
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/subbasic.png"
 }

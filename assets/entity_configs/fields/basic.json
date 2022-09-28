@@ -3,6 +3,6 @@
   "name": "basic",
   "polishName": "pole",
   "modelPath": "basic.g3db",
-  "textureName": "basic.png",
+  "textureName": "fields/basic.png",
   "scoreValue": 3
 }

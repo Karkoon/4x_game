@@ -54,6 +54,8 @@ public class MenuScreenAssets {
                                  @NonNull Class<T> assetType) {
     var dir = Gdx.files.internal(path).list(suffix);
     for (var i = 0; i < dir.length; i++) {
+      if (dir[i].isDirectory())
+        loadDirectory(dir[i].path(), ".png", Texture.class);
       assetManager.load(dir[i].path(), assetType);
     }
   }

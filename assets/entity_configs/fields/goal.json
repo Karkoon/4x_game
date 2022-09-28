@@ -3,6 +3,6 @@
   "name": "goal",
   "polishName": "cel",
   "modelPath": "basic.g3db",
-  "textureName": "goal.png",
+  "textureName": "fields/goal.png",
   "scoreValue": 250
 }

@@ -3,6 +3,6 @@
   "name": "forest",
   "polishName": "las",
   "modelPath": "basic.g3db",
-  "textureName": "forest.png",
+  "textureName": "fields/forest.png",
   "scoreValue": 5
 }
