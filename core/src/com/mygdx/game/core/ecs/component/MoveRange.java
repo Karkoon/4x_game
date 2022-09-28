@@ -4,7 +4,6 @@ import com.artemis.PooledComponent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
@@ -16,10 +15,5 @@ public class MoveRange extends PooledComponent {
     @Override
     protected void reset() {
         this.currentRange = this.moveRange;
-    }
-
-    public void setMoveRange(int moveRange) {
-        this.moveRange = moveRange;
-        this.currentRange = moveRange;
     }
 }
