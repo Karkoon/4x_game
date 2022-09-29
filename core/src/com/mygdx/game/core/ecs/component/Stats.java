@@ -12,8 +12,8 @@ public class Stats extends PooledComponent {
   private int attackPower;
   private int defense;
   private int sightRadius;
-  private int speed;
   private int moveRange;
+  private int maxMoveRange;
 
   @Override
   public void reset() {
@@ -26,7 +26,8 @@ public class Stats extends PooledComponent {
     attackPower = component.getAttackPower();
     defense = component.getDefense();
     sightRadius = component.getSightRadius();
-    speed = component.getSpeed();
+    moveRange = component.getMoveRange();
+    maxMoveRange = component.getMaxMoveRange();
     log.info("current HP: " + hp);
   }
 }

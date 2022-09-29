@@ -4,7 +4,6 @@ import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.core.ecs.component.MoveRange;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -34,7 +33,6 @@ public class UnitFactory {
   ) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinates, entityId);
-    componentFactory.createMoveRangeComponent(config.getMoveRange(), entityId); //TODO: Czy to jest w dobrym miejscu?
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createNameComponent(entityId, "unit " + config.getName() + " " + entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
@@ -43,7 +41,7 @@ public class UnitFactory {
     componentFactory.createStatsComponent(entityId, config);
     componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createCanAttackComponent(entityId);
-    var componentsToSend = new Class[]{Coordinates.class, Stats.class, MoveRange.class, EntityConfigId.class, Owner.class, CanAttack.class};
+    var componentsToSend = new Class[]{Coordinates.class, Stats.class, EntityConfigId.class, Owner.class, CanAttack.class};
     componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
         componentsToSend,

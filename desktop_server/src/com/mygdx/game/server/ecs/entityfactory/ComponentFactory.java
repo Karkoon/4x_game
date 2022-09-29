@@ -9,7 +9,6 @@ import com.mygdx.game.config.Config;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.MoveRange;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
@@ -41,7 +40,6 @@ public class ComponentFactory {
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<MoveRange> moveRangeMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
@@ -72,7 +70,6 @@ public class ComponentFactory {
     subFieldMapper.create(entity);
     fieldMapper.create(entity);
     coordinatesMapper.create(entity);
-    moveRangeMapper.create(entity);
     entityConfigIdMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
     changeSubscribersMapper.create(entity);
@@ -97,13 +94,6 @@ public class ComponentFactory {
   public void createCoordinateComponent(Coordinates coordinates, int entityId) {
     var position = coordinatesMapper.create(entityId);
     position.setCoordinates(coordinates);
-  }
-
-  public void createMoveRangeComponent(int moveRange, int entityId){
-    var range = moveRangeMapper.create(entityId);
-    range.setMoveRange(moveRange);
-    //TODO: Może current inicjalizowany od 0?
-    range.setCurrentRange(moveRange);
   }
 
   public void createSubFieldComponent(int fieldId, int entityId) {
@@ -162,11 +152,11 @@ public class ComponentFactory {
     var stats = statsMapper.create(entityId);
     stats.setHp(config.getMaxHp());
     stats.setMaxHp(config.getMaxHp());
-    stats.setSpeed(config.getSpeed());
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
     stats.setAttackPower(config.getAttackPower());
     stats.setMoveRange(config.getMoveRange());
+    stats.setMaxMoveRange(config.getMoveRange());
   }
 
   public void createOwnerComponent(int entityId, Client owner) {

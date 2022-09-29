@@ -10,7 +10,7 @@ import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MoveRange;
+import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.util.DistanceUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -26,7 +26,7 @@ public class MovementSystem extends IteratingSystem {
   private final OutOfMoveRangeDialogFactory moveRangeDialog;
   private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<MoveRange> moveRangeMapper;
+  private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Field> fieldMapper;
 
   @Inject
@@ -49,12 +49,12 @@ public class MovementSystem extends IteratingSystem {
       var currentCoordinate = coordinatesMapper.get(entityId);
 
       var distance = DistanceUtil.distance(currentCoordinate, targetCoordinate);
-      var range = moveRangeMapper.get(entityId).getCurrentRange();
+      var range = statsMapper.get(entityId).getMoveRange();
 
       log.info("Chce przejsc " + distance + " ale zostało mi " + range);
 
       if (distance > range){
-        moveRangeDialog.createAndShow("You have " + range + " move points left!" + "You can't move " + distance + " units!");
+        moveRangeDialog.createAndShow(range, distance);
       }
       else {
         moveEntityService.moveEntity(entityId, targetCoordinate);

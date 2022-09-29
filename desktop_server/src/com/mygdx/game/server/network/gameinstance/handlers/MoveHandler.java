@@ -24,7 +24,6 @@ public class MoveHandler extends EntityCommandHandler {
     var entityId = Integer.parseInt(commands[1]);
     var x = Integer.parseInt(commands[2]);
     var y = Integer.parseInt(commands[3]);
-//    TODO: Nie spradzam czy legalny ruch, wewnątrz moveEntityService jest sprawdzanie
     moveEntityService.moveEntity(entityId, x, y, client.getGameRoom());
   }
 }

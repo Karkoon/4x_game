@@ -27,10 +27,10 @@ public class OutOfMoveRangeDialogFactory {
         this.stage = stage;
     }
 
-    public void createAndShow(String msg) {
+    public void createAndShow(int range, int distance) {
         var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
         var dialog = new Dialog("MoveRange", skin);
-        dialog.text(msg);
+        dialog.text("You have " + range + " move points left!" + "You can't move " + distance + " units!");
         dialog.button("OK");
         dialog.show(stage);
     }
