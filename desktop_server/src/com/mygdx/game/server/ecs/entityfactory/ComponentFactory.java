@@ -11,10 +11,12 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -46,6 +48,7 @@ public class ComponentFactory {
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<MaterialComponent> materialMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
 
@@ -74,6 +77,7 @@ public class ComponentFactory {
     sightlineSubscribersMapper.create(entity);
     sharedComponentsMapper.create(entity);
     canAttackMapper.create(entity);
+    materialMapper.create(entity);
     dirtyMapper.create(entity);
     world.delete(entity); //todo create a system to do it automatically?
   }
@@ -159,6 +163,12 @@ public class ComponentFactory {
     ownerComp.setToken(owner.getPlayerToken());
   }
 
+  public void createMaterialComponent(int entityId, MaterialBase materialBase) {
+    var materialComp = materialMapper.create(entityId);
+    materialComp.setMaterial(materialBase);
+    materialComp.setValue(0);
+  }
+
   public void createCanAttackComponent(int entityId) {
     canAttackMapper.create(entityId).setCanAttack(true);
   }
@@ -181,4 +191,5 @@ public class ComponentFactory {
     var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
     dirtyMapper.create(entityId).getDirtyComponents().set(componentIndex);
   }
+
 }

@@ -3,6 +3,7 @@ package com.mygdx.game.server.model;
 import com.artemis.World;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.MapInitializer;
+import com.mygdx.game.server.initialize.MaterialInitializer;
 import com.mygdx.game.server.initialize.StartUnitInitializer;
 import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.network.gameinstance.GameInstanceServer;
@@ -16,6 +17,7 @@ import java.util.Queue;
 public class GameInstance {
 
   private final Lazy<TechnologyInitializer> technologyInitializer;
+  private final Lazy<MaterialInitializer> materialInitializer;
   private final Lazy<MapInitializer> mapInitializer;
   private final Lazy<StartUnitInitializer> unitInitializer;
   private final World world;
@@ -27,6 +29,7 @@ public class GameInstance {
   @Inject
   public GameInstance(
       Lazy<TechnologyInitializer> technologyInitializer,
+      Lazy<MaterialInitializer> materialInitializer,
       Lazy<MapInitializer> mapInitializer,
       Lazy<StartUnitInitializer> unitInitializer,
       World world,
@@ -34,6 +37,7 @@ public class GameInstance {
       Lazy<GameInstanceServer> gameInstanceServer
   ) {
     this.technologyInitializer = technologyInitializer;
+    this.materialInitializer = materialInitializer;
     this.mapInitializer = mapInitializer;
     this.unitInitializer = unitInitializer;
     this.world = world;
@@ -44,6 +48,7 @@ public class GameInstance {
   public void startGame(int width, int height, long mapType) {
     mapInitializer.get().initializeMap(width, height, mapType);
     technologyInitializer.get().initializeTechnologies();
+    materialInitializer.get().initializeMaterials();
     unitInitializer.get().initializeStartingUnits();
     playerOrder = new ArrayDeque<>(room.getClients());
     changeToNextPlayer();
