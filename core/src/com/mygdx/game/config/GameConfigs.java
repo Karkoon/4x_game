@@ -20,6 +20,8 @@ public class GameConfigs {
   public static final int TECHNOLOGY_MAX = 302;
   public static final int MAP_TYPE_MIN = 401;
   public static final int MAP_TYPE_MAX = 401;
+  public static final int BUILDING_MIN = 501;
+  public static final int BUILDING_MAX = 502;
 
   private final LongMap<Config> configMap = new LongMap<>();
 

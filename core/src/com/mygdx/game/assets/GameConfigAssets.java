@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
 import com.mygdx.game.assets.assetloaders.JsonLoader;
+import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
@@ -33,6 +34,7 @@ public class GameConfigAssets {
           UnitConfig.class,
           SubFieldConfig.class,
           TechnologyConfig.class,
+          BuildingConfig.class,
           MapTypeConfig.class
       );
 
@@ -80,6 +82,7 @@ public class GameConfigAssets {
     loadArrayAsset(GameConfigAssetPaths.UNIT_CONFIG_DIR, UnitConfig.class);
     loadArrayAsset(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, SubFieldConfig.class);
     loadArrayAsset(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, TechnologyConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.BUILDING_CONFIG_DIR, BuildingConfig.class);
     loadArrayAsset(GameConfigAssetPaths.MAP_TYPE_CONFIG_DIR, MapTypeConfig.class);
   }
 

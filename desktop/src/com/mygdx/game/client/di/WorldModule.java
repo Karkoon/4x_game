@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.mygdx.game.client.ecs.system.AttackSystem;
 import com.mygdx.game.client.ecs.system.BlockInputSystem;
+import com.mygdx.game.client.ecs.system.BuildSystem;
 import com.mygdx.game.client.ecs.system.ChooseSystem;
 import com.mygdx.game.client.ecs.system.MovementSystem;
 import com.mygdx.game.client.ecs.system.NavigationSystem;
@@ -31,6 +32,7 @@ public class WorldModule {
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull ChooseSystem chooseSystem,
       @NonNull MovementSystem movementSystem,
+      @NonNull BuildSystem buildSystem,
       @NonNull RenderSystem renderSystem,
       @NonNull SetHighlightSystem setHighlightSystem,
       @NonNull NavigationSystem navigationSystem,
@@ -47,6 +49,7 @@ public class WorldModule {
     configuration.setSystem(blockInputSystem);
     configuration.setSystem(chooseSystem);
     configuration.setSystem(movementSystem);
+    configuration.setSystem(buildSystem);
     configuration.setSystem(renderSystem);
     configuration.setSystem(attackSystem);
     configuration.setSystem(setHighlightSystem);

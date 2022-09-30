@@ -43,7 +43,6 @@ public class UiElementsCreator {
     textField.setPosition(position.x + 200, position.z + 200);
     textField.setHeight(200);
     textField.setWidth(600);
-
     return textField;
   }
 

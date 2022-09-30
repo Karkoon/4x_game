@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
@@ -27,10 +28,12 @@ import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @GameInstanceScope
+@Log
 public class ComponentFactory {
 
   private final GameRoom room;
@@ -39,6 +42,7 @@ public class ComponentFactory {
 
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
@@ -69,6 +73,7 @@ public class ComponentFactory {
     var entity = createEntityId();
     subFieldMapper.create(entity);
     fieldMapper.create(entity);
+    buildingMapper.create(entity);
     coordinatesMapper.create(entity);
     entityConfigIdMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
@@ -112,6 +117,13 @@ public class ComponentFactory {
     entityConfigIdComponent.setId(configId);
   }
 
+  public void createBuildingComponent(int entityId, int parent) {
+    var building = buildingMapper.create(entityId);
+    building.setParent(parent);
+    var subField = subFieldMapper.get(parent);
+    subField.setBuilding(entityId);
+  }
+
   public void createFriendlyOrFoeComponent(
       int entityId,
       Client nullableClient
@@ -146,6 +158,12 @@ public class ComponentFactory {
 
   public void createChangeSubscribersComponent(int entityId) {
     changeSubscribersMapper.create(entityId);
+  }
+
+  public void createChangeSubscribersComponentFast(int entityId, int clientIndex) {
+    var changeSubscribers = changeSubscribersMapper.create(entityId);
+    changeSubscribers.getChangedSubscriptionState().set(clientIndex);
+    changeSubscribers.getClients().flip(clientIndex);
   }
 
   public void createStatsComponent(int entityId, UnitConfig config) {
@@ -192,5 +210,4 @@ public class ComponentFactory {
     var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
     dirtyMapper.create(entityId).getDirtyComponents().set(componentIndex);
   }
-
 }

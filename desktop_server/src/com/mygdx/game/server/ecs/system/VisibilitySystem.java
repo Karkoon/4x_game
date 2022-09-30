@@ -7,6 +7,7 @@ import com.artemis.annotations.AspectDescriptor;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntMap;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 @Log
 public class VisibilitySystem extends IteratingSystem {
 
-  @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class })
+  @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class, Building.class})
   private EntitySubscription allThatCanBePerceived;
   private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;

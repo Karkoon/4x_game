@@ -6,6 +6,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Position;
+import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -25,6 +26,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<Movable> movableMapper;
 
@@ -40,7 +42,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     var toSet = new Vector3(0, 0, 0);
     if (fieldMapper.has(entityId) || movableMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
-    } else if (subFieldMapper.has(entityId)) {
+    } else if (subFieldMapper.has(entityId) || buildingMapper.has(entityId)) {
       toSet = PositionUtil.generateSubWorldPositionForCoords(coordinatesMapper.get(entityId));
     } else if (technologyMapper.has(entityId)) {
       toSet = PositionUtil.generateTechnologyPositionForCoords(coordinatesMapper.get(entityId));

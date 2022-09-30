@@ -37,4 +37,16 @@ public class StageModule {
     log.info("provided GameScreen Stage");
     return stage;
   }
+
+  public static final String FIELD_SCREEN = "field_screen";
+
+  @Provides
+  @Singleton
+  @Named(FIELD_SCREEN)
+  public Stage providesFieldStage() {
+    var stage = new Stage(new ScreenViewport());
+    stage.setDebugAll(true);
+    log.info("provided FieldScreen Stage");
+    return stage;
+  }
 }

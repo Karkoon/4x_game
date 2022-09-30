@@ -2,11 +2,13 @@ package com.mygdx.game.client_core.network.comp_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.client_core.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.SubFieldFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
+import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.SubFieldConfig;
@@ -28,6 +30,7 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler<Ent
   private final UnitFactory unitFactory;
   private final SubFieldFactory subFieldFactory;
   private final TechnologyFactory technologyFactory;
+  private final BuildingFactory buildingFactory;
 
   @Inject
   public EntityConfigHandler(
@@ -35,13 +38,15 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler<Ent
       FieldFactory fieldFactory,
       UnitFactory unitFactory,
       SubFieldFactory subFieldFactory,
-      TechnologyFactory technologyFactory
+      TechnologyFactory technologyFactory,
+      BuildingFactory buildingFactory
   ) {
     this.assets = assets;
     this.fieldFactory = fieldFactory;
     this.unitFactory = unitFactory;
     this.subFieldFactory = subFieldFactory;
     this.technologyFactory = technologyFactory;
+    this.buildingFactory = buildingFactory;
   }
 
   @Override
@@ -66,6 +71,11 @@ public class EntityConfigHandler implements ComponentMessageListener.Handler<Ent
       log.info("technology id " + worldEntity);
       var config = assets.getGameConfigs().get(TechnologyConfig.class, entityConfigId);
       technologyFactory.createEntity(config, worldEntity);
+      return FULLY_HANDLED;
+    } else if (entityConfigId >= GameConfigs.BUILDING_MIN && entityConfigId <= GameConfigs.BUILDING_MAX) {
+      log.info("building id " + worldEntity);
+      var config = assets.getGameConfigs().get(BuildingConfig.class, entityConfigId);
+      buildingFactory.createEntity(config, worldEntity);
       return FULLY_HANDLED;
     }
     return NOT_HANDLED;

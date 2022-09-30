@@ -1,0 +1,8 @@
+{
+  "id": 501,
+  "name": "house",
+  "polishName": "dom",
+  "modelPath": "subbasic.g3db",
+  "textureName": "house.png",
+  "iconName": "icons/house_icon.png"
+}

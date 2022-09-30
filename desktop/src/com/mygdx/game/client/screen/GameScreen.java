@@ -103,6 +103,11 @@ public class GameScreen extends ScreenAdapter {
     renderer.dispose();
   }
 
+  @Override
+  public void hide() {
+    disposeInput();
+  }
+
   private void setUpInput() {
     var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, gameScreenUiInputAdapter, stage, clickInputAdapter);
@@ -110,4 +115,7 @@ public class GameScreen extends ScreenAdapter {
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
+  private void disposeInput() {
+    Gdx.input.setInputProcessor(null);
+  }
 }
