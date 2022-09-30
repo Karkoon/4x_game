@@ -152,10 +152,11 @@ public class ComponentFactory {
     var stats = statsMapper.create(entityId);
     stats.setHp(config.getMaxHp());
     stats.setMaxHp(config.getMaxHp());
-    stats.setSpeed(config.getSpeed());
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
     stats.setAttackPower(config.getAttackPower());
+    stats.setMoveRange(config.getMoveRange());
+    stats.setMaxMoveRange(config.getMoveRange());
   }
 
   public void createOwnerComponent(int entityId, Client owner) {
