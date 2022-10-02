@@ -20,7 +20,7 @@ import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
-import com.mygdx.game.client_core.network.ShowSubfieldService;
+import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.util.CompositeUpdatable;
@@ -101,6 +101,7 @@ public class FieldScreen extends ScreenAdapter {
       }
     });
     inField.setInField(true);
+    inField.setField(fieldParent);
     showSubfieldService.flipSubscriptionState(fieldParent);
     saveCameraPosition(viewport.getCamera());
     positionCamera(viewport.getCamera());

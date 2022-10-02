@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.network.message_senders;
+package com.mygdx.game.client_core.network.service;
 
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;

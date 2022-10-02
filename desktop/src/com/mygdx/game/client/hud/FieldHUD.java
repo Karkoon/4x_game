@@ -8,7 +8,9 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.model.ChosenConfig;
+import com.mygdx.game.client.model.InField;
 import com.mygdx.game.client.util.HUDElementsCreator;
+import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import lombok.NonNull;
@@ -25,6 +27,8 @@ public class FieldHUD implements Disposable {
   private final ChosenConfig chosenConfig;
   private final GameConfigAssets assets;
   private final GameScreenAssets gameAssets;
+  private final CreateUnitService createUnitService;
+  private final InField inField;
 
   @Inject
   public FieldHUD(
@@ -32,13 +36,17 @@ public class FieldHUD implements Disposable {
       @NonNull HUDElementsCreator hudElementsCreator,
       @NonNull ChosenConfig chosenConfig,
       @NonNull GameConfigAssets assets,
-      @NonNull GameScreenAssets gameAssets
+      @NonNull GameScreenAssets gameAssets,
+      @NonNull CreateUnitService createUnitService,
+      @NonNull InField inField
   ) {
     this.stage = stage;
     this.hudElementsCreator = hudElementsCreator;
     this.chosenConfig = chosenConfig;
     this.assets = assets;
     this.gameAssets = gameAssets;
+    this.createUnitService = createUnitService;
+    this.inField = inField;
 
     prepareHudSceleton();
   }
@@ -114,8 +122,9 @@ public class FieldHUD implements Disposable {
     chosenConfig.addChosen(buildingId, BuildingConfig.class);
   }
 
-  private void choosenUnit(long buildingId) {
-    log.info("Choosen unit with id: " + buildingId);
+  private void choosenUnit(long unitId) {
+    log.info("Choosen unit with id: " + unitId);
+    createUnitService.createUnit(unitId, unitId);
   }
 
 

@@ -5,7 +5,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenConfig;
-import com.mygdx.game.client_core.network.message_senders.BuildingService;
+import com.mygdx.game.client_core.network.service.BuildingService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.SubField;
