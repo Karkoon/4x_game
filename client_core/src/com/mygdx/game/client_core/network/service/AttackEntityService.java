@@ -1,6 +1,7 @@
-package com.mygdx.game.client_core.network;
+package com.mygdx.game.client_core.network.service;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import dagger.Lazy;
 import lombok.extern.java.Log;
 

@@ -13,8 +13,8 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
-import com.mygdx.game.client_core.network.GameConnectService;
-import com.mygdx.game.client_core.network.GameStartService;
+import com.mygdx.game.client_core.network.service.GameConnectService;
+import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
@@ -86,8 +86,10 @@ public class GameScreen extends ScreenAdapter {
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
+
     stage.draw();
     worldHUD.draw();
+
     stage.act(delta);
     worldHUD.act(delta);
   }

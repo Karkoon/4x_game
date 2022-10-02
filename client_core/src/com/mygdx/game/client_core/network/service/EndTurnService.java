@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.network;
+package com.mygdx.game.client_core.network.service;
 
 import com.github.czyzby.websocket.WebSocket;
 import lombok.NonNull;

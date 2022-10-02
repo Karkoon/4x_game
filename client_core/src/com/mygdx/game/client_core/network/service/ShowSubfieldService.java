@@ -1,8 +1,7 @@
-package com.mygdx.game.client_core.network.message_senders;
+package com.mygdx.game.client_core.network.service;
 
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
-import com.mygdx.game.core.ecs.component.Coordinates;
 import dagger.Lazy;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -10,13 +9,13 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
-public class MoveEntityService {
+public class ShowSubfieldService {
 
   private final Lazy<WebSocket> webSocket;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
-  public MoveEntityService(
+  public ShowSubfieldService(
       @NonNull Lazy<WebSocket> webSocket,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
@@ -24,9 +23,9 @@ public class MoveEntityService {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
-  public void moveEntity(int selectedUnit, Coordinates coordinates) {
-    log.info("Send from client to server");
-    selectedUnit = networkWorldEntityMapper.getNetworkEntity(selectedUnit);
-    webSocket.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
+  public void flipSubscriptionState(int fieldId) {
+    log.info("Show subfields from client to server");
+    fieldId = networkWorldEntityMapper.getNetworkEntity(fieldId);
+    webSocket.get().send("field:" + fieldId);
   }
 }

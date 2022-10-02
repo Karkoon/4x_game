@@ -6,7 +6,7 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.di.bot.BotClient;
 import com.mygdx.game.client_core.di.Names;
 import com.mygdx.game.client_core.model.PlayerInfo;
-import com.mygdx.game.client_core.network.GameConnectService;
+import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Scheduler;

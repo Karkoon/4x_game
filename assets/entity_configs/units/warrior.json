@@ -1,9 +1,10 @@
 {
   "id": 101,
-  "name": "unitTest",
-  "polishName": "jednostka",
+  "name": "warrior",
+  "polishName": "wojownik",
   "modelPath": "basic.g3db",
-  "textureName": "unit.png",
+  "textureName": "warrior.png",
+  "iconName": "icons/warrior_icon.png",
   "maxHp": 100,
   "attackPower": 125,
   "defense": 25,

@@ -8,6 +8,7 @@ import com.mygdx.game.server.network.gameinstance.handlers.BuildHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.EndTurnHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.MoveHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.SubfieldSubscriptionHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.UnitHandler;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ public class GameInstanceServer {
   private final EndTurnHandler endTurnHandler;
   private final BuildHandler buildHandler;
   private final AttackHandler attackHandler;
+  private final UnitHandler unitHandler;
   private final SubfieldSubscriptionHandler subfieldSubscriptionHandler;
   private final GameInstance gameInstance;
 
@@ -28,6 +30,7 @@ public class GameInstanceServer {
       EndTurnHandler endTurnHandler,
       AttackHandler attackHandler,
       BuildHandler buildHandler,
+      UnitHandler unitHandler,
       SubfieldSubscriptionHandler subfieldSubscriptionHandler,
       GameInstance gameInstance
   ) {
@@ -35,6 +38,7 @@ public class GameInstanceServer {
     this.endTurnHandler = endTurnHandler;
     this.buildHandler = buildHandler;
     this.attackHandler = attackHandler;
+    this.unitHandler = unitHandler;
     this.subfieldSubscriptionHandler = subfieldSubscriptionHandler;
     this.gameInstance = gameInstance;
   }
@@ -50,6 +54,7 @@ public class GameInstanceServer {
       case "build" -> buildHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle();
       case "attack" -> attackHandler.handle(commands, client);
+      case "create_unit" -> unitHandler.handle(commands, client);
       default -> throw new RuntimeException("wtf");
     }
   }
