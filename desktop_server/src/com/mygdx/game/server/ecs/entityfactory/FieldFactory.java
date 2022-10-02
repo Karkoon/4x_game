@@ -37,9 +37,11 @@ public class FieldFactory {
     componentFactory.createFieldComponent(entityId, subfields);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
-    componentFactory.createSightlineSubscribersComponent(entityId, 1);
+    componentFactory.createSightlineSubscribersComponent(entityId, 0);
+    var componentsToSend = new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class};
+    componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
-        new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class},
+        componentsToSend,
         new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class}
     );
     return entityId;
