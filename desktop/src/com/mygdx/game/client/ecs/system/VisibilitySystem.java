@@ -59,7 +59,7 @@ public class VisibilitySystem extends IteratingSystem {
       var perceivableEntity = allThatCanBePerceived.getEntities().get(i);
       var perceivableCoords = coordinatesMapper.get(perceivableEntity);
       visibleMapper.set(perceivableEntity, false);
-      if (DistanceUtil.distance(coordinates, perceivableCoords) <= sightlineRadius) {
+      if (true) {
         visible.add(perceivableEntity);
       }
     }

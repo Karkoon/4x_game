@@ -1,6 +1,7 @@
 package com.mygdx.game.client.di;
 
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
+import com.mygdx.game.client.network.OwnerColorHandler;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.comp_handlers.BuildingHandler;
@@ -43,6 +44,7 @@ public class ComponentMessageListenerModule {
       BuildingHandler buildingHandler,
       OwnerHandler ownerHandler,
       ResearchHandler researchHandler,
+      OwnerColorHandler ownerColorHandler,
       StatsHandler statsHandler,
       CanAttackHandler canAttackHandler
   ) {
@@ -55,6 +57,7 @@ public class ComponentMessageListenerModule {
     listener.registerHandler(SubField.class, subFieldHandler);
     listener.registerHandler(Building.class, buildingHandler);
     listener.registerHandler(Owner.class, ownerHandler);
+    listener.registerHandler(Owner.class, ownerColorHandler);
     listener.registerHandler(Research.class, researchHandler);
     listener.registerHandler(Stats.class, statsHandler);
     listener.registerHandler(CanAttack.class, canAttackHandler);
