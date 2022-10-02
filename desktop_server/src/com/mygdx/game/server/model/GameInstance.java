@@ -7,6 +7,7 @@ import com.mygdx.game.server.initialize.MaterialInitializer;
 import com.mygdx.game.server.initialize.StartUnitInitializer;
 import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.network.gameinstance.GameInstanceServer;
+import com.mygdx.game.server.network.gameinstance.services.RoundEndService;
 import dagger.Lazy;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ public class GameInstance {
   private final World world;
   private final GameRoom room;
   private final Lazy<GameInstanceServer> gameInstanceServer;
+  private final RoundEndService roundEndService;
   private Queue<Client> playerOrder;
   private Client activePlayer;
 
@@ -34,7 +36,8 @@ public class GameInstance {
       Lazy<StartUnitInitializer> unitInitializer,
       World world,
       GameRoom room,
-      Lazy<GameInstanceServer> gameInstanceServer
+      Lazy<GameInstanceServer> gameInstanceServer,
+      RoundEndService roundEndService
   ) {
     this.technologyInitializer = technologyInitializer;
     this.materialInitializer = materialInitializer;
@@ -43,6 +46,7 @@ public class GameInstance {
     this.world = world;
     this.room = room;
     this.gameInstanceServer = gameInstanceServer;
+    this.roundEndService = roundEndService;
   }
 
   public void startGame(int width, int height, long mapType) {
@@ -50,14 +54,18 @@ public class GameInstance {
     technologyInitializer.get().initializeTechnologies();
     materialInitializer.get().initializeMaterials();
     unitInitializer.get().initializeStartingUnits();
-    playerOrder = new ArrayDeque<>(room.getClients());
+    playerOrder = new ArrayDeque<>();
+    playerOrder.addAll(room.getClients());
     changeToNextPlayer();
     world.process();
   }
 
   public Client changeToNextPlayer() {
+    if (playerOrder.isEmpty()) {
+      roundEndService.makeEndRoundSteps();
+      playerOrder.addAll(room.getClients());
+    }
     activePlayer = playerOrder.remove();
-    playerOrder.add(activePlayer);
     return activePlayer;
   }
 
@@ -72,5 +80,4 @@ public class GameInstance {
   public GameInstanceServer getServer() {
     return gameInstanceServer.get();
   }
-
 }

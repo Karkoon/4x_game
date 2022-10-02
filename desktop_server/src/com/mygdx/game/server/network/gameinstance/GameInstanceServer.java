@@ -48,7 +48,7 @@ public class GameInstanceServer {
       case "move" -> moveHandler.handle(commands, client);
       case "field" -> subfieldSubscriptionHandler.handle(commands, client);
       case "build" -> buildHandler.handle(commands, client);
-      case "end_turn" -> endTurnHandler.handle(client);
+      case "end_turn" -> endTurnHandler.handle();
       case "attack" -> attackHandler.handle(commands, client);
       default -> throw new RuntimeException("wtf");
     }
