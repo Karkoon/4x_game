@@ -124,7 +124,7 @@ public class FieldHUD implements Disposable {
 
   private void choosenUnit(long unitId) {
     log.info("Choosen unit with id: " + unitId);
-    createUnitService.createUnit(unitId, unitId);
+    createUnitService.createUnit(unitId, inField.getField());
   }
 
 

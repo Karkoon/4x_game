@@ -17,5 +17,5 @@ public class InField {
   }
 
   private boolean inField = false;
-  private int field = 0;
+  private int field = -1;
 }

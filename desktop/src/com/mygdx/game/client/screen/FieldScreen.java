@@ -134,6 +134,7 @@ public class FieldScreen extends ScreenAdapter {
     showSubfieldService.flipSubscriptionState(fieldParent);
     fieldParent = -1;
     inField.setInField(false);
+    inField.setField(-1);
     disposeInput();
   }
 

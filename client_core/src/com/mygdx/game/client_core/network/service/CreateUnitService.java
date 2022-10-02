@@ -12,20 +12,21 @@ import javax.inject.Inject;
 public class CreateUnitService {
 
   private final Lazy<WebSocket> socket;
+  private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public CreateUnitService(
-      @NonNull Lazy<WebSocket> socket
+      @NonNull Lazy<WebSocket> socket,
+      @NonNull NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
     this.socket = socket;
+    this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
-  public void endTurn() {
+  public void createUnit(long unitId, int fieldId) {
+    int fieldWorldId = networkWorldEntityMapper.getNetworkEntity(fieldId);
 
-  }
-
-  public void createUnit(long unitId, long fieldId) {
-    log.info("create unit for unit " + unitId + " for field " + fieldId + " request send");
-    socket.get().send("create_unit" + ":" + unitId + ":" + fieldId);
+    log.info("create unit for unit " + unitId + " for field " + fieldWorldId + " request send");
+    socket.get().send("create_unit" + ":" + unitId + ":" + fieldWorldId);
   }
 }
