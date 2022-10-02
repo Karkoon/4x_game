@@ -130,6 +130,10 @@ public class ComponentSyncSystem extends IteratingSystem {
           continue; // skip if component wasn't changed and the client does not need all the data
         }
         var mapper = world.getMapper(mapperIndex);
+        if (!mapper.has(entityId)) {
+          log.info("skipped because entity does not have that component " + mapper.type.getType().getName());
+          continue;
+        }
         var componentToSend = mapper.get(entityId);
         log.info("sending name:" +  nameComponentMapper.get(entityId) + " to " + client.getPlayerToken());
         stateSyncer.sendComponentTo(componentToSend, entityId, client);

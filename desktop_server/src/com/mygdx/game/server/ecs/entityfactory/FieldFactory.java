@@ -4,6 +4,7 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
 import lombok.NonNull;
@@ -36,9 +37,10 @@ public class FieldFactory {
     componentFactory.createFieldComponent(entityId, subfields);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
+    componentFactory.createSightlineSubscribersComponent(entityId, 1);
     componentFactory.createSharedComponents(entityId,
-        new Class[]{Coordinates.class, EntityConfigId.class, Field.class},
-        new Class[]{Coordinates.class, EntityConfigId.class, Field.class}
+        new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class},
+        new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class}
     );
     return entityId;
   }

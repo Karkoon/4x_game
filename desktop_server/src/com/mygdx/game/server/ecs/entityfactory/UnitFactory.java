@@ -32,6 +32,7 @@ public class UnitFactory {
       @NonNull Client client
   ) {
     int entityId = componentFactory.createEntityId();
+    componentFactory.createUnitComponent(entityId);
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createNameComponent(entityId, "unit " + config.getName() + " " + entityId);
