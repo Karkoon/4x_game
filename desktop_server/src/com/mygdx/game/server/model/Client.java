@@ -13,4 +13,6 @@ public class Client {
   private String playerUsername;
   @Exclude
   private String playerToken;
+  @Exclude
+  private int turnNumber;
 }

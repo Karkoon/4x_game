@@ -25,6 +25,7 @@ public class GameInstance {
   private final Lazy<GameInstanceServer> gameInstanceServer;
   private Queue<Client> playerOrder;
   private Client activePlayer;
+  private int currentTurn;
 
   @Inject
   public GameInstance(
@@ -43,6 +44,7 @@ public class GameInstance {
     this.world = world;
     this.room = room;
     this.gameInstanceServer = gameInstanceServer;
+    this.currentTurn = 1;
   }
 
   public void startGame(int width, int height, long mapType) {
@@ -50,13 +52,18 @@ public class GameInstance {
     technologyInitializer.get().initializeTechnologies();
     materialInitializer.get().initializeMaterials();
     unitInitializer.get().initializeStartingUnits();
-    playerOrder = new ArrayDeque<>(room.getClients());
+    playerOrder = new ArrayDeque<>();
+    for (Client client : room.getClients()) {
+      client.setTurnNumber(0);
+      playerOrder.add(client);
+    }
     changeToNextPlayer();
     world.process();
   }
 
   public Client changeToNextPlayer() {
     activePlayer = playerOrder.remove();
+    activePlayer.setTurnNumber(currentTurn);
     playerOrder.add(activePlayer);
     return activePlayer;
   }
@@ -71,6 +78,14 @@ public class GameInstance {
 
   public GameInstanceServer getServer() {
     return gameInstanceServer.get();
+  }
+
+  public boolean isLastPlayer() {
+    if (activePlayer.getTurnNumber() == currentTurn) {
+      currentTurn += 1;
+      return true;
+    }
+    return false;
   }
 
 }
