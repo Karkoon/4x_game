@@ -1,6 +1,7 @@
 package com.mygdx.game.client.util;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -61,7 +62,7 @@ public class HUDElementsCreator {
 
   public Button createActionButton(String text, Runnable runnable) {
     var button = new TextButton(text, assets.getSkin(MenuScreenAssetPaths.SKIN));
-    button.getLabel().setFontScale(1.0f);
+    button.getLabel().setFontScale(0.75f);
     button.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -108,13 +109,6 @@ public class HUDElementsCreator {
     verticalGroup.setWidth(width);
     verticalGroup.setHeight(height);
 
-    verticalGroup.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        verticalGroup.remove();
-      }
-    });
-
     return verticalGroup;
   }
 
@@ -141,5 +135,14 @@ public class HUDElementsCreator {
     image.setPosition(x, y);
 
     return image;
+  }
+
+  public void removeAfterClick(Actor actor) {
+    actor.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        actor.remove();
+      }
+    });
   }
 }

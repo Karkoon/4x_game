@@ -18,6 +18,8 @@ public class UnitConfig implements Config, ModelConfig {
   private String modelPath;
   @NonNull
   private String textureName;
+  @NonNull
+  private String iconName;
   private int maxHp;
   private int attackPower;
   private int defense;

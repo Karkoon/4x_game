@@ -13,7 +13,7 @@ public class GameConfigs {
   public static final int FIELD_MIN = 1;
   public static final int FIELD_MAX = 5;
   public static final int UNIT_MIN = 101;
-  public static final int UNIT_MAX = 101;
+  public static final int UNIT_MAX = 102;
   public static final int SUBFIELD_MIN = 201;
   public static final int SUBFIELD_MAX = 203;
   public static final int TECHNOLOGY_MIN = 301;
