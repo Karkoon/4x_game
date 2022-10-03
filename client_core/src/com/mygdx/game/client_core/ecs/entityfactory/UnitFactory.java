@@ -29,11 +29,22 @@ public class UnitFactory {
     world.inject(this);
   }
 
-  public void createEntity(@NonNull UnitConfig config, int entity) {
-    setUpNameComponent(config, entity);
-    positionMapper.create(entity).getValue().set(0, 10, 0);
-    setupStatsComponent(config, entity);
-    movableMapper.set(entity, true);
+  public void createEntity(@NonNull UnitConfig config, int entityId) {
+    setUpNameComponent(config, entityId);
+    setUpPositionComponent(entityId);
+    setupStatsComponent(config, entityId);
+    movableMapper.set(entityId, true);
+  }
+
+  private void setUpNameComponent(@NonNull UnitConfig config, int entityId) {
+    var name = nameMapper.create(entityId);
+    name.setName(config.getName());
+    name.setPolishName(config.getPolishName());
+  }
+
+  private void setUpPositionComponent(int entityId) {
+    Position position = positionMapper.create(entityId);
+    position.getValue().set(0, 10, 0);
   }
 
   private void setupStatsComponent(@NonNull UnitConfig config, int entityId) {
@@ -45,11 +56,5 @@ public class UnitFactory {
     stats.setAttackPower(config.getAttackPower());
     stats.setMoveRange(config.getMoveRange());
     stats.setMaxMoveRange(config.getMoveRange());
-  }
-
-  private void setUpNameComponent(@NonNull UnitConfig config, int entityId) {
-    var name = nameMapper.create(entityId);
-    name.setName(config.getName());
-    name.setPolishName(config.getPolishName());
   }
 }

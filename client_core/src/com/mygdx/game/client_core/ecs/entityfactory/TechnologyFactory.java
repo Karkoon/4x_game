@@ -27,9 +27,9 @@ public class TechnologyFactory {
     world.inject(this);
   }
 
-  public @NonNull void createEntity(TechnologyConfig config, int entity) {
+  public void createEntity(@NonNull TechnologyConfig config, int entity) {
     setUpName(config, entity);
-    setUpTechnology(config, entity);
+    setUpTechnology(entity);
     positionMapper.create(entity);
   }
 
@@ -39,7 +39,7 @@ public class TechnologyFactory {
     name.setPolishName(config.getPolishName());
   }
 
-  private void setUpTechnology(TechnologyConfig config, int entity) {
+  private void setUpTechnology(int entity) {
     technologyMapper.create(entity);
   }
 
