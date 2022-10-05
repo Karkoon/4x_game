@@ -6,19 +6,22 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
+import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialComponent;
+import com.mygdx.game.core.ecs.component.MaterialIncomeComponent;
+import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
+import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -32,6 +35,8 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Random;
 
 @GameInstanceScope
 @Log
@@ -40,7 +45,8 @@ public class ComponentFactory {
   private final GameRoom room;
   private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
-
+  private final Random random;
+  
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Unit> unitMapper;
@@ -57,6 +63,10 @@ public class ComponentFactory {
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<PlayerMaterialComponent> playerMaterialMapper;
+  private ComponentMapper<MaterialIncomeComponent> materialIncomeMapper;
+  private ComponentMapper<DirtyComponents> dirtyMapper;
+  private ComponentMapper<CanAttack> canAttackMapper;
 
   @Inject
   public ComponentFactory(
@@ -67,6 +77,7 @@ public class ComponentFactory {
     this.room = room;
     this.world = world;
     this.world.inject(this);
+    this.random = new Random();
     this.componentIndicesCache = componentIndicesCache;
     createAndDeleteEntityWithAllComponents();
   }
@@ -150,8 +161,8 @@ public class ComponentFactory {
   }
 
   public void createFriendlyOrFoeComponent(
-          int entityId,
-          Client nullableClient
+      int entityId,
+      Client nullableClient
   ) {
     var friendlyOrFoe = friendlyOrFoeMapper.create(entityId);
     var friendlies = new Bits(room.getNumberOfClients());
@@ -207,12 +218,41 @@ public class ComponentFactory {
     subField.setParent(fieldId);
   }
 
-  public void createMaterialComponent(int entityId, MaterialBase materialBase) {
-    var materialComp = materialMapper.create(entityId);
+  public void createPlayerMaterialComponent(int entityId, MaterialBase materialBase) {
+    var materialComp = playerMaterialMapper.create(entityId);
     materialComp.setMaterial(materialBase);
     materialComp.setValue(0);
   }
 
+  public void createMaterialIncomeComponent(SubFieldConfig config, int entityId) {
+    var materialComp = materialIncomeMapper.create(entityId);
+    var materialUnits = config.getMaterialProductions().get(
+      random.nextInt(config.getMaterialProductions().size())
+    );
+    materialComp.setMaterialIncomes(materialUnits);
+  }
+
+  public void createCanAttackComponent(int entityId) {
+    canAttackMapper.create(entityId).setCanAttack(true);
+  }
+
+  /**
+   * Use when creating a component that needs to be sent at the beginning to the owner and doesn't change it's state.
+   * For instance the technology entity components don't change at this moment.
+   * It's a workaround to the problem of currently not having a way to
+   * @param entityId
+   * @param dirtyComps
+   */
+  public void createDirtyComponent(int entityId, Class... dirtyComps) {
+    for (int i = 0; i < dirtyComps.length; i++) {
+      var toDirty = dirtyComps[i];
+      setDirty(entityId, toDirty);
+    }
+  }
+
+  private void setDirty(int entityId, Class component) {
+    var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
+    dirtyMapper.create(entityId).getDirtyComponents().set(componentIndex);
   public void createUnitComponent(int entityId) {
     unitMapper.create(entityId);
   }

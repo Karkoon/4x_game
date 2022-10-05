@@ -3,5 +3,15 @@
   "name": "oasis",
   "polishName": "oaza",
   "modelPath": "basic.g3db",
-  "textureName": "subfields/oasis.png"
+  "textureName": "subfields/oasis.png",
+  "materialProductions":
+    [
+      [
+        {"base":"FOOD","amount":2},
+      ],
+      [
+        {"base":"GOLD","amount":1},
+        {"base":"PRODUCTION","amount":1},
+      ]
+    ]
 }

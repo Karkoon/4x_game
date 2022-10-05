@@ -3,5 +3,16 @@
   "name": "dune",
   "polishName": "wydmy",
   "modelPath": "basic.g3db",
-  "textureName": "subfields/dune.png"
+  "textureName": "subfields/dune.png",
+  "materialProductions":
+    [
+      [
+        {"base":"GOLD","amount":2},
+        {"base":"FOOD","amount":1},
+      ],
+      [
+        {"base":"GOLD","amount":2},
+        {"base":"PRODUCTION","amount":1},
+      ]
+    ]
 }

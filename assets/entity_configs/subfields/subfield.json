@@ -1,7 +1,18 @@
 {
-  "id": 201,
-  "name": "subfield",
-  "polishName": "podobszar",
-  "modelPath": "basic.g3db",
-  "textureName": "subfields/subbasic.png"
+  "id":201,
+  "name":"subfield",
+  "polishName":"podobszar",
+  "modelPath":"basic.g3db",
+  "textureName":"subfields/subbasic.png",
+  "materialProductions":
+    [
+      [
+        {"base":"GOLD","amount":2},
+        {"base":"FOOD","amount":1},
+      ],
+      [
+        {"base":"GOLD","amount":2},
+        {"base":"PRODUCTION","amount":1},
+      ]
+    ]
 }

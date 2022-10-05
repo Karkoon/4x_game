@@ -16,6 +16,8 @@ import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
+import com.mygdx.game.client.util.HUDElementsCreator;
+import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
 import com.mygdx.game.core.model.MaterialBase;
 import lombok.extern.java.Log;
 
@@ -29,18 +31,21 @@ public class WorldHUD implements Disposable {
   private final EndTurnService endTurnService;
   private final UiElementsCreator uiElementsCreator;
   private final Stage stage;
+  private final HUDElementsCreator hudElementsCreator;
+  private ComponentMapper<PlayerMaterialComponent> playerMaterialMapper;
 
   private Button endTurnButton;
   private HorizontalGroup materialGroup;
 
-  @AspectDescriptor(all = {MaterialComponent.class})
-
+  @AspectDescriptor(all = {PlayerMaterialComponent.class})
   private EntitySubscription subscription;
   private ComponentMapper<MaterialComponent> materialMapper;
 
   @Inject
   public WorldHUD(
       World world,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      HUDElementsCreator hudElementsCreator
       GameScreenAssets gameScreenAssets,
       EndTurnService endTurnService,
       UiElementsCreator uiElementsCreator,
@@ -101,7 +106,7 @@ public class WorldHUD implements Disposable {
   private int findConnectedValue(MaterialBase material) {
     for (int i = 0; i < subscription.getEntities().size(); i++) {
       int materialEntityId = subscription.getEntities().get(i);
-      var materialComponent = materialMapper.get(materialEntityId);
+      var materialComponent = playerMaterialMapper.get(materialEntityId);
       if (materialComponent.getMaterial() == material)
         return materialComponent.getValue();
     }
