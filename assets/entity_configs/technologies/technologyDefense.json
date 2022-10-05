@@ -2,7 +2,7 @@
   "id": 302,
   "name": "defense technology",
   "polishName": "technologia obrony",
-  "textureName": "defense.png",
+  "textureName": "technologies/defense.png",
   "x": 1,
   "y": 1
 }

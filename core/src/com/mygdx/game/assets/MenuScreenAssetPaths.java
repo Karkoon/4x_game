@@ -3,7 +3,7 @@ package com.mygdx.game.assets;
 public final class MenuScreenAssetPaths {
 
   public static final String ASSETS_PATH = "./";
-  public static final String TEXTURE_DIR = ASSETS_PATH + "textures/";
+  public static final String TEXTURE_DIR = ASSETS_PATH + "textures/menu/";
   public static final String PLANET = TEXTURE_DIR + "planet.png";
   public static final String NEBULA = TEXTURE_DIR + "noise.png";
   public static final String STARS = TEXTURE_DIR + "stars.png";

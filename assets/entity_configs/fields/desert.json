@@ -3,6 +3,6 @@
   "name": "desert",
   "polishName": "pustynia",
   "modelPath": "basic.g3db",
-  "textureName": "desert.png",
+  "textureName": "fields/desert.png",
   "scoreValue": 1
 }
