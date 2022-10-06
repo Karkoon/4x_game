@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class MaterialIncomeComponent extends PooledComponent {
+public class MaterialIncome extends PooledComponent {
 
   private List<MaterialUnit> materialIncomes = new ArrayList<>();
 

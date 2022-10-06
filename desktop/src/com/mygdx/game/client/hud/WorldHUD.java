@@ -17,7 +17,7 @@ import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.client.util.HUDElementsCreator;
-import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.model.MaterialBase;
 import lombok.extern.java.Log;
 
@@ -32,8 +32,9 @@ public class WorldHUD implements Disposable {
   private final UiElementsCreator uiElementsCreator;
   private final Stage stage;
   private final HUDElementsCreator hudElementsCreator;
-  private ComponentMapper<PlayerMaterialComponent> playerMaterialMapper;
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
 
+  @AspectDescriptor(all = {PlayerMaterial.class})
   private Button endTurnButton;
   private HorizontalGroup materialGroup;
 

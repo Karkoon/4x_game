@@ -13,15 +13,14 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialIncomeComponent;
-import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
+import com.mygdx.game.core.ecs.component.MaterialIncome;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
-import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -35,7 +34,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Random;
 
 @GameInstanceScope
@@ -46,7 +44,7 @@ public class ComponentFactory {
   private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
   private final Random random;
-  
+
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Unit> unitMapper;
@@ -65,6 +63,8 @@ public class ComponentFactory {
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<PlayerMaterialComponent> playerMaterialMapper;
   private ComponentMapper<MaterialIncomeComponent> materialIncomeMapper;
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
 

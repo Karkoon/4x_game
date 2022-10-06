@@ -19,7 +19,7 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Research;
 import com.mygdx.game.core.ecs.component.Stats;
@@ -51,7 +51,7 @@ public class ComponentMessageListenerModule {
     var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
-    listener.registerHandler(PlayerMaterialComponent.class, materialHandler);
+    listener.registerHandler(PlayerMaterial.class, materialHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
     listener.registerHandler(Field.class, fieldHandler);
     listener.registerHandler(SubField.class, subFieldHandler);

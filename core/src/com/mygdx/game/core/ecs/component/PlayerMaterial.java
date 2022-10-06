@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PlayerMaterialComponent extends PooledComponent {
+public class PlayerMaterial extends PooledComponent {
 
   private MaterialBase material = null;
   private int value = 0;
