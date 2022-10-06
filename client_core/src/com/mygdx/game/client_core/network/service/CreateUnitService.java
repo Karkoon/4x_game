@@ -3,7 +3,6 @@ package com.mygdx.game.client_core.network.service;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import dagger.Lazy;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -16,8 +15,8 @@ public class CreateUnitService {
 
   @Inject
   public CreateUnitService(
-      @NonNull Lazy<WebSocket> socket,
-      @NonNull NetworkWorldEntityMapper networkWorldEntityMapper
+      Lazy<WebSocket> socket,
+      NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
     this.socket = socket;
     this.networkWorldEntityMapper = networkWorldEntityMapper;

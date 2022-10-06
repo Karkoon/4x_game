@@ -10,21 +10,21 @@ import javax.inject.Inject;
 @Log
 public class AttackEntityService {
 
-  private final Lazy<WebSocket> webSocket;
+  private final Lazy<WebSocket> socket;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public AttackEntityService(
-      Lazy<WebSocket> webSocket,
+      Lazy<WebSocket> socket,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.webSocket = webSocket;
+    this.socket = socket;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public void attack(int attackerEntity, int attackedEntity) {
     var networkAttacker = networkWorldEntityMapper.getNetworkEntity(attackerEntity);
     var networkAttacked = networkWorldEntityMapper.getNetworkEntity(attackedEntity);
-    webSocket.get().send("attack:" + networkAttacker + ":" + networkAttacked);
+    socket.get().send("attack:" + networkAttacker + ":" + networkAttacked);
   }
 }

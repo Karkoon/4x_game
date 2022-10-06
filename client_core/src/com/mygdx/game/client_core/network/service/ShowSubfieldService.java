@@ -3,7 +3,6 @@ package com.mygdx.game.client_core.network.service;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import dagger.Lazy;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -11,21 +10,21 @@ import javax.inject.Inject;
 @Log
 public class ShowSubfieldService {
 
-  private final Lazy<WebSocket> webSocket;
+  private final Lazy<WebSocket> socket;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public ShowSubfieldService(
-      @NonNull Lazy<WebSocket> webSocket,
+      Lazy<WebSocket> socket,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.webSocket = webSocket;
+    this.socket = socket;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public void flipSubscriptionState(int fieldId) {
     log.info("Show subfields from client to server");
     fieldId = networkWorldEntityMapper.getNetworkEntity(fieldId);
-    webSocket.get().send("field:" + fieldId);
+    socket.get().send("field:" + fieldId);
   }
 }

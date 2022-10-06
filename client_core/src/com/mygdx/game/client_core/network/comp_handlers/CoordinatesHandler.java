@@ -13,13 +13,14 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
 public class CoordinatesHandler implements ComponentMessageListener.Handler<Coordinates> {
-  private final ComponentMapper<Coordinates> coordinatesMapper;
+
+  private ComponentMapper<Coordinates> coordinatesMapper;
 
   @Inject
   public CoordinatesHandler(
       World world
   ) {
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
+    world.inject(this);
   }
 
   @Override

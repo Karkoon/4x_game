@@ -10,8 +10,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class Technologies {
 
   @AspectDescriptor(all = {Technology.class})

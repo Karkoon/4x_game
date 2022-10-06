@@ -1,11 +1,9 @@
 package com.mygdx.game.client_core.network.comp_handlers;
 
-import com.artemis.Component;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
-import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import lombok.extern.java.Log;
 
@@ -16,13 +14,13 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @Log
 public class MaterialHandler implements ComponentMessageListener.Handler<MaterialComponent>  {
 
-  private final ComponentMapper<MaterialComponent> materialMapper;
+  private ComponentMapper<MaterialComponent> materialMapper;
 
   @Inject
   public MaterialHandler(
       World world
   ) {
-    this.materialMapper = world.getMapper(MaterialComponent.class);
+    world.inject(this);
   }
 
   @Override
