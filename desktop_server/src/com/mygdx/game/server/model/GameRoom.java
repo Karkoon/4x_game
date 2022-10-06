@@ -5,6 +5,7 @@ import lombok.NonNull;
 import java.util.List;
 
 public interface GameRoom {
+
   List<Client> getClients();
 
   void addClient(@NonNull Client client);

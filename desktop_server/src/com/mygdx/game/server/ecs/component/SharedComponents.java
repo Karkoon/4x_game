@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class SharedComponents extends Component {
-  private Bits friendlies = new Bits(); // categories helping to distinguish the components to send
+
   private Bits foes = new Bits();
+  private Bits friendlies = new Bits(); // categories helping to distinguish the components to send
 }

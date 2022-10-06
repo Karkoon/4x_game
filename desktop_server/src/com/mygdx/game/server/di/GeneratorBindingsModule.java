@@ -11,6 +11,7 @@ import dagger.multibindings.IntoSet;
 
 @Module
 public interface GeneratorBindingsModule {
+
   @Binds
   @IntoSet
   @GameInstanceScope

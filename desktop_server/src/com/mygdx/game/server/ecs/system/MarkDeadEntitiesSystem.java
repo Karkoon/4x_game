@@ -12,8 +12,8 @@ import javax.inject.Inject;
 @All({Stats.class, ChangeSubscribers.class})
 public class MarkDeadEntitiesSystem extends IteratingSystem {
 
-  private ComponentMapper<Stats> statsComponentMapper;
   private ComponentMapper<Dead> deadComponentMapper;
+  private ComponentMapper<Stats> statsComponentMapper;
 
   @Inject
   public MarkDeadEntitiesSystem() {

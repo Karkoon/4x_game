@@ -7,7 +7,6 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.TechnologyFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -20,9 +19,9 @@ public class TechnologyInitializer {
 
   @Inject
   public TechnologyInitializer(
-      @NonNull TechnologyFactory technologyFactory,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameRoom gameRoom
+      TechnologyFactory technologyFactory,
+      GameConfigAssets assets,
+      GameRoom gameRoom
   ) {
     this.technologyFactory = technologyFactory;
     this.assets = assets;
@@ -31,8 +30,7 @@ public class TechnologyInitializer {
 
   public void initializeTechnologies() {
     var clients = gameRoom.getClients();
-    for (int i = 0; i < clients.size(); i++) {
-      var client = clients.get(i);
+    for (Client client : clients) {
       setupTechnologiesForClient(client);
     }
   }

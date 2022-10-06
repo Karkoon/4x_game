@@ -6,7 +6,6 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.server.model.GameRoom;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -19,9 +18,9 @@ public class StartUnitInitializer {
 
   @Inject
   public StartUnitInitializer(
-      @NonNull UnitFactory unitFactory,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameRoom gameRoom
+      UnitFactory unitFactory,
+      GameConfigAssets assets,
+      GameRoom gameRoom
   ) {
     this.unitFactory = unitFactory;
     this.assets = assets;

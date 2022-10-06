@@ -21,6 +21,7 @@ public class GameInstance {
   private final Lazy<MaterialInitializer> materialInitializer;
   private final Lazy<MapInitializer> mapInitializer;
   private final Lazy<StartUnitInitializer> unitInitializer;
+
   private final World world;
   private final GameRoom room;
   private final Lazy<GameInstanceServer> gameInstanceServer;

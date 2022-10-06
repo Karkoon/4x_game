@@ -15,9 +15,10 @@ import lombok.extern.java.Log;
 
 import java.util.logging.Level;
 
-@Module
 @Log
+@Module
 public class WorldModule {
+
   @Provides
   @GameInstanceScope
   public @NonNull WorldConfiguration providesWorldConfiguration(

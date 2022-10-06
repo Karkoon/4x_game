@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode.Exclude;
 
 @Data
 public class Client {
+
   @Exclude
   private GameRoom gameRoom;
   @Exclude

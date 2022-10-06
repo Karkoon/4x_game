@@ -20,8 +20,8 @@ public class FieldFactory {
 
   @Inject
   public FieldFactory(
-      @NonNull SubfieldMapInitializer subMapInitializer,
-      @NonNull ComponentFactory componentFactory
+      SubfieldMapInitializer subMapInitializer,
+      ComponentFactory componentFactory
   ) {
     this.subMapInitializer = subMapInitializer;
     this.componentFactory = componentFactory;

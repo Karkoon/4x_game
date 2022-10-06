@@ -10,6 +10,7 @@ import java.util.Set;
 
 @GameInstanceScope
 public class SubfieldMapGeneratorsContainer {
+
   private final LongMap<SubfieldMapGenerator> mapTypes = new LongMap<>();
 
   @Inject

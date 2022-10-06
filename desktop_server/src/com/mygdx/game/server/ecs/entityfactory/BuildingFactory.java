@@ -17,14 +17,16 @@ import javax.inject.Inject;
 @Log
 public class BuildingFactory {
 
-  private final ComponentFactory componentFactory;
-  private ComponentMapper<SubField> subFieldComponentMapper;
   private World world;
+  private final ComponentFactory componentFactory;
+
+  private ComponentMapper<SubField> subFieldComponentMapper;
+
 
   @Inject
   public BuildingFactory(
-      @NonNull World world,
-      @NonNull ComponentFactory componentFactory
+      World world,
+      ComponentFactory componentFactory
   ) {
     this.componentFactory = componentFactory;
     this.world = world;
@@ -32,9 +34,9 @@ public class BuildingFactory {
   }
 
   public void createEntity(
-          @NonNull BuildingConfig config,
-          @NonNull Coordinates coordinates,
-          int parentSubfield, int clientIdex
+      @NonNull BuildingConfig config,
+      @NonNull Coordinates coordinates,
+      int parentSubfield, int clientIdex
   ) {
     if (subFieldComponentMapper.get(parentSubfield).getBuilding() != -0xC0FEE) {
       log.info("THERE IS BUILDING WITH PARENT: " + parentSubfield);

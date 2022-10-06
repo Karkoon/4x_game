@@ -18,8 +18,9 @@ public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
 
   @Inject
   protected BasicSubfieldMapGenerator(
-      @NonNull SubFieldFactory subFieldFactory,
-      @NonNull GameConfigAssets assets) {
+      SubFieldFactory subFieldFactory,
+      GameConfigAssets assets
+  ) {
     super(0);
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;

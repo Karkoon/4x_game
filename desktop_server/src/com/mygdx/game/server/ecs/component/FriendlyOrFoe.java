@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class FriendlyOrFoe extends Component {
+
   private Bits friendlies = new Bits(); // 1 friendly; 0 foe
 }

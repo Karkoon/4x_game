@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ChangeSubscribers extends Component {
-  private Bits clients = new Bits();
+
   private Bits changedSubscriptionState = new Bits();
+  private Bits clients = new Bits();
 }

@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class DirtyComponents extends Component {
+
   private Bits dirtyComponents = new Bits();
 }

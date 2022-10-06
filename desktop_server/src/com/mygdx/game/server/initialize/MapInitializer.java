@@ -2,7 +2,6 @@ package com.mygdx.game.server.initialize;
 
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.field_generators.MapGeneratorsContainer;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -13,7 +12,7 @@ public class MapInitializer {
 
   @Inject
   public MapInitializer(
-      @NonNull MapGeneratorsContainer generators
+      MapGeneratorsContainer generators
   ) {
     this.generators = generators;
   }

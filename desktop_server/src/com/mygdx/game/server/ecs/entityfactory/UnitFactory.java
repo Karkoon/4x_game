@@ -21,7 +21,7 @@ public class UnitFactory {
 
   @Inject
   public UnitFactory(
-      @NonNull ComponentFactory componentFactory
+      ComponentFactory componentFactory
   ) {
     this.componentFactory = componentFactory;
   }
