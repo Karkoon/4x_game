@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class NavigationDirection extends Component {
+
   public Navigator.Direction direction;
 }

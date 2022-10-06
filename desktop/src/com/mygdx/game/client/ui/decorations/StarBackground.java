@@ -14,6 +14,7 @@ import com.mygdx.game.core.util.NoiseGenerator;
 import lombok.NonNull;
 
 public class StarBackground {
+
   private final ShaderProgram nebulaShader;
   private final NoiseGenerator noiseGenerator = new NoiseGenerator();
   private float step = 0;
@@ -28,8 +29,10 @@ public class StarBackground {
   private float iPosX;
   private float iPosY;
 
-  public StarBackground(@NonNull MenuScreenAssets assets,
-                        @NonNull Camera camera) {
+  public StarBackground(
+      @NonNull MenuScreenAssets assets,
+      @NonNull Camera camera
+  ) {
     this.assets = assets;
     this.camera = camera;
     nebula = assets.getTexture(MenuScreenAssetPaths.NEBULA);

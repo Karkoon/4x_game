@@ -31,8 +31,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class FieldScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
@@ -57,15 +57,15 @@ public class FieldScreen extends ScreenAdapter {
 
   @Inject
   public FieldScreen(
-      @NonNull World world,
-      @NonNull Viewport viewport,
-      @NonNull @Named(StageModule.FIELD_SCREEN) Stage stage,
-      @NonNull ClickInputAdapter clickInputAdapter,
-      @NonNull FieldHUD fieldHUD,
-      @NonNull ChosenEntity chosenEntity,
-      @NonNull ShowSubfieldService showSubfieldService,
-      @NonNull SubFieldUiInputProcessor subFieldUiInputProcessor,
-      @NonNull InField inField
+      World world,
+      Viewport viewport,
+      @Named(StageModule.FIELD_SCREEN) Stage stage,
+      ClickInputAdapter clickInputAdapter,
+      FieldHUD fieldHUD,
+      ChosenEntity chosenEntity,
+      ShowSubfieldService showSubfieldService,
+      SubFieldUiInputProcessor subFieldUiInputProcessor,
+      InField inField
   ) {
     this.world = world;
     this.inField = inField;

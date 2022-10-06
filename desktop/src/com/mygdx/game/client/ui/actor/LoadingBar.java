@@ -15,7 +15,9 @@ public class LoadingBar extends Actor {
 
   private float time;
 
-  public LoadingBar(@NonNull Animation<TextureRegion> animation) {
+  public LoadingBar(
+      @NonNull Animation<TextureRegion> animation
+  ) {
     this.animation = animation;
     currentFrame = animation.getKeyFrame(0);
   }

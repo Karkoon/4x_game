@@ -9,6 +9,7 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class ModelInstanceComp extends PooledComponent {
+
   private @NonNull ModelInstance modelInstance;
 
   @Override

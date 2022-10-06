@@ -20,20 +20,22 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@All({Coordinates.class, Stats.class, Owner.class})
 @Log
 @Singleton
+@All({Coordinates.class, Stats.class, Owner.class})
 public class VisibilitySystem extends IteratingSystem {
 
   private final InField inField;
   private final PlayerInfo playerInfo;
+  private final IntSet visible = new IntSet();
+
   @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class, Building.class })
   private EntitySubscription allThatCanBePerceived;
+
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Visible> visibleMapper;
-  private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Owner> ownerMapper;
-  private final IntSet visibles = new IntSet();
+  private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<Visible> visibleMapper;
 
   @Inject
   public VisibilitySystem(
@@ -58,7 +60,7 @@ public class VisibilitySystem extends IteratingSystem {
       var perceivableCoords = coordinatesMapper.get(perceivableEntity);
       visibleMapper.set(perceivableEntity, false);
       if (DistanceUtil.distance(coordinates, perceivableCoords) <= sightlineRadius) {
-        visibles.add(perceivableEntity);
+        visible.add(perceivableEntity);
       }
     }
   }
@@ -66,15 +68,15 @@ public class VisibilitySystem extends IteratingSystem {
   @Override
   protected void end() {
     if (inField.isInField()) { // todo do it differently
-      visibles.clear();
+      visible.clear();
       return;
     }
-    var iterator = visibles.iterator();
+    var iterator = visible.iterator();
     while (iterator.hasNext) {
       var visible = iterator.next();
       visibleMapper.set(visible, true);
     }
     iterator.reset();
-    visibles.clear();
+    visible.clear();
   }
 }

@@ -8,9 +8,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Data
-@Singleton
 @Log
+@Singleton
 public class ClickInput {
+
   private Ray value = null;
   private boolean handled = true;
 

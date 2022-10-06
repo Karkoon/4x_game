@@ -22,8 +22,8 @@ import lombok.extern.java.Log;
 import javax.inject.Singleton;
 import java.util.logging.Level;
 
-@Module
 @Log
+@Module
 public class WorldModule {
   @Provides
   @Singleton

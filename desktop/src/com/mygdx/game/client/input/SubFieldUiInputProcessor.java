@@ -3,7 +3,6 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client.screen.Navigator;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -13,7 +12,7 @@ public class SubFieldUiInputProcessor extends InputAdapter {
 
   @Inject
   public SubFieldUiInputProcessor(
-      @NonNull Navigator navigator
+      Navigator navigator
   ) {
     this.navigator = navigator;
   }

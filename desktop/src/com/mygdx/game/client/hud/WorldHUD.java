@@ -23,18 +23,18 @@ public class WorldHUD implements Disposable {
 
   private final Stage stage;
   private final HUDElementsCreator hudElementsCreator;
+  private HorizontalGroup materialGroup;
+
   private ComponentMapper<MaterialComponent> materialMapper;
 
   @AspectDescriptor(all = {MaterialComponent.class})
   private EntitySubscription subscription;
 
-  private HorizontalGroup materialGroup;
-
   @Inject
   public WorldHUD(
       World world,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull HUDElementsCreator hudElementsCreator
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      HUDElementsCreator hudElementsCreator
   ) {
     world.inject(this);
     this.stage = stage;

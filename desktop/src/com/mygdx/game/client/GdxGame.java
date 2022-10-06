@@ -11,7 +11,6 @@ import com.mygdx.game.client.screen.MenuScreen;
 import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client.screen.TechnologyScreen;
 import dagger.Lazy;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -30,12 +29,12 @@ public class GdxGame extends Game implements Navigator {
 
   @Inject
   GdxGame(
-      @NonNull AssetManager assetManager,
-      @NonNull Lazy<GameScreen> gameScreen,
-      @NonNull Lazy<FieldScreen> fieldScreen,
-      @NonNull Lazy<LoadingScreen> loadingScreen,
-      @NonNull Lazy<MenuScreen> menuScreen,
-      @NonNull Lazy<TechnologyScreen> technologyScreen
+      AssetManager assetManager,
+      Lazy<GameScreen> gameScreen,
+      Lazy<FieldScreen> fieldScreen,
+      Lazy<LoadingScreen> loadingScreen,
+      Lazy<MenuScreen> menuScreen,
+      Lazy<TechnologyScreen> technologyScreen
   ) {
     this.assetManager = assetManager;
     this.gameScreen = gameScreen;

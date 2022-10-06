@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,7 +23,7 @@ public class UiElementsCreator {
 
   @Inject
   public UiElementsCreator(
-      @NonNull MenuScreenAssets assets
+      MenuScreenAssets assets
   ) {
     this.assets = assets;
   }

@@ -19,7 +19,9 @@ class CameraControl implements Updatable {
   private final Camera camera;
   private final Set<Direction> activeDirections = new HashSet<>();
 
-  CameraControl(@NonNull Camera camera) {
+  CameraControl(
+      @NonNull Camera camera
+  ) {
     this.camera = camera;
   }
 

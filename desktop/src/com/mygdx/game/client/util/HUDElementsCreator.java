@@ -36,8 +36,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class HUDElementsCreator {
 
   private final MenuScreenAssets assets;
@@ -45,8 +45,8 @@ public class HUDElementsCreator {
 
   @Inject
   public HUDElementsCreator(
-      @NonNull MenuScreenAssets assets,
-      @NonNull GameScreenAssets gameAssets
+      MenuScreenAssets assets,
+      GameScreenAssets gameAssets
   ) {
     this.assets = assets;
     this.gameAssets = gameAssets;

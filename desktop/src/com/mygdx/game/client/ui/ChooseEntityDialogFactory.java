@@ -23,14 +23,15 @@ public final class ChooseEntityDialogFactory {
 
   private final GameScreenAssets assets;
   private final Stage stage;
+
   private ComponentMapper<Highlighted> highlightedComponentMapper;
   private ComponentMapper<Name> nameComponentMapper;
 
   @Inject
   public ChooseEntityDialogFactory(
-      @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull World world
+      GameScreenAssets assets,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      World world
   ) {
     this.assets = assets;
     this.stage = stage;

@@ -14,7 +14,6 @@ import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.ui.decorations.Planet;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.core.util.Vector3Util;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -29,9 +28,9 @@ public class MenuScreen extends ScreenAdapter {
 
   @Inject
   public MenuScreen(
-      @NonNull Stage stage,
-      @NonNull MenuScreenAssets assets,
-      @NonNull Navigator navigator
+      Stage stage,
+      MenuScreenAssets assets,
+      Navigator navigator
   ) {
     this.stage = stage;
     this.assets = assets;

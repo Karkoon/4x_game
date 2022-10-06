@@ -4,7 +4,6 @@ import com.artemis.BaseSystem;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.NotPlayerTurnDialogFactory;
 import com.mygdx.game.client_core.model.PlayerInfo;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -18,9 +17,9 @@ public class BlockInputSystem extends BaseSystem {
 
   @Inject
   public BlockInputSystem(
-      @NonNull PlayerInfo playerInfo,
-      @NonNull ClickInput clickInput,
-      @NonNull NotPlayerTurnDialogFactory notPlayerTurnDialogFactory
+      PlayerInfo playerInfo,
+      ClickInput clickInput,
+      NotPlayerTurnDialogFactory notPlayerTurnDialogFactory
   ) {
     this.playerInfo = playerInfo;
     this.clickInput = clickInput;

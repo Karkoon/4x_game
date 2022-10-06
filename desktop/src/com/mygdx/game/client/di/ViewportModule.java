@@ -15,8 +15,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.logging.Level;
 
-@Module
 @Log
+@Module
 public class ViewportModule {
 
   @Provides

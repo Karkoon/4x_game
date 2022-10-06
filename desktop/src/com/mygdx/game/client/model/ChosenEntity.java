@@ -1,6 +1,5 @@
 package com.mygdx.game.client.model;
 
-
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -9,6 +8,7 @@ import javax.inject.Singleton;
 @Log
 @Singleton
 public class ChosenEntity {
+
   private static final int NO_ENTITY = -0xC0FFE;
 
   private int entity = NO_ENTITY;

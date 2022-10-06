@@ -21,6 +21,7 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
 public class PlayerRoomDialogFactory {
+
   private final GameScreenAssets assets;
   private final Stage stage;
   private final WebSocketHandler handler;
@@ -28,10 +29,10 @@ public class PlayerRoomDialogFactory {
 
   @Inject
   public PlayerRoomDialogFactory(
-      @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull WebSocketHandler handler,
-      @NonNull PlayerInfo playerInfo
+      GameScreenAssets assets,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      WebSocketHandler handler,
+      PlayerInfo playerInfo
   ) {
     this.assets = assets;
     this.stage = stage;

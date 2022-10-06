@@ -7,18 +7,19 @@ import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
 public class NavigationDirectionSetter implements Setter {
-  private final ComponentMapper<NavigationDirection> directionMapper;
+
+  private ComponentMapper<NavigationDirection> directionMapper;
 
   @Inject
   public NavigationDirectionSetter(
-      @NonNull World world
+      World world
   ) {
-    this.directionMapper = world.getMapper(NavigationDirection.class);
+    world.inject(this);
+    world.getMapper(NavigationDirection.class);
   }
 
   public Result set(Config config, int entity) {

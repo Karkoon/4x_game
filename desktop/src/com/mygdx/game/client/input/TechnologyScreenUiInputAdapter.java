@@ -3,7 +3,6 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client.screen.Navigator;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,7 +14,7 @@ public class TechnologyScreenUiInputAdapter extends InputAdapter {
 
   @Inject
   public TechnologyScreenUiInputAdapter(
-      @NonNull Navigator navigator
+      Navigator navigator
   ) {
     this.navigator = navigator;
   }
