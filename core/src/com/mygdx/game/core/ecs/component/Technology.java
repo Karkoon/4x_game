@@ -8,6 +8,5 @@ public class Technology extends PooledComponent {
 
   @Override
   protected void reset() {
-
   }
 }

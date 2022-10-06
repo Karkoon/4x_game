@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 @Data
 @Log
 public class Stats extends PooledComponent {
+
   private int maxHp;
   private int hp;
   private int attackPower;

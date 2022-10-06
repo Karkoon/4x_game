@@ -10,6 +10,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Coordinates extends PooledComponent {
+
   private int x;
   private int y;
 

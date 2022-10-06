@@ -3,6 +3,7 @@ package com.mygdx.game.assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,8 +15,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class GameScreenAssets {
 
   @NonNull
@@ -23,7 +24,7 @@ public class GameScreenAssets {
 
   @Inject
   public GameScreenAssets(
-      @NonNull AssetManager assetManager
+      AssetManager assetManager
   ) {
     this.assetManager = assetManager;
     initCustomLoaders();
@@ -50,19 +51,19 @@ public class GameScreenAssets {
     return assetManager.get(path);
   }
 
-  private <T> void loadDirectory(@NonNull String path,
-                                 @NonNull String suffix,
-                                 @NonNull Class<T> assetType) {
+  private <T> void loadDirectory(
+      @NonNull String path,
+      @NonNull String suffix,
+      @NonNull Class<T> assetType
+  ) {
     var assets = Gdx.files.internal(path).list(suffix);
     var directiories = Gdx.files.internal(path).list();
-    for (var i = 0; i < assets.length; i++) {
-      assetManager.load(assets[i].path(), assetType);
+    for (FileHandle asset : assets) {
+      assetManager.load(asset.path(), assetType);
     }
-    for (int i = 0; i < directiories.length; i++) {
-      log.info("WWWW");
-      log.info(directiories[i].path());
-      if (directiories[i].isDirectory()) {
-        loadDirectory(directiories[i].path(), suffix, assetType);
+    for (FileHandle directiory : directiories) {
+      if (directiory.isDirectory()) {
+        loadDirectory(directiory.path(), suffix, assetType);
       }
     }
   }
@@ -71,7 +72,14 @@ public class GameScreenAssets {
     loadDirectory(GameScreenAssetPaths.MODEL_DIR, ".g3db", Model.class);
   }
 
+  // we can control there the order of loading textures what is important with transparency
   private void loadTextures() {
+    loadDirectory(GameScreenAssetPaths.FIELD_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.SUBFIELDS_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.UNITS_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.BUILDINGS_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.MATERIALS_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths.TECHNOLOGIES_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
   }

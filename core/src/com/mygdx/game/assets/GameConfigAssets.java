@@ -20,8 +20,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
 @Log
+@Singleton
 public class GameConfigAssets {
 
   @NonNull
@@ -29,19 +29,19 @@ public class GameConfigAssets {
   private final AssetManager assetManager;
 
   private final List<Class<? extends Config>> configClasses =
-      List.of(
-          FieldConfig.class,
-          UnitConfig.class,
-          SubFieldConfig.class,
-          TechnologyConfig.class,
-          BuildingConfig.class,
-          MapTypeConfig.class
-      );
+    List.of(
+      BuildingConfig.class,
+      FieldConfig.class,
+      MapTypeConfig.class,
+      SubFieldConfig.class,
+      TechnologyConfig.class,
+      UnitConfig.class
+    );
 
   @Inject
   public GameConfigAssets(
-      @NonNull AssetManager assetManager,
-      @NonNull GameConfigs gameConfigs
+      AssetManager assetManager,
+      GameConfigs gameConfigs
   ) {
     this.assetManager = assetManager;
     this.gameConfigs = gameConfigs;
@@ -78,12 +78,12 @@ public class GameConfigAssets {
   }
 
   private void loadConfigs() {
+    loadArrayAsset(GameConfigAssetPaths.BUILDING_CONFIG_DIR, BuildingConfig.class);
     loadArrayAsset(GameConfigAssetPaths.FIELD_CONFIG_DIR, FieldConfig.class);
-    loadArrayAsset(GameConfigAssetPaths.UNIT_CONFIG_DIR, UnitConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.MAP_TYPE_CONFIG_DIR, MapTypeConfig.class);
     loadArrayAsset(GameConfigAssetPaths.SUB_FIELD_CONFIG_DIR, SubFieldConfig.class);
     loadArrayAsset(GameConfigAssetPaths.TECHNOLOGY_CONFIG_DIR, TechnologyConfig.class);
-    loadArrayAsset(GameConfigAssetPaths.BUILDING_CONFIG_DIR, BuildingConfig.class);
-    loadArrayAsset(GameConfigAssetPaths.MAP_TYPE_CONFIG_DIR, MapTypeConfig.class);
+    loadArrayAsset(GameConfigAssetPaths.UNIT_CONFIG_DIR, UnitConfig.class);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})

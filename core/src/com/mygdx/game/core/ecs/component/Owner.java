@@ -5,5 +5,6 @@ import lombok.Data;
 
 @Data
 public class Owner extends Component {
+
   private String token = null;
 }

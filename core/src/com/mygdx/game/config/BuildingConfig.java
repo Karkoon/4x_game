@@ -9,6 +9,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BuildingConfig implements Config, ModelConfig {
+
   private long id;
   @NonNull
   private String name;
