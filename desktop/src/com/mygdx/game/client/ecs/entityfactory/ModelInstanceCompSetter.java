@@ -18,15 +18,14 @@ import javax.inject.Singleton;
 @Singleton
 public class ModelInstanceCompSetter implements Setter {
 
-  private final ComponentMapper<ModelInstanceComp> modelMapper;
+  private ComponentMapper<ModelInstanceComp> modelMapper;
   private final GameScreenAssets assets;
 
   @Inject
-  public ModelInstanceCompSetter(
-      @NonNull World world,
-      @NonNull GameScreenAssets assets
+  public ModelInstanceCompSetter(World world,
+      GameScreenAssets assets
   ) {
-    this.modelMapper = world.getMapper(ModelInstanceComp.class);
+    world.inject(this);
     this.assets = assets;
   }
 

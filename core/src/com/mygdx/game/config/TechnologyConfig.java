@@ -9,6 +9,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TechnologyConfig implements Config, TextureConfig {
+
   private long id;
   @NonNull
   private String name;

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 @GameInstanceScope
 @Log
 public class GameInstanceServer {
+
   private final MoveHandler moveHandler;
   private final EndTurnHandler endTurnHandler;
   private final BuildHandler buildHandler;

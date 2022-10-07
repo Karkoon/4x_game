@@ -22,13 +22,13 @@ import javax.inject.Singleton;
 @All({Position.class, Coordinates.class})
 public class CoordinateToPositionSystem extends IteratingSystem {
 
-  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<SubField> subFieldMapper;
-  private ComponentMapper<Building> buildingMapper;
-  private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<Movable> movableMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Technology> technologyMapper;
 
   @Inject
   public CoordinateToPositionSystem() {
@@ -40,11 +40,13 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     var position = positionMapper.get(entityId);
     var retainedY = position.getValue().y;
     var toSet = new Vector3(0, 0, 0);
+
     if (fieldMapper.has(entityId) || movableMapper.has(entityId) || subFieldMapper.has(entityId) || buildingMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
     } else if (technologyMapper.has(entityId)) {
       toSet = PositionUtil.generateTechnologyPositionForCoords(coordinatesMapper.get(entityId));
     }
+
     position.getValue().set(toSet);
     position.getValue().y = retainedY;
   }

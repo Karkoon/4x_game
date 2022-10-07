@@ -17,8 +17,10 @@ public class GdxServer extends Game {
   private final Server server;
 
   @Inject
-  GdxServer(GameConfigAssets assets,
-            Server server) {
+  GdxServer(
+      GameConfigAssets assets,
+      Server server
+  ) {
     this.assets = assets;
     this.server = server;
   }

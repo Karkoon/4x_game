@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ComponentMessage<T extends Component> {
+
   private T component;
   private int entityId;
 }

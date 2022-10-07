@@ -9,6 +9,7 @@ import lombok.NonNull;
 @Data
 @PooledWeaver
 public class Position extends PooledComponent {
+
   @NonNull
   private final Vector3 value = new Vector3();
 

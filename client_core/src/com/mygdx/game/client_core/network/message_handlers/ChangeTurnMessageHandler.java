@@ -18,7 +18,7 @@ public class ChangeTurnMessageHandler implements WebSocketHandler.Handler<Change
 
   @Inject
   public ChangeTurnMessageHandler(
-      @NonNull PlayerInfo playerInfo
+      PlayerInfo playerInfo
   ) {
     this.playerInfo = playerInfo;
   }

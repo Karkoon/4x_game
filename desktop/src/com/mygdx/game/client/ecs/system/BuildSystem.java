@@ -9,13 +9,12 @@ import com.mygdx.game.client_core.network.service.BuildingService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.SubField;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@All({Highlighted.class, SubField.class})
 @Log
+@All({Highlighted.class, SubField.class})
 public class BuildSystem extends IteratingSystem {
 
   private final ChosenConfig chosenConfig;
@@ -25,8 +24,8 @@ public class BuildSystem extends IteratingSystem {
 
   @Inject
   public BuildSystem(
-      @NonNull ChosenConfig chosenConfig,
-      @NonNull BuildingService buildingService
+      ChosenConfig chosenConfig,
+      BuildingService buildingService
   ) {
     this.chosenConfig = chosenConfig;
     this.buildingService = buildingService;

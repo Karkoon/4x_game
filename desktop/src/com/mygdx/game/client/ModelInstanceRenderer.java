@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,14 +15,16 @@ import javax.inject.Singleton;
 @Singleton
 public class ModelInstanceRenderer implements Disposable {
 
-  private final ModelBatch modelBatch;
   private ModelCache cache;
+  private final ModelBatch modelBatch;
   private final Array<ModelInstance> modelInstances;
 
   private final Camera camera;
 
   @Inject
-  public ModelInstanceRenderer(@NonNull Viewport viewport) {
+  public ModelInstanceRenderer(
+      Viewport viewport
+  ) {
     this.camera = viewport.getCamera();
     this.cache = new ModelCache();
     this.modelBatch = new ModelBatch();

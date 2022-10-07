@@ -1,11 +1,9 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
-import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -18,7 +16,7 @@ public class MaterialFactory {
 
   @Inject
   public MaterialFactory(
-      @NonNull ComponentFactory componentFactory
+      ComponentFactory componentFactory
   ) {
     this.componentFactory = componentFactory;
   }

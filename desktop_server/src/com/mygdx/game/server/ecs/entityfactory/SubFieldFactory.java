@@ -18,7 +18,7 @@ public class SubFieldFactory {
 
   @Inject
   public SubFieldFactory(
-      @NonNull ComponentFactory componentFactory
+      ComponentFactory componentFactory
   ) {
     this.componentFactory = componentFactory;
   }

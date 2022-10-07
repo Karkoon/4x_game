@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ public class ConnectionErrorDialogFactory {
 
   @Inject
   public ConnectionErrorDialogFactory(
-      @NonNull GameScreenAssets assets,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage
+      GameScreenAssets assets,
+      @Named(StageModule.GAME_SCREEN) Stage stage
   ) {
     this.assets = assets;
     this.stage = stage;

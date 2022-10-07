@@ -26,10 +26,11 @@ public class VisibilitySystem extends IteratingSystem {
   @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class, Building.class})
   private EntitySubscription allThatCanBePerceived;
   private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
-  private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
+
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
 
   @Inject
   public VisibilitySystem() {

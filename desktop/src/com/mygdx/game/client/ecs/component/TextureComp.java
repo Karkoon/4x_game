@@ -9,6 +9,7 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class TextureComp extends PooledComponent {
+
   private @NonNull Texture texture;
 
   public void setTexture(Texture texture) {

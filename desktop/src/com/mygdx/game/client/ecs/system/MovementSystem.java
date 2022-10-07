@@ -12,13 +12,12 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.util.DistanceUtil;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@All({Highlighted.class, Movable.class})
 @Log
+@All({Highlighted.class, Movable.class})
 public class MovementSystem extends IteratingSystem {
 
   private final ChosenEntity chosenEntity;
@@ -31,9 +30,9 @@ public class MovementSystem extends IteratingSystem {
 
   @Inject
   public MovementSystem(
-      @NonNull ChosenEntity chosenEntity,
-      @NonNull MoveEntityService moveEntityService,
-      @NonNull OutOfMoveRangeDialogFactory moveRangeDialog
+      ChosenEntity chosenEntity,
+      MoveEntityService moveEntityService,
+      OutOfMoveRangeDialogFactory moveRangeDialog
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;

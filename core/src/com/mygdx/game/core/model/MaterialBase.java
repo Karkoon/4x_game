@@ -11,7 +11,7 @@ public enum MaterialBase {
   public final String polishName;
   public final String iconPath;
 
-  private MaterialBase(String name, String polishName, String iconPath) {
+  MaterialBase(String name, String polishName, String iconPath) {
     this.name = name;
     this.polishName = polishName;
     this.iconPath = iconPath;

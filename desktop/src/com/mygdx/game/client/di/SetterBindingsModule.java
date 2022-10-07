@@ -1,6 +1,6 @@
 package com.mygdx.game.client.di;
 
-import com.mygdx.game.client.ecs.entityfactory.ChooseableSetter;
+import com.mygdx.game.client.ecs.entityfactory.ChoosableSetter;
 import com.mygdx.game.client.ecs.entityfactory.DesktopCoordinateSetter;
 import com.mygdx.game.client.ecs.entityfactory.ModelInstanceCompSetter;
 import com.mygdx.game.client.ecs.entityfactory.NavigationDirectionSetter;
@@ -12,9 +12,10 @@ import dagger.multibindings.IntoSet;
 
 @Module
 public interface SetterBindingsModule {
+
   @Binds
   @IntoSet
-  Setter providesChooseableSetter(ChooseableSetter setter);
+  Setter providesChoosableSetter(ChoosableSetter setter);
 
   @Binds
   @IntoSet

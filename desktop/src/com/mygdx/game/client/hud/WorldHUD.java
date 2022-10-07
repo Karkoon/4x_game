@@ -23,18 +23,18 @@ public class WorldHUD implements Disposable {
 
   private final Stage stage;
   private final HUDElementsCreator hudElementsCreator;
+  private HorizontalGroup materialGroup;
+
   private ComponentMapper<MaterialComponent> materialMapper;
 
   @AspectDescriptor(all = {MaterialComponent.class})
   private EntitySubscription subscription;
 
-  private HorizontalGroup materialGroup;
-
   @Inject
   public WorldHUD(
       World world,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull HUDElementsCreator hudElementsCreator
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      HUDElementsCreator hudElementsCreator
   ) {
     world.inject(this);
     this.stage = stage;
@@ -68,7 +68,6 @@ public class WorldHUD implements Disposable {
       var allMaterials = MaterialBase.values();
       for (int i = 0; i < allMaterials.length; i++) {
         var material = allMaterials[i];
-        log.info("MATERIAL: " + material.name);
         int value = findConnectedValue(material);
         var image = hudElementsCreator.createImage(material.iconPath, i * 50, 0);
         var text = hudElementsCreator.createLabel(String.valueOf(value), i * 50 + 20, 0);

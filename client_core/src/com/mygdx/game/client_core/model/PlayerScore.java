@@ -6,9 +6,9 @@ import lombok.Setter;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Getter
 @Setter
+@Singleton
 public class PlayerScore {
   private int scoreValue = 0;
 

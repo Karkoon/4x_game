@@ -10,8 +10,8 @@ import lombok.extern.java.Log;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Module
 @Log
+@Module
 public class StageModule {
 
   private static final float VIRTUAL_WIDTH = 1920;

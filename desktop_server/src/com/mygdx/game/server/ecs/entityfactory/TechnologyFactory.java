@@ -17,7 +17,7 @@ public class TechnologyFactory {
 
   @Inject
   public TechnologyFactory(
-      @NonNull ComponentFactory componentFactory
+      ComponentFactory componentFactory
   ) {
     this.componentFactory = componentFactory;
   }

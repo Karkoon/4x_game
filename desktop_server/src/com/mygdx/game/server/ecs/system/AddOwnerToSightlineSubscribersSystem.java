@@ -17,13 +17,14 @@ import javax.inject.Inject;
 public class AddOwnerToSightlineSubscribersSystem extends IteratingSystem {
 
   private final GameRoom room;
+
   private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Name> nameComponentMapper;
+  private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
 
   @Inject
   public AddOwnerToSightlineSubscribersSystem(
-      @NonNull GameRoom room
+      GameRoom room
   ) {
     super();
     this.room = room;

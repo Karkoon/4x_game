@@ -23,7 +23,9 @@ public final class CameraMoverInputProcessor extends InputAdapter {
   private boolean isNearVerticalEdge = false;
   private boolean isNearHorizontalEdge = false;
 
-  public CameraMoverInputProcessor(@NonNull Viewport viewport) {
+  public CameraMoverInputProcessor(
+      @NonNull Viewport viewport
+  ) {
     this.cameraControl = new CameraControl(viewport.getCamera());
     this.viewport = viewport;
   }

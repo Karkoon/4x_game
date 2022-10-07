@@ -11,11 +11,16 @@ import com.mygdx.game.core.util.Updatable;
 import lombok.NonNull;
 
 public class Planet implements Updatable {
+
   private final Sprite planetSprite;
   private final MenuScreenAssets assets;
   private final ShaderProgram shader;
 
-  public Planet(@NonNull MenuScreenAssets assets, Vector2 size, Vector2 position) {
+  public Planet(
+      @NonNull MenuScreenAssets assets,
+      Vector2 size,
+      Vector2 position
+  ) {
     this.assets = assets;
     this.planetSprite = createPlanetSprite(size, position);
     this.shader = createPlanetShader();

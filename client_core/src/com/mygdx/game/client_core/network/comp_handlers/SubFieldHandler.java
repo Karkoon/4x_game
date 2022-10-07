@@ -6,7 +6,6 @@ import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.core.ecs.component.SubField;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -17,15 +16,15 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class SubFieldHandler implements ComponentMessageListener.Handler<SubField> {
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
-  private final ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public SubFieldHandler(
-      @NonNull NetworkWorldEntityMapper networkWorldEntityMapper,
-      @NonNull World world
+      NetworkWorldEntityMapper networkWorldEntityMapper,
+      World world
   ) {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
-    this.subFieldMapper = world.getMapper(SubField.class);
+    world.inject(this);
   }
 
   @Override

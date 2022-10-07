@@ -2,6 +2,7 @@ package com.mygdx.game.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -49,14 +50,20 @@ public class MenuScreenAssets {
     return assetManager.get(path);
   }
 
-  private <T> void loadDirectory(@NonNull String path,
-                                 @NonNull String suffix,
-                                 @NonNull Class<T> assetType) {
-    var dir = Gdx.files.internal(path).list(suffix);
-    for (var i = 0; i < dir.length; i++) {
-      if (dir[i].isDirectory())
-        loadDirectory(dir[i].path(), ".png", Texture.class);
-      assetManager.load(dir[i].path(), assetType);
+  private <T> void loadDirectory(
+      @NonNull String path,
+      @NonNull String suffix,
+      @NonNull Class<T> assetType
+  ) {
+    var assets = Gdx.files.internal(path).list(suffix);
+    var directiories = Gdx.files.internal(path).list();
+    for (FileHandle asset : assets) {
+      assetManager.load(asset.path(), assetType);
+    }
+    for (FileHandle directiory : directiories) {
+      if (directiory.isDirectory()) {
+        loadDirectory(directiory.path(), suffix, assetType);
+      }
     }
   }
 }

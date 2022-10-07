@@ -39,8 +39,9 @@ public class DesertSubfieldMapGenerator extends SubfieldMapGenerator {
 
   @Inject
   protected DesertSubfieldMapGenerator(
-      @NonNull SubFieldFactory subFieldFactory,
-      @NonNull GameConfigAssets assets) {
+      SubFieldFactory subFieldFactory,
+      GameConfigAssets assets
+  ) {
     super(3);
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;

@@ -19,7 +19,9 @@ public class SetHighlightSystem extends BaseSystem {
   private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
-  public SetHighlightSystem(ChosenEntity chosenEntity) {
+  public SetHighlightSystem(
+      ChosenEntity chosenEntity
+  ) {
     this.chosenEntity = chosenEntity;
   }
 

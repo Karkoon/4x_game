@@ -6,7 +6,6 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.MaterialFactory;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -19,9 +18,9 @@ public class MaterialInitializer {
 
   @Inject
   public MaterialInitializer(
-      @NonNull MaterialFactory materialFactory,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameRoom gameRoom
+      MaterialFactory materialFactory,
+      GameConfigAssets assets,
+      GameRoom gameRoom
   ) {
     this.materialFactory = materialFactory;
     this.assets = assets;
@@ -30,8 +29,7 @@ public class MaterialInitializer {
 
   public void initializeMaterials() {
     var clients = gameRoom.getClients();
-    for (int i = 0; i < clients.size(); i++) {
-      var client = clients.get(i);
+    for (Client client : clients) {
       setUpMaterialsForClients(client);
     }
   }

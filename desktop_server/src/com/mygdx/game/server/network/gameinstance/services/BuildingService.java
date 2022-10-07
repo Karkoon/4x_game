@@ -6,7 +6,6 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.model.GameRoom;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -20,9 +19,9 @@ public class BuildingService extends WorldService {
 
   @Inject
   BuildingService(
-      @NonNull BuildingFactory buildingFactory,
-      @NonNull ComponentFactory componentFactory,
-      @NonNull GameConfigAssets assets
+      BuildingFactory buildingFactory,
+      ComponentFactory componentFactory,
+      GameConfigAssets assets
   ) {
     this.buildingFactory = buildingFactory;
     this.componentFactory = componentFactory;

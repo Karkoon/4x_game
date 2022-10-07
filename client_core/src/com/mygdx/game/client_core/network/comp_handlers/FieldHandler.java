@@ -14,13 +14,13 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @Log
 public class FieldHandler implements ComponentMessageListener.Handler<Field> {
 
-  private final ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Field> fieldMapper;
 
   @Inject
   public FieldHandler(
       World world
   ) {
-    this.fieldMapper = world.getMapper(Field.class);
+    world.inject(this);
   }
 
   @Override

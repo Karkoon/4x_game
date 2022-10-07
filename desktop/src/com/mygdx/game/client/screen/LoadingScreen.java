@@ -19,8 +19,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class LoadingScreen extends ScreenAdapter {
 
   private final LoadingScreenAssets loadingScreenAssets;

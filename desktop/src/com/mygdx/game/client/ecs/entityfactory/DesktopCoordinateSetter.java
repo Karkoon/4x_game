@@ -12,15 +12,17 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class DesktopCoordinateSetter implements Setter {
 
-  private final ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Coordinates> coordinatesMapper;
 
   @Inject
-  public DesktopCoordinateSetter(@NonNull World world) {
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
+  public DesktopCoordinateSetter(
+      World world
+  ) {
+    world.inject(this);
   }
 
   @Override

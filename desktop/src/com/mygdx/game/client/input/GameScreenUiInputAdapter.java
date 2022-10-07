@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -19,8 +18,8 @@ public class GameScreenUiInputAdapter extends InputAdapter {
 
   @Inject
   public GameScreenUiInputAdapter(
-      @NonNull Navigator navigator,
-      @NonNull EndTurnService endTurnService
+      Navigator navigator,
+      EndTurnService endTurnService
   ) {
     this.navigator = navigator;
     this.endTurnService = endTurnService;

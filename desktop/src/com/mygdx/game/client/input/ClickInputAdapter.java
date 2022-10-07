@@ -3,7 +3,6 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.model.ClickInput;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -16,8 +15,8 @@ public class ClickInputAdapter extends InputAdapter {
 
   @Inject
   public ClickInputAdapter(
-      @NonNull Viewport viewport,
-      @NonNull ClickInput clickInput
+      Viewport viewport,
+      ClickInput clickInput
   ) {
     this.viewport = viewport;
     this.clickInput = clickInput;

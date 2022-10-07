@@ -16,6 +16,7 @@ public class AttackEntityService extends WorldService {
 
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
+
   private World world;
 
   @Inject

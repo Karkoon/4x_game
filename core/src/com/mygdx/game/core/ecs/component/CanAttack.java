@@ -5,5 +5,6 @@ import lombok.Data;
 
 @Data
 public class CanAttack extends Component {
+
   private boolean canAttack;
 }

@@ -17,8 +17,8 @@ public class AddOwnerToChangeSubscribersSystem extends IteratingSystem {
 
   private final GameRoom gameRoom;
   private ComponentMapper<ChangeSubscribers> changeSubscribersComponentMapper;
-  private ComponentMapper<Owner> ownerComponentMapper;
   private ComponentMapper<Name> nameComponentMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
 
   @Inject
   public AddOwnerToChangeSubscribersSystem(

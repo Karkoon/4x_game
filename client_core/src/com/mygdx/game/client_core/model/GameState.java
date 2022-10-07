@@ -14,20 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Singleton
 @Log
+@Singleton
 public class GameState {
 
-  private final ComponentMapper<Coordinates> coordinatesMapper;
-  private final ComponentMapper<Score> scoreMapper;
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Score> scoreMapper;
   private final Map<Coordinates, IntArray> entitiesAtCoordinateGame;
 
   @Inject
   public GameState(
-     @NonNull World world
+      @NonNull World world
   ) {
-    this.coordinatesMapper = world.getMapper(Coordinates.class);
-    this.scoreMapper = world.getMapper(Score.class);
+    world.inject(this);
     this.entitiesAtCoordinateGame = new HashMap<>();
   }
 
@@ -84,3 +83,4 @@ public class GameState {
     return scoreMap;
   }
 }
+

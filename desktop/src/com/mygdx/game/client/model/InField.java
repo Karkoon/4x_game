@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Data
-@Singleton
 @Log
+@Singleton
 public class InField {
 
   @Inject

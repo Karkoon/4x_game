@@ -27,12 +27,13 @@ public class ComponentSyncSystem extends IteratingSystem {
   private final StateSyncer stateSyncer;
   private final Lazy<RemoveClientEntityService> removeClientEntityService;
   private final GameRoom gameRoom;
-  private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
-  private ComponentMapper<SharedComponents> sharedComponentsMapper;
-  private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
-  private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
-  private ComponentMapper<Name> nameComponentMapper;
+
   private ComponentMapper<Building> buildingMapper;
+  private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
+  private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
+  private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
+  private ComponentMapper<Name> nameComponentMapper;
+  private ComponentMapper<SharedComponents> sharedComponentsMapper;
 
   @Inject
   public ComponentSyncSystem(

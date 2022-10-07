@@ -17,15 +17,14 @@ import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.util.CompositeUpdatable;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class GameScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
@@ -46,16 +45,16 @@ public class GameScreen extends ScreenAdapter {
 
   @Inject
   public GameScreen(
-      @NonNull ModelInstanceRenderer renderer,
-      @NonNull World world,
-      @NonNull Viewport viewport,
-      @NonNull @Named(StageModule.GAME_SCREEN) Stage stage,
-      @NonNull WorldHUD worldHUD,
-      @NonNull ClickInputAdapter clickInputAdapter,
-      @NonNull GameScreenUiInputAdapter gameScreenUiInputAdapter,
-      @NonNull GameStartService gameStartService,
-      @NonNull PlayerRoomDialogFactory roomDialogFactory,
-      @NonNull GameConnectService gameConnectService
+      ModelInstanceRenderer renderer,
+      World world,
+      Viewport viewport,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      WorldHUD worldHUD,
+      ClickInputAdapter clickInputAdapter,
+      GameScreenUiInputAdapter gameScreenUiInputAdapter,
+      GameStartService gameStartService,
+      PlayerRoomDialogFactory roomDialogFactory,
+      GameConnectService gameConnectService
   ) {
     this.renderer = renderer;
     this.world = world;

@@ -17,6 +17,7 @@ import javax.inject.Inject;
 @Log
 @GameInstanceScope
 public class StateSyncer {
+
   private final Json json = new Json(JsonWriter.OutputType.minimal);
   private final ObjectMap<Client, Transaction> transactionMap = new ObjectMap<>();
 

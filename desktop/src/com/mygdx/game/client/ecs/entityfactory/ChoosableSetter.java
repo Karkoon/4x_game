@@ -8,19 +8,17 @@ import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
-import lombok.NonNull;
-
 import javax.inject.Inject;
 
-public class ChooseableSetter implements Setter {
+public class ChoosableSetter implements Setter {
 
-  private final ComponentMapper<Choosable> clickableMapper;
+  private ComponentMapper<Choosable> clickableMapper;
 
   @Inject
-  public ChooseableSetter(
-      @NonNull World world
+  public ChoosableSetter(
+      World world
   ) {
-    this.clickableMapper = world.getMapper(Choosable.class);
+    world.inject(this);
   }
 
   @Override

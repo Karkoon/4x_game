@@ -27,7 +27,7 @@ public class BuildingFactory {
     world.inject(this);
   }
 
-  public @NonNull void createEntity(BuildingConfig config, int entity) {
+  public void createEntity(@NonNull BuildingConfig config, int entity) {
     setUpName(config, entity);
     buildingMapper.create(entity);
     positionMapper.create(entity).getValue().set(0, 10, 0);

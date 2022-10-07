@@ -18,8 +18,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class TechnologyScreen extends ScreenAdapter {
 
   private final Stage stage;
@@ -32,11 +32,11 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Inject
   public TechnologyScreen(
-      @NonNull World world,
-      @NonNull Stage stage,
-      @NonNull Technologies technologies,
-      @NonNull UiElementsCreator uiElementsCreator,
-      @NonNull TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter
+      World world,
+      Stage stage,
+      Technologies technologies,
+      UiElementsCreator uiElementsCreator,
+      TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter
   ) {
     this.stage = stage;
     world.inject(this);

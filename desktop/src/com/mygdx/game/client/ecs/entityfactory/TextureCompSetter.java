@@ -13,17 +13,19 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class TextureCompSetter implements Setter {
 
-  private final ComponentMapper<TextureComp> textureMapper;
+  private ComponentMapper<TextureComp> textureMapper;
   private final GameScreenAssets assets;
 
   @Inject
-  public TextureCompSetter(@NonNull World world,
-                           @NonNull GameScreenAssets assets) {
-    this.textureMapper = world.getMapper(TextureComp.class);
+  public TextureCompSetter(
+      World world,
+      GameScreenAssets assets
+  ) {
+    world.inject(this);
     this.assets = assets;
   }
 

@@ -27,10 +27,10 @@ public class SubFieldFactory {
     world.inject(this);
   }
 
-  public @NonNull void createEntity(SubFieldConfig config, int entity) {
-    setUpName(config, entity);
-    subFieldMapper.create(entity);
-    positionMapper.create(entity);
+  public void createEntity(@NonNull SubFieldConfig config, int entityId) {
+    setUpName(config, entityId);
+    subFieldMapper.create(entityId);
+    positionMapper.create(entityId);
   }
 
   private void setUpName(@NonNull SubFieldConfig config, int entityId) {

@@ -13,7 +13,6 @@ import com.mygdx.game.client.util.HUDElementsCreator;
 import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -32,13 +31,13 @@ public class FieldHUD implements Disposable {
 
   @Inject
   public FieldHUD(
-      @NonNull @Named(StageModule.FIELD_SCREEN) Stage stage,
-      @NonNull HUDElementsCreator hudElementsCreator,
-      @NonNull ChosenConfig chosenConfig,
-      @NonNull GameConfigAssets assets,
-      @NonNull GameScreenAssets gameAssets,
-      @NonNull CreateUnitService createUnitService,
-      @NonNull InField inField
+      @Named(StageModule.FIELD_SCREEN) Stage stage,
+      HUDElementsCreator hudElementsCreator,
+      ChosenConfig chosenConfig,
+      GameConfigAssets assets,
+      GameScreenAssets gameAssets,
+      CreateUnitService createUnitService,
+      InField inField
   ) {
     this.stage = stage;
     this.hudElementsCreator = hudElementsCreator;

@@ -10,6 +10,7 @@ import java.util.Set;
 
 @GameInstanceScope
 public class MapGeneratorsContainer {
+
   private final LongMap<MapGenerator> mapTypes = new LongMap<>();
 
   @Inject

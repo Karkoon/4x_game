@@ -19,7 +19,6 @@ public class NetworkJobSystem extends BaseSystem {
     this.networkJobsQueueJobJobberManager = networkJobsQueueJobJobberManager;
   }
 
-
   @Override
   protected void processSystem() {
     networkJobsQueueJobJobberManager.get().doAllJobs();

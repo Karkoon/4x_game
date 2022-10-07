@@ -31,17 +31,17 @@ public class ComponentMessageListenerModule {
 
   @Provides
   public ComponentMessageListener provideComponentMessageListener(
+      NetworkWorldEntityMapper mapper,
       EntityConfigHandler entityConfigHandler,
+      DesktopEntityConfigHandler desktopEntityConfigHandler,
+      MaterialHandler materialHandler,
+      CoordinatesHandler coordinatesHandler,
+      FieldHandler fieldHandler,
       SubFieldHandler subFieldHandler,
       BuildingHandler buildingHandler,
-      FieldHandler fieldHandler,
-      CoordinatesHandler coordinatesHandler,
-      MaterialHandler materialHandler,
-      DesktopEntityConfigHandler desktopEntityConfigHandler,
       OwnerHandler ownerHandler,
       StatsHandler statsHandler,
-      CanAttackHandler canAttackHandler,
-      NetworkWorldEntityMapper mapper
+      CanAttackHandler canAttackHandler
   ) {
     var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
