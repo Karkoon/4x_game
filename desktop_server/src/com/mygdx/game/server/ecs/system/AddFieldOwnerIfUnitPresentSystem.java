@@ -39,9 +39,11 @@ public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
       if (coordinatesMapper.get(unitId).equals(coordinatesMapper.get(fieldId))) {
         var fieldOwner = ownerMapper.create(fieldId);
         var unitOwner = ownerMapper.get(unitId);
-        fieldOwner.setToken(unitOwner.getToken());
-        setDirty(fieldId, Owner.class, world);
-        log.info("added owner to field");
+        if (!unitOwner.getToken().equals(fieldOwner.getToken())) {
+          fieldOwner.setToken(unitOwner.getToken());
+          setDirty(fieldId, Owner.class, world);
+          log.info("added owner to field");
+        }
       }
     }
   }
