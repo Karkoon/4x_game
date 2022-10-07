@@ -16,7 +16,7 @@ public class BuildingService {
 
   @Inject
   public BuildingService(
-      Lazy<com.github.czyzby.websocket.WebSocket> socket,
+      Lazy<WebSocket> socket,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
     this.socket = socket;

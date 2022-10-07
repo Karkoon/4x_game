@@ -170,9 +170,9 @@ public class ComponentFactory {
   }
 
   public void createSharedComponents(
-          int entityId,
-          Class<? extends Component>[] compsToSyncWithFriendly,
-          Class<? extends Component>[] compsToSyncWithEnemy
+      int entityId,
+      Class<? extends Component>[] compsToSyncWithFriendly,
+      Class<? extends Component>[] compsToSyncWithEnemy
   ) {
     var sharedComponents = sharedComponentsMapper.create(entityId);
     sharedComponents.setFriendlies(componentIndicesCache.getIndicesFor(compsToSyncWithFriendly));
@@ -180,8 +180,8 @@ public class ComponentFactory {
   }
 
   public void createSightlineSubscribersComponent(
-          int entityId,
-          int sightlineRadius
+      int entityId,
+      int sightlineRadius
   ) {
     var sightlineSubscribers = sightlineSubscribersMapper.create(entityId);
     sightlineSubscribers.setSightlineRadius(sightlineRadius);

@@ -1,5 +1,6 @@
 package com.mygdx.game.client.util;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,8 +29,8 @@ public class UiElementsCreator {
     this.assets = assets;
   }
 
-  public Image createImage(Vector3 position, TextureComp texture) {
-    var image = new Image(new TextureRegionDrawable(new TextureRegion(texture.getTexture())));
+  public Image createImage(Vector3 position, Texture texture) {
+    var image = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
     image.setPosition(position.x, position.z);
     return image;
   }

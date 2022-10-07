@@ -2,6 +2,7 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.Research;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
