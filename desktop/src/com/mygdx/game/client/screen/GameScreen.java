@@ -13,6 +13,7 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
+import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.GameConfigs;
@@ -40,6 +41,7 @@ public class GameScreen extends ScreenAdapter {
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final GameConnectService gameConnectService;
+  private final PlayerTurnDialogFactory playerTurnDialogFactory;
 
   private boolean initialized = false;
 
@@ -54,7 +56,8 @@ public class GameScreen extends ScreenAdapter {
       GameScreenUiInputAdapter gameScreenUiInputAdapter,
       GameStartService gameStartService,
       PlayerRoomDialogFactory roomDialogFactory,
-      GameConnectService gameConnectService
+      GameConnectService gameConnectService,
+      PlayerTurnDialogFactory playerTurnDialogFactory
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -66,6 +69,7 @@ public class GameScreen extends ScreenAdapter {
     this.gameStartService = gameStartService;
     this.roomDialogFactory = roomDialogFactory;
     this.gameConnectService = gameConnectService;
+    this.playerTurnDialogFactory = playerTurnDialogFactory;
   }
 
   @Override
@@ -76,6 +80,7 @@ public class GameScreen extends ScreenAdapter {
       gameConnectService.connect();
       initialized = true;
     }
+    playerTurnDialogFactory.initializeHandler();
     setUpInput();
   }
 

@@ -13,24 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mygdx.game.assets.GameScreenAssetPaths;
-import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.assets.MenuScreenAssets;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -135,6 +122,17 @@ public class HUDElementsCreator {
     image.setPosition(x, y);
 
     return image;
+  }
+
+  public Button createButton(String message, int x, int y, int width, int height) {
+    var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    var button = new TextButton(message, skin);
+
+    button.setPosition(x, y);
+    button.setWidth(width);
+    button.setHeight(height);
+
+    return button;
   }
 
   public void removeAfterClick(Actor actor) {
