@@ -50,7 +50,6 @@ public class ComponentFactory {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<MaterialComponent> materialMapper;
   private ComponentMapper<Name> nameMapper;
@@ -58,7 +57,6 @@ public class ComponentFactory {
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public ComponentFactory(
