@@ -37,7 +37,7 @@ public class NetworkJobsQueueJobJobberManager {
   public void doAllJobs() {
     var datum = dataToBeHandled.poll();
     while (datum != null) {
-      log.info("data tried to be handled");
+      log.info("data tried to be handled content: " + datum);
       if (!webSocketHandler.onMessage(datum.socket(), datum.data())) {
         if (!componentMessageListener.onMessage(datum.socket(), datum.data())) {
           throw new RuntimeException("data " + datum + "can't be handled");

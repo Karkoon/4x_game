@@ -7,7 +7,6 @@ import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.GameRoom;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -16,7 +15,7 @@ import javax.inject.Inject;
 @Log
 public class AddOwnerToSightlineSubscribersSystem extends IteratingSystem {
 
-  private final GameRoom room;
+  private final GameRoom gameRoom;
 
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Name> nameComponentMapper;
@@ -24,16 +23,18 @@ public class AddOwnerToSightlineSubscribersSystem extends IteratingSystem {
 
   @Inject
   public AddOwnerToSightlineSubscribersSystem(
-      GameRoom room
+      GameRoom gameRoom
   ) {
-    super();
-    this.room = room;
+    this.gameRoom = gameRoom;
   }
 
   @Override
   protected void process(int entityId) {
-    var owner = room.getClientByToken(ownerMapper.get(entityId).getToken());
-    sightlineSubscribersMapper.get(entityId).setClient(room.getOrderNumber(owner));
-    log.info("added sightline subscriber to" + nameComponentMapper.get(entityId));
+    var owner = ownerMapper.get(entityId).getToken();
+    var name = nameComponentMapper.create(entityId);
+    var clientIndex = gameRoom.getOrderNumber(gameRoom.getClientByToken(owner));
+    var sightlineSubscribers = sightlineSubscribersMapper.get(entityId);
+    log.info("added sightline subscriber " + owner + " to" + name);
+    sightlineSubscribers.setClient(clientIndex);
   }
 }

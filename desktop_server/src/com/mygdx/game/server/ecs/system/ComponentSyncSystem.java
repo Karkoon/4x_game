@@ -4,7 +4,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
-import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
@@ -28,8 +27,7 @@ public class ComponentSyncSystem extends IteratingSystem {
   private final Lazy<RemoveClientEntityService> removeClientEntityService;
   private final GameRoom gameRoom;
 
-  private ComponentMapper<Building> buildingMapper;
-  private ComponentMapper<ChangeSubscribers> clientsToUpdateMapper;
+  private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<Name> nameComponentMapper;
@@ -76,7 +74,7 @@ public class ComponentSyncSystem extends IteratingSystem {
    */
 
   private void handleUnsubscribedClients(int entityId) {
-    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
+    var clientsToUpdate = changeSubscribersMapper.get(entityId);
     var subscribers = clientsToUpdate.getClients();
     var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
@@ -89,9 +87,9 @@ public class ComponentSyncSystem extends IteratingSystem {
   }
 
   private void handleFoes(int entityId) {
-    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
-    var clients = clientsToUpdate.getClients();
-    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
+    var changeSubscribers = changeSubscribersMapper.get(entityId);
+    var clients = changeSubscribers.getClients();
+    var changedSubscriptionState = new Bits(changeSubscribers.getChangedSubscriptionState());
     var foes = new Bits(clients);
     foes.andNot(friendlyOrFoeMapper.get(entityId).getFriendlies());
     changedSubscriptionState.andNot(friendlyOrFoeMapper.get(entityId).getFriendlies());
@@ -100,19 +98,26 @@ public class ComponentSyncSystem extends IteratingSystem {
   }
 
   private void handleFriendlies(int entityId) {
-    var clientsToUpdate = clientsToUpdateMapper.get(entityId);
-    var clients = clientsToUpdate.getClients();
-    var changedSubscriptionState = new Bits(clientsToUpdate.getChangedSubscriptionState());
+    var changeSubscribers = changeSubscribersMapper.get(entityId);
+    var clients = changeSubscribers.getClients();
+    var changedSubscriptionState = new Bits(changeSubscribers.getChangedSubscriptionState());
     var friendlies = new Bits(clients);
     friendlies.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
     changedSubscriptionState.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
+    log.info("id: " + entityId + " friendlyorfoe bits: " + friendlyOrFoeMapper.get(entityId).getFriendlies()
+        + " change subscribers:" + clients + " changed subscription state: " + changedSubscriptionState
+    + " friendlies:" + friendlies + " changed subscription state " + changedSubscriptionState );
     var friendComponents = sharedComponentsMapper.get(entityId).getFriendlies();
     sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
   }
 
   private void sendComponentsToClients(int entityId, Bits clients, Bits components, Bits changedSubscriptionState) {
     var dirtyFlags = dirtyComponentsMapper.get(entityId);
-    for (int clientIndex = 0; clientIndex < clients.length(); clientIndex++) {
+    for (
+        var clientIndex = clients.nextSetBit(0);
+        clientIndex != -1;
+        clientIndex = clients.nextSetBit(clientIndex + 1)
+    ) {
       var client = gameRoom.getClients().get(clientIndex);
       stateSyncer.beginTransaction(client); //problematic
       for (
@@ -120,13 +125,13 @@ public class ComponentSyncSystem extends IteratingSystem {
           mapperIndex != -1;
           mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
-        log.info("name: " + nameComponentMapper.get(entityId));
         if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !changedSubscriptionState.get(clientIndex)) {
-          log.info("skipped because no changes");
+          log.info("name:" +  nameComponentMapper.get(entityId) + " skipped because no changes");
           continue; // skip if component wasn't changed and the client does not need all the data
         }
         var mapper = world.getMapper(mapperIndex);
         var componentToSend = mapper.get(entityId);
+        log.info("sending name:" +  nameComponentMapper.get(entityId) + " to " + client.getPlayerToken());
         stateSyncer.sendComponentTo(componentToSend, entityId, client);
       }
     }
