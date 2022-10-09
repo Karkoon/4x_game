@@ -27,7 +27,7 @@ public class FieldFactory {
     this.componentFactory = componentFactory;
   }
 
-  public void createEntity(@NonNull FieldConfig config, Coordinates coordinate) {
+  public int createEntity(@NonNull FieldConfig config, Coordinates coordinate) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createCoordinateComponent(coordinate, entityId);
     componentFactory.createNameComponent(entityId, "field " + config.getName() + " " + entityId);
@@ -40,5 +40,6 @@ public class FieldFactory {
         new Class[]{Coordinates.class, EntityConfigId.class, Field.class},
         new Class[]{Coordinates.class, EntityConfigId.class, Field.class}
     );
+    return entityId;
   }
 }

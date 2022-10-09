@@ -1,5 +1,6 @@
 package com.mygdx.game.server.initialize;
 
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.field_generators.MapGeneratorsContainer;
 import lombok.NonNull;
@@ -18,8 +19,8 @@ public class MapInitializer {
     this.generators = generators;
   }
 
-  public void initializeMap(int width, int height, long mapType) {
-    generators.get(mapType).generateMap(width, height);
+  public IntArray initializeMap(int width, int height, long mapType) {
+    return generators.get(mapType).generateMap(width, height);
   }
 
 }

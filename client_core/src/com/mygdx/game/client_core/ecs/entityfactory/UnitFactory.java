@@ -31,7 +31,7 @@ public class UnitFactory {
 
   public void createEntity(@NonNull UnitConfig config, int entity) {
     setUpNameComponent(config, entity);
-    positionMapper.create(entity).getValue().set(0, 10, 0);
+    positionMapper.create(entity).getValue().set(0, 0, 0);
     setupStatsComponent(config, entity);
     movableMapper.set(entity, true);
   }
