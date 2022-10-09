@@ -7,6 +7,7 @@ import com.mygdx.game.server.network.gameinstance.handlers.AttackHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.BuildHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.EndTurnHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.MoveHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.ResearchHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.SubfieldSubscriptionHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.UnitHandler;
 import lombok.extern.java.Log;
@@ -17,30 +18,33 @@ import javax.inject.Inject;
 @Log
 public class GameInstanceServer {
 
-  private final MoveHandler moveHandler;
-  private final EndTurnHandler endTurnHandler;
-  private final BuildHandler buildHandler;
   private final AttackHandler attackHandler;
-  private final UnitHandler unitHandler;
+  private final BuildHandler buildHandler;
+  private final EndTurnHandler endTurnHandler;
+  private final MoveHandler moveHandler;
+  private final ResearchHandler researchHandler;
   private final SubfieldSubscriptionHandler subfieldSubscriptionHandler;
+  private final UnitHandler unitHandler;
   private final GameInstance gameInstance;
 
   @Inject
   public GameInstanceServer(
-      MoveHandler moveHandler,
-      EndTurnHandler endTurnHandler,
       AttackHandler attackHandler,
       BuildHandler buildHandler,
-      UnitHandler unitHandler,
+      EndTurnHandler endTurnHandler,
+      MoveHandler moveHandler,
+      ResearchHandler researchHandler,
       SubfieldSubscriptionHandler subfieldSubscriptionHandler,
+      UnitHandler unitHandler,
       GameInstance gameInstance
   ) {
-    this.moveHandler = moveHandler;
-    this.endTurnHandler = endTurnHandler;
-    this.buildHandler = buildHandler;
     this.attackHandler = attackHandler;
-    this.unitHandler = unitHandler;
+    this.buildHandler = buildHandler;
+    this.endTurnHandler = endTurnHandler;
+    this.moveHandler = moveHandler;
+    this.researchHandler = researchHandler;
     this.subfieldSubscriptionHandler = subfieldSubscriptionHandler;
+    this.unitHandler = unitHandler;
     this.gameInstance = gameInstance;
   }
 
@@ -50,12 +54,13 @@ public class GameInstanceServer {
       return;
     }
     switch (commands[0]) {
-      case "move" -> moveHandler.handle(commands, client);
-      case "field" -> subfieldSubscriptionHandler.handle(commands, client);
-      case "build" -> buildHandler.handle(commands, client);
-      case "end_turn" -> endTurnHandler.handle();
       case "attack" -> attackHandler.handle(commands, client);
+      case "build" -> buildHandler.handle(commands, client);
       case "create_unit" -> unitHandler.handle(commands, client);
+      case "end_turn" -> endTurnHandler.handle();
+      case "field" -> subfieldSubscriptionHandler.handle(commands, client);
+      case "research" -> researchHandler.handle(commands, client);
+      case "move" -> moveHandler.handle(commands, client);
       default -> throw new RuntimeException("wtf");
     }
   }

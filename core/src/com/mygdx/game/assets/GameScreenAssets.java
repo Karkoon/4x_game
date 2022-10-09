@@ -78,7 +78,7 @@ public class GameScreenAssets {
     loadDirectory(GameScreenAssetPaths.SUBFIELDS_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.UNITS_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.BUILDINGS_TEXTURE_DIR, ".png", Texture.class);
-    loadDirectory(GameScreenAssetPaths.MATERIALS_TEXTURE_DIR, ".png", Texture.class);
+    loadDirectory(GameScreenAssetPaths. MATERIALS_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.TECHNOLOGIES_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
     assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);

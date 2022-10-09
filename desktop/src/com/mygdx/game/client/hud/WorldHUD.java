@@ -16,7 +16,6 @@ import com.mygdx.game.client.util.HUDElementsCreator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.model.MaterialBase;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -25,17 +24,17 @@ import javax.inject.Named;
 @Log
 public class WorldHUD implements Disposable {
 
-  @AspectDescriptor(all = {MaterialComponent.class})
-  private EntitySubscription subscription;
-
-  private ComponentMapper<MaterialComponent> materialMapper;
-
   private final EndTurnService endTurnService;
   private final HUDElementsCreator hudElementsCreator;
   private final Stage stage;
 
   private HorizontalGroup materialGroup;
   private Button endTurnButton;
+
+  @AspectDescriptor(all = {MaterialComponent.class})
+  private EntitySubscription subscription;
+
+  private ComponentMapper<MaterialComponent> materialMapper;
 
   @Inject
   public WorldHUD(
