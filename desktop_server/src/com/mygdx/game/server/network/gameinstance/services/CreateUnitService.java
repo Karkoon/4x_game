@@ -17,9 +17,8 @@ import javax.inject.Inject;
 public class CreateUnitService extends WorldService {
 
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private UnitFactory unitFactory;
-  private GameConfigAssets assets;
-  private World world;
+  private final UnitFactory unitFactory;
+  private final GameConfigAssets assets;
 
   @Inject
   public CreateUnitService(
@@ -36,6 +35,5 @@ public class CreateUnitService extends WorldService {
     var config = assets.getGameConfigs().get(UnitConfig.class, unitConfigId);
     var coordinates = coordinatesMapper.get(fieldEntityId);
     unitFactory.createEntity(config, coordinates, client);
-    world.process();
   }
 }
