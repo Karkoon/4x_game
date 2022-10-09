@@ -44,7 +44,7 @@ public class UnitFactory {
 
   private void setUpPositionComponent(int entityId) {
     Position position = positionMapper.create(entityId);
-    position.getValue().set(0, 10, 0);
+    position.getValue().set(0, 0, 0);
   }
 
   private void setupStatsComponent(@NonNull UnitConfig config, int entityId) {

@@ -1,37 +1,48 @@
 package com.mygdx.game.server.initialize;
 
-import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.config.UnitConfig;
-import com.mygdx.game.core.ecs.component.Coordinates;
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.IntSet;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.server.di.GameInstanceScope;
-import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.gameinstance.services.CreateUnitService;
 
 import javax.inject.Inject;
 
 @GameInstanceScope
 public class StartUnitInitializer {
 
-  private final UnitFactory unitFactory;
-  private final GameConfigAssets assets;
   private final GameRoom gameRoom;
+  private final CreateUnitService createUnitService;
+  private final IntSet usedMapPositions = new IntSet();
 
   @Inject
   public StartUnitInitializer(
-      UnitFactory unitFactory,
-      GameConfigAssets assets,
-      GameRoom gameRoom
+      GameRoom gameRoom,
+      CreateUnitService createUnitService
   ) {
-    this.unitFactory = unitFactory;
-    this.assets = assets;
+    this.createUnitService = createUnitService;
     this.gameRoom = gameRoom;
   }
 
-  private int y = 0;
-  public void initializeStartingUnits() {
-    var anyConfig = assets.getGameConfigs().getAny(UnitConfig.class); // todo decide which unitconfig should be the starting unit
+  public void initializeStartingUnits(IntArray map) {
+    var anyConfig = GameConfigs.UNIT_MIN;
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
-      unitFactory.createEntity(anyConfig, new Coordinates(0, y++), gameRoom.getClients().get(i));
+      var client = gameRoom.getClients().get(i);
+      var fieldId = getUnusedField(map);
+      createUnitService.createUnit(anyConfig, fieldId, client);
     }
+  }
+
+  private int getUnusedField(IntArray map) {
+    var fieldId = map.random();
+    while (usedMapPositions.contains(fieldId)) {
+      fieldId = map.random();
+      if (usedMapPositions.size == map.size) {
+        throw new RuntimeException("all positions have been used");
+      }
+    }
+    usedMapPositions.add(fieldId);
+    return fieldId;
   }
 }
