@@ -42,7 +42,7 @@ public class ModelInstanceCompSetter implements Setter {
   private void setUpModelInstanceComp(@NonNull ModelConfig config, int entityId) {
     var modelInstance = prepareModelInstance(config);
     var modelInstanceComp = modelMapper.create(entityId);
-    modelInstanceComp.setModelInstance(modelInstance);
+    modelInstanceComp.setMainModel(modelInstance);
   }
 
   private ModelInstance prepareModelInstance(ModelConfig config) {

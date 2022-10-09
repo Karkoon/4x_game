@@ -12,7 +12,7 @@ import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.SelfVisibilitySystem;
 import com.mygdx.game.client.ecs.system.SetHighlightSystem;
 import com.mygdx.game.client.ecs.system.VisibilitySystem;
-import com.mygdx.game.client_core.ecs.system.CoordinateToPositionSystem;
+import com.mygdx.game.client.ecs.system.CoordinateToPositionSystem;
 import com.mygdx.game.client_core.ecs.system.NetworkJobSystem;
 import com.mygdx.game.client_core.ecs.system.RemovalSystem;
 import dagger.Module;

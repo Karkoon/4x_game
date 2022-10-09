@@ -38,7 +38,7 @@ public class GameScreenAssets {
 
   @NonNull
   public Model getModel(@NonNull String filename) {
-    return assetManager.get(GameScreenAssetPaths.MODEL_DIR + filename);
+    return assetManager.get(GameScreenAssetPaths.MODEL_DIR + filename, Model.class);
   }
 
   @NonNull
@@ -69,7 +69,9 @@ public class GameScreenAssets {
   }
 
   private void loadModels() {
+    log.info("loading models");
     loadDirectory(GameScreenAssetPaths.MODEL_DIR, ".g3db", Model.class);
+    log.info("loaded models (first instance)");
   }
 
   // we can control there the order of loading textures what is important with transparency
