@@ -55,6 +55,7 @@ public class PlayerRoomDialogFactory {
       if (message.getPlayerToken().equals(playerInfo.getToken())) {
         playerInfo.activatePlayer();
       }
+      log.info("GameStartedMessage received");
       dialog.hide();
       return FULLY_HANDLED;
     }));

@@ -6,9 +6,11 @@ import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.gameinstance.services.CreateUnitService;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
+@Log
 @GameInstanceScope
 public class StartUnitInitializer {
 
@@ -29,6 +31,7 @@ public class StartUnitInitializer {
     var anyConfig = GameConfigs.UNIT_MIN;
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
       var client = gameRoom.getClients().get(i);
+      log.info("client id " + client.getPlayerToken());
       var fieldId = getUnusedField(map);
       createUnitService.createUnit(anyConfig, fieldId, client);
     }
