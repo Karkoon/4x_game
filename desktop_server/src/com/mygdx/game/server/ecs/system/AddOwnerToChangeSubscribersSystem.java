@@ -34,7 +34,7 @@ public class AddOwnerToChangeSubscribersSystem extends IteratingSystem {
     var clientIndex = gameRoom.getOrderNumber(gameRoom.getClientByToken(owner));
     var subscribers = changeSubscribersComponentMapper.get(entityId);
     if (!subscribers.getClients().get(clientIndex)) {
-      log.info("added owner to " + name);
+      log.info("added change subscriber: " + owner + " to " + name);
       subscribers.getClients().set(clientIndex);
     }
   }

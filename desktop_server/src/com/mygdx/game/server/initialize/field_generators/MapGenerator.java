@@ -1,6 +1,7 @@
 package com.mygdx.game.server.initialize.field_generators;
 
 
+import com.badlogic.gdx.utils.IntArray;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -14,6 +15,6 @@ public abstract class MapGenerator {
     this.id = id;
   }
 
-  public abstract void generateMap(int width, int height);
+  public abstract IntArray generateMap(int width, int height);
 
 }

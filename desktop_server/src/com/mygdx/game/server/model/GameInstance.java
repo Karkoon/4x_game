@@ -51,10 +51,10 @@ public class GameInstance {
   }
 
   public void startGame(int width, int height, long mapType) {
-    mapInitializer.get().initializeMap(width, height, mapType);
+    var map = mapInitializer.get().initializeMap(width, height, mapType);
     technologyInitializer.get().initializeTechnologies();
     materialInitializer.get().initializeMaterials();
-    unitInitializer.get().initializeStartingUnits();
+    unitInitializer.get().initializeStartingUnits(map);
     playerOrder = new ArrayDeque<>();
     playerOrder.addAll(room.getClients());
     changeToNextPlayer();

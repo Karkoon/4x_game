@@ -1,5 +1,6 @@
 package com.mygdx.game.server.initialize.field_generators;
 
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.GameConfigs;
@@ -31,17 +32,20 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   }
 
   @Override
-  public void generateMap(int width, int height) {
+  public IntArray generateMap(int width, int height) {
+    var fieldIds = new IntArray(width * height);
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
         if (i == WINNING_X && j == WINNING_Y) {
           continue;
         }
         var fieldConfig = chooseFieldConfig();
-        fieldFactory.createEntity(fieldConfig, new Coordinates(i, j));
+        var entityId = fieldFactory.createEntity(fieldConfig, new Coordinates(i, j));
+        fieldIds.add(entityId);
       }
     }
     createWinningField();
+    return fieldIds;
   }
 
   private @NonNull FieldConfig chooseFieldConfig() {
