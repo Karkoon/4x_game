@@ -5,11 +5,13 @@ import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.Owner;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
+@Log
 public class OwnerHandler implements ComponentMessageListener.Handler<Owner> {
 
   private ComponentMapper<Owner> ownerMapper;
@@ -23,6 +25,7 @@ public class OwnerHandler implements ComponentMessageListener.Handler<Owner> {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Owner component) {
+    log.info("added onwer component or changed owner component");
     ownerMapper.create(worldEntity).setToken(component.getToken());
     return FULLY_HANDLED;
   }
