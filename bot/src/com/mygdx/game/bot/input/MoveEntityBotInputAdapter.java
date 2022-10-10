@@ -4,10 +4,10 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client_core.ecs.component.Score;
+import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.GameState;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.model.PlayerScore;
-import com.mygdx.game.client_core.network.MoveEntityService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
@@ -25,6 +25,7 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
   private final ComponentMapper<Score> scoreMapper;
   private final PlayerScore playerScore;
   private final PlayerInfo playerInfo;
+  private final ActiveToken activeToken;
 
   @Inject
   public MoveEntityBotInputAdapter(
@@ -32,22 +33,28 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
       @NonNull World world,
       @NonNull MoveEntityService moveEntityService,
       @NonNull PlayerScore playerScore,
-      @NonNull PlayerInfo playerInfo
+      @NonNull PlayerInfo playerInfo,
+      @NonNull ActiveToken activeToken
   ) {
     this.gameState = gameState;
     this.moveEntityService = moveEntityService;
     this.scoreMapper = world.getMapper(Score.class);
     this.playerScore = playerScore;
     this.playerInfo = playerInfo;
+    this.activeToken = activeToken;
   }
 
   public void moveUnit(int entityId, Coordinates clickedCoords) {
-    if (playerInfo.isPlayerTurn()) {
+    if (canPlayerMove()) {
       processScore(clickedCoords);
       moveEntityService.moveEntity(entityId, clickedCoords);
     } else {
       log.info("Not your turn");
     }
+  }
+
+  private boolean canPlayerMove() {
+    return activeToken.isActiveToken(playerInfo.getToken());
   }
 
   private void processScore(Coordinates clickedCoords) {
