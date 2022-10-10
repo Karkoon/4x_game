@@ -10,7 +10,11 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Unit;
+import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.DirtyComponents;
+import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
+import com.mygdx.game.server.ecs.component.SightlineSubscribers;
+import com.mygdx.game.server.model.GameRoom;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -19,16 +23,22 @@ import javax.inject.Inject;
 @Log
 public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
 
+  private final GameRoom room;
   @AspectDescriptor(all = {Unit.class, Coordinates.class})
   private EntitySubscription units;
 
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
+  private ComponentMapper<ChangeSubscribers> changeSubscribersComponentMapper;
+  private ComponentMapper<SightlineSubscribers> sightlineSubscribersComponentMapper;
+  private ComponentMapper<FriendlyOrFoe> friendlyOrFoeComponentMapper;
 
   @Inject
-  public AddFieldOwnerIfUnitPresentSystem() {
-    super();
+  public AddFieldOwnerIfUnitPresentSystem(
+      GameRoom room
+  ) {
+    this.room = room;
   }
 
   @Override
@@ -40,12 +50,29 @@ public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
         var fieldOwner = ownerMapper.create(fieldId);
         var unitOwner = ownerMapper.get(unitId);
         if (!unitOwner.getToken().equals(fieldOwner.getToken())) {
+          removePreviousOwnerFromField(fieldId, fieldOwner.getToken());
+          addNewOwner(fieldId, unitOwner.getToken());
           fieldOwner.setToken(unitOwner.getToken());
           setDirty(fieldId, Owner.class, world);
           log.info("added owner to field");
         }
       }
     }
+  }
+
+  private void removePreviousOwnerFromField(int fieldId, String previousOwner) {
+    if (previousOwner == null) return;
+    var previousOwnerIndex = room.getClients().indexOf(room.getClientByToken(previousOwner));
+    friendlyOrFoeComponentMapper.get(fieldId).getFriendlies().clear(previousOwnerIndex);
+    sightlineSubscribersComponentMapper.get(fieldId).getClients().clear(previousOwnerIndex);
+    changeSubscribersComponentMapper.get(fieldId).getClients().clear(previousOwnerIndex);
+  }
+
+  private void addNewOwner(int fieldId, String newOwner) {
+    var newOwnerIndex = room.getClients().indexOf(room.getClientByToken(newOwner));
+    friendlyOrFoeComponentMapper.get(fieldId).getFriendlies().set(newOwnerIndex);
+    sightlineSubscribersComponentMapper.get(fieldId).getClients().set(newOwnerIndex);
+    changeSubscribersComponentMapper.get(fieldId).getClients().set(newOwnerIndex);
   }
 
   protected void setDirty(int entityId, Class component, World world) {

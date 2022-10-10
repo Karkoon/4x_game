@@ -28,7 +28,6 @@ public final class ModelInstanceUtil {
 
   public static void tintColor(@NonNull ModelInstance modelInstance,
                                @NonNull Color color) {
-    log.info("tinting color");
     modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(color));
   }
 }
