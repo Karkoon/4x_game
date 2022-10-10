@@ -100,9 +100,10 @@ public class TechnologyScreen extends ScreenAdapter {
       var texture = textureMapper.get(entityId).getTexture();
       var name = nameMapper.get(entityId);
 
-      var image = uiElementsCreator.createImage(position, texture);
-      var textField = uiElementsCreator.createTextField(position, name.getName());
-      uiElementsCreator.addHoverPopupWithActor(image, textField, stage);
+      var image = uiElementsCreator.createImage(texture, (int) position.x, (int) position.z);
+      var label = uiElementsCreator.createLabel(name.getName(), (int) position.x + 250, (int) position.z + 250);
+      uiElementsCreator.scaleLabel(label, 2.5f);
+      uiElementsCreator.addHoverPopupWithActor(image, label, stage);
 
       image.addListener(new ClickListener() {
         @Override
@@ -111,6 +112,7 @@ public class TechnologyScreen extends ScreenAdapter {
           world.process();
         }
       });
+
       stage.addActor(image);
     }
 
@@ -124,9 +126,11 @@ public class TechnologyScreen extends ScreenAdapter {
     var texture = gameScreenAssets.getTexture( "technologies/researched.png");
     var name = nameMapper.get(entityId);
 
-    var image = uiElementsCreator.createImage(position, texture);
-    var textField = uiElementsCreator.createTextField(position, name.getName());
-    uiElementsCreator.addHoverPopupWithActor(image, textField, stage);
+    var image = uiElementsCreator.createImage(texture, (int) position.x, (int) position.z);
+    var label = uiElementsCreator.createLabel(name.getName(), (int) position.x + 200, (int) position.z + 200);
+    uiElementsCreator.scaleLabel(label, 2.5f);
+    uiElementsCreator.addHoverPopupWithActor(image, label, stage);
+
     stage.addActor(image);
   }
 
