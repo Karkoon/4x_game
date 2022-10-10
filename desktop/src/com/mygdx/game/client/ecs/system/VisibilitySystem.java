@@ -49,10 +49,6 @@ public class VisibilitySystem extends IteratingSystem {
 
   @Override
   protected void process(int perceiver) {
-    if (!ownerMapper.get(perceiver).getToken().equals(playerInfo.getToken())) {
-      visibleMapper.set(perceiver, false);
-      return;
-    }
     var coordinates = coordinatesMapper.get(perceiver);
     var sightlineRadius = statsMapper.get(perceiver).getSightRadius();
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {

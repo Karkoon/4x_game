@@ -76,11 +76,11 @@ public class GameScreen extends ScreenAdapter {
   public void show() {
     log.info("GameScreen shown");
     if (!initialized) {
+      playerTurnDialogFactory.initializeHandler();
       roomDialogFactory.createAndShow(() -> gameStartService.startGame(10, 10, GameConfigs.MAP_TYPE_MIN));
       gameConnectService.connect();
       initialized = true;
     }
-    playerTurnDialogFactory.initializeHandler();
     setUpInput();
   }
 

@@ -4,11 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.client_core.model.ActiveToken;
+import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import lombok.NonNull;
@@ -24,38 +24,36 @@ public class PlayerRoomDialogFactory {
 
   private final GameScreenAssets assets;
   private final Stage stage;
-  private final WebSocketHandler handler;
-  private final PlayerInfo playerInfo;
+  private final QueueMessageListener listener;
+  private final ActiveToken activeToken;
 
   @Inject
   public PlayerRoomDialogFactory(
       GameScreenAssets assets,
       @Named(StageModule.GAME_SCREEN) Stage stage,
-      WebSocketHandler handler,
-      PlayerInfo playerInfo
+      QueueMessageListener listener,
+      ActiveToken activeToken
   ) {
     this.assets = assets;
     this.stage = stage;
-    this.handler = handler;
-    this.playerInfo = playerInfo;
+    this.listener = listener;
+    this.activeToken = activeToken;
   }
 
   public void createAndShow(@NonNull OnClose onClose) {
     var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
     var dialog = createDialog(skin, onClose);
     var numberOfPlayersLabel = new Label("0", skin);
-    handler.registerHandler(PlayerJoinedRoomMessage.class, ((webSocket, o) -> {
+    listener.registerHandler(PlayerJoinedRoomMessage.class, ((webSocket, o) -> {
       var message = (PlayerJoinedRoomMessage) o;
       numberOfPlayersLabel.setText(message.getNumberOfClients());
       log.info("A player joined the room: number_of_clients=" + message);
       return FULLY_HANDLED;
     }));
-    handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
+    listener.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
       var message = (GameStartedMessage) o;
-      if (message.getPlayerToken().equals(playerInfo.getToken())) {
-        playerInfo.activatePlayer();
-      }
       log.info("GameStartedMessage received");
+      activeToken.setActiveToken(message.getPlayerToken());
       dialog.hide();
       return FULLY_HANDLED;
     }));

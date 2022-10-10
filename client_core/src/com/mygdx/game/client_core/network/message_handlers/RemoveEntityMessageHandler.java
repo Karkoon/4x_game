@@ -6,13 +6,14 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.client_core.model.ToRemove;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
+import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.RemoveEntityMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 @Log
-public class RemoveEntityMessageHandler implements WebSocketHandler.Handler<RemoveEntityMessage> {
+public class RemoveEntityMessageHandler implements QueueMessageListener.Handler<RemoveEntityMessage> {
 
   private final NetworkWorldEntityMapper mapper;
   private ComponentMapper<ToRemove> toRemoveComponentMapper;
