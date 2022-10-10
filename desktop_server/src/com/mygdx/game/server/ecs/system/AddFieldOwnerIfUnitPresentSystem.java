@@ -15,6 +15,8 @@ import com.mygdx.game.server.ecs.component.DirtyComponents;
 import com.mygdx.game.server.ecs.component.FriendlyOrFoe;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.gameinstance.services.RemoveClientEntityService;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -24,6 +26,7 @@ import javax.inject.Inject;
 public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
 
   private final GameRoom room;
+  private final Lazy<RemoveClientEntityService> service;
   @AspectDescriptor(all = {Unit.class, Coordinates.class})
   private EntitySubscription units;
 
@@ -36,9 +39,11 @@ public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
 
   @Inject
   public AddFieldOwnerIfUnitPresentSystem(
-      GameRoom room
+      GameRoom room,
+      Lazy<RemoveClientEntityService> service
   ) {
     this.room = room;
+    this.service = service;
   }
 
   @Override
@@ -62,10 +67,12 @@ public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
 
   private void removePreviousOwnerFromField(int fieldId, String previousOwner) {
     if (previousOwner == null) return;
-    var previousOwnerIndex = room.getClients().indexOf(room.getClientByToken(previousOwner));
+    var previousOwnerClient = room.getClientByToken(previousOwner);
+    var previousOwnerIndex = room.getClients().indexOf(previousOwnerClient);
     friendlyOrFoeComponentMapper.get(fieldId).getFriendlies().clear(previousOwnerIndex);
     sightlineSubscribersComponentMapper.get(fieldId).getClients().clear(previousOwnerIndex);
     changeSubscribersComponentMapper.get(fieldId).getClients().clear(previousOwnerIndex);
+    service.get().removeEntity(fieldId, previousOwnerClient);
   }
 
   private void addNewOwner(int fieldId, String newOwner) {
