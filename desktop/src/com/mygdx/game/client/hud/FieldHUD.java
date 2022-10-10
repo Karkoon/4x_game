@@ -9,7 +9,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.model.ChosenConfig;
 import com.mygdx.game.client.model.InField;
-import com.mygdx.game.client.util.HUDElementsCreator;
+import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
@@ -22,7 +22,7 @@ import javax.inject.Named;
 public class FieldHUD implements Disposable {
 
   private final Stage stage;
-  private final HUDElementsCreator hudElementsCreator;
+  private final UiElementsCreator uiElementsCreator;
   private final ChosenConfig chosenConfig;
   private final GameConfigAssets assets;
   private final GameScreenAssets gameAssets;
@@ -32,7 +32,7 @@ public class FieldHUD implements Disposable {
   @Inject
   public FieldHUD(
       @Named(StageModule.FIELD_SCREEN) Stage stage,
-      HUDElementsCreator hudElementsCreator,
+      UiElementsCreator uiElementsCreator,
       ChosenConfig chosenConfig,
       GameConfigAssets assets,
       GameScreenAssets gameAssets,
@@ -40,7 +40,7 @@ public class FieldHUD implements Disposable {
       InField inField
   ) {
     this.stage = stage;
-    this.hudElementsCreator = hudElementsCreator;
+    this.uiElementsCreator = uiElementsCreator;
     this.chosenConfig = chosenConfig;
     this.assets = assets;
     this.gameAssets = gameAssets;
@@ -63,9 +63,9 @@ public class FieldHUD implements Disposable {
   }
 
   private void prepareHudSceleton() {
-    var container = hudElementsCreator.createVerticalContainer((int) stage.getWidth()/5*4, 0, (int) stage.getWidth()/5, (int) stage.getHeight());
-    var buildingsButton = hudElementsCreator.createActionButton("Create building", this::createBuildingList);
-    var unitButton = hudElementsCreator.createActionButton("Create unit", this::createUnitList);
+    var container = uiElementsCreator.createVerticalContainer((int) stage.getWidth()/5*4, 0, (int) stage.getWidth()/5, (int) stage.getHeight());
+    var buildingsButton = uiElementsCreator.createActionButton("Create building", this::createBuildingList, 0, 0);
+    var unitButton = uiElementsCreator.createActionButton("Create unit", this::createUnitList, 0, 0);
     container.addActor(buildingsButton);
     container.addActor(unitButton);
     stage.addActor(container);
@@ -73,14 +73,15 @@ public class FieldHUD implements Disposable {
 
   private void createBuildingList() {
     var buildings = assets.getGameConfigs().getAll(BuildingConfig.class);
-    var texture = gameAssets.getTexture(buildings.get(0).getIconName());
-    var container = hudElementsCreator.createVerticalContainer(100, 100, texture.getWidth(), texture.getHeight() * buildings.size);
-    hudElementsCreator.removeAfterClick(container);
+    var sampleTexture = gameAssets.getTexture(buildings.get(0).getIconName());
+    var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * buildings.size);
+    uiElementsCreator.removeActorAfterClick(container);
     for (int i = 0; i < buildings.size; i++) {
       var building = buildings.get(i);
-      log.info("BUILDING: " + building.getName());
       long buildingId = building.getId();
-      var imageButton = hudElementsCreator.createImageButton(building.getIconName(), 0, i * texture.getHeight());
+
+      var texture = gameAssets.getTexture(building.getIconName());
+      var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
       imageButton.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
@@ -95,14 +96,15 @@ public class FieldHUD implements Disposable {
 
   private void createUnitList() {
     var units = assets.getGameConfigs().getAll(UnitConfig.class);
-    var texture = gameAssets.getTexture(units.get(0).getIconName());
-    var container = hudElementsCreator.createVerticalContainer(100, 100, texture.getWidth(), texture.getHeight() * units.size);
-    hudElementsCreator.removeAfterClick(container);
+    var sampleTexture = gameAssets.getTexture(units.get(0).getIconName());
+    var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
+    uiElementsCreator.removeActorAfterClick(container);
     for (int i = 0; i < units.size; i++) {
       var unit = units.get(i);
-      log.info("UNIT: " + unit.getName());
       long unitId = unit.getId();
-      var imageButton = hudElementsCreator.createImageButton(unit.getIconName(), 0, i * texture.getHeight());
+
+      var texture = gameAssets.getTexture(unit.getIconName());
+      var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
       imageButton.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {

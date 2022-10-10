@@ -11,8 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client.util.HUDElementsCreator;
+import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.model.MaterialBase;
@@ -24,29 +25,32 @@ import javax.inject.Named;
 @Log
 public class WorldHUD implements Disposable {
 
+  private final GameScreenAssets gameAssets;
   private final EndTurnService endTurnService;
-  private final HUDElementsCreator hudElementsCreator;
+  private final UiElementsCreator uiElementsCreator;
   private final Stage stage;
 
-  private HorizontalGroup materialGroup;
   private Button endTurnButton;
+  private HorizontalGroup materialGroup;
 
   @AspectDescriptor(all = {MaterialComponent.class})
-  private EntitySubscription subscription;
 
+  private EntitySubscription subscription;
   private ComponentMapper<MaterialComponent> materialMapper;
 
   @Inject
   public WorldHUD(
       World world,
+      GameScreenAssets gameScreenAssets,
       EndTurnService endTurnService,
-      HUDElementsCreator hudElementsCreator,
+      UiElementsCreator uiElementsCreator,
       @Named(StageModule.GAME_SCREEN) Stage stage
   ) {
     world.inject(this);
 
+    this.gameAssets = gameScreenAssets;
     this.endTurnService = endTurnService;
-    this.hudElementsCreator = hudElementsCreator;
+    this.uiElementsCreator = uiElementsCreator;
     this.stage = stage;
 
     prepareHudSceleton();
@@ -66,11 +70,12 @@ public class WorldHUD implements Disposable {
   }
 
   private void prepareHudSceleton() {
-    this.materialGroup = hudElementsCreator.createHorizontalContainer((int) (stage.getWidth()-200), (int) (stage.getHeight()-50), 200, 50);
-    this.endTurnButton = hudElementsCreator.createButton("END TURN", (int) (stage.getWidth()-150), 0, 150, 40);
+    this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-200), (int) (stage.getHeight()-50), 200, 50);
+
+    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::addEndTurnAction, (int) (stage.getWidth()-150), 0);
+    uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 150, 40);
 
     fillMaterialGroup();
-    addEndTurnAction();
 
     stage.addActor(materialGroup);
     stage.addActor(endTurnButton);
@@ -83,8 +88,10 @@ public class WorldHUD implements Disposable {
       for (int i = 0; i < allMaterials.length; i++) {
         var material = allMaterials[i];
         int value = findConnectedValue(material);
-        var image = hudElementsCreator.createImage(material.iconPath, i * 50, 0);
-        var text = hudElementsCreator.createLabel(String.valueOf(value), i * 50 + 20, 0);
+
+        var texture = gameAssets.getTexture(material.iconPath);
+        var image = uiElementsCreator.createImage(texture, i * 50, 0);
+        var text = uiElementsCreator.createLabel(String.valueOf(value), i * 50 + 20, 0);
         this.materialGroup.addActor(image);
         this.materialGroup.addActor(text);
       }
@@ -102,12 +109,7 @@ public class WorldHUD implements Disposable {
   }
 
   private void addEndTurnAction() {
-    endTurnButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        endTurnService.endTurn();
-      }
-    });
+    endTurnService.endTurn();
   }
 
   private void addListeners() {

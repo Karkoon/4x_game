@@ -131,6 +131,7 @@
   },
   LabelStyle: {
     default: {
+      background: textfield,
       font: default-font,
       fontColor: white
     }
