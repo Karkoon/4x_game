@@ -45,7 +45,7 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
       processScore(clickedCoords);
       moveEntityService.moveEntity(entityId, clickedCoords);
     } else {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Not your turn");
+      log.info("Not your turn");
     }
   }
 
@@ -53,12 +53,12 @@ public class MoveEntityBotInputAdapter extends InputAdapter {
     var entities = gameState.getEntitiesAtCoordinate(clickedCoords);
     for (int i = 0; i < entities.size; i++) {
       var entity = entities.get(i);
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + String.valueOf(entity));
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + String.valueOf(i));
+      log.info(String.valueOf(entity));
+      log.info(String.valueOf(i));
       if (scoreMapper.has(entity)) {
         var scoreValue = scoreMapper.get(entity).getScoreValue();
         playerScore.setScoreValue(playerScore.getScoreValue() + scoreValue);
-        log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Current score: " + playerScore.getScoreValue());
+        log.info("Current score: " + playerScore.getScoreValue());
       }
     }
   }

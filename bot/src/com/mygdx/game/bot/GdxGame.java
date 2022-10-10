@@ -50,16 +50,16 @@ public class GdxGame extends Game {
 
   @Override
   public void create() {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Loading assets...");
+    log.info("Loading assets...");
     assets.loadAssetsSync();
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Assets loaded.");
+    log.info("Assets loaded.");
 
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Waiting for game start.");
+    log.info("Waiting for game start.");
 
     handler.setFailIfNoHandler(false);
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
       Completable.fromAction(() -> {
-            log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Starting bot.");
+            log.info("Starting bot.");
             var message = (GameStartedMessage) o;
             if (message.getPlayerToken().equals(playerInfo.getToken())) {
               playerInfo.activatePlayer();

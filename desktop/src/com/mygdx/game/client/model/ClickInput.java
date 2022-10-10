@@ -22,7 +22,7 @@ public class ClickInput {
 
   public void setValue(Ray value) {
     if (handled) {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "value set: " + value + " thread: " + Thread.currentThread().getName());
+      log.info("value set: " + value + " thread: " + Thread.currentThread().getName());
       this.value = value;
       this.handled = false;
     }

@@ -32,7 +32,7 @@ public class FieldHandler implements ComponentMessageListener.Handler {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Read field component " + worldEntity);
+    log.info("Read field component " + worldEntity);
     var subFields = ((Field) component).getSubFields();
     for (int i = 0; i < subFields.size; i++) {
       var subField = subFields.get(i);

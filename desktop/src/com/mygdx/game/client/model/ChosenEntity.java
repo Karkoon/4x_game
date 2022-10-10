@@ -20,7 +20,7 @@ public class ChosenEntity {
   }
 
   public void addChosen(int entity) {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "chosen entity");
+    log.info("chosen entity");
     this.entity = entity;
   }
 

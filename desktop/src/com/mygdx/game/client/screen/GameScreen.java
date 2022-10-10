@@ -78,7 +78,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
 
   @Override
   public void show() {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "GameScreen shown");
+    log.info("GameScreen shown");
     positionCamera(viewport.getCamera());
     setUpInput();
     setupNetwork();

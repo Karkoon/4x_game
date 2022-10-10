@@ -34,12 +34,12 @@ public class PlayerRoomDialogFactory {
     var numberOfPlayersLabel = new Label("0", skin);
     serverConnection.registerSingleMessageHandler(PlayerJoinedRoomMessage.class, ((webSocket, msg) -> {
       numberOfPlayersLabel.setText(msg.getNumberOfClients());
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "A player joined the room: number_of_clients=" + msg);
+      log.info("A player joined the room: number_of_clients=" + msg);
       return FULLY_HANDLED;
     }));
     dialog.text(numberOfPlayersLabel);
     dialog.button("Start game");
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "shown PlayerRoomDialog");
+    log.info("shown PlayerRoomDialog");
     return dialog;
   }
 

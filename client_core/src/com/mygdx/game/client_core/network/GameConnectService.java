@@ -24,7 +24,7 @@ public class GameConnectService {
   }
 
   public void connect(String roomId) {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "connect request sent");
+    log.info("connect request sent");
     connection.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + roomId);
   }
 

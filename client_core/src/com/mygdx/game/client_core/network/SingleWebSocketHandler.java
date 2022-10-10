@@ -47,6 +47,6 @@ public class SingleWebSocketHandler extends AbstractWebSocketListener {
   }
 
   private final Handler<?> quitter = (webSocket, o) -> {
-    throw new RuntimeException(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Can't handle " + o.getClass());
+    throw new RuntimeException("Can't handle " + o.getClass());
   };
 }

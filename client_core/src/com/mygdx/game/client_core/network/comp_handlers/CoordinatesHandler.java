@@ -27,7 +27,7 @@ public class CoordinatesHandler implements ComponentMessageListener.Handler {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Component component) {
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Read coordinates component " + worldEntity);
+    log.info("Read coordinates component " + worldEntity);
     var newCoordinates = (Coordinates) component;
     var entityCoordinates = coordinatesMapper.create(worldEntity);
     entityCoordinates.setCoordinates(newCoordinates);

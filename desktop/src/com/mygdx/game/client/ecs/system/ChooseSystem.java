@@ -97,7 +97,7 @@ public class ChooseSystem extends IteratingSystem {
     public void saveIfClicked(int entityId, ClickInput clickInput) {
       var position = positionMapper.get(entityId).getValue();
       if (isWithinClickRadius(position, clickInput.getValue())) {
-        log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "clicked entity");
+        log.info("clicked entity");
         clickedEntitiesIds.add(entityId);
       }
     }

@@ -46,7 +46,7 @@ public class ServerConnection {
 
     @Override
     public boolean onMessage(WebSocket webSocket, byte[] packet) {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "message packet " + Arrays.toString(packet));
+      log.info("message packet " + Arrays.toString(packet));
       return false;
     }
 

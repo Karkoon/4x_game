@@ -36,7 +36,7 @@ public final class ChooseEntityDialogFactory {
     dialog.text("Choose on of the following:");
     addEntityButtons(dialog, entities);
     dialog.show(stage);
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "shown FieldClickedDialog");
+    log.info("shown FieldClickedDialog");
   }
 
   private void addEntityButtons(Dialog dialog, IntMap<Name> entities) {

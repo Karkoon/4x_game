@@ -24,10 +24,10 @@ public class EndTurnService {
     var gameInstance = client.getGameRoom().getGameInstance();
     var currentPlayer = gameInstance.getActivePlayer();
     if (!client.getPlayerToken().equals(currentPlayer)) {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Player " + client.getPlayerUsername() + " tried to end turn");
+      log.info("Player " + client.getPlayerUsername() + " tried to end turn");
     }
     var nextClient = gameInstance.changeToNextPlayer();
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Give control to player " + nextClient.getPlayerUsername());
+    log.info("Give control to player " + nextClient.getPlayerUsername());
     var msg = new ChangeTurnMessage(nextClient.getPlayerToken());
     sender.sendToAll(msg, client.getGameRoom().getClients());
   }

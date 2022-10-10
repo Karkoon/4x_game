@@ -41,7 +41,7 @@ public class GameRoomSyncer {
     if (!transaction.isPending()) {
       throw new IllegalStateException("Transaction not pending");
     }
-    log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "sending " + transaction + " to " + client.getPlayerUsername());
+    log.info("sending " + transaction + " to " + client.getPlayerUsername());
     sendSavingClassInJson(transaction, client);
   }
 
@@ -52,7 +52,7 @@ public class GameRoomSyncer {
     }
     var messageBuffer = transaction.getMessageBuffer();
     room.getClients().forEach(client -> {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "sending " + messageBuffer + " of " + messageBuffer + " to " + client.getPlayerUsername());
+      log.info("sending " + messageBuffer + " of " + messageBuffer + " to " + client.getPlayerUsername());
       sendSavingClassInJson(messageBuffer, client);
     });
   }
@@ -67,7 +67,7 @@ public class GameRoomSyncer {
 
   public synchronized void sendComponentTo(Component component, int entityId, Client client) {
     if (!transactionMap.containsKey(client.getGameRoom())) {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "Sending component " + component + " to " + client);
+      log.info("Sending component " + component + " to " + client);
       var message = new ComponentMessage<>(component, entityId);
       sendSavingClassInJson(message, client);
     } else {

@@ -38,7 +38,7 @@ public class MovementSystem extends IteratingSystem {
   @Override
   protected void process(int entityId) {
     if (chosenEntity.isAnyChosen() && fieldMapper.has(chosenEntity.peek())) {
-      log.info(Thread.currentThread().getName() + " " + Thread.currentThread().getId() + " " + "some are chosen and there's a movable highlighted entity");
+      log.info("some are chosen and there's a movable highlighted entity");
       var targetCoordinate = coordinatesMapper.get(chosenEntity.pop());
       moveEntityService.moveEntity(entityId, targetCoordinate);
       highlightedMapper.remove(entityId);
