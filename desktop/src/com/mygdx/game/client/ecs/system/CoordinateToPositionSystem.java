@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.ecs.system;
+package com.mygdx.game.client.ecs.system;
 
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
@@ -40,8 +40,10 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     var position = positionMapper.get(entityId);
     var retainedY = position.getValue().y;
     var toSet = new Vector3(0, 0, 0);
-
-    if (fieldMapper.has(entityId) || movableMapper.has(entityId) || subFieldMapper.has(entityId) || buildingMapper.has(entityId)) {
+    if (fieldMapper.has(entityId)
+        || movableMapper.has(entityId)
+        || subFieldMapper.has(entityId)
+        || buildingMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
     } else if (technologyMapper.has(entityId)) {
       toSet = PositionUtil.generateTechnologyPositionForCoords(coordinatesMapper.get(entityId));

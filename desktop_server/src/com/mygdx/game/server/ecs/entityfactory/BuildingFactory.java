@@ -17,7 +17,7 @@ import javax.inject.Inject;
 @Log
 public class BuildingFactory {
 
-  private World world;
+  private final World world;
   private final ComponentFactory componentFactory;
 
   private ComponentMapper<SubField> subFieldComponentMapper;
@@ -36,7 +36,7 @@ public class BuildingFactory {
   public void createEntity(
       @NonNull BuildingConfig config,
       @NonNull Coordinates coordinates,
-      int parentSubfield, int clientIdex
+      int parentSubfield, int clientIndex
   ) {
     if (subFieldComponentMapper.get(parentSubfield).getBuilding() != -0xC0FEE) {
       log.info("THERE IS BUILDING WITH PARENT: " + parentSubfield);
@@ -47,8 +47,8 @@ public class BuildingFactory {
       componentFactory.setUpEntityConfig(config, entityId);
       componentFactory.createNameComponent(entityId, "building " + config.getName() + " " + entityId + " " + parentSubfield);
       componentFactory.createBuildingComponent(entityId, parentSubfield);
-      componentFactory.createChangeSubscribersComponentFast(entityId, clientIdex);
-      componentFactory.createFriendlyOrFoeComponent(entityId, null);
+      componentFactory.createChangeSubscribersComponentFast(entityId, clientIndex);
+      componentFactory.createFriendlyOrFoeComponent(entityId, null); // todo add client to friendlies?
       componentFactory.createSharedComponents(entityId,
               new Class[]{Coordinates.class, EntityConfigId.class, Building.class},
               new Class[]{Coordinates.class, EntityConfigId.class, Building.class});

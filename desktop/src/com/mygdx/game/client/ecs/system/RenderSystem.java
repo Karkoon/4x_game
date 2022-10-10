@@ -30,11 +30,15 @@ public class RenderSystem extends IteratingSystem {
 
   @Override
   protected void process(int entityId) {
-    var modelInstance = modelInstanceMapper.get(entityId).getModelInstance();
+    var yIndex = 0;
+    var modelInstancesIter = modelInstanceMapper.get(entityId).getModelInstances().values();
     var position = positionMapper.get(entityId).getValue();
-    modelInstance.transform.setTranslation(position);
-    renderer.addModelToCache(modelInstance);
-    // TODO #94 fix problem with errors when model instance is created but not set
+    while (modelInstancesIter.hasNext()) {
+      var instance = modelInstancesIter.next();
+      instance.transform.setTranslation(position.x, position.y + yIndex, position.z);
+      yIndex += 5f;
+      renderer.addModelToCache(instance);
+    }
   }
 
   @Override

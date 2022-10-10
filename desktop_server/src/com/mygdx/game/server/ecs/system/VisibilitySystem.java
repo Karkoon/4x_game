@@ -50,7 +50,8 @@ public class VisibilitySystem extends IteratingSystem {
     var sightlineSubscribers = sightlineSubscribersMapper.get(perceiver).getClients();
     log.info("processing perceiver: " + nameMapper.get(perceiver));
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) {
-      var perceivableCoords = coordinatesMapper.get(allThatCanBePerceived.getEntities().get(i));
+      var perceivable = allThatCanBePerceived.getEntities().get(i);
+      var perceivableCoords = coordinatesMapper.get(perceivable);
       if (DistanceUtil.distance(coordinates, perceivableCoords) <= sightlineRadius) {
         var changeSubscribers = obtainNewChangeSubscribers(allThatCanBePerceived.getEntities().get(i));
         changeSubscribers.or(sightlineSubscribers);
@@ -60,6 +61,7 @@ public class VisibilitySystem extends IteratingSystem {
 
   @Override
   protected void end() {
+    log.info("visibility end");
     for (int i = 0; i < allThatCanBePerceived.getEntities().size(); i++) { // postprocessing
       var entityId = allThatCanBePerceived.getEntities().get(i);
       var changeSubscribersComp = changeSubscribersMapper.get(entityId);

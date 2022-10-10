@@ -17,6 +17,7 @@ import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.ComponentClassToIndexCache;
@@ -40,13 +41,15 @@ public class ComponentFactory {
   private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
 
+  private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Unit> unitMapper;
   private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
   private ComponentMapper<MaterialComponent> materialMapper;
   private ComponentMapper<Name> nameMapper;
@@ -54,7 +57,6 @@ public class ComponentFactory {
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   public ComponentFactory(
@@ -211,4 +213,7 @@ public class ComponentFactory {
     materialComp.setValue(0);
   }
 
+  public void createUnitComponent(int entityId) {
+    unitMapper.create(entityId);
+  }
 }

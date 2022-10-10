@@ -2,6 +2,7 @@ package com.mygdx.game.client.ecs.component;
 
 import com.artemis.PooledComponent;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.utils.IntMap;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -10,10 +11,25 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class ModelInstanceComp extends PooledComponent {
 
-  private @NonNull ModelInstance modelInstance;
+  private @NonNull IntMap<ModelInstance> modelInstances = new IntMap<>(ModelIndex.values().length);
 
   @Override
   protected void reset() {
-    this.modelInstance = null;
+    this.modelInstances = new IntMap<>(ModelIndex.values().length);
+  }
+
+  public void setMainModel(ModelInstance mainModel) {
+    modelInstances.put(ModelIndex.MAIN.ordinal(), mainModel);
+  }
+
+  public void setHighlight(ModelInstance highlight) {
+    modelInstances.put(ModelIndex.HIGHLIGHT.ordinal(), highlight);
+  }
+
+  /**
+   * order of these enums has meaning
+   */
+  private enum ModelIndex {
+    MAIN, HIGHLIGHT
   }
 }

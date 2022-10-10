@@ -2,6 +2,7 @@ package com.mygdx.game.server.di;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.mygdx.game.server.ecs.system.AddFieldOwnerIfUnitPresentSystem;
 import com.mygdx.game.server.ecs.system.AddOwnerToChangeSubscribersSystem;
 import com.mygdx.game.server.ecs.system.AddOwnerToSightlineSubscribersSystem;
 import com.mygdx.game.server.ecs.system.ComponentSyncSystem;
@@ -27,10 +28,12 @@ public class WorldModule {
       ComponentSyncSystem componentSyncSystem,
       VisibilitySystem visibilitySystem,
       MarkDeadEntitiesSystem markDeadSystem,
-      RemoveDeadSystem removeDeadSystem
+      RemoveDeadSystem removeDeadSystem,
+      AddFieldOwnerIfUnitPresentSystem addFieldOwnerIfUnitPresentSystem
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
     var conf =  new WorldConfiguration();
+    conf.setSystem(addFieldOwnerIfUnitPresentSystem);
     conf.setSystem(addOwnerToChangeSubscribersSystem);
     conf.setSystem(addOwnerToSightlineSubscribersSystem);
     conf.setSystem(visibilitySystem);

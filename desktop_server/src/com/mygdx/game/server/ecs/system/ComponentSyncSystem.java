@@ -65,14 +65,6 @@ public class ComponentSyncSystem extends IteratingSystem {
     super.end();
   }
 
-  /*
-  1. entity created -> all data sent
-  2. entity comp updated -> only that data sent
-  3. entity comp updated and then removed from world and then deleted from client
-   - problem -> componentsyncsystem is not the only place which updates the state .......... it can be thought that
-     updating the whole entity is not a "component sync" problem -> this means I can "handle removing stuff in another system"
-   */
-
   private void handleUnsubscribedClients(int entityId) {
     var clientsToUpdate = changeSubscribersMapper.get(entityId);
     var subscribers = clientsToUpdate.getClients();
@@ -125,11 +117,15 @@ public class ComponentSyncSystem extends IteratingSystem {
           mapperIndex != -1;
           mapperIndex = components.nextSetBit(mapperIndex + 1)
       ) {
+        var mapper = world.getMapper(mapperIndex);
         if (!dirtyFlags.getDirtyComponents().get(mapperIndex) && !changedSubscriptionState.get(clientIndex)) {
-          log.info("name:" +  nameComponentMapper.get(entityId) + " skipped because no changes");
+          log.info("name:" +  nameComponentMapper.get(entityId) + " skipped because no changes in " + mapper.type.getType().getName());
           continue; // skip if component wasn't changed and the client does not need all the data
         }
-        var mapper = world.getMapper(mapperIndex);
+        if (!mapper.has(entityId)) {
+          log.info("skipped because entity does not have that component " + mapper.type.getType().getName());
+          continue;
+        }
         var componentToSend = mapper.get(entityId);
         log.info("sending name:" +  nameComponentMapper.get(entityId) + " to " + client.getPlayerToken());
         stateSyncer.sendComponentTo(componentToSend, entityId, client);
