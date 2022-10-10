@@ -1,6 +1,5 @@
 package com.mygdx.game.client.di;
 
-import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.mygdx.game.client.ecs.system.AttackSystem;
 import com.mygdx.game.client.ecs.system.BlockInputSystem;
@@ -25,10 +24,10 @@ import java.util.logging.Level;
 
 @Log
 @Module
-public class WorldModule {
+public class WorldConfigurationModule {
   @Provides
   @Singleton
-  public @NonNull World providesWorld(
+  public @NonNull WorldConfiguration providesWorld(
       @NonNull RemovalSystem removalSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,
       @NonNull ChooseSystem chooseSystem,
@@ -58,6 +57,6 @@ public class WorldModule {
     configuration.setSystem(setHighlightSystem);
     configuration.setSystem(navigationSystem);
     configuration.setSystem(removalSystem);
-    return new World(configuration);
+    return configuration;
   }
 }

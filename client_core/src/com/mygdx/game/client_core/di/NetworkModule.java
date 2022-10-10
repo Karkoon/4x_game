@@ -25,7 +25,7 @@ public class NetworkModule {
 
   @Provides
   @Singleton
-  public WebSocket providesWebsocket(
+  public WebSocket providesWebsocket( // todo move it to something that can restore connections
       NetworkJobRegisterHandler messageListener
   ) {
     CommonWebSockets.initiate();
