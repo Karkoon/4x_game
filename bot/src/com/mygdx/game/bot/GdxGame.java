@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.di.bot.BotClient;
-import com.mygdx.game.client_core.di.Names;
+import com.mygdx.game.client_core.di.CoreNames;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
@@ -38,7 +38,7 @@ public class GdxGame extends Game {
       @NonNull BotClient botClient,
       @NonNull WebSocketHandler handler,
       @NonNull PlayerInfo playerInfo,
-      @NonNull @Named(Names.MAIN_THREAD) Scheduler main
+      @NonNull @Named(CoreNames.MAIN_THREAD) Scheduler main
   ) {
     this.assets = assets;
     this.gameConnectService = gameConnectService;
