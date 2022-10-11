@@ -45,28 +45,23 @@ public class ComponentFactory {
   private final ComponentClassToIndexCache componentIndicesCache;
   private final Random random;
 
-  private ComponentMapper<SubField> subFieldMapper;
-  private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<Unit> unitMapper;
   private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
-  private ComponentMapper<MaterialComponent> materialMapper;
+  private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<PlayerMaterialComponent> playerMaterialMapper;
-  private ComponentMapper<MaterialIncomeComponent> materialIncomeMapper;
-  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
-  private ComponentMapper<MaterialIncome> materialIncomeMapper;
-  private ComponentMapper<DirtyComponents> dirtyMapper;
-  private ComponentMapper<CanAttack> canAttackMapper;
+  private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Unit> unitMapper;
 
   @Inject
   public ComponentFactory(
@@ -92,7 +87,6 @@ public class ComponentFactory {
     entityConfigIdMapper.create(entity);
     fieldMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
-    materialMapper.create(entity);
     nameMapper.create(entity);
     sharedComponentsMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
@@ -172,6 +166,14 @@ public class ComponentFactory {
     friendlyOrFoe.setFriendlies(friendlies);
   }
 
+  public void createMaterialIncomeComponent(SubFieldConfig config, int entityId) {
+    var materialComp = materialIncomeMapper.create(entityId);
+    var materialUnits = config.getMaterialProductions().get(
+      random.nextInt(config.getMaterialProductions().size())
+    );
+    materialComp.setMaterialIncomes(materialUnits);
+  }
+
   public void createNameComponent(int entityId, String name) {
     var nameComp = nameMapper.create(entityId);
     nameComp.setName(name);
@@ -224,35 +226,6 @@ public class ComponentFactory {
     materialComp.setValue(0);
   }
 
-  public void createMaterialIncomeComponent(SubFieldConfig config, int entityId) {
-    var materialComp = materialIncomeMapper.create(entityId);
-    var materialUnits = config.getMaterialProductions().get(
-      random.nextInt(config.getMaterialProductions().size())
-    );
-    materialComp.setMaterialIncomes(materialUnits);
-  }
-
-  public void createCanAttackComponent(int entityId) {
-    canAttackMapper.create(entityId).setCanAttack(true);
-  }
-
-  /**
-   * Use when creating a component that needs to be sent at the beginning to the owner and doesn't change it's state.
-   * For instance the technology entity components don't change at this moment.
-   * It's a workaround to the problem of currently not having a way to
-   * @param entityId
-   * @param dirtyComps
-   */
-  public void createDirtyComponent(int entityId, Class... dirtyComps) {
-    for (int i = 0; i < dirtyComps.length; i++) {
-      var toDirty = dirtyComps[i];
-      setDirty(entityId, toDirty);
-    }
-  }
-
-  private void setDirty(int entityId, Class component) {
-    var componentIndex = world.getComponentManager().getTypeFactory().getIndexFor(component);
-    dirtyMapper.create(entityId).getDirtyComponents().set(componentIndex);
   public void createUnitComponent(int entityId) {
     unitMapper.create(entityId);
   }

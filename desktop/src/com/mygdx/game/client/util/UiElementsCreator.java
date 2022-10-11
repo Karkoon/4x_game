@@ -83,7 +83,6 @@ public class UiElementsCreator {
     horizontalGroup.setPosition(x, y);
     horizontalGroup.setWidth(width);
     horizontalGroup.setHeight(height);
-
     return horizontalGroup;
   }
 

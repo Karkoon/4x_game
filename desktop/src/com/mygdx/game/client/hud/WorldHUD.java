@@ -4,19 +4,14 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
-import com.artemis.utils.IntBag;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.EndTurnService;
-import com.mygdx.game.core.ecs.component.MaterialComponent;
-import com.mygdx.game.client.util.HUDElementsCreator;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.model.MaterialBase;
 import lombok.extern.java.Log;
@@ -27,40 +22,33 @@ import javax.inject.Named;
 @Log
 public class WorldHUD implements Disposable {
 
-  private final GameScreenAssets gameAssets;
   private final EndTurnService endTurnService;
-  private final UiElementsCreator uiElementsCreator;
+  private final GameScreenAssets gameAssets;
   private final Stage stage;
-  private final HUDElementsCreator hudElementsCreator;
-  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private final UiElementsCreator uiElementsCreator;
 
-  @AspectDescriptor(all = {PlayerMaterial.class})
   private Button endTurnButton;
   private HorizontalGroup materialGroup;
 
-  @AspectDescriptor(all = {PlayerMaterialComponent.class})
+  @AspectDescriptor(one = {PlayerMaterial.class})
   private EntitySubscription subscription;
-  private ComponentMapper<MaterialComponent> materialMapper;
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
 
   @Inject
   public WorldHUD(
-      World world,
-      @Named(StageModule.GAME_SCREEN) Stage stage,
-      HUDElementsCreator hudElementsCreator
       GameScreenAssets gameScreenAssets,
       EndTurnService endTurnService,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
       UiElementsCreator uiElementsCreator,
-      @Named(StageModule.GAME_SCREEN) Stage stage
+      World world
   ) {
     world.inject(this);
 
-    this.gameAssets = gameScreenAssets;
     this.endTurnService = endTurnService;
-    this.uiElementsCreator = uiElementsCreator;
+    this.gameAssets = gameScreenAssets;
     this.stage = stage;
-
+    this.uiElementsCreator = uiElementsCreator;
     prepareHudSceleton();
-    addListeners();
   }
 
   public void act(float delta) {
@@ -75,20 +63,19 @@ public class WorldHUD implements Disposable {
     stage.dispose();
   }
 
-  private void prepareHudSceleton() {
-    this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-200), (int) (stage.getHeight()-50), 200, 50);
+  public void prepareHudSceleton() {
+    stage.clear();
+    this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
 
     this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::addEndTurnAction, (int) (stage.getWidth()-150), 0);
     uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 150, 40);
 
     fillMaterialGroup();
-
     stage.addActor(materialGroup);
     stage.addActor(endTurnButton);
   }
 
   private void fillMaterialGroup() {
-    this.materialGroup.clearChildren();
     if (subscription != null) {
       var allMaterials = MaterialBase.values();
       for (int i = 0; i < allMaterials.length; i++) {
@@ -96,8 +83,8 @@ public class WorldHUD implements Disposable {
         int value = findConnectedValue(material);
 
         var texture = gameAssets.getTexture(material.iconPath);
-        var image = uiElementsCreator.createImage(texture, i * 50, 0);
-        var text = uiElementsCreator.createLabel(String.valueOf(value), i * 50 + 20, 0);
+        var image = uiElementsCreator.createImage(texture, i * 70, 0);
+        var text = uiElementsCreator.createLabel(String.valueOf(value), i * 70 + 20, 0);
         this.materialGroup.addActor(image);
         this.materialGroup.addActor(text);
       }
@@ -116,19 +103,6 @@ public class WorldHUD implements Disposable {
 
   private void addEndTurnAction() {
     endTurnService.endTurn();
-  }
-
-  private void addListeners() {
-    subscription.addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
-      @Override
-      public void inserted(IntBag entities) {
-        fillMaterialGroup();
-      }
-
-      @Override
-      public void removed(IntBag entities) {
-      }
-    });
   }
 
 }

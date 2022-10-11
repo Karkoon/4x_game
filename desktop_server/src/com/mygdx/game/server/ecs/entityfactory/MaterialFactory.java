@@ -1,7 +1,5 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
-import com.mygdx.game.core.ecs.component.PlayerMaterialComponent;
-import com.mygdx.game.core.ecs.component.MaterialComponent;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
