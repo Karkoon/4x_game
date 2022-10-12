@@ -28,8 +28,7 @@ public class AttackEntityService extends WorldService {
   }
 
   public void attackEntity(int attacker, int attacked) {
-    if (!canAttackMapper.get(attacker).isCanAttack()
-        || !coordinatesMapper.get(attacker).equals(coordinatesMapper.get(attacked))) {
+    if (!canAttackMapper.get(attacker).isCanAttack()) {
       log.info("tried to attack unlawfully");
       return;
     }
