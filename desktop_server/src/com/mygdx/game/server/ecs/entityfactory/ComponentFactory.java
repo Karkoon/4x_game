@@ -200,6 +200,7 @@ public class ComponentFactory {
     stats.setAttackPower(config.getAttackPower());
     stats.setMoveRange(config.getMoveRange());
     stats.setMaxMoveRange(config.getMoveRange());
+    stats.setAttackRange(config.getAttackRange());
   }
 
   public void createSubFieldComponent(int fieldId, int entityId) {

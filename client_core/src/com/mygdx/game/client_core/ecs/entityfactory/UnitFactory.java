@@ -53,6 +53,7 @@ public class UnitFactory {
     stats.setMaxHp(config.getMaxHp());
     stats.setDefense(config.getDefense());
     stats.setSightRadius(config.getSightRadius());
+    stats.setAttackRange(config.getAttackRange());
     stats.setAttackPower(config.getAttackPower());
     stats.setMoveRange(config.getMoveRange());
     stats.setMaxMoveRange(config.getMoveRange());

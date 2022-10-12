@@ -5,6 +5,7 @@ import com.artemis.World;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.di.GameInstanceScope;
 import lombok.extern.java.Log;
 
@@ -33,12 +34,30 @@ public class AttackEntityService extends WorldService {
       return;
     }
     var statsMapper = world.getMapper(Stats.class);
-    attackAndCounterAttack(statsMapper.get(attacker), statsMapper.get(attacked));
+
+    Coordinates attakerCoordinates = coordinatesMapper.get(attacker);
+    Coordinates attackedCoordinates = coordinatesMapper.get(attacked);
+
+    int attackerAttackRange = statsMapper.get(attacker).getAttackRange();
+    int distance = DistanceUtil.distance(attakerCoordinates, attackedCoordinates);
+
+    if (distance > attackerAttackRange){
+      log.warning("Attack out of attack range!!!");
+    }
+    else {
+      int attackedAttackRange = statsMapper.get(attacked).getAttackRange();
+      if (distance <= attackedAttackRange){
+        attackAndCounterAttack(statsMapper.get(attacker), statsMapper.get(attacked));
+      }
+      else {
+        attack(statsMapper.get(attacker), statsMapper.get(attacked));
+      }
+    }
     canAttackMapper.get(attacker).setCanAttack(false);
     log.info("Attack component");
     setDirty(attacker, CanAttack.class, world);
-    setDirty(attacked, Stats.class, world);
     setDirty(attacker, Stats.class, world);
+    setDirty(attacked, Stats.class, world);
     world.process();
   }
 

@@ -27,13 +27,11 @@ public class NetworkJobsQueueJobJobberManager {
     this.webSocketHandler = webSocketHandler;
   }
 
-  @SneakyThrows
   public void add(WebSocket webSocket, byte[] data) {
     log.info("data added");
     dataToBeHandled.add(new OnMessageArgs(webSocket, data));
   }
 
-  @SneakyThrows
   public void doAllJobs() {
     var datum = dataToBeHandled.poll();
     while (datum != null) {
