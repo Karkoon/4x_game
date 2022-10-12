@@ -6,13 +6,15 @@ import com.artemis.World;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.Config;
+import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialComponent;
+import com.mygdx.game.core.ecs.component.MaterialIncome;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
@@ -32,6 +34,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.Random;
 
 @GameInstanceScope
 @Log
@@ -40,23 +43,25 @@ public class ComponentFactory {
   private final GameRoom room;
   private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
+  private final Random random;
 
-  private ComponentMapper<SubField> subFieldMapper;
-  private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<Unit> unitMapper;
   private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
-  private ComponentMapper<MaterialComponent> materialMapper;
+  private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
   private ComponentMapper<SharedComponents> sharedComponentsMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Unit> unitMapper;
 
   @Inject
   public ComponentFactory(
@@ -67,6 +72,7 @@ public class ComponentFactory {
     this.room = room;
     this.world = world;
     this.world.inject(this);
+    this.random = new Random();
     this.componentIndicesCache = componentIndicesCache;
     createAndDeleteEntityWithAllComponents();
   }
@@ -81,7 +87,6 @@ public class ComponentFactory {
     entityConfigIdMapper.create(entity);
     fieldMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
-    materialMapper.create(entity);
     nameMapper.create(entity);
     sharedComponentsMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
@@ -150,8 +155,8 @@ public class ComponentFactory {
   }
 
   public void createFriendlyOrFoeComponent(
-          int entityId,
-          Client nullableClient
+      int entityId,
+      Client nullableClient
   ) {
     var friendlyOrFoe = friendlyOrFoeMapper.create(entityId);
     var friendlies = new Bits(room.getNumberOfClients());
@@ -159,6 +164,14 @@ public class ComponentFactory {
       friendlies.set(room.getClients().indexOf(nullableClient));
     }
     friendlyOrFoe.setFriendlies(friendlies);
+  }
+
+  public void createMaterialIncomeComponent(SubFieldConfig config, int entityId) {
+    var materialComp = materialIncomeMapper.create(entityId);
+    var materialUnits = config.getMaterialProductions().get(
+      random.nextInt(config.getMaterialProductions().size())
+    );
+    materialComp.setMaterialIncomes(materialUnits);
   }
 
   public void createNameComponent(int entityId, String name) {
@@ -207,8 +220,8 @@ public class ComponentFactory {
     subField.setParent(fieldId);
   }
 
-  public void createMaterialComponent(int entityId, MaterialBase materialBase) {
-    var materialComp = materialMapper.create(entityId);
+  public void createPlayerMaterialComponent(int entityId, MaterialBase materialBase) {
+    var materialComp = playerMaterialMapper.create(entityId);
     materialComp.setMaterial(materialBase);
     materialComp.setValue(0);
   }

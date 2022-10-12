@@ -1,6 +1,7 @@
 package com.mygdx.game.client.di;
 
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
+import com.mygdx.game.client.network.DesktopMaterialHandler;
 import com.mygdx.game.client.network.FieldOwnerColorHandler;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
@@ -19,7 +20,7 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialComponent;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Research;
 import com.mygdx.game.core.ecs.component.Stats;
@@ -38,6 +39,7 @@ public class ComponentMessageListenerModule {
       EntityConfigHandler entityConfigHandler,
       DesktopEntityConfigHandler desktopEntityConfigHandler,
       MaterialHandler materialHandler,
+      DesktopMaterialHandler desktopMaterialHandler,
       CoordinatesHandler coordinatesHandler,
       FieldHandler fieldHandler,
       SubFieldHandler subFieldHandler,
@@ -51,7 +53,7 @@ public class ComponentMessageListenerModule {
     var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
-    listener.registerHandler(MaterialComponent.class, materialHandler);
+    listener.registerHandler(PlayerMaterial.class, desktopMaterialHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
     listener.registerHandler(Field.class, fieldHandler);
     listener.registerHandler(SubField.class, subFieldHandler);

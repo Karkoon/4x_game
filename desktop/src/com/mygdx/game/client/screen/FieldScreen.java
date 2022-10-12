@@ -139,8 +139,8 @@ public class FieldScreen extends ScreenAdapter {
   }
 
   private void positionCamera(@NonNull Camera camera) {
-    camera.position.set(0, 600, 0);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(-400, 600, -400);
+    camera.lookAt(-400, 0, -400);
   }
 
   private void restoreCameraPosition(Camera camera) {

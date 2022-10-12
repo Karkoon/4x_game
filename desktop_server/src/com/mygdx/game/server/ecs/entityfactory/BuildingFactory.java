@@ -22,7 +22,6 @@ public class BuildingFactory {
 
   private ComponentMapper<SubField> subFieldComponentMapper;
 
-
   @Inject
   public BuildingFactory(
       World world,

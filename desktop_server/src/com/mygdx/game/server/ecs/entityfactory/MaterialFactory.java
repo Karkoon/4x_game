@@ -1,6 +1,6 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
-import com.mygdx.game.core.ecs.component.MaterialComponent;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
@@ -24,11 +24,11 @@ public class MaterialFactory {
   public void createEntity(MaterialBase materialBase, Client client) {
     int entityId = componentFactory.createEntityId();
     componentFactory.createNameComponent(entityId, "material " + materialBase.name() + " " + entityId);
-    componentFactory.createMaterialComponent(entityId, materialBase);
+    componentFactory.createPlayerMaterialComponent(entityId, materialBase);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
-    var componentsToSend = new Class[]{MaterialComponent.class};
+    var componentsToSend = new Class[]{PlayerMaterial.class};
     componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
       componentsToSend,

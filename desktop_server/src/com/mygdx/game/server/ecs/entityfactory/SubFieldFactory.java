@@ -29,6 +29,7 @@ public class SubFieldFactory {
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createNameComponent(entityId, "subfield " + config.getName() + " " + entityId + " " + parentField);
     componentFactory.createSubFieldComponent(parentField, entityId);
+    componentFactory.createMaterialIncomeComponent(config, entityId);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
     componentFactory.createSharedComponents(entityId,
