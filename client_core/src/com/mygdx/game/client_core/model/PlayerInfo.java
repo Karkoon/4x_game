@@ -12,21 +12,10 @@ public class PlayerInfo {
 
   private final String userName;
   private final String token;
-  private boolean playerTurn;
 
   @Inject
-  public PlayerInfo() {
+  public PlayerInfo() { // TODO: 10.10.2022 make username configurable
     userName = UUID.randomUUID().toString();
     token = UUID.randomUUID().toString();
-    playerTurn = false;
   }
-
-  public void activatePlayer() {
-    playerTurn = true;
-  }
-
-  public void deactivatePlayer() {
-    playerTurn = false;
-  }
-
 }

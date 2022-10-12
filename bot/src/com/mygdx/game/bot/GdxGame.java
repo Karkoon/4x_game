@@ -4,8 +4,9 @@ import com.badlogic.gdx.Game;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.di.bot.BotClient;
-import com.mygdx.game.client_core.di.Names;
-import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.client_core.di.CoreNames;
+import com.mygdx.game.client_core.model.ActiveToken;
+import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import io.reactivex.rxjava3.core.Completable;
@@ -27,8 +28,8 @@ public class GdxGame extends Game {
   private final GameConfigAssets assets;
   private final GameConnectService gameConnectService;
   private final BotClient botClient;
-  private final WebSocketHandler handler;
-  private final PlayerInfo playerInfo;
+  private final QueueMessageListener handler;
+  private final ActiveToken activeToken;
   private final Scheduler main;
 
   @Inject
@@ -36,15 +37,15 @@ public class GdxGame extends Game {
       @NonNull GameConfigAssets assets,
       @NonNull GameConnectService gameConnectService,
       @NonNull BotClient botClient,
-      @NonNull WebSocketHandler handler,
-      @NonNull PlayerInfo playerInfo,
-      @NonNull @Named(Names.MAIN_THREAD) Scheduler main
+      @NonNull QueueMessageListener listener,
+      @NonNull ActiveToken activeToken,
+      @NonNull @Named(CoreNames.MAIN_THREAD) Scheduler main
   ) {
     this.assets = assets;
     this.gameConnectService = gameConnectService;
     this.botClient = botClient;
-    this.handler = handler;
-    this.playerInfo = playerInfo;
+    this.handler = listener;
+    this.activeToken = activeToken;
     this.main = main;
   }
 
@@ -56,14 +57,11 @@ public class GdxGame extends Game {
 
     log.info("Waiting for game start.");
 
-    handler.setFailIfNoHandler(false);
     handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
       Completable.fromAction(() -> {
             log.info("Starting bot.");
             var message = (GameStartedMessage) o;
-            if (message.getPlayerToken().equals(playerInfo.getToken())) {
-              playerInfo.activatePlayer();
-            }
+            activeToken.setActiveToken(message.getPlayerToken());
             botClient.run();
           })
           .observeOn(Schedulers.io())

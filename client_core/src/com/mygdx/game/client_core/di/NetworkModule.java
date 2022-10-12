@@ -5,6 +5,7 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSockets;
 import com.mygdx.game.client_core.network.NetworkJobRegisterHandler;
+import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.message_handlers.ChangeTurnMessageHandler;
 import com.mygdx.game.client_core.network.message_handlers.RemoveEntityMessageHandler;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -25,7 +26,7 @@ public class NetworkModule {
 
   @Provides
   @Singleton
-  public WebSocket providesWebsocket(
+  public WebSocket providesWebsocket( // todo move it to something that can restore connections
       NetworkJobRegisterHandler messageListener
   ) {
     CommonWebSockets.initiate();
@@ -42,14 +43,13 @@ public class NetworkModule {
 
   @Provides
   @Singleton
-  public WebSocketHandler providesWebSocketHandler(
+  public QueueMessageListener providesWebSocketHandler(
       @NonNull ChangeTurnMessageHandler changeTurnMessageHandler,
       @NonNull RemoveEntityMessageHandler removeEntityMessageHandler
   ) {
-    var handler = new WebSocketHandler();
-    handler.setFailIfNoHandler(false);
-    handler.registerHandler(ChangeTurnMessage.class, changeTurnMessageHandler);
-    handler.registerHandler(RemoveEntityMessage.class, removeEntityMessageHandler);
-    return handler;
+    var listener = new QueueMessageListener();
+    listener.registerHandler(ChangeTurnMessage.class, changeTurnMessageHandler);
+    listener.registerHandler(RemoveEntityMessage.class, removeEntityMessageHandler);
+    return listener;
   }
 }

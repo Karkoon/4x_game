@@ -12,7 +12,7 @@ import javax.inject.Singleton;
 public class MainSchedulerModule {
   @Singleton
   @Provides
-  @Named("Main Thread")
+  @Named(CoreNames.MAIN_THREAD)
   public Scheduler mainThread() {
     return Schedulers.newThread();
   }

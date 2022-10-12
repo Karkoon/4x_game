@@ -1,8 +1,8 @@
 package com.mygdx.game.client_core.model;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
+import com.mygdx.game.client_core.network.QueueMessageListener;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
@@ -15,16 +15,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class NetworkJobsQueueJobJobberManager {
 
   private final ComponentMessageListener componentMessageListener;
-  private final WebSocketHandler webSocketHandler;
+  private final QueueMessageListener queueMessageListener;
   private final ConcurrentLinkedQueue<OnMessageArgs> dataToBeHandled = new ConcurrentLinkedQueue<>();
 
   @Inject
   NetworkJobsQueueJobJobberManager(
       ComponentMessageListener componentMessageListener,
-      WebSocketHandler webSocketHandler
+      QueueMessageListener queueMessageListener
   ) {
     this.componentMessageListener = componentMessageListener;
-    this.webSocketHandler = webSocketHandler;
+    this.queueMessageListener = queueMessageListener;
   }
 
   @SneakyThrows
@@ -38,7 +38,7 @@ public class NetworkJobsQueueJobJobberManager {
     var datum = dataToBeHandled.poll();
     while (datum != null) {
       log.info("data tried to be handled content: " + datum);
-      if (!webSocketHandler.onMessage(datum.socket(), datum.data())) {
+      if (!queueMessageListener.onMessage(datum.socket(), datum.data())) {
         if (!componentMessageListener.onMessage(datum.socket(), datum.data())) {
           throw new RuntimeException("data " + datum + "can't be handled");
         }
