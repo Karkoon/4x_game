@@ -2,10 +2,11 @@ package com.mygdx.game.client_core.di;
 
 import com.github.czyzby.websocket.CommonWebSockets;
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSockets;
+import com.mygdx.game.client_core.model.ServerConnectionConfig;
 import com.mygdx.game.client_core.network.NetworkJobRegisterHandler;
 import com.mygdx.game.client_core.network.QueueMessageListener;
+import com.mygdx.game.client_core.network.ServerConnection;
 import com.mygdx.game.client_core.network.message_handlers.ChangeTurnMessageHandler;
 import com.mygdx.game.client_core.network.message_handlers.RemoveEntityMessageHandler;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -26,19 +27,15 @@ public class NetworkModule {
 
   @Provides
   @Singleton
-  public WebSocket providesWebsocket( // todo move it to something that can restore connections
+  public WebSocket providesWebsocket(
+      ServerConnectionConfig config,
+      ServerConnection serverConnection, // todo move it to something that can restore connections
       NetworkJobRegisterHandler messageListener
   ) {
-    CommonWebSockets.initiate();
-    var socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(HOST, PORT));
-    socket.setSendGracefully(true);
-    socket.addListener(messageListener);
+    serverConnection.connect(config);
+    serverConnection.setPersistentListener(messageListener);
     log.info("provided socket: " + socket);
-    socket.connect();
-    while (!socket.isOpen()) {
-      /* wait till connection is ready, later this code should be redone */
-    }
-    return socket;
+    return ;
   }
 
   @Provides
