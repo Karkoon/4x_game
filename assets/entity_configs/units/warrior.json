@@ -9,5 +9,6 @@
   "attackPower": 125,
   "defense": 25,
   "sightRadius": 2,
-  "moveRange": 2
+  "moveRange": 2,
+  "attackRange": 1
 }

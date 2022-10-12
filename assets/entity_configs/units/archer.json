@@ -6,8 +6,9 @@
   "textureName": "units/archer.png",
   "iconName": "units/archer_icon.png",
   "maxHp": 100,
-  "attackPower": 125,
+  "attackPower": 90,
   "defense": 25,
   "sightRadius": 2,
-  "moveRange": 2
+  "moveRange": 2,
+  "attackRange": 2
 }

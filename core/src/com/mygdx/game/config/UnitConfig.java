@@ -26,4 +26,5 @@ public class UnitConfig implements Config, ModelConfig {
   private int defense;
   private int sightRadius;
   private int moveRange;
+  private int attackRange;
 }

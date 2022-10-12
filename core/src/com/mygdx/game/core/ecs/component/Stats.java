@@ -13,6 +13,7 @@ public class Stats extends PooledComponent {
   private int attackPower;
   private int defense;
   private int sightRadius;
+  private int attackRange;
   private int moveRange;
   private int maxMoveRange;
 
@@ -27,6 +28,7 @@ public class Stats extends PooledComponent {
     attackPower = component.getAttackPower();
     defense = component.getDefense();
     sightRadius = component.getSightRadius();
+    attackRange = component.getAttackRange();
     moveRange = component.getMoveRange();
     maxMoveRange = component.getMaxMoveRange();
     log.info("current HP: " + hp);
