@@ -12,6 +12,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.SightlineSubscribers;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
 @Log
 public class VisibilitySystem extends IteratingSystem {
 
-  @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class, Building.class})
+  @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class, Building.class, UnderConstruction.class})
   private EntitySubscription allThatCanBePerceived;
   private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
 

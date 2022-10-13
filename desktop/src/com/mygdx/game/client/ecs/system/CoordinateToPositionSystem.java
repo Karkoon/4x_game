@@ -12,6 +12,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.Technology;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.util.PositionUtil;
 import lombok.extern.java.Log;
 
@@ -29,6 +30,7 @@ public class CoordinateToPositionSystem extends IteratingSystem {
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<Technology> technologyMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @Inject
   public CoordinateToPositionSystem() {
@@ -43,7 +45,8 @@ public class CoordinateToPositionSystem extends IteratingSystem {
     if (fieldMapper.has(entityId)
         || movableMapper.has(entityId)
         || subFieldMapper.has(entityId)
-        || buildingMapper.has(entityId)) {
+        || buildingMapper.has(entityId)
+        || underConstructionMapper.has(entityId)) {
       toSet = PositionUtil.generateWorldPositionForCoords(coordinatesMapper.get(entityId));
     } else if (technologyMapper.has(entityId)) {
       toSet = PositionUtil.generateTechnologyPositionForCoords(coordinatesMapper.get(entityId));

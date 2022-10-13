@@ -1,9 +1,12 @@
 package com.mygdx.game.config;
 
+import com.mygdx.game.core.model.MaterialUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +24,7 @@ public class BuildingConfig implements Config, ModelConfig {
   private String textureName;
   @NonNull
   private String iconName;
+  private int turnAmount;
+  @NonNull
+  private List<MaterialUnit> materials;
 }

@@ -6,6 +6,7 @@ import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.model.Client;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class ShowSubfieldService extends WorldService {
 
-  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class, Building.class})
+  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class, Building.class, UnderConstruction.class})
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;

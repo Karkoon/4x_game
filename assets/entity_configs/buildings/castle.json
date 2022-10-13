@@ -4,5 +4,11 @@
   "polishName": "zamek",
   "modelPath": "basic.g3db",
   "textureName": "buildings/castle.png",
-  "iconName": "buildings/castle_icon.png"
+  "iconName": "buildings/castle_icon.png",
+  "turnAmount": 3,
+  "materials":
+    [
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+    ]
 }

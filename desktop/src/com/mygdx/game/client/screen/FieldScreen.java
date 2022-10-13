@@ -24,6 +24,7 @@ import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -50,7 +51,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private int fieldParent = -1;
 
-  @AspectDescriptor(one = {SubField.class, Building.class})
+  @AspectDescriptor(one = {SubField.class, Building.class, UnderConstruction.class})
   private EntitySubscription subscription;
   private ComponentMapper<Visible> visibleComponentMapper;
   private Vector3 pos;

@@ -14,6 +14,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
 
@@ -27,7 +28,7 @@ public class VisibilitySystem extends IteratingSystem {
   private final InField inField;
   private final IntSet visible = new IntSet();
 
-  @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class, Building.class })
+  @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class, Building.class, UnderConstruction.class})
   private EntitySubscription allThatCanBePerceived;
 
   private ComponentMapper<Coordinates> coordinatesMapper;
