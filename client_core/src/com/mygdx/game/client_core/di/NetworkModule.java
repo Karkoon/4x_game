@@ -1,9 +1,7 @@
 package com.mygdx.game.client_core.di;
 
-import com.github.czyzby.websocket.CommonWebSockets;
-import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSockets;
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
+import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkJobRegisterHandler;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.ServerConnection;
@@ -22,20 +20,20 @@ import javax.inject.Singleton;
 @Log
 public class NetworkModule {
 
-  private static final String HOST = "127.0.0.1"; // todo put configs in a runtime-provided object
+  private static final String HOST = "127.0.0.1"; // load this from file
   private static final int PORT = 10666;
 
   @Provides
   @Singleton
-  public WebSocket providesWebsocket(
-      ServerConnectionConfig config,
-      ServerConnection serverConnection, // todo move it to something that can restore connections
+  public MessageSender providesMessageSender(
+      ServerConnection serverConnection,
       NetworkJobRegisterHandler messageListener
   ) {
+    var config = new ServerConnectionConfig(HOST, PORT);
     serverConnection.connect(config);
     serverConnection.setPersistentListener(messageListener);
-    log.info("provided socket: " + socket);
-    return ;
+    log.info("provided message sender: " + serverConnection);
+    return serverConnection;
   }
 
   @Provides

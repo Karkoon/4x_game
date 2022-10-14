@@ -1,6 +1,6 @@
 package com.mygdx.game.client_core.network.service;
 
-import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.network.MessageSender;
 import dagger.Lazy;
 import lombok.extern.java.Log;
 
@@ -9,17 +9,17 @@ import javax.inject.Inject;
 @Log
 public class EndTurnService {
 
-  private final Lazy<WebSocket> socket;
+  private final Lazy<MessageSender> sender;
 
   @Inject
   public EndTurnService(
-      Lazy<WebSocket> socket
+      Lazy<MessageSender> sender
   ) {
-    this.socket = socket;
+    this.sender = sender;
   }
 
   public void endTurn() {
     log.info("end turn request send");
-    socket.get().send("end_turn");
+    sender.get().send("end_turn");
   }
 }

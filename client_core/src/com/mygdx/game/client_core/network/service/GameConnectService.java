@@ -1,7 +1,7 @@
 package com.mygdx.game.client_core.network.service;
 
-import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.client_core.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -9,21 +9,21 @@ import javax.inject.Inject;
 @Log
 public class GameConnectService {
 
-  private final WebSocket socket;
+  private final MessageSender sender;
   private final PlayerInfo playerInfo;
 
   @Inject
   public GameConnectService(
-      WebSocket socket,
+      MessageSender sender,
       PlayerInfo playerInfo
   ) {
-    this.socket = socket;
+    this.sender = sender;
     this.playerInfo = playerInfo;
   }
 
   public void connect() {
     log.info("connect request sent");
-    socket.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":default");
+    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":default");
   }
 
 }

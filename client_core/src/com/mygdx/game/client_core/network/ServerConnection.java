@@ -5,7 +5,6 @@ import com.github.czyzby.websocket.CommonWebSockets;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.WebSockets;
-import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
 import lombok.extern.java.Log;
 
@@ -16,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Singleton
 @Log
-public class ServerConnection {
+public class ServerConnection implements MessageSender {
   private final ConcurrentLinkedQueue<String> dataToSend = new ConcurrentLinkedQueue<>();
 
   private WebSocketListener persistentListener;
@@ -92,6 +91,9 @@ public class ServerConnection {
       while (iter.hasNext()) {
         if (activeWebSocket.isOpen()) {
           activeWebSocket.send(iter.next());
+        } else {
+          dataToSend.add(text);
+          return;
         }
       }
       activeWebSocket.send(text);

@@ -1,7 +1,6 @@
 package com.mygdx.game.client_core.network.message_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -24,9 +23,9 @@ public class ChangeTurnMessageHandler implements QueueMessageListener.Handler<Ch
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, ChangeTurnMessage changeTurnMessage) {
+  public boolean handle(WebSocket webSocket, ChangeTurnMessage message) {
     log.info("Handle change turn message ");
-    activeToken.setActiveToken(changeTurnMessage.getPlayerToken());
+    activeToken.setActiveToken(message.getPlayerToken());
     return FULLY_HANDLED;
   }
 

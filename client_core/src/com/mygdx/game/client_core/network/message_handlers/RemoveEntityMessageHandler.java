@@ -3,7 +3,6 @@ package com.mygdx.game.client_core.network.message_handlers;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.client_core.model.ToRemove;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.QueueMessageListener;
@@ -28,9 +27,9 @@ public class RemoveEntityMessageHandler implements QueueMessageListener.Handler<
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, RemoveEntityMessage removeEntityMessage) {
-    var entityId = mapper.getWorldEntity(removeEntityMessage.getEntityId());
-    log.info("removed network entity " + removeEntityMessage.getEntityId());
+  public boolean handle(WebSocket webSocket, RemoveEntityMessage message) {
+    var entityId = mapper.getWorldEntity(message.getEntityId());
+    log.info("removed network entity " + message.getEntityId());
     toRemoveComponentMapper.set(entityId, true);
     return true;
   }

@@ -15,9 +15,6 @@ public class QueueMessageListener extends AbstractWebSocketListener {
 
   private final ObjectMap<Class<?>, Queue<Handler>> handlers = new ObjectMap<>();
 
-  public QueueMessageListener() {
-  }
-
   /**
    * @param packetClass class of the packet that should be passed to the selected handler.
    * @param handler     will be notified when the chosen type of packet is received. Should be prepared to handle the
@@ -68,6 +65,6 @@ public class QueueMessageListener extends AbstractWebSocketListener {
      * @see WebSocketListener#FULLY_HANDLED
      * @see WebSocketListener#NOT_HANDLED
      */
-    boolean handle(WebSocket webSocket, T component);
+    boolean handle(WebSocket webSocket, T message);
   }
 }
