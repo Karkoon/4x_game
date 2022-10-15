@@ -26,14 +26,12 @@ import javax.inject.Singleton;
 @Singleton
 public class UiElementsCreator {
 
-  private final GameScreenAssets gameAssets;
   private final Skin skin;
 
   @Inject
   public UiElementsCreator(
       GameScreenAssets gameAssets
   ) {
-    this.gameAssets = gameAssets;
     skin = gameAssets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
   }
 

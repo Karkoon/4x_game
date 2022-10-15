@@ -10,21 +10,12 @@ public interface Navigator {
 
   void changeToTechnologyScreen();
 
-  void changeToLoadingScreen();
-
-  void changeToMenuScreen();
-
-  void changeToAboutScreen();
-
   void exit();
 
   enum Direction {
     GAME_SCREEN,
     FIELD_SCREEN,
     TECHNOLOGY_SCREEN,
-    LOADING_SCREEN,
-    MENU_SCREEN,
-    ABOUT_SCREEN,
     EXIT
   }
 }

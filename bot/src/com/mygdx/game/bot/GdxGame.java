@@ -1,7 +1,6 @@
 package com.mygdx.game.bot;
 
 import com.badlogic.gdx.Game;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.di.bot.BotClient;
 import com.mygdx.game.client_core.di.CoreNames;
@@ -57,10 +56,9 @@ public class GdxGame extends Game {
 
     log.info("Waiting for game start.");
 
-    handler.registerHandler(GameStartedMessage.class, ((webSocket, o) -> {
+    handler.registerHandler(GameStartedMessage.class, ((webSocket, message) -> {
       Completable.fromAction(() -> {
             log.info("Starting bot.");
-            var message = (GameStartedMessage) o;
             activeToken.setActiveToken(message.getPlayerToken());
             botClient.run();
           })
@@ -70,7 +68,7 @@ public class GdxGame extends Game {
       return FULLY_HANDLED;
     }));
 
-    gameConnectService.connect();
+    gameConnectService.connect("default");
     main.start();
   }
 }

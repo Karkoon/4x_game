@@ -13,6 +13,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.assets.LoadingScreenAssetPaths;
 import com.mygdx.game.assets.LoadingScreenAssets;
 import com.mygdx.game.assets.MenuScreenAssets;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ui.actor.LoadingBar;
 import lombok.extern.java.Log;
 
@@ -25,7 +26,7 @@ public class LoadingScreen extends ScreenAdapter {
 
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
-  private final Navigator navigator;
+  private final GdxGame navigator;
   private final GameScreenAssets gameScreenAssets;
   private final GameConfigAssets gameConfigAssets;
   private final AssetManager manager;
@@ -42,7 +43,7 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Inject
   public LoadingScreen(
-      Navigator navigator,
+      GdxGame navigator,
       GameScreenAssets gameScreenAssets,
       LoadingScreenAssets loadingScreenAssets,
       MenuScreenAssets menuScreenAssets,

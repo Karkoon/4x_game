@@ -20,7 +20,7 @@ public class QueueMessageListener extends AbstractWebSocketListener {
    * @param handler     will be notified when the chosen type of packet is received. Should be prepared to handle the
    *                    specific packet class, otherwise {@link ClassCastException} might be thrown.
    */
-  public void registerHandler(final Class<?> packetClass, final Handler handler) {
+  public <T> void registerHandler(final Class<T> packetClass, final Handler<T> handler) {
     var queue = handlers.get(packetClass);
     if (queue == null) {
       queue = new Queue<>();

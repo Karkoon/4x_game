@@ -23,7 +23,7 @@ public class ServerConnection implements MessageSender {
     @Override
     public boolean onOpen(WebSocket webSocket) {
       log.info("opened server connection");
-      return false;
+      return true;
     }
 
     @Override
@@ -86,20 +86,32 @@ public class ServerConnection implements MessageSender {
   }
 
   public void send(String text) {
+    log.info("send called");
     if (activeWebSocket.isOpen()) {
       var iter = dataToSend.iterator();
       while (iter.hasNext()) {
         if (activeWebSocket.isOpen()) {
-          activeWebSocket.send(iter.next());
+          sendNetwork(iter.next());
         } else {
-          dataToSend.add(text);
+          saveToSendQueue(text);
           return;
         }
       }
-      activeWebSocket.send(text);
+      sendNetwork(text);
     } else {
-      dataToSend.add(text);
+      saveToSendQueue(text);
     }
+    log.info("send finished");
+  }
+
+  private void sendNetwork(String text) {
+    log.info("sending data: " + text);
+    activeWebSocket.send(text);
+  }
+
+  private void saveToSendQueue(String text) {
+    log.info("saving data: " + text);
+    dataToSend.add(text);
   }
 
   public void setPersistentListener(WebSocketListener messageListener) {
