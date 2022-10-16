@@ -3,7 +3,8 @@ package com.mygdx.game.client_core.network.message_handlers;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.client_core.model.ToRemove;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.ecs.component.ToRemove;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.RemoveEntityMessage;
@@ -12,6 +13,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class RemoveEntityMessageHandler implements QueueMessageListener.Handler<RemoveEntityMessage> {
 
   private final NetworkWorldEntityMapper mapper;

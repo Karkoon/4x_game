@@ -1,8 +1,9 @@
-package com.mygdx.game.client.di;
+package com.mygdx.game.client.di.gameinstance;
 
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
 import com.mygdx.game.client.network.DesktopMaterialHandler;
 import com.mygdx.game.client.network.FieldOwnerColorHandler;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.comp_handlers.BuildingHandler;
@@ -20,8 +21,8 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Owner;
+import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Research;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -34,6 +35,7 @@ import lombok.extern.java.Log;
 public class ComponentMessageListenerModule {
 
   @Provides
+  @GameInstanceScope
   public ComponentMessageListener provideComponentMessageListener(
       NetworkWorldEntityMapper mapper,
       EntityConfigHandler entityConfigHandler,

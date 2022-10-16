@@ -7,9 +7,11 @@ import com.mygdx.game.core.network.messages.GameStartedMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 @Log
+@Singleton
 public class GameStartedMessageHandler implements QueueMessageListener.Handler<GameStartedMessage> {
 
   private final ActiveToken activeToken;

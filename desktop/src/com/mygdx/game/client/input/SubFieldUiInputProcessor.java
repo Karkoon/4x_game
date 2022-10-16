@@ -19,11 +19,10 @@ public class SubFieldUiInputProcessor extends InputAdapter {
 
   @Override
   public boolean keyDown(int keycode) {
-    switch (keycode) {
-      case Input.Keys.ESCAPE -> backToGameScreen();
-      default -> {
-        return false;
-      }
+    if (keycode == Input.Keys.ESCAPE) {
+      backToGameScreen();
+    } else {
+      return false;
     }
     return true;
   }

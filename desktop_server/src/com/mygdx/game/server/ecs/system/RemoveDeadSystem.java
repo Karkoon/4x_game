@@ -11,7 +11,7 @@ import javax.inject.Inject;
 @All({Dead.class})
 public class RemoveDeadSystem extends IteratingSystem {
 
-  private Lazy<RemoveClientEntityService> service;
+  private final Lazy<RemoveClientEntityService> service;
 
   @Inject
   public RemoveDeadSystem(

@@ -4,14 +4,14 @@ import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.artemis.utils.IntBag;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class Technologies {
 
   @AspectDescriptor(all = {Technology.class})

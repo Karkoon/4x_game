@@ -8,6 +8,7 @@ import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
+
 import javax.inject.Inject;
 
 public class ChoosableSetter implements Setter {

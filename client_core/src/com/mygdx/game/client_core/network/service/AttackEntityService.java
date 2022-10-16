@@ -1,5 +1,6 @@
 package com.mygdx.game.client_core.network.service;
 
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import dagger.Lazy;
@@ -8,6 +9,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class AttackEntityService {
 
   private final Lazy<MessageSender> sender;

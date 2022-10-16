@@ -1,25 +1,25 @@
 package com.mygdx.game.client_core.model;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.client_core.network.ComponentMessageListener;
-import com.mygdx.game.client_core.network.QueueMessageListener;
+import com.github.czyzby.websocket.WebSocketListener;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Log
 @Singleton
 public class NetworkJobsQueueJobJobberManager {
 
-  private final ComponentMessageListener componentMessageListener;
-  private final QueueMessageListener queueMessageListener;
+  private final Set<WebSocketListener> webSocketListenerSet;
   private final ConcurrentLinkedQueue<OnMessageArgs> dataToBeHandled = new ConcurrentLinkedQueue<>();
 
   @Inject
   NetworkJobsQueueJobJobberManager(
-      ComponentMessageListener componentMessageListener, // todo use multibindings to remove the dependency
+      Set<WebSocketListener> webSocketListenerSet
+      //ComponentMessageListener componentMessageListener, // todo use multibindings to remove the dependency
       /* in docs:
       * subComponent can add elements to multibound sets or maps that are bound in its parent.
       * When that happens, the set or map is different depending on where it is injected.
@@ -31,10 +31,9 @@ public class NetworkJobsQueueJobJobberManager {
 
       // this means that the "outer" part of the game won't have to think about the GameInstance world at all, which is good
       // because they will be exchanged
-      QueueMessageListener queueMessageListener
+      // QueueMessageListener queueMessageListener
   ) {
-    this.componentMessageListener = componentMessageListener;
-    this.queueMessageListener = queueMessageListener;
+    this.webSocketListenerSet = webSocketListenerSet;
   }
 
   public void add(WebSocket webSocket, byte[] data) {
@@ -46,10 +45,14 @@ public class NetworkJobsQueueJobJobberManager {
     var datum = dataToBeHandled.poll();
     while (datum != null) {
       log.info("data tried to be handled content: " + datum);
-      if (!queueMessageListener.onMessage(datum.socket(), datum.data())) {
-        if (!componentMessageListener.onMessage(datum.socket(), datum.data())) {
-          throw new RuntimeException("data " + datum + "can't be handled");
+      var handled = false;
+      for (var listener : webSocketListenerSet) {
+        if (listener.onMessage(datum.socket(), datum.data())) {
+          handled = true;
         }
+      }
+      if (!handled) {
+        throw new RuntimeException("data " + datum + "can't be handled");
       }
       datum = dataToBeHandled.poll();
     }

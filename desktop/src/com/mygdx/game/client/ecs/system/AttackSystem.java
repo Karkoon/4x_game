@@ -6,6 +6,7 @@ import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.ui.CanNotAttackDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.AttackEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 @Log
 @All({Highlighted.class, Stats.class})
+@GameInstanceScope
 public class AttackSystem extends IteratingSystem {
 
   private final ChosenEntity chosenEntity;
