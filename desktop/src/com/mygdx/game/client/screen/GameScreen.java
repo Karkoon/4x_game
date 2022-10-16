@@ -18,6 +18,7 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -29,10 +30,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();

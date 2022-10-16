@@ -1,6 +1,7 @@
 package com.mygdx.game.client_core.network.message_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
+@GameInstanceScope
 public class ChangeTurnMessageHandler implements QueueMessageListener.Handler<ChangeTurnMessage> {
 
   private final ActiveToken activeToken;

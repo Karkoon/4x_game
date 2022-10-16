@@ -7,14 +7,13 @@ import dagger.Provides;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
-import javax.inject.Singleton;
 import java.util.logging.Level;
 
 @Module
 @Log
 public class WorldModule {
   @Provides
-  @Singleton
+  @GameInstanceScope
   public @NonNull World providesWorld(
       WorldConfiguration worldConfiguration
   ) {

@@ -6,7 +6,6 @@ import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 

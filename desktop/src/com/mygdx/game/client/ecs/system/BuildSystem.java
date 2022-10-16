@@ -5,6 +5,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenConfig;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.BuildingService;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -13,6 +14,7 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 @Log
 @All({Highlighted.class, SubField.class})
 public class BuildSystem extends IteratingSystem {

@@ -2,7 +2,7 @@ package com.mygdx.game.client_core.ecs.system;
 
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
-import com.mygdx.game.client_core.model.ToRemove;
+import com.mygdx.game.client_core.ecs.component.ToRemove;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 
 import javax.inject.Inject;

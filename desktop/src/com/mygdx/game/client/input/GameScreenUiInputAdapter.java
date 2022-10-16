@@ -3,15 +3,15 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client.screen.Navigator;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class GameScreenUiInputAdapter extends InputAdapter {
 
   private final Lazy<Navigator> navigator;

@@ -6,7 +6,9 @@ import com.github.czyzby.websocket.data.WebSocketException;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class NetworkJobRegisterHandler implements WebSocketListener {
 
     private final NetworkJobsQueueJobJobberManager queue;

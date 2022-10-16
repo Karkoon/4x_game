@@ -8,7 +8,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.model.InField;
-import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -18,15 +18,13 @@ import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
 @All({Coordinates.class, Stats.class, Owner.class})
+@GameInstanceScope
 public class VisibilitySystem extends IteratingSystem {
 
   private final InField inField;
-  private final PlayerInfo playerInfo;
   private final IntSet visible = new IntSet();
 
   @AspectDescriptor(all = { Coordinates.class }, exclude = { SubField.class, Building.class })
@@ -39,12 +37,10 @@ public class VisibilitySystem extends IteratingSystem {
 
   @Inject
   public VisibilitySystem(
-      InField inField,
-      PlayerInfo playerInfo
+      InField inField
   ) {
     super();
     this.inField = inField;
-    this.playerInfo = playerInfo;
   }
 
   @Override

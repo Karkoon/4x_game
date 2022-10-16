@@ -1,9 +1,10 @@
 package com.mygdx.game.client_core.model;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 
-@Singleton
+import javax.inject.Inject;
+
+@GameInstanceScope
 public class ActiveToken {
   private String token = "";
 

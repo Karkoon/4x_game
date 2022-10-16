@@ -5,18 +5,12 @@ import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkJobRegisterHandler;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.ServerConnection;
-import com.mygdx.game.client_core.network.message_handlers.ChangeTurnMessageHandler;
-import com.mygdx.game.client_core.network.message_handlers.GameStartedMessageHandler;
-import com.mygdx.game.client_core.network.message_handlers.RemoveEntityMessageHandler;
-import com.mygdx.game.core.network.messages.ChangeTurnMessage;
-import com.mygdx.game.core.network.messages.GameStartedMessage;
-import com.mygdx.game.core.network.messages.RemoveEntityMessage;
 import dagger.Module;
 import dagger.Provides;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Singleton;
+import java.util.Map;
 
 @Module
 @Log
@@ -39,16 +33,14 @@ public class NetworkModule {
   }
 
   @Provides
-  @Singleton
+  @Singleton // todo remove handlers from gameinstance that aren't usable anymore but still exist
   public QueueMessageListener providesWebSocketHandler(
-      @NonNull GameStartedMessageHandler gameStartedMessageHandler,
-      @NonNull ChangeTurnMessageHandler changeTurnMessageHandler,
-      @NonNull RemoveEntityMessageHandler removeEntityMessageHandler
+      Map<Class<?>, QueueMessageListener.Handler> handlerMap
   ) {
     var listener = new QueueMessageListener();
-    listener.registerHandler(GameStartedMessage.class, gameStartedMessageHandler);
-    listener.registerHandler(ChangeTurnMessage.class, changeTurnMessageHandler);
-    listener.registerHandler(RemoveEntityMessage.class, removeEntityMessageHandler);
+    for (var entry : handlerMap.entrySet()) {
+      listener.registerHandler(entry.getKey(), entry.getValue());
+    }
     return listener;
   }
 }

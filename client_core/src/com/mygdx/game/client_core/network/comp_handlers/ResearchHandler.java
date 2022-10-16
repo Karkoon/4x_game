@@ -3,6 +3,7 @@ package com.mygdx.game.client_core.network.comp_handlers;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.Research;
 import lombok.extern.java.Log;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
+@GameInstanceScope
 public class ResearchHandler implements ComponentMessageListener.Handler<Research> {
 
   private ComponentMapper<Research> reserchedMapper;

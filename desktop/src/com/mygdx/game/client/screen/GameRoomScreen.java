@@ -4,12 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
-import dagger.Lazy;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -22,7 +22,7 @@ import javax.inject.Singleton;
 public class GameRoomScreen extends ScreenAdapter {
 
   private final Stage stage;
-  private final Lazy<GameScreen> gameScreenBuilder;
+  private final GameScreenSubcomponent.Builder gameScreenBuilder;
   private final GameStartService gameStartService;
   private final PlayerRoomDialogFactory roomDialogFactory;
   private final QueueMessageListener connection;
@@ -31,7 +31,7 @@ public class GameRoomScreen extends ScreenAdapter {
   @Inject
   GameRoomScreen(
       @NonNull @Named(StageModule.SCREEN_STAGE) Stage stage,
-      @NonNull Lazy<GameScreen> gameScreenBuilder,
+      @NonNull GameScreenSubcomponent.Builder gameScreenBuilder,
       @NonNull GameStartService gameStartService,
       @NonNull PlayerRoomDialogFactory roomDialogFactory,
       @NonNull QueueMessageListener connection,
@@ -53,7 +53,7 @@ public class GameRoomScreen extends ScreenAdapter {
         GameStartedMessage.class,
         (socket, packet) -> {
           log.info( " game started handled");
-          var gameScreen = gameScreenBuilder.get();
+          var gameScreen = gameScreenBuilder.build().get();
           gameScreen.changeToGameScreen();
           return true;
         }

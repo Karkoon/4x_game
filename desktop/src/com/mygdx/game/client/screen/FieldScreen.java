@@ -20,6 +20,7 @@ import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.SubField;
@@ -29,10 +30,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class FieldScreen extends ScreenAdapter {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();

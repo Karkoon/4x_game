@@ -3,6 +3,7 @@ package com.mygdx.game.client.ecs.system;
 import com.artemis.BaseSystem;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.NotPlayerTurnDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import lombok.extern.java.Log;
@@ -10,6 +11,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class BlockInputSystem extends BaseSystem {
 
   private final PlayerInfo playerInfo;

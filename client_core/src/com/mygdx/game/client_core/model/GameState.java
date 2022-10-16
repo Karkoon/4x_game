@@ -3,19 +3,19 @@ package com.mygdx.game.client_core.model;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.utils.IntArray;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class GameState {
 
   private ComponentMapper<Coordinates> coordinatesMapper;

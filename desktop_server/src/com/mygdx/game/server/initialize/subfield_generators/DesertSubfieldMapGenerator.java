@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 import java.util.List;
