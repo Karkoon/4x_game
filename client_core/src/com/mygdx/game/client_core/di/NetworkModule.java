@@ -2,7 +2,7 @@ package com.mygdx.game.client_core.di;
 
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
 import com.mygdx.game.client_core.network.MessageSender;
-import com.mygdx.game.client_core.network.NetworkJobRegisterHandler;
+import com.mygdx.game.client_core.network.NetworkJobRegisterListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.ServerConnection;
 import dagger.Module;
@@ -23,7 +23,7 @@ public class NetworkModule {
   @Singleton
   public MessageSender providesMessageSender(
       ServerConnection serverConnection,
-      NetworkJobRegisterHandler messageListener
+      NetworkJobRegisterListener messageListener
   ) {
     var config = new ServerConnectionConfig(HOST, PORT);
     serverConnection.connect(config);
@@ -33,7 +33,7 @@ public class NetworkModule {
   }
 
   @Provides
-  @Singleton // todo remove handlers from gameinstance that aren't usable anymore but still exist
+  @Singleton
   public QueueMessageListener providesWebSocketHandler(
       Map<Class<?>, QueueMessageListener.Handler> handlerMap
   ) {
