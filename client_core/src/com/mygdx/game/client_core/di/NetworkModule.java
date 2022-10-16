@@ -4,7 +4,7 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
 import com.mygdx.game.client_core.network.MessageSender;
-import com.mygdx.game.client_core.network.NetworkJobRegisterListener;
+import com.mygdx.game.client_core.network.AddJobToQueueListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.ServerConnection;
 import dagger.Module;
@@ -26,7 +26,7 @@ public class NetworkModule {
   @Singleton
   public MessageSender providesMessageSender(
       ServerConnection serverConnection,
-      NetworkJobRegisterListener messageListener
+      AddJobToQueueListener messageListener
   ) {
     var config = new ServerConnectionConfig(HOST, PORT);
     serverConnection.connect(config);
@@ -50,10 +50,9 @@ public class NetworkModule {
   @Provides
   @Singleton
   public NetworkJobsQueueJobJobberManager providesNetworkJobsQueueJobJobberManager(
-      NetworkJobRegisterListener listener,
+      AddJobToQueueListener listener,
       Set<WebSocketListener> listenerSet
   ) {
-    log.info("debugTestText4 netwokrfomdule " + listener.hashCode());
     return new NetworkJobsQueueJobJobberManager(listener, listenerSet);
   }
 }

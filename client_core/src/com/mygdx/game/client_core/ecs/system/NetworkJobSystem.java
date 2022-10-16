@@ -23,7 +23,6 @@ public class NetworkJobSystem extends BaseSystem {
 
   @Override
   protected void processSystem() {
-    log.info("debugTestText3 " + networkJobsQueueJobJobberManager.get().hashCode());
     networkJobsQueueJobJobberManager.get().doAllJobs();
   }
 }

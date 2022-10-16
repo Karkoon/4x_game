@@ -11,12 +11,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Singleton
 @Log
-public class NetworkJobRegisterListener implements WebSocketListener {
+public class AddJobToQueueListener implements WebSocketListener {
 
     private final ConcurrentLinkedQueue<OnMessageArgs> queue = new ConcurrentLinkedQueue<>();
 
-    public OnMessageArgs poll() {
-        return queue.poll();
+    public OnMessageArgs peek() {
+        return queue.peek();
+    }
+
+    public void remove() {
+        queue.remove();
     }
 
     public record OnMessageArgs(WebSocket socket, byte[] data) {
@@ -27,7 +31,7 @@ public class NetworkJobRegisterListener implements WebSocketListener {
     }
 
     @Inject
-    public NetworkJobRegisterListener() {
+    public AddJobToQueueListener() {
         super();
     }
 
