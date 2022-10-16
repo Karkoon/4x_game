@@ -33,19 +33,18 @@ public class QueueMessageListener extends AbstractWebSocketListener {
   @Override
   protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
     try {
-      routeMessageToHandler(webSocket, packet);
-      return FULLY_HANDLED;
+      return routeMessageToHandler(webSocket, packet);
     } catch (final Exception exception) {
       return onError(webSocket,
           new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
   }
 
-  private void routeMessageToHandler(WebSocket webSocket, Object message) {
+  private boolean routeMessageToHandler(WebSocket webSocket, Object message) {
     var queue = handlers.get(message.getClass());
     if (queue == null) {
       log.info("queue is null for: " + message.getClass());
-      return;
+      return NOT_HANDLED;
     }
     for (var handler : queue) {
       var result = handler.handle(webSocket, message);
@@ -53,6 +52,7 @@ public class QueueMessageListener extends AbstractWebSocketListener {
         throw new RuntimeException("Every Message needs to be handled; content=" + message);
       }
     }
+    return FULLY_HANDLED;
   }
 
   /**

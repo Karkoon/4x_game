@@ -3,6 +3,7 @@ package com.mygdx.game.client.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
 import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
@@ -29,6 +30,7 @@ public class GameRoomScreen extends ScreenAdapter {
   private final NetworkJobsQueueJobJobberManager jobManager;
 
   private boolean initialized = false;
+  private Dialog roomDialog;
 
   @Inject
   GameRoomScreen(
@@ -51,14 +53,10 @@ public class GameRoomScreen extends ScreenAdapter {
   public void show() {
     log.info("gameroomscreen shown");
     if (!initialized) {
-      roomDialogFactory.create(() -> {
-        gameStartService.startGame(5, 5, 401);
-
-      }).show(stage);
+      roomDialog = roomDialogFactory.create(() -> gameStartService.startGame(5, 5, 401));
       connection.registerHandler(
           GameStartedMessage.class,
           (socket, packet) -> {
-            log.info( " game started handled");
             var gameScreen = gameScreenBuilder.build().get();
             gameScreen.setActivePlayerToken(packet.getPlayerToken());
             gameScreen.changeToGameScreen();
@@ -68,7 +66,7 @@ public class GameRoomScreen extends ScreenAdapter {
       initialized = true;
       log.info("initialized gameroomscreen");
     }
-
+    roomDialog.show(stage);
     Gdx.input.setInputProcessor(stage);
   }
 
