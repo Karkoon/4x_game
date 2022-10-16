@@ -42,7 +42,10 @@ public class QueueMessageListener extends AbstractWebSocketListener {
 
   private void routeMessageToHandler(WebSocket webSocket, Object message) {
     var queue = handlers.get(message.getClass());
-
+    if (queue == null) {
+      log.info("queue is null for: " + message.getClass());
+      return;
+    }
     for (var handler : queue) {
       var result = handler.handle(webSocket, message);
       if (result != FULLY_HANDLED) {

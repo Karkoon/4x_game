@@ -9,12 +9,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class NetworkJobRegisterHandler implements WebSocketListener {
+public class NetworkJobRegisterListener implements WebSocketListener {
 
     private final NetworkJobsQueueJobJobberManager queue;
 
     @Inject
-    public NetworkJobRegisterHandler(
+    public NetworkJobRegisterListener(
         NetworkJobsQueueJobJobberManager queue
     ) {
         this.queue = queue;

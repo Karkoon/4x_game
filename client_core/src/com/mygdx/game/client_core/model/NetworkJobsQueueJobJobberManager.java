@@ -13,7 +13,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Singleton
 public class NetworkJobsQueueJobJobberManager {
 
-  private final Set<WebSocketListener> webSocketListenerSet;
+  private final Set<WebSocketListener> webSocketListenerSet; // quickfix would be to have a set keyed by class to have
+  // the websocket listenres be replaced but it's horrible
+
   private final ConcurrentLinkedQueue<OnMessageArgs> dataToBeHandled = new ConcurrentLinkedQueue<>();
 
   @Inject
