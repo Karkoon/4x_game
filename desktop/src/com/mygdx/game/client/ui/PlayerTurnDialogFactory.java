@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -12,12 +13,12 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
+import static com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule.GAME_INSTANCE;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class PlayerTurnDialogFactory {
 
   private final GameScreenAssets assets;
@@ -30,7 +31,7 @@ public class PlayerTurnDialogFactory {
       GameScreenAssets assets,
       @Named(StageModule.GAME_SCREEN) Stage stage,
       PlayerInfo playerInfo,
-      QueueMessageListener listener
+      @Named(GAME_INSTANCE) QueueMessageListener listener
   ) {
     this.assets = assets;
     this.stage = stage;

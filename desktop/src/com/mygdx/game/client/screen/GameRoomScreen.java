@@ -28,6 +28,8 @@ public class GameRoomScreen extends ScreenAdapter {
   private final QueueMessageListener connection;
   private final NetworkJobsQueueJobJobberManager jobManager;
 
+  private boolean initialized = false;
+
   @Inject
   GameRoomScreen(
       @NonNull @Named(StageModule.SCREEN_STAGE) Stage stage,
@@ -48,16 +50,25 @@ public class GameRoomScreen extends ScreenAdapter {
   @Override
   public void show() {
     log.info("gameroomscreen shown");
-    roomDialogFactory.create(() -> gameStartService.startGame(5, 5, 401)).show(stage);
-    connection.registerHandler(
-        GameStartedMessage.class,
-        (socket, packet) -> {
-          log.info( " game started handled");
-          var gameScreen = gameScreenBuilder.build().get();
-          gameScreen.changeToGameScreen();
-          return true;
-        }
-    );
+    if (!initialized) {
+      roomDialogFactory.create(() -> {
+        gameStartService.startGame(5, 5, 401);
+
+      }).show(stage);
+      connection.registerHandler(
+          GameStartedMessage.class,
+          (socket, packet) -> {
+            log.info( " game started handled");
+            var gameScreen = gameScreenBuilder.build().get();
+            gameScreen.setActivePlayerToken(packet.getPlayerToken());
+            gameScreen.changeToGameScreen();
+            return true;
+          }
+      );
+      initialized = true;
+      log.info("initialized gameroomscreen");
+    }
+
     Gdx.input.setInputProcessor(stage);
   }
 

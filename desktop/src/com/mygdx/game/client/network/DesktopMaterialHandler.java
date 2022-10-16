@@ -31,10 +31,7 @@ public class DesktopMaterialHandler implements ComponentMessageListener.Handler<
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, PlayerMaterial component) {
-    log.info("Read material component " + worldEntity);
-    var material = playerplayerMaterialMapper.create(worldEntity);
-    material.setMaterial(component.getMaterial());
-    material.setValue(component.getValue());
+    log.info("Desktop read material component " + worldEntity);
     worldHUD.prepareHudSceleton();
     return FULLY_HANDLED;
   }

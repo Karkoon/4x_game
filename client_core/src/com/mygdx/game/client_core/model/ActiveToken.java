@@ -13,7 +13,6 @@ public class ActiveToken {
     super();
   }
 
-
   public void setActiveToken(String token) {
     this.token = token;
   }
