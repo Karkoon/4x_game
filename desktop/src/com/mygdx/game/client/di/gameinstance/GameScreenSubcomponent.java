@@ -1,6 +1,7 @@
 package com.mygdx.game.client.di.gameinstance;
 
 import com.mygdx.game.client.screen.GameScreen;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.di.gameinstance.WorldModule;
 import dagger.Subcomponent;
@@ -13,6 +14,7 @@ import dagger.Subcomponent;
         ComponentMessageListenerModule.class,
         SetterBindingsModule.class,
         MessageHandlerBindingsModule.class,
+        GameInstanceNetworkModule.class,
         GameInstanceWebSocketListenerBindingsModule.class
     }
 )

@@ -55,6 +55,7 @@ public class ComponentMessageListenerModule {
     var listener = new ComponentMessageListener(mapper); // jobs
     listener.registerHandler(EntityConfigId.class, entityConfigHandler);
     listener.registerHandler(EntityConfigId.class, desktopEntityConfigHandler);
+    listener.registerHandler(PlayerMaterial.class, materialHandler);
     listener.registerHandler(PlayerMaterial.class, desktopMaterialHandler);
     listener.registerHandler(Coordinates.class, coordinatesHandler);
     listener.registerHandler(Field.class, fieldHandler);

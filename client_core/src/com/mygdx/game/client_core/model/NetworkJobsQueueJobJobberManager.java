@@ -1,25 +1,20 @@
 package com.mygdx.game.client_core.model;
 
-import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
+import com.mygdx.game.client_core.network.NetworkJobRegisterListener;
 import lombok.extern.java.Log;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Log
-@Singleton
 public class NetworkJobsQueueJobJobberManager {
 
+  private final NetworkJobRegisterListener queueContainer;
   private final Set<WebSocketListener> webSocketListenerSet; // quickfix would be to have a set keyed by class to have
   // the websocket listenres be replaced but it's horrible
 
-  private final ConcurrentLinkedQueue<OnMessageArgs> dataToBeHandled = new ConcurrentLinkedQueue<>();
-
-  @Inject
-  NetworkJobsQueueJobJobberManager(
+  public NetworkJobsQueueJobJobberManager(
+      NetworkJobRegisterListener queueContainer,
       Set<WebSocketListener> webSocketListenerSet
       //ComponentMessageListener componentMessageListener, // todo use multibindings to remove the dependency
       /* in docs:
@@ -35,16 +30,12 @@ public class NetworkJobsQueueJobJobberManager {
       // because they will be exchanged
       // QueueMessageListener queueMessageListener
   ) {
+    this.queueContainer = queueContainer;
     this.webSocketListenerSet = webSocketListenerSet;
   }
 
-  public void add(WebSocket webSocket, byte[] data) {
-    log.info("data added");
-    dataToBeHandled.add(new OnMessageArgs(webSocket, data));
-  }
-
   public void doAllJobs() {
-    var datum = dataToBeHandled.poll();
+    var datum = queueContainer.poll();
     while (datum != null) {
       log.info("data tried to be handled content: " + datum);
       var handled = false;
@@ -56,15 +47,9 @@ public class NetworkJobsQueueJobJobberManager {
       if (!handled) {
         throw new RuntimeException("data " + datum + "can't be handled");
       }
-      datum = dataToBeHandled.poll();
+      datum = queueContainer.poll();
     }
   }
 
-  public record OnMessageArgs(WebSocket socket, byte[] data) {
 
-    @Override
-    public String toString() {
-      return new String(data);
-    }
-  }
 }

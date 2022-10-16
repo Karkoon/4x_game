@@ -6,8 +6,9 @@ import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
-import com.google.inject.Singleton;
 import lombok.extern.java.Log;
+
+import javax.inject.Singleton;
 
 @Log
 @Singleton
