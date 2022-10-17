@@ -198,7 +198,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   @Override
   public void exit() {
     dispose();
-    game.exit();
+    game.changeToGameRoomScreen();
   }
 
   public void setActivePlayerToken(String playerToken) {
