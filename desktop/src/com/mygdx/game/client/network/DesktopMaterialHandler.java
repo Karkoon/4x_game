@@ -15,7 +15,6 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @Log
 public class DesktopMaterialHandler implements ComponentMessageListener.Handler<PlayerMaterial> {
 
-  private final World world;
   private final WorldHUD worldHUD;
   private ComponentMapper<PlayerMaterial> playerplayerMaterialMapper;
 
@@ -25,7 +24,6 @@ public class DesktopMaterialHandler implements ComponentMessageListener.Handler<
       WorldHUD worldHUD
   ) {
     world.inject(this);
-    this.world = world;
     this.worldHUD = worldHUD;
   }
 

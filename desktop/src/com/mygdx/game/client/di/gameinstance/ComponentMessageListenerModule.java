@@ -12,6 +12,7 @@ import com.mygdx.game.client_core.network.comp_handlers.CoordinatesHandler;
 import com.mygdx.game.client_core.network.comp_handlers.DesktopUnderConstructionHandler;
 import com.mygdx.game.client_core.network.comp_handlers.EntityConfigHandler;
 import com.mygdx.game.client_core.network.comp_handlers.FieldHandler;
+import com.mygdx.game.client_core.network.comp_handlers.MaterialHandler;
 import com.mygdx.game.client_core.network.comp_handlers.OwnerHandler;
 import com.mygdx.game.client_core.network.comp_handlers.ResearchHandler;
 import com.mygdx.game.client_core.network.comp_handlers.StatsHandler;
@@ -45,6 +46,7 @@ public class ComponentMessageListenerModule {
       DesktopMaterialHandler desktopMaterialHandler,
       CoordinatesHandler coordinatesHandler,
       FieldHandler fieldHandler,
+      MaterialHandler materialHandler,
       SubFieldHandler subFieldHandler,
       UnderConstructionHandler underConstructionHandler,
       DesktopUnderConstructionHandler desktopUnderConstructionHandler,
