@@ -144,9 +144,9 @@ public class RoundEndService extends WorldService {
       var underConstruction = underConstructionMapper.get(entityId);
       underConstruction.setTurnLeft(underConstruction.getTurnLeft()-1);
       if (underConstruction.getTurnLeft() == 0) {
-        int buildingEntityId = underConstruction.getBuildingEntityId();
+        int buildingConfigId = underConstruction.getBuildingConfigId();
         int parentSubfield = underConstruction.getParentSubfield();
-        var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingEntityId);
+        var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
         this.buildingFactory.createEntity(entityId, buildingConfig, parentSubfield);
         this.underConstructionMapper.remove(entityId);
       }

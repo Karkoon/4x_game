@@ -39,15 +39,6 @@ public class ModelInstanceCompSetter implements Setter {
     }
   }
 
-  public void setModel(Config config, int entityId, String textureName) {
-    if (config instanceof ModelConfig modelConfig) {
-      setUpModelInstanceComp(modelConfig, entityId);
-      var modelInstanceComp = modelMapper.get(entityId);
-      var texture = assets.getTexture(textureName);
-      ModelInstanceUtil.setTexture(modelInstanceComp.getModelInstances().get(0), texture);
-    }
-  }
-
   private void setUpModelInstanceComp(@NonNull ModelConfig config, int entityId) {
     var modelInstance = prepareModelInstance(config);
     var modelInstanceComp = modelMapper.create(entityId);

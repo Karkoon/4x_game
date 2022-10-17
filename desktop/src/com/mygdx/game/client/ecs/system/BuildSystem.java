@@ -16,12 +16,12 @@ import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.Map;
 
 @GameInstanceScope
 @Log
@@ -68,15 +68,14 @@ public class BuildSystem extends IteratingSystem {
     }
   }
 
-  public boolean checkIfCanBuy(@NonNull List<MaterialUnit> materials, IntBag entities) {
+  public boolean checkIfCanBuy(Map<MaterialBase, MaterialUnit> materials, IntBag entities) {
     for (int i = 0; i < entities.size(); i++) {
       int entityId = entities.get(i);
       var playerMaterial = playerMaterialMapper.get(entityId);
-      for (var material : materials) {
-        if (material.getBase() == playerMaterial.getMaterial()) {
-          if (material.getAmount() > playerMaterial.getValue())
-            return false;
-        }
+      if (materials.containsKey(playerMaterial.getMaterial())) {
+        var material = materials.get(playerMaterial.getMaterial());
+        if (material.getAmount() > playerMaterial.getValue())
+          return false;
       }
     }
     return true;

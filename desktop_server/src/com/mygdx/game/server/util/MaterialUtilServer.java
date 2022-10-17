@@ -6,13 +6,13 @@ import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
+import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.network.gameinstance.services.WorldService;
-import lombok.NonNull;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.Map;
 
 @GameInstanceScope
 public class MaterialUtilServer extends WorldService {
@@ -33,32 +33,31 @@ public class MaterialUtilServer extends WorldService {
     this.world = world;
   }
 
-  public boolean checkIfCanBuy(String playerToken, @NonNull List<MaterialUnit> materials) {
+  public boolean checkIfCanBuy(String playerToken, Map<MaterialBase, MaterialUnit> materials) {
     for (int i = 0; i < ownerPlayerMaterialSubscriber.getEntities().size(); i++) {
       int entityId = ownerPlayerMaterialSubscriber.getEntities().get(i);
-      if (ownerMapper.get(entityId).getToken().equals(playerToken)) {
-        var playerMaterial = playerMaterialMapper.get(entityId);
-        for (var material : materials) {
-          if (material.getBase() == playerMaterial.getMaterial()) {
-            if (material.getAmount() > playerMaterial.getValue())
-              return false;
-          }
-        }
+      if (!ownerMapper.get(entityId).getToken().equals(playerToken)) {
+        continue;
+      }
+      var playerMaterial = playerMaterialMapper.get(entityId);
+      if (materials.containsKey(playerMaterial.getMaterial())) {
+        var material = materials.get(playerMaterial.getMaterial());
+        if (material.getAmount() > playerMaterial.getValue())
+          return false;
       }
     }
     return true;
   }
 
-  public void removeMaterials(String playerToken, List<MaterialUnit> materials) {
+  public void removeMaterials(String playerToken, Map<MaterialBase, MaterialUnit> materials) {
     for (int i = 0; i < ownerPlayerMaterialSubscriber.getEntities().size(); i++) {
       int entityId = ownerPlayerMaterialSubscriber.getEntities().get(i);
       if (ownerMapper.get(entityId).getToken().equals(playerToken)) {
         var playerMaterial = playerMaterialMapper.get(entityId);
-        for (var material : materials) {
-          if (material.getBase() == playerMaterial.getMaterial()) {
-            playerMaterial.setValue(playerMaterial.getValue() - material.getAmount());
-            setDirty(entityId, PlayerMaterial.class, world);
-          }
+        if (materials.containsKey(playerMaterial.getMaterial())) {
+          var material = materials.get(playerMaterial.getMaterial());
+          playerMaterial.setValue(playerMaterial.getValue() - material.getAmount());
+          setDirty(entityId, PlayerMaterial.class, world);
         }
       }
     }

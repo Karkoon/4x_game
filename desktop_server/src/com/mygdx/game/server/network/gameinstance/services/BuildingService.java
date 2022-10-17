@@ -40,7 +40,7 @@ public class BuildingService extends WorldService {
 
   public void createBuilding(int entityConfig, int parentSubfield, int x, int y, GameRoom room, int clientIndex) {
     log.info("Create building");
-    var world = room.getGameInstance().getWorld();
+
     var buildingConfig = assets.getGameConfigs().get(BuildingConfig.class, entityConfig);
     String playerToken = room.getClients().get(clientIndex).getPlayerToken();
 
@@ -49,6 +49,7 @@ public class BuildingService extends WorldService {
     } else if(!materialUtilServer.checkIfCanBuy(playerToken, buildingConfig.getMaterials())) {
       log.info("NOT ENOUGH RESOURCES");
     } else {
+      var world = room.getGameInstance().getWorld();
       materialUtilServer.removeMaterials(playerToken, buildingConfig.getMaterials());
       buildingFactory.createBeforeEntity(
               buildingConfig,

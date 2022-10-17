@@ -237,7 +237,7 @@ public class ComponentFactory {
 
   public void createUnderConstruction(BuildingConfig config, int entityId, int parent) {
     var underConstruction = underConstructionMapper.create(entityId);
-    underConstruction.setBuildingEntityId((int) config.getId());
+    underConstruction.setBuildingConfigId((int) config.getId());
     underConstruction.setTurnLeft(config.getTurnAmount());
     underConstruction.setParentSubfield(parent);
 
