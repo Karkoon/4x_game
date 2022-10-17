@@ -1,6 +1,6 @@
 package com.mygdx.game.client_core.network.service;
 
-import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import dagger.Lazy;
 import lombok.extern.java.Log;
@@ -10,15 +10,15 @@ import javax.inject.Inject;
 @Log
 public class CreateUnitService {
 
-  private final Lazy<WebSocket> socket;
+  private final Lazy<MessageSender> sender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public CreateUnitService(
-      Lazy<WebSocket> socket,
+      Lazy<MessageSender> sender,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.socket = socket;
+    this.sender = sender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
@@ -26,6 +26,6 @@ public class CreateUnitService {
     int fieldWorldId = networkWorldEntityMapper.getNetworkEntity(fieldId);
 
     log.info("create unit for unit " + unitId + " for field " + fieldWorldId + " request send");
-    socket.get().send("create_unit" + ":" + unitId + ":" + fieldWorldId);
+    sender.get().send("create_unit" + ":" + unitId + ":" + fieldWorldId);
   }
 }

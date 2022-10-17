@@ -1,6 +1,6 @@
 package com.mygdx.game.client_core.network.service;
 
-import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import dagger.Lazy;
@@ -11,22 +11,22 @@ import javax.inject.Inject;
 @Log
 public class BuildingService {
 
-  private final Lazy<WebSocket> socket;
+  private final Lazy<MessageSender> sender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public BuildingService(
-      Lazy<WebSocket> socket,
+      Lazy<MessageSender> sender,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.socket = socket;
+    this.sender = sender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public void createBuilding(long buildingConfigId, int subfieldEntityId, Coordinates coordinates) {
     log.info("build:" + buildingConfigId + ":" + subfieldEntityId + ":" + coordinates.getX() + ":" + coordinates.getY());
     int networkEntity = networkWorldEntityMapper.getNetworkEntity(subfieldEntityId);
-    socket.get().send("build:" + buildingConfigId + ":" + networkEntity + ":" + coordinates.getX() + ":" + coordinates.getY());
+    sender.get().send("build:" + buildingConfigId + ":" + networkEntity + ":" + coordinates.getX() + ":" + coordinates.getY());
   }
 
 }
