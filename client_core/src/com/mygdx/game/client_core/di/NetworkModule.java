@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 @Log
 public class NetworkModule {
 
-  private static final String HOST = "127.0.0.1"; // load this from file
+  private static final String HOST = "127.0.0.1"; // todo load this from file
   private static final int PORT = 10666;
 
   @Provides
