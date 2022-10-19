@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.TextureConfig;
@@ -11,10 +12,9 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class TextureCompSetter implements Setter {
 
   private ComponentMapper<TextureComp> textureMapper;

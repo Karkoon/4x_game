@@ -1,4 +1,4 @@
-package com.mygdx.game.client_core.model;
+package com.mygdx.game.client_core.ecs.component;
 
 import com.artemis.Component;
 

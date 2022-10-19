@@ -15,6 +15,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.util.UiElementsCreator;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
@@ -24,10 +25,9 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class TechnologyScreen extends ScreenAdapter {
 
   private final Stage stage;

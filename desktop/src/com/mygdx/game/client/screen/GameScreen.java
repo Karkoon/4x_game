@@ -18,7 +18,9 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
+import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -29,10 +31,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
@@ -47,6 +48,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
   private final PlayerTurnDialogFactory playerTurnDialogFactory;
   private final PlayerInfo playerInfo;
+  private final ActiveToken activeToken;
   private final GdxGame game;
   private final Lazy<FieldScreen> fieldScreen;
   private final Lazy<TechnologyScreen> technologyScreen;
@@ -69,6 +71,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       GameScreenUiInputAdapter gameScreenUiInputAdapter,
       PlayerTurnDialogFactory playerTurnDialogFactory,
       PlayerInfo playerInfo,
+      ActiveToken activeToken,
       GdxGame game,
       Lazy<FieldScreen> fieldScreen,
       Lazy<TechnologyScreen> technologyScreen
@@ -82,6 +85,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.clickInputAdapter = clickInputAdapter;
     this.playerTurnDialogFactory = playerTurnDialogFactory;
     this.playerInfo = playerInfo;
+    this.activeToken = activeToken;
     this.game = game;
     this.fieldScreen = fieldScreen;
     this.technologyScreen = technologyScreen;
@@ -195,5 +199,9 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   public void exit() {
     dispose();
     game.exit();
+  }
+
+  public void setActivePlayerToken(String playerToken) {
+    activeToken.setActiveToken(playerToken);
   }
 }

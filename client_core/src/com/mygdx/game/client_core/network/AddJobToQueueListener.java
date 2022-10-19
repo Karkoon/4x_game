@@ -3,29 +3,46 @@ package com.mygdx.game.client_core.network;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
-import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class NetworkJobRegisterHandler implements WebSocketListener {
+@Singleton
+@Log
+public class AddJobToQueueListener implements WebSocketListener {
 
-    private final NetworkJobsQueueJobJobberManager queue;
+    private final ConcurrentLinkedQueue<OnMessageArgs> queue = new ConcurrentLinkedQueue<>();
+
+    public OnMessageArgs peek() {
+        return queue.peek();
+    }
+
+    public void remove() {
+        queue.remove();
+    }
+
+    public record OnMessageArgs(WebSocket socket, byte[] data) {
+        @Override
+        public String toString() {
+            return new String(data);
+        }
+    }
 
     @Inject
-    public NetworkJobRegisterHandler(
-        NetworkJobsQueueJobJobberManager queue
-    ) {
-        this.queue = queue;
+    public AddJobToQueueListener() {
+        super();
     }
 
     @Override
     public boolean onOpen(WebSocket webSocket) {
-        return false; // TODO: 13.09.2022 implement it (client side connection to the server??)
+        return false;
     }
 
     @Override
     public boolean onClose(WebSocket webSocket, int closeCode, String reason) {
-        return false; // TODO: 13.09.2022 implement it
+        return false;
     }
 
     @Override
@@ -36,7 +53,8 @@ public class NetworkJobRegisterHandler implements WebSocketListener {
     @Override
     public boolean onMessage(WebSocket webSocket, byte[] packet) {
         try {
-            queue.add(webSocket, packet);
+            log.info("onMessage register job args");
+            queue.add(new OnMessageArgs(webSocket, packet));
             return true;
         } catch (final Exception exception) {
             return onError(webSocket,
@@ -46,6 +64,6 @@ public class NetworkJobRegisterHandler implements WebSocketListener {
 
     @Override
     public boolean onError(WebSocket webSocket, Throwable error) {
-        return false; // TODO: 13.09.2022 implement it
+        return false;
     }
 }

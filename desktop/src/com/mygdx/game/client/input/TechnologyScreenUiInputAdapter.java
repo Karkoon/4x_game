@@ -3,11 +3,11 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.client.screen.Navigator;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 public class TechnologyScreenUiInputAdapter extends InputAdapter {
 
   private final Navigator navigator;
@@ -21,8 +21,8 @@ public class TechnologyScreenUiInputAdapter extends InputAdapter {
 
   @Override
   public boolean keyDown(int keycode) {
-    switch (keycode) {
-      case Input.Keys.ESCAPE -> backToGameScreen();
+    if (keycode == Input.Keys.ESCAPE) {
+      backToGameScreen();
     }
     return false;
   }

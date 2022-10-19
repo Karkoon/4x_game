@@ -3,13 +3,16 @@ package com.mygdx.game.client.ecs.entityfactory;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.client.ecs.component.Choosable;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.Setter;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
+
 import javax.inject.Inject;
 
+@GameInstanceScope
 public class ChoosableSetter implements Setter {
 
   private ComponentMapper<Choosable> clickableMapper;

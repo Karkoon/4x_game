@@ -6,8 +6,9 @@ import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
-import com.google.inject.Singleton;
 import lombok.extern.java.Log;
+
+import javax.inject.Singleton;
 
 @Log
 @Singleton
@@ -32,23 +33,26 @@ public class QueueMessageListener extends AbstractWebSocketListener {
   @Override
   protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
     try {
-      routeMessageToHandler(webSocket, packet);
-      return FULLY_HANDLED;
+      return routeMessageToHandler(webSocket, packet);
     } catch (final Exception exception) {
       return onError(webSocket,
           new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
   }
 
-  private void routeMessageToHandler(WebSocket webSocket, Object message) {
+  private boolean routeMessageToHandler(WebSocket webSocket, Object message) {
     var queue = handlers.get(message.getClass());
-
+    if (queue == null) {
+      log.info("queue is null for: " + message.getClass());
+      return NOT_HANDLED;
+    }
     for (var handler : queue) {
       var result = handler.handle(webSocket, message);
       if (result != FULLY_HANDLED) {
         throw new RuntimeException("Every Message needs to be handled; content=" + message);
       }
     }
+    return FULLY_HANDLED;
   }
 
   /**

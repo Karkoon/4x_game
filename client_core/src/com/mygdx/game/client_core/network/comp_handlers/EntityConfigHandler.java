@@ -2,6 +2,7 @@ package com.mygdx.game.client_core.network.comp_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.FieldFactory;
 import com.mygdx.game.client_core.ecs.entityfactory.SubFieldFactory;
@@ -23,6 +24,7 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 import static com.github.czyzby.websocket.WebSocketListener.NOT_HANDLED;
 
 @Log
+@GameInstanceScope
 public class EntityConfigHandler implements ComponentMessageListener.Handler<EntityConfigId> {
 
   private final GameConfigAssets assets;

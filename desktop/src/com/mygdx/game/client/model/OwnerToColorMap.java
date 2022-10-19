@@ -10,7 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import static com.badlogic.gdx.graphics.Color.*;
+import static com.badlogic.gdx.graphics.Color.BLUE;
+import static com.badlogic.gdx.graphics.Color.BROWN;
+import static com.badlogic.gdx.graphics.Color.CYAN;
+import static com.badlogic.gdx.graphics.Color.FIREBRICK;
+import static com.badlogic.gdx.graphics.Color.GREEN;
+import static com.badlogic.gdx.graphics.Color.ORANGE;
+import static com.badlogic.gdx.graphics.Color.PINK;
+import static com.badlogic.gdx.graphics.Color.PURPLE;
+import static com.badlogic.gdx.graphics.Color.RED;
+import static com.badlogic.gdx.graphics.Color.ROYAL;
+import static com.badlogic.gdx.graphics.Color.SKY;
+import static com.badlogic.gdx.graphics.Color.TAN;
+import static com.badlogic.gdx.graphics.Color.TEAL;
+import static com.badlogic.gdx.graphics.Color.YELLOW;
 
 public class OwnerToColorMap {
 
@@ -19,7 +32,7 @@ public class OwnerToColorMap {
     super();
   }
 
-  private Map<String, Color> map = new HashMap<>();
+  private final Map<String, Color> map = new HashMap<>();
 
   public Color get(Owner owner) {
     var color = map.get(owner.getToken());

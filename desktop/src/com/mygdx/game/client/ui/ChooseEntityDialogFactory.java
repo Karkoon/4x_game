@@ -9,16 +9,16 @@ import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Highlighted;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.core.ecs.component.Name;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Log
-@Singleton
+@GameInstanceScope
 public final class ChooseEntityDialogFactory {
 
   private final GameScreenAssets assets;

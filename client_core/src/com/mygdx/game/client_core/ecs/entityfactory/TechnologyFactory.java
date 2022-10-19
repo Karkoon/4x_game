@@ -2,6 +2,7 @@ package com.mygdx.game.client_core.ecs.entityfactory;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.Name;
@@ -10,9 +11,8 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameInstanceScope
 @Log
 public class TechnologyFactory {
 

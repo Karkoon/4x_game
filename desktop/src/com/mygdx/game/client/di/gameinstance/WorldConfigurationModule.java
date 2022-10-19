@@ -1,17 +1,18 @@
-package com.mygdx.game.client.di;
+package com.mygdx.game.client.di.gameinstance;
 
 import com.artemis.WorldConfiguration;
 import com.mygdx.game.client.ecs.system.AttackSystem;
 import com.mygdx.game.client.ecs.system.BlockInputSystem;
 import com.mygdx.game.client.ecs.system.BuildSystem;
 import com.mygdx.game.client.ecs.system.ChooseSystem;
+import com.mygdx.game.client.ecs.system.CoordinateToPositionSystem;
 import com.mygdx.game.client.ecs.system.MovementSystem;
 import com.mygdx.game.client.ecs.system.NavigationSystem;
 import com.mygdx.game.client.ecs.system.RenderSystem;
 import com.mygdx.game.client.ecs.system.SelfVisibilitySystem;
 import com.mygdx.game.client.ecs.system.SetHighlightSystem;
 import com.mygdx.game.client.ecs.system.VisibilitySystem;
-import com.mygdx.game.client.ecs.system.CoordinateToPositionSystem;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.system.NetworkJobSystem;
 import com.mygdx.game.client_core.ecs.system.RemovalSystem;
 import dagger.Module;
@@ -19,14 +20,13 @@ import dagger.Provides;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
-import javax.inject.Singleton;
 import java.util.logging.Level;
 
 @Log
 @Module
 public class WorldConfigurationModule {
   @Provides
-  @Singleton
+  @GameInstanceScope
   public @NonNull WorldConfiguration providesWorld(
       @NonNull RemovalSystem removalSystem,
       @NonNull CoordinateToPositionSystem coordinateToPositionSystem,

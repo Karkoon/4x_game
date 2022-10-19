@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 @Singleton
 public class ModelInstanceRenderer implements Disposable {
 
-  private ModelCache cache;
+  private final ModelCache cache;
   private final ModelBatch modelBatch;
   private final Array<ModelInstance> modelInstances;
 
