@@ -21,7 +21,6 @@ public interface MessageHandlerBindingsModule {
   @IntoMap
   @ClassKey(ChangeTurnMessage.class)
   @GameInstanceScope
-
   @Named(GameInstanceNetworkModule.GAME_INSTANCE)
   Handler changeTurnMessageHandler(ChangeTurnMessageHandler handler);
 

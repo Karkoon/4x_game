@@ -1,6 +1,7 @@
 package com.mygdx.game.server.model;
 
 import com.mygdx.game.server.di.GameInstanceSubcomponent;
+import com.mygdx.game.server.network.gameinstance.services.StopGameInstanceService;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -61,6 +62,9 @@ public class GameRoomImpl implements GameRoom {
 
   public void setupGameInstance() {
     log.info("started game");
+    if (activeGameInstance != null) {
+      tearDownGameInstance();
+    }
     activeGameInstance = gameInstanceSubcomponentBuilder.gameRoom(this).build().get();
   }
 
