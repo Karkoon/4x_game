@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper;
 import com.mygdx.game.client.ecs.component.NavigationDirection;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.screen.Navigator;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -13,12 +14,12 @@ import javax.inject.Inject;
 public class NavigationSystem extends BaseSystem {
 
   private final ChosenEntity chosenEntity;
-  private final Navigator navigator;
+  private final Lazy<Navigator> navigator;
   private ComponentMapper<NavigationDirection> directionMapper;
 
   @Inject
   public NavigationSystem(
-      final Navigator navigator,
+      final Lazy<Navigator> navigator,
       final ChosenEntity chosenEntity
   ) {
     this.navigator = navigator;
@@ -31,6 +32,6 @@ public class NavigationSystem extends BaseSystem {
       return;
     }
     var direction = directionMapper.get(chosenEntity.peek()).direction;
-    this.navigator.changeTo(direction);
+    this.navigator.get().changeTo(direction);
   }
 }

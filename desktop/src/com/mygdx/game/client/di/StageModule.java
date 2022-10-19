@@ -16,6 +16,8 @@ public class StageModule {
 
   private static final float VIRTUAL_WIDTH = 1920;
   private static final float VIRTUAL_HEIGHT = 1080;
+  public static final String GAME_SCREEN = "game_screen";
+  public static final String SCREEN_STAGE = "screen_viewport";
 
   @Provides
   public Stage providesStage() {
@@ -26,7 +28,6 @@ public class StageModule {
     return stage;
   }
 
-  public static final String GAME_SCREEN = "game_screen";
 
   @Provides
   @Singleton
@@ -47,6 +48,15 @@ public class StageModule {
     var stage = new Stage(new ScreenViewport());
     stage.setDebugAll(true);
     log.info("provided FieldScreen Stage");
+    return stage;
+  }
+
+  @Provides
+  @Named(SCREEN_STAGE)
+  public Stage providesGameRoomListScreen() {
+    var stage = new Stage(new ScreenViewport());
+    stage.setDebugAll(true);
+    log.info("provided GameScreen Stage");
     return stage;
   }
 }

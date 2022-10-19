@@ -39,9 +39,8 @@ public class PlayerTurnDialogFactory {
   }
 
   public void initializeHandler() {
-    listener.registerHandler(ChangeTurnMessage.class, ((webSocket, o) -> {
-      var changeTurnMessage = (ChangeTurnMessage) o;
-      if (changeTurnMessage.getPlayerToken().equals(playerInfo.getToken())) {
+    listener.registerHandler(ChangeTurnMessage.class, ((webSocket, message) -> {
+      if (message.getPlayerToken().equals(playerInfo.getToken())) {
         createAndShow();
       }
       return FULLY_HANDLED;

@@ -1,10 +1,8 @@
 package com.mygdx.game.client.di;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
@@ -19,6 +17,8 @@ import java.util.logging.Level;
 @Module
 public class ViewportModule {
 
+  public static final String HUD_VIEWPORT = "hud_viewport";
+
   @Provides
   @Singleton
   public @NonNull Viewport providesPerspectiveViewport() {
@@ -30,8 +30,6 @@ public class ViewportModule {
     camera.lookAt(0, 0, 0);
     return new ExtendViewport(500, 500, camera);
   }
-
-  public static final String HUD_VIEWPORT = "hud_viewport";
 
   @Provides
   @Singleton

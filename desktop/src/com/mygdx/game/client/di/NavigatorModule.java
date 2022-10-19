@@ -1,6 +1,6 @@
 package com.mygdx.game.client.di;
 
-import com.mygdx.game.client.GdxGame;
+import com.mygdx.game.client.screen.GameScreen;
 import com.mygdx.game.client.screen.Navigator;
 import dagger.Module;
 import dagger.Provides;
@@ -14,7 +14,7 @@ public class NavigatorModule {
 
   @Singleton
   @Provides
-  public Navigator providesNavigator(GdxGame game) {
+  public Navigator providesNavigator(GameScreen game) {
     log.info("provided Navigator");
     return game;
   }

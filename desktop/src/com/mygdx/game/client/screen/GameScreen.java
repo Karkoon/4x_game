@@ -10,23 +10,21 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.hud.WorldHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
-import com.mygdx.game.client.ui.PlayerRoomDialogFactory;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.model.PlayerInfo;
-import com.mygdx.game.client_core.network.service.GameConnectService;
-import com.mygdx.game.client_core.network.service.GameStartService;
-import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import com.mygdx.game.core.util.PositionUtil;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -35,7 +33,7 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
@@ -47,11 +45,11 @@ public class GameScreen extends ScreenAdapter {
   private final WorldHUD worldHUD;
   private final ClickInputAdapter clickInputAdapter;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
-  private final GameStartService gameStartService;
-  private final PlayerRoomDialogFactory roomDialogFactory;
-  private final GameConnectService gameConnectService;
   private final PlayerTurnDialogFactory playerTurnDialogFactory;
   private final PlayerInfo playerInfo;
+  private final GdxGame game;
+  private final Lazy<FieldScreen> fieldScreen;
+  private final Lazy<TechnologyScreen> technologyScreen;
 
   private boolean initialized = false;
 
@@ -69,11 +67,11 @@ public class GameScreen extends ScreenAdapter {
       WorldHUD worldHUD,
       ClickInputAdapter clickInputAdapter,
       GameScreenUiInputAdapter gameScreenUiInputAdapter,
-      GameStartService gameStartService,
-      PlayerRoomDialogFactory roomDialogFactory,
-      GameConnectService gameConnectService,
       PlayerTurnDialogFactory playerTurnDialogFactory,
-      PlayerInfo playerInfo
+      PlayerInfo playerInfo,
+      GdxGame game,
+      Lazy<FieldScreen> fieldScreen,
+      Lazy<TechnologyScreen> technologyScreen
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -82,11 +80,11 @@ public class GameScreen extends ScreenAdapter {
     this.worldHUD = worldHUD;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
-    this.gameStartService = gameStartService;
-    this.roomDialogFactory = roomDialogFactory;
-    this.gameConnectService = gameConnectService;
     this.playerTurnDialogFactory = playerTurnDialogFactory;
     this.playerInfo = playerInfo;
+    this.game = game;
+    this.fieldScreen = fieldScreen;
+    this.technologyScreen = technologyScreen;
     this.world.inject(this);
   }
 
@@ -95,8 +93,6 @@ public class GameScreen extends ScreenAdapter {
     log.info("GameScreen shown");
     if (!initialized) {
       playerTurnDialogFactory.initializeHandler();
-      roomDialogFactory.createAndShow(() -> gameStartService.startGame(10, 10, GameConfigs.MAP_TYPE_MIN));
-      gameConnectService.connect();
       setUpUnitWithOwnerListener();
       initialized = true;
     }
@@ -171,5 +167,33 @@ public class GameScreen extends ScreenAdapter {
         break;
       }
     }
+  }
+
+  public void changeTo(Direction screenDirection) {
+    switch (screenDirection) {
+      case GAME_SCREEN -> changeToGameScreen();
+      case FIELD_SCREEN -> changeToFieldScreen();
+      case TECHNOLOGY_SCREEN -> changeToTechnologyScreen();
+      case EXIT -> exit();
+    }
+  }
+
+  @Override
+  public void changeToGameScreen() {
+    game.setScreen(this);
+  }
+
+  public void changeToFieldScreen() {
+    game.setScreen(fieldScreen.get());
+  }
+
+  public void changeToTechnologyScreen() {
+    game.setScreen(technologyScreen.get());
+  }
+
+  @Override
+  public void exit() {
+    dispose();
+    game.exit();
   }
 }

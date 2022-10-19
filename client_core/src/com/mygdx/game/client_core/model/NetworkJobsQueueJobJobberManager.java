@@ -3,7 +3,6 @@ package com.mygdx.game.client_core.model;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -20,7 +19,18 @@ public class NetworkJobsQueueJobJobberManager {
 
   @Inject
   NetworkJobsQueueJobJobberManager(
-      ComponentMessageListener componentMessageListener,
+      ComponentMessageListener componentMessageListener, // todo use multibindings to remove the dependency
+      /* in docs:
+      * subComponent can add elements to multibound sets or maps that are bound in its parent.
+      * When that happens, the set or map is different depending on where it is injected.
+      * When it is injected into a binding defined on the subcomponent, then it has the values
+      * or entries defined by the subcomponent’s multibindings as well as those
+      * defined by the parent component’s multibindings. When it is injected into
+      * a binding defined on the parent component, it has only the values or entries defined there.
+      * */
+
+      // this means that the "outer" part of the game won't have to think about the GameInstance world at all, which is good
+      // because they will be exchanged
       QueueMessageListener queueMessageListener
   ) {
     this.componentMessageListener = componentMessageListener;
