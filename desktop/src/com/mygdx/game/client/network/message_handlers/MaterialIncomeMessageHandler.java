@@ -1,13 +1,17 @@
-package com.mygdx.game.client_core.network.message_handlers;
+package com.mygdx.game.client.network.message_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client.hud.WorldHUD;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.QueueMessageListener;
+import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.network.messages.MaterialIncomeMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+
+import java.util.Map;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
@@ -16,18 +20,26 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class MaterialIncomeMessageHandler implements QueueMessageListener.Handler<MaterialIncomeMessage>  {
 
   private final PredictedIncome predictedIncome;
+  private final WorldHUD worldHUD;
 
   @Inject
   public MaterialIncomeMessageHandler(
-      PredictedIncome predictedIncome
+      PredictedIncome predictedIncome,
+      WorldHUD worldHUD
   ) {
     this.predictedIncome = predictedIncome;
+    this.worldHUD = worldHUD;
   }
 
   @Override
   public boolean handle(WebSocket webSocket, MaterialIncomeMessage message) {
     log.info("Handle material income message ");
-    predictedIncome.setIncomes(message.getIncomes());
+    Map<String, Integer> incomes = message.getIncomes();
+    for (MaterialBase base : MaterialBase.values()) {
+      var value = incomes.get(base.toString());
+      predictedIncome.setIncome(base, value);
+    }
+    worldHUD.prepareHudSceleton();
     return FULLY_HANDLED;
   }
 

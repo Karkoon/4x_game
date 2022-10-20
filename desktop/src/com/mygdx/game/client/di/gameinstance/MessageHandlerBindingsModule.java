@@ -4,7 +4,7 @@ import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.QueueMessageListener.Handler;
 import com.mygdx.game.client_core.network.message_handlers.ChangeTurnMessageHandler;
-import com.mygdx.game.client_core.network.message_handlers.MaterialIncomeMessageHandler;
+import com.mygdx.game.client.network.message_handlers.MaterialIncomeMessageHandler;
 import com.mygdx.game.client_core.network.message_handlers.RemoveEntityMessageHandler;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.MaterialIncomeMessage;

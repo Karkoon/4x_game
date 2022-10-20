@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.artemis.utils.IntBag;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Field;
@@ -51,6 +52,19 @@ public class MaterialUtilClient {
       materialMap.put(materialComponent.getMaterial(), materialComponent.getValue());
     }
     return materialMap;
+  }
+
+  public boolean checkIfCanBuy(Map<MaterialBase, MaterialUnit> materials, IntBag entities) {
+    for (int i = 0; i < entities.size(); i++) {
+      int entityId = entities.get(i);
+      var playerMaterial = playerMaterialMapper.get(entityId);
+      if (materials.containsKey(playerMaterial.getMaterial())) {
+        var material = materials.get(playerMaterial.getMaterial());
+        if (material.getAmount() > playerMaterial.getValue())
+          return false;
+      }
+    }
+    return true;
   }
 
 }
