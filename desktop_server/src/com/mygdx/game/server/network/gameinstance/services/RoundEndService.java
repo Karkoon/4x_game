@@ -17,6 +17,7 @@ import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
+import com.mygdx.game.server.util.MaterialUtilServer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -31,8 +32,6 @@ public class RoundEndService extends WorldService {
   private EntitySubscription unitSubscriber;
   @AspectDescriptor(all = {CanAttack.class})
   private EntitySubscription canAttackSubscriber;
-  @AspectDescriptor(all = {Owner.class, Field.class})
-  private EntitySubscription ownerFieldsSubscriber;
   @AspectDescriptor(all = {Owner.class, PlayerMaterial.class})
   private EntitySubscription ownerPlayerMaterialSubscriber;
   @AspectDescriptor(all = {UnderConstruction.class})
@@ -40,9 +39,7 @@ public class RoundEndService extends WorldService {
 
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 
@@ -50,17 +47,20 @@ public class RoundEndService extends WorldService {
 
   private final BuildingFactory buildingFactory;
   private final GameConfigAssets gameConfigAssets;
+  private final MaterialUtilServer materialUtilServer;
 
   @Inject
   RoundEndService(
       World world,
       BuildingFactory buildingFactory,
-      GameConfigAssets gameConfigAssets
+      GameConfigAssets gameConfigAssets,
+      MaterialUtilServer materialUtilServer
   ) {
     world.inject(this);
     this.world = world;
     this.buildingFactory = buildingFactory;
     this.gameConfigAssets = gameConfigAssets;
+    this.materialUtilServer = materialUtilServer;
   }
 
   public void makeEndRoundSteps() {
@@ -95,47 +95,10 @@ public class RoundEndService extends WorldService {
   }
 
   private void giveMaterialsFromSubfields() {
-    var incomes = calculateIncomes();
-
-    for (int i = 0; i < ownerPlayerMaterialSubscriber.getEntities().size(); i++) {
-      int entityId = ownerPlayerMaterialSubscriber.getEntities().get(i);
-      var playerToken = ownerMapper.get(entityId).getToken();
-      var playerMaterial = playerMaterialMapper.get(entityId);
-
-      var incomeValue = incomes.get(playerToken).get(playerMaterial.getMaterial());
-      playerMaterial.setValue(playerMaterial.getValue() + incomeValue);
-      setDirty(entityId, PlayerMaterial.class, world);
-    }
+    materialUtilServer.giveMaterialsToPlayers();
   }
 
-  private Map<String, Map<MaterialBase, Integer>> calculateIncomes() {
-    var incomes = new HashMap<String, Map<MaterialBase, Integer>>();
 
-    for (int i = 0; i < ownerFieldsSubscriber.getEntities().size(); i++) {
-      int entityId = ownerFieldsSubscriber.getEntities().get(i);
-
-      var ownerToken = ownerMapper.get(entityId).getToken();
-      if (!incomes.containsKey(ownerToken)) {
-        incomes.put(ownerToken, new HashMap<>());
-        for (MaterialBase material : MaterialBase.values()) {
-          incomes.get(ownerToken).put(material, 0);
-
-        }
-      }
-
-      var field = fieldMapper.get(entityId);
-      var subFields = field.getSubFields();
-      for (int subFieldEntityId : subFields.toArray()) {
-        var materialIncome = materialIncomeMapper.get(subFieldEntityId);
-        for (MaterialUnit materialUnit : materialIncome.getMaterialIncomes()) {
-          var previousValue = incomes.get(ownerToken).get(materialUnit.getBase());
-          incomes.get(ownerToken).put(materialUnit.getBase(), previousValue + materialUnit.getAmount());
-        }
-      }
-    }
-
-    return incomes;
-  }
 
   private void constructBuildings() {
     var underConstructionEntities = underConstructionSubscriber.getEntities();
