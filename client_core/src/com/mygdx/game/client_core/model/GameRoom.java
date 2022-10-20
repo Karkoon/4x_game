@@ -7,7 +7,6 @@ import dagger.assisted.AssistedInject;
 
 public class GameRoom {
 
-
   @AssistedInject
   public GameRoom(
       @Assisted String gameRoomName
