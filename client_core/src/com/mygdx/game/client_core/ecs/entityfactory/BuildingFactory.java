@@ -7,6 +7,7 @@ import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -19,6 +20,7 @@ public class BuildingFactory {
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Building> buildingMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @Inject
   public BuildingFactory(

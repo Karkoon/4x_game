@@ -4,5 +4,11 @@
   "polishName": "dom",
   "modelPath": "basic.g3db",
   "textureName": "buildings/house.png",
-  "iconName": "buildings/house_icon.png"
+  "iconName": "buildings/house_icon.png",
+  "turnAmount": 2,
+  "materials":
+    [
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    ]
 }

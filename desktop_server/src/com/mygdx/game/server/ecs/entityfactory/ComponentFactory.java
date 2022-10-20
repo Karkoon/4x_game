@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.utils.Bits;
 import com.badlogic.gdx.utils.IntArray;
+import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
@@ -19,6 +20,7 @@ import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -61,6 +63,7 @@ public class ComponentFactory {
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
   private ComponentMapper<Unit> unitMapper;
 
   @Inject
@@ -91,6 +94,7 @@ public class ComponentFactory {
     sharedComponentsMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
     subFieldMapper.create(entity);
+    underConstructionMapper.create(entity);
     world.delete(entity); //todo create a system to do it automatically?
   }
 
@@ -184,6 +188,12 @@ public class ComponentFactory {
     ownerComp.setToken(owner.getPlayerToken());
   }
 
+  public void createPlayerMaterialComponent(int entityId, MaterialBase materialBase) {
+    var materialComp = playerMaterialMapper.create(entityId);
+    materialComp.setMaterial(materialBase);
+    materialComp.setValue(0);
+  }
+
   public void createSharedComponents(
       int entityId,
       Class<? extends Component>[] compsToSyncWithFriendly,
@@ -221,13 +231,17 @@ public class ComponentFactory {
     subField.setParent(fieldId);
   }
 
-  public void createPlayerMaterialComponent(int entityId, MaterialBase materialBase) {
-    var materialComp = playerMaterialMapper.create(entityId);
-    materialComp.setMaterial(materialBase);
-    materialComp.setValue(0);
-  }
-
   public void createUnitComponent(int entityId) {
     unitMapper.create(entityId);
+  }
+
+  public void createUnderConstruction(BuildingConfig config, int entityId, int parent) {
+    var underConstruction = underConstructionMapper.create(entityId);
+    underConstruction.setBuildingConfigId((int) config.getId());
+    underConstruction.setTurnLeft(config.getTurnAmount());
+    underConstruction.setParentSubfield(parent);
+
+    var subField = subFieldMapper.get(parent);
+    subField.setBuilding(entityId);
   }
 }

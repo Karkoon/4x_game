@@ -15,6 +15,8 @@ public final class GameScreenAssetPaths {
   public static final String UNITS_TEXTURE_DIR = TEXTURE_DIR + "units/";
   public static final String DIALOG_SKIN = ASSETS_PATH + "dialog/custom/uiskin.json";
   public static final String HIGHLIGHT_TEXTURE = "highlight.png";
+  public static String CONSTRUCTION_TEXTURE = "buildings/construction.png";
+
 
   private GameScreenAssetPaths() {
   }
