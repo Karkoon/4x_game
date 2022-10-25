@@ -56,7 +56,6 @@ public class UiElementsCreator {
   public ImageButton createImageButton(Texture texture, int x, int y) {
     var imageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(texture)));
     imageButton.setPosition(x, y);
-
     return imageButton;
   }
 
@@ -118,5 +117,9 @@ public class UiElementsCreator {
         actor.remove();
       }
     });
+  }
+
+  public void changeColorOfActor(Actor actor, float r, float g, float b, float a) {
+    actor.setColor(r, g, b, a);
   }
 }

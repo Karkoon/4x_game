@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
-import com.mygdx.game.client.hud.FieldHUD;
+import com.mygdx.game.client.hud.InfieldHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.SubFieldUiInputProcessor;
@@ -44,7 +44,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final ClickInputAdapter clickInputAdapter;
-  private final FieldHUD fieldHUD;
+  private final InfieldHUD infieldHUD;
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
   private final SubFieldUiInputProcessor subFieldUiInputProcessor;
@@ -62,7 +62,7 @@ public class FieldScreen extends ScreenAdapter {
       Viewport viewport,
       @Named(StageModule.FIELD_SCREEN) Stage stage,
       ClickInputAdapter clickInputAdapter,
-      FieldHUD fieldHUD,
+      InfieldHUD infieldHUD,
       ChosenEntity chosenEntity,
       ShowSubfieldService showSubfieldService,
       SubFieldUiInputProcessor subFieldUiInputProcessor,
@@ -74,7 +74,7 @@ public class FieldScreen extends ScreenAdapter {
     this.viewport = viewport;
     this.stage = stage;
     this.clickInputAdapter = clickInputAdapter;
-    this.fieldHUD = fieldHUD;
+    this.infieldHUD = infieldHUD;
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
@@ -117,10 +117,10 @@ public class FieldScreen extends ScreenAdapter {
     viewport.getCamera().update();
 
     stage.draw();
-    fieldHUD.draw();
+    infieldHUD.draw();
 
     stage.act(delta);
-    fieldHUD.act(delta);
+    infieldHUD.act(delta);
   }
 
   @Override

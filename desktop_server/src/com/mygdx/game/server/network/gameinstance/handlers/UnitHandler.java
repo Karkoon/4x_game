@@ -25,7 +25,7 @@ public class UnitHandler extends EntityCommandHandler {
   public void handle(String[] commands, Client client) {
     var unitConfigId = Integer.parseInt(commands[1]);
     var fieldEntityId = Integer.parseInt(commands[2]);
-    createUnitService.createUnit(unitConfigId, fieldEntityId, client);
+    createUnitService.createUnit(unitConfigId, fieldEntityId, client, false);
     world.process();
   }
 }
