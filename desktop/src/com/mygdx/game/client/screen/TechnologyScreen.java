@@ -1,13 +1,11 @@
 package com.mygdx.game.client.screen;
 
 import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
 import com.artemis.World;
-import com.artemis.annotations.AspectDescriptor;
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,11 +18,13 @@ import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.core.ecs.component.Name;
-import com.mygdx.game.core.ecs.component.Research;
+import com.mygdx.game.core.ecs.component.InResearch;
+import com.mygdx.game.core.ecs.component.Researched;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 @Log
 @GameInstanceScope
@@ -37,13 +37,15 @@ public class TechnologyScreen extends ScreenAdapter {
   private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
   private final ResearchTechnologyService researchTechnologyService;
   private final World world;
+  private final Texture inResearchTexture;
+  private final Texture researchedTexture;
+  private final Texture unblockedTexture;
 
-  @AspectDescriptor(all = {Research.class})
-  private EntitySubscription subscription;
-
-  private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<TextureComp> textureMapper;
+  private ComponentMapper<InResearch> inResearchMapper;
   private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Researched> researchedMapper;
+  private ComponentMapper<TextureComp> textureMapper;
 
 
   @Inject
@@ -64,8 +66,9 @@ public class TechnologyScreen extends ScreenAdapter {
     this.uiElementsCreator = uiElementsCreator;
     this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
     this.researchTechnologyService = researchTechnologyService;
-
-    addListeners();
+    this.inResearchTexture = gameScreenAssets.getTexture( "technologies/inresearch.png");
+    this.unblockedTexture = gameScreenAssets.getTexture( "technologies/unblocked.png");
+    this.researchedTexture = gameScreenAssets.getTexture( "technologies/researched.png");
   }
 
   @Override
@@ -87,6 +90,11 @@ public class TechnologyScreen extends ScreenAdapter {
     super.resize(width, height);
   }
 
+  public void refresh() {
+    stage.clear();
+    setUpTechnologyButtons();
+  }
+
   private void setUpInput() {
     var inputMultiplexer = new InputMultiplexer(technologyScreenUiInputAdapter, stage);
     Gdx.input.setInputProcessor(inputMultiplexer);
@@ -105,48 +113,24 @@ public class TechnologyScreen extends ScreenAdapter {
       uiElementsCreator.scaleLabel(label, 2.5f);
       uiElementsCreator.addHoverPopupWithActor(image, label, stage);
 
-      image.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          researchTechnologyService.researchTechnology(entityId);
-          world.process();
-        }
-      });
-
       stage.addActor(image);
+      var secondImage = uiElementsCreator.createImage(unblockedTexture, (int) position.x, (int) position.z);
+      if (inResearchMapper.has(entityId)) {
+        secondImage = uiElementsCreator.createImage(inResearchTexture, (int) position.x, (int) position.z);
+      } else if (researchedMapper.has(entityId)) {
+        secondImage = uiElementsCreator.createImage(inResearchTexture, (int) position.x, (int) position.z);
+      } else {
+        secondImage.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            researchTechnologyService.researchTechnology(entityId);
+            world.process();
+          }
+        });
+      }
+      uiElementsCreator.addHoverPopupWithActor(secondImage, label, stage);
+      stage.addActor(secondImage);
     }
 
-    for (int i = 0; i < subscription.getEntities().size(); i++) {
-      addFlagToResearchedTechnology(subscription.getEntities().get(i));
-    }
   }
-
-  private void addFlagToResearchedTechnology(int entityId) {
-    var position = positionMapper.get(entityId).getValue();
-    var texture = gameScreenAssets.getTexture( "technologies/researched.png");
-    var name = nameMapper.get(entityId);
-
-    var image = uiElementsCreator.createImage(texture, (int) position.x, (int) position.z);
-    var label = uiElementsCreator.createLabel(name.getName(), (int) position.x + 200, (int) position.z + 200);
-    uiElementsCreator.scaleLabel(label, 2.5f);
-    uiElementsCreator.addHoverPopupWithActor(image, label, stage);
-
-    stage.addActor(image);
-  }
-
-  private void addListeners() {
-    subscription.addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
-      @Override
-      public void inserted(IntBag entities) {
-        for (int i = 0; i < entities.size(); i++) {
-          addFlagToResearchedTechnology(entities.get(i));
-        }
-      }
-
-      @Override
-      public void removed(IntBag entities) {
-      }
-    });
-  }
-
 }

@@ -4,5 +4,6 @@
   "polishName": "technologia ataku",
   "textureName": "technologies/attack.png",
   "x": 0,
-  "y": 0
+  "y": 0,
+  "requiredScience": 10
 }

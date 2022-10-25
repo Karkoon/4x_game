@@ -5,7 +5,7 @@ import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
-import com.mygdx.game.core.ecs.component.Research;
+import com.mygdx.game.core.ecs.component.InResearch;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -14,21 +14,23 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
 @GameInstanceScope
-public class ResearchHandler implements ComponentMessageListener.Handler<Research> {
+public class InResearchHandler implements ComponentMessageListener.Handler<InResearch> {
 
-  private ComponentMapper<Research> reserchedMapper;
+  private ComponentMapper<InResearch> reserchedMapper;
 
   @Inject
-  public ResearchHandler(
+  public InResearchHandler(
       World world
   ) {
     world.inject(this);
   }
 
   @Override
-  public boolean handle(WebSocket webSocket, int worldEntity, Research component) {
-    log.info("Read research handler");
-    reserchedMapper.create(worldEntity);
+  public boolean handle(WebSocket webSocket, int worldEntity, InResearch component) {
+    log.info("Read inresearch handler");
+    var inResearch = reserchedMapper.create(worldEntity);
+    inResearch.setConfigRequiredScience(component.getConfigRequiredScience());
+    inResearch.setScienceLeft(component.getScienceLeft());
     return FULLY_HANDLED;
   }
 }

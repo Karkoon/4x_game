@@ -4,5 +4,6 @@
   "polishName": "technologia obrony",
   "textureName": "technologies/defense.png",
   "x": 1,
-  "y": 1
+  "y": 1,
+  "requiredScience": 20
 }
