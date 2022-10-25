@@ -33,7 +33,7 @@ public class StartUnitInitializer {
       var client = gameRoom.getClients().get(i);
       log.info("client id " + client.getPlayerToken());
       var fieldId = getUnusedField(map);
-      createUnitService.createUnit(anyConfig, fieldId, client);
+      createUnitService.createUnit(anyConfig, fieldId, client, true);
     }
   }
 

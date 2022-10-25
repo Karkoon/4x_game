@@ -36,6 +36,10 @@ public class SubFieldHandler implements ComponentMessageListener.Handler<SubFiel
     newParent = networkWorldEntityMapper.getWorldEntity(newParent);
     var subField = subFieldMapper.create(worldEntity);
     subField.setParent(newParent);
+    if (component.getBuilding() != -0xC0FEE) {
+      var building = networkWorldEntityMapper.getWorldEntity(component.getBuilding());
+      subField.setBuilding(building);
+    }
     return FULLY_HANDLED;
   }
 }

@@ -6,6 +6,7 @@ import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Building;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import lombok.NonNull;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 @Log
 public class BuildingFactory {
 
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Building> buildingMapper;
@@ -31,6 +33,7 @@ public class BuildingFactory {
 
   public void createEntity(@NonNull BuildingConfig config, int entity) {
     setUpName(config, entity);
+    entityConfigIdMapper.create(entity).setId(config.getId());
     buildingMapper.create(entity);
     positionMapper.create(entity).getValue().set(0, 10, 0);
   }
