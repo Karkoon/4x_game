@@ -5,10 +5,13 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
@@ -24,13 +27,13 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 @Log
 @GameInstanceScope
 public class TechnologyScreen extends ScreenAdapter {
 
   private final Stage stage;
+  private final Viewport viewport;
   private final GameScreenAssets gameScreenAssets;
   private final @NonNull Technologies technologies;
   private final UiElementsCreator uiElementsCreator;
@@ -46,12 +49,14 @@ public class TechnologyScreen extends ScreenAdapter {
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<TextureComp> textureMapper;
+  private Vector3 pos;
 
 
   @Inject
   public TechnologyScreen(
       World world,
       Stage stage,
+      Viewport viewport,
       GameScreenAssets gameScreenAssets,
       Technologies technologies,
       UiElementsCreator uiElementsCreator,
@@ -61,6 +66,7 @@ public class TechnologyScreen extends ScreenAdapter {
     world.inject(this);
     this.world = world;
     this.stage = stage;
+    this.viewport = viewport;
     this.gameScreenAssets = gameScreenAssets;
     this.technologies = technologies;
     this.uiElementsCreator = uiElementsCreator;
@@ -76,23 +82,46 @@ public class TechnologyScreen extends ScreenAdapter {
     log.info("Technology tree shown");
     setUpTechnologyButtons();
     setUpInput();
+    saveCameraPosition(viewport.getCamera());
+    positionCamera(viewport.getCamera());
   }
 
   @Override
   public void render(float delta) {
+    world.setDelta(delta);
+    world.process();
     stage.draw();
     stage.act(delta);
+    viewport.getCamera().update();
   }
 
   @Override
   public void resize(int width, int height) {
-    stage.getViewport().update(width, height);
-    super.resize(width, height);
+    viewport.update(width, height);
+    stage.getViewport().update(width, height, true);
+  }
+
+  @Override
+  public void hide() {
+    restoreCameraPosition(viewport.getCamera());
   }
 
   public void refresh() {
     stage.clear();
     setUpTechnologyButtons();
+  }
+
+  private void positionCamera(@NonNull Camera camera) {
+    camera.position.set(-1000, 600, -1000);
+    camera.lookAt(-1000, 0, -1000);
+  }
+
+  private void restoreCameraPosition(Camera camera) {
+    camera.position.set(pos);
+  }
+
+  private void saveCameraPosition(Camera camera) {
+    pos = new Vector3(camera.position);
   }
 
   private void setUpInput() {
