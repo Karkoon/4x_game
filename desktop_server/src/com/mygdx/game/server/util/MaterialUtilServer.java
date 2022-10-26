@@ -85,6 +85,17 @@ public class MaterialUtilServer extends WorldService {
     }
   }
 
+  public int getPlayerMaterial(String playerToken, MaterialBase materialBase) {
+    for (int i = 0; i < ownerPlayerMaterialSubscriber.getEntities().size(); i++) {
+      int entityId = ownerPlayerMaterialSubscriber.getEntities().get(i);
+      if (ownerMapper.get(entityId).getToken().equals(playerToken)) {
+        if (playerMaterialMapper.get(entityId).getMaterial() == materialBase)
+          return playerMaterialMapper.get(entityId).getValue();
+      }
+    }
+    return 0;
+  }
+
   public Map<String, Map<MaterialBase, Integer>> calculateIncomes() {
     var incomes = new HashMap<String, Map<MaterialBase, Integer>>();
 

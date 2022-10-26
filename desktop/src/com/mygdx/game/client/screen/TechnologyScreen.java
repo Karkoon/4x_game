@@ -1,7 +1,9 @@
 package com.mygdx.game.client.screen;
 
 import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.World;
+import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
+import com.mygdx.game.client.ui.CanNotResearchTechnologyDialogFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -40,6 +43,8 @@ public class TechnologyScreen extends ScreenAdapter {
   private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
   private final ResearchTechnologyService researchTechnologyService;
   private final World world;
+  private final CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory;
+  private Vector3 pos;
   private final Texture inResearchTexture;
   private final Texture researchedTexture;
   private final Texture unblockedTexture;
@@ -49,8 +54,9 @@ public class TechnologyScreen extends ScreenAdapter {
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<TextureComp> textureMapper;
-  private Vector3 pos;
 
+  @AspectDescriptor(all = {InResearch.class})
+  private EntitySubscription inResearchSubscriber;
 
   @Inject
   public TechnologyScreen(
@@ -61,7 +67,8 @@ public class TechnologyScreen extends ScreenAdapter {
       Technologies technologies,
       UiElementsCreator uiElementsCreator,
       TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
-      ResearchTechnologyService researchTechnologyService
+      ResearchTechnologyService researchTechnologyService,
+      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory
   ) {
     world.inject(this);
     this.world = world;
@@ -72,6 +79,7 @@ public class TechnologyScreen extends ScreenAdapter {
     this.uiElementsCreator = uiElementsCreator;
     this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
     this.researchTechnologyService = researchTechnologyService;
+    this.canNotResearchTechnologyDialogFactory = canNotResearchTechnologyDialogFactory;
     this.inResearchTexture = gameScreenAssets.getTexture( "technologies/inresearch.png");
     this.unblockedTexture = gameScreenAssets.getTexture( "technologies/unblocked.png");
     this.researchedTexture = gameScreenAssets.getTexture( "technologies/researched.png");
@@ -147,19 +155,36 @@ public class TechnologyScreen extends ScreenAdapter {
       if (inResearchMapper.has(entityId)) {
         secondImage = uiElementsCreator.createImage(inResearchTexture, (int) position.x, (int) position.z);
       } else if (researchedMapper.has(entityId)) {
-        secondImage = uiElementsCreator.createImage(inResearchTexture, (int) position.x, (int) position.z);
+        secondImage = uiElementsCreator.createImage(researchedTexture, (int) position.x, (int) position.z);
       } else {
-        secondImage.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent event, float x, float y) {
-            researchTechnologyService.researchTechnology(entityId);
-            world.process();
-          }
-        });
+        secondImage = uiElementsCreator.createImage(unblockedTexture, (int) position.x, (int) position.z);
       }
+      secondImage.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          researchTechnology(entityId);
+        }
+      });
       uiElementsCreator.addHoverPopupWithActor(secondImage, label, stage);
       stage.addActor(secondImage);
     }
+  }
 
+  public void researchTechnology(int entityId) {
+    if (inResearchMapper.has(entityId)) {
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - in research state");
+      log.info("Can't research");
+      stage.addActor(dialog);
+    } else if (inResearchSubscriber.getEntities().size() > 0) {
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - researching another");
+      log.info("Can't research");
+      stage.addActor(dialog);
+    } else if (researchedMapper.has(entityId)) {
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - it's researched");
+      log.info("Can't research");
+      stage.addActor(dialog);
+    } else {
+      researchTechnologyService.researchTechnology(entityId);
+    }
   }
 }

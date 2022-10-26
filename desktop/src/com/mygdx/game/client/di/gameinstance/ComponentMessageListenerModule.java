@@ -3,6 +3,7 @@ package com.mygdx.game.client.di.gameinstance;
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
 import com.mygdx.game.client.network.DesktopInResearchHandler;
 import com.mygdx.game.client.network.DesktopMaterialHandler;
+import com.mygdx.game.client.network.DesktopResearchedHandler;
 import com.mygdx.game.client.network.FieldOwnerColorHandler;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
@@ -16,6 +17,7 @@ import com.mygdx.game.client_core.network.comp_handlers.FieldHandler;
 import com.mygdx.game.client_core.network.comp_handlers.InResearchHandler;
 import com.mygdx.game.client_core.network.comp_handlers.MaterialHandler;
 import com.mygdx.game.client_core.network.comp_handlers.OwnerHandler;
+import com.mygdx.game.client_core.network.comp_handlers.ResearchedHandler;
 import com.mygdx.game.client_core.network.comp_handlers.StatsHandler;
 import com.mygdx.game.client_core.network.comp_handlers.SubFieldHandler;
 import com.mygdx.game.client_core.network.comp_handlers.UnderConstructionHandler;
@@ -27,6 +29,7 @@ import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.InResearch;
+import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
@@ -56,6 +59,8 @@ public class ComponentMessageListenerModule {
       FieldOwnerColorHandler fieldOwnerColorHandler,
       InResearchHandler inResearchHandler,
       DesktopInResearchHandler desktopInResearchHandler,
+      ResearchedHandler researchedHandler,
+      DesktopResearchedHandler desktopResearchedHandler,
       StatsHandler statsHandler,
       CanAttackHandler canAttackHandler
   ) {
@@ -74,6 +79,8 @@ public class ComponentMessageListenerModule {
     listener.registerHandler(Owner.class, fieldOwnerColorHandler);
     listener.registerHandler(InResearch.class, inResearchHandler);
     listener.registerHandler(InResearch.class, desktopInResearchHandler);
+    listener.registerHandler(Researched.class, researchedHandler);
+    listener.registerHandler(Researched.class, desktopResearchedHandler);
     listener.registerHandler(Stats.class, statsHandler);
     listener.registerHandler(CanAttack.class, canAttackHandler);
     return listener;
