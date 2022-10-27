@@ -2,6 +2,8 @@ package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
+import com.mygdx.game.core.ecs.component.InResearch;
+import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import lombok.NonNull;
@@ -29,7 +31,7 @@ public class TechnologyFactory {
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);
-    var componentsToSend = new Class[]{EntityConfigId.class};
+    var componentsToSend = new Class[]{EntityConfigId.class, InResearch.class, Researched.class};
     componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
       componentsToSend,

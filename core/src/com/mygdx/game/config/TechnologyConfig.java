@@ -19,4 +19,5 @@ public class TechnologyConfig implements Config, TextureConfig {
   private String textureName;
   private int x;
   private int y;
+  private int requiredScience;
 }

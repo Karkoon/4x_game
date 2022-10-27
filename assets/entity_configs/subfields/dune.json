@@ -8,7 +8,8 @@
     [
       [
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
-        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":1}
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":1}
       ],
       [
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},

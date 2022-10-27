@@ -8,21 +8,17 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialIncome;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
-import com.mygdx.game.core.model.MaterialBase;
-import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.server.util.MaterialUtilServer;
+import com.mygdx.game.server.util.TechnologyUtilServer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 @Log
 @GameInstanceScope
@@ -48,24 +44,28 @@ public class RoundEndService extends WorldService {
   private final BuildingFactory buildingFactory;
   private final GameConfigAssets gameConfigAssets;
   private final MaterialUtilServer materialUtilServer;
+  private final TechnologyUtilServer technologyUtilServer;
 
   @Inject
   RoundEndService(
       World world,
       BuildingFactory buildingFactory,
       GameConfigAssets gameConfigAssets,
-      MaterialUtilServer materialUtilServer
+      MaterialUtilServer materialUtilServer,
+      TechnologyUtilServer technologyUtilServer
   ) {
     world.inject(this);
     this.world = world;
     this.buildingFactory = buildingFactory;
     this.gameConfigAssets = gameConfigAssets;
     this.materialUtilServer = materialUtilServer;
+    this.technologyUtilServer = technologyUtilServer;
   }
 
   public void makeEndRoundSteps() {
     log.info("End round, edit components");
     resetUnitComponents();
+    researchTechnologies();
     giveMaterialsFromSubfields();
     constructBuildings();
     world.process();
@@ -94,11 +94,13 @@ public class RoundEndService extends WorldService {
     }
   }
 
+  private void researchTechnologies() {
+    technologyUtilServer.researchTechnologies();
+  }
+
   private void giveMaterialsFromSubfields() {
     materialUtilServer.giveMaterialsToPlayers();
   }
-
-
 
   private void constructBuildings() {
     var underConstructionEntities = underConstructionSubscriber.getEntities();
