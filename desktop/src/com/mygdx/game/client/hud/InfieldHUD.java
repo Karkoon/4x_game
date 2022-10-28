@@ -1,5 +1,8 @@
 package com.mygdx.game.client.hud;
 
+import com.artemis.ComponentMapper;
+import com.artemis.World;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,6 +18,7 @@ import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.client_core.util.InfieldUtil;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.core.ecs.component.InRecruitment;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -32,6 +36,9 @@ public class InfieldHUD implements Disposable {
   private final InfieldUtil infieldUtil;
   private final UiElementsCreator uiElementsCreator;
   private final Stage stage;
+  private final Texture inRecruitmentImageTexture;
+
+  private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
   @Inject
   public InfieldHUD(
@@ -43,7 +50,8 @@ public class InfieldHUD implements Disposable {
       InfieldUtil infieldUtil,
       GameConfigAssets assets,
       GameScreenAssets gameAssets,
-      CreateUnitService createUnitService
+      CreateUnitService createUnitService,
+      World world
   ) {
     this.assets = assets;
     this.canNotCreateUnitFactory = canNotCreateUnitFactory;
@@ -54,6 +62,8 @@ public class InfieldHUD implements Disposable {
     this.infieldUtil = infieldUtil;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
+    this.inRecruitmentImageTexture = gameAssets.getTexture("units/in_recruitment.png");
+    world.inject(this);
 
     prepareHudSceleton();
   }
@@ -71,9 +81,12 @@ public class InfieldHUD implements Disposable {
   }
 
   private void prepareHudSceleton() {
+    stage.clear();
     var container = uiElementsCreator.createVerticalContainer((int) stage.getWidth()/5*4, 0, (int) stage.getWidth()/5, (int) stage.getHeight());
     var buildingsButton = uiElementsCreator.createActionButton("Create building", this::createBuildingList, 0, 0);
     var unitButton = uiElementsCreator.createActionButton("Create unit", this::createUnitList, 0, 0);
+    var inRecruitmentImage = uiElementsCreator.createImage(inRecruitmentImageTexture, 0, 0);
+    uiElementsCreator.addHoverPopupWithActor(inRecruitmentImage, inRecruitmentImage, stage);
     container.addActor(buildingsButton);
     container.addActor(unitButton);
     stage.addActor(container);
