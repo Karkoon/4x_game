@@ -19,6 +19,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import com.mygdx.game.server.util.MaterialUtilServer;
 import com.mygdx.game.server.util.TechnologyUtilServer;
 import lombok.extern.java.Log;
@@ -56,6 +57,7 @@ public class RoundEndService extends WorldService {
   private final GameRoom room;
   private final TechnologyUtilServer technologyUtilServer;
   private final UnitFactory unitFactory;
+  private final StateSyncer stateSyncer;
 
   @Inject
   RoundEndService(
@@ -65,7 +67,8 @@ public class RoundEndService extends WorldService {
       MaterialUtilServer materialUtilServer,
       GameRoom room,
       TechnologyUtilServer technologyUtilServer,
-      UnitFactory unitFactory
+      UnitFactory unitFactory,
+      StateSyncer stateSyncer
   ) {
     world.inject(this);
     this.world = world;
@@ -75,6 +78,7 @@ public class RoundEndService extends WorldService {
     this.room = room;
     this.technologyUtilServer = technologyUtilServer;
     this.unitFactory = unitFactory;
+    this.stateSyncer = stateSyncer;
   }
 
   public void makeEndRoundSteps() {
@@ -140,10 +144,12 @@ public class RoundEndService extends WorldService {
       int entityId = inRecruitmentEntities.get(i);
       var inRecruitment = inRecruitmentMapper.get(entityId);
       inRecruitment.setTurnLeft(inRecruitment.getTurnLeft()-1);
+      setDirty(entityId, InRecruitment.class, world);
       if (inRecruitment.getTurnLeft() == 0) {
         long unitConfigId = inRecruitment.getUnitConfigId();
         var coordinates = coordinatesMapper.get(entityId);
         var client = room.getClientByToken(inRecruitment.getClientToken());
+        stateSyncer.sendComponentTo(inRecruitment, entityId, client);
         var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
         this.unitFactory.createEntity(unitConfig, coordinates, client);
         this.inRecruitmentMapper.remove(entityId);

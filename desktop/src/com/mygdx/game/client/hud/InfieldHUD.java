@@ -16,9 +16,11 @@ import com.mygdx.game.client.ui.CanNotCreateUnitFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.client_core.util.InfieldUtil;
+import com.mygdx.game.client_core.util.MaterialUtilClient;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.InRecruitment;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -37,6 +39,7 @@ public class InfieldHUD implements Disposable {
   private final UiElementsCreator uiElementsCreator;
   private final Stage stage;
   private final Texture inRecruitmentImageTexture;
+  private final Lazy<MaterialUtilClient> materialUtilClient;
 
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
@@ -51,6 +54,7 @@ public class InfieldHUD implements Disposable {
       GameConfigAssets assets,
       GameScreenAssets gameAssets,
       CreateUnitService createUnitService,
+      Lazy<MaterialUtilClient> materialUtilClient,
       World world
   ) {
     this.assets = assets;
@@ -62,6 +66,7 @@ public class InfieldHUD implements Disposable {
     this.infieldUtil = infieldUtil;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
+    this.materialUtilClient = materialUtilClient;
     this.inRecruitmentImageTexture = gameAssets.getTexture("units/in_recruitment.png");
     world.inject(this);
 
@@ -80,13 +85,19 @@ public class InfieldHUD implements Disposable {
     stage.dispose();
   }
 
-  private void prepareHudSceleton() {
+  public void prepareHudSceleton() {
+    log.info("Show infield");
     stage.clear();
     var container = uiElementsCreator.createVerticalContainer((int) stage.getWidth()/5*4, 0, (int) stage.getWidth()/5, (int) stage.getHeight());
     var buildingsButton = uiElementsCreator.createActionButton("Create building", this::createBuildingList, 0, 0);
     var unitButton = uiElementsCreator.createActionButton("Create unit", this::createUnitList, 0, 0);
-    var inRecruitmentImage = uiElementsCreator.createImage(inRecruitmentImageTexture, 0, 0);
-    uiElementsCreator.addHoverPopupWithActor(inRecruitmentImage, inRecruitmentImage, stage);
+    if (inField.getField() != -1 && inRecruitmentMapper.has(inField.getField())) {
+      var inRecruitment = inRecruitmentMapper.get(inField.getField());
+      var inRecruitmentImage = uiElementsCreator.createImage(inRecruitmentImageTexture, 0, 0);
+      var inRecruitmentLabel = uiElementsCreator.createLabel("There is creating unit " + inRecruitment.getUnitConfigId() + ", turn left " + inRecruitment.getTurnLeft(), 10, 10);
+      uiElementsCreator.addHoverPopupWithActor(inRecruitmentImage, inRecruitmentLabel, stage);
+      stage.addActor(inRecruitmentImage);
+    }
     container.addActor(buildingsButton);
     container.addActor(unitButton);
     stage.addActor(container);
@@ -126,19 +137,35 @@ public class InfieldHUD implements Disposable {
 
       var texture = gameAssets.getTexture(unit.getIconName());
       var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
-      if (infieldUtil.checkIfCanBuildUnit(inField.getField(), unitId)) {
+      if (!infieldUtil.checkIfCanBuildUnit(inField.getField(), unitId)) {
         imageButton.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            choosenUnit(unitId);
+            container.remove();
+            canNotCreateUnitFactory.createAndShow("You don't have enough buildings");
+          }
+        });
+      } else if (inRecruitmentMapper.has(inField.getField())) {
+        imageButton.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            container.remove();
+            canNotCreateUnitFactory.createAndShow("There is another recruited unit");
+          }
+        });
+      } else if (!infieldUtil.checkIfEnoughMaterialsToRecruitUnit(unitId)){
+        imageButton.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            container.remove();
+            canNotCreateUnitFactory.createAndShow("You don't have enough materials");
           }
         });
       } else {
         imageButton.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            container.remove();
-            canNotCreateUnitFactory.createAndShow("You don't have enough buildings");
+            choosenUnit(unitId);
           }
         });
       }

@@ -26,6 +26,7 @@ public class UnitHandler extends EntityCommandHandler {
   ) {
     this.createUnitService = createUnitService;
     this.world = world;
+    world.inject(this);
   }
 
   public void handle(String[] commands, Client client) {

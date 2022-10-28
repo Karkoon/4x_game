@@ -1,8 +1,8 @@
-package com.mygdx.game.client_core.network.comp_handlers;
+package com.mygdx.game.client.network.comp_handlers;
 
-import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;
+import com.mygdx.game.client.hud.InfieldHUD;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.InRecruitment;
@@ -14,25 +14,23 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
 @GameInstanceScope
-public class InRecruitmentHandler implements ComponentMessageListener.Handler<InRecruitment> {
+public class DesktopInRecruitmentHandler implements ComponentMessageListener.Handler<InRecruitment> {
 
-  private ComponentMapper<InRecruitment> inRecruitmentMapper;
+  private final InfieldHUD infieldHUD;
 
   @Inject
-  public InRecruitmentHandler(
+  public DesktopInRecruitmentHandler(
+      InfieldHUD infieldHUD,
       World world
   ) {
+    this.infieldHUD = infieldHUD;
     world.inject(this);
   }
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, InRecruitment component) {
-    log.info("Read inRecruitment component " + worldEntity);
-    var inRecruitment = inRecruitmentMapper.create(worldEntity);
-    inRecruitment.setTurnLeft(component.getTurnLeft());
-    inRecruitment.setUnitConfigId(component.getUnitConfigId());
-    if (inRecruitment.getTurnLeft() == 0)
-      inRecruitmentMapper.remove(worldEntity);
+    log.info("Read desktop inRecruitment handler");
+    infieldHUD.prepareHudSceleton();
     return FULLY_HANDLED;
   }
 }

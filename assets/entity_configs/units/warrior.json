@@ -15,7 +15,7 @@
   "turnAmount": 2,
   "materials":
       [
-        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1500},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
       ]
 }

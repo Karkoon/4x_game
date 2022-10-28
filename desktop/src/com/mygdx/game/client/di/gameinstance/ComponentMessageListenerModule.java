@@ -1,9 +1,10 @@
 package com.mygdx.game.client.di.gameinstance;
 
 import com.mygdx.game.client.network.DesktopEntityConfigHandler;
-import com.mygdx.game.client.network.DesktopInResearchHandler;
-import com.mygdx.game.client.network.DesktopMaterialHandler;
-import com.mygdx.game.client.network.DesktopResearchedHandler;
+import com.mygdx.game.client.network.comp_handlers.DesktopInRecruitmentHandler;
+import com.mygdx.game.client.network.comp_handlers.DesktopInResearchHandler;
+import com.mygdx.game.client.network.comp_handlers.DesktopMaterialHandler;
+import com.mygdx.game.client.network.comp_handlers.DesktopResearchedHandler;
 import com.mygdx.game.client.network.FieldOwnerColorHandler;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
@@ -14,6 +15,7 @@ import com.mygdx.game.client_core.network.comp_handlers.CoordinatesHandler;
 import com.mygdx.game.client_core.network.comp_handlers.DesktopUnderConstructionHandler;
 import com.mygdx.game.client_core.network.comp_handlers.EntityConfigHandler;
 import com.mygdx.game.client_core.network.comp_handlers.FieldHandler;
+import com.mygdx.game.client_core.network.comp_handlers.InRecruitmentHandler;
 import com.mygdx.game.client_core.network.comp_handlers.InResearchHandler;
 import com.mygdx.game.client_core.network.comp_handlers.MaterialHandler;
 import com.mygdx.game.client_core.network.comp_handlers.OwnerHandler;
@@ -26,6 +28,7 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.InRecruitment;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.InResearch;
@@ -59,6 +62,8 @@ public class ComponentMessageListenerModule {
       FieldOwnerColorHandler fieldOwnerColorHandler,
       InResearchHandler inResearchHandler,
       DesktopInResearchHandler desktopInResearchHandler,
+      InRecruitmentHandler inRecruitmentHandler,
+      DesktopInRecruitmentHandler desktopInRecruitmentHandler,
       ResearchedHandler researchedHandler,
       DesktopResearchedHandler desktopResearchedHandler,
       StatsHandler statsHandler,
@@ -79,6 +84,8 @@ public class ComponentMessageListenerModule {
     listener.registerHandler(Owner.class, fieldOwnerColorHandler);
     listener.registerHandler(InResearch.class, inResearchHandler);
     listener.registerHandler(InResearch.class, desktopInResearchHandler);
+    listener.registerHandler(InRecruitment.class, inRecruitmentHandler);
+    listener.registerHandler(InRecruitment.class, desktopInRecruitmentHandler);
     listener.registerHandler(Researched.class, researchedHandler);
     listener.registerHandler(Researched.class, desktopResearchedHandler);
     listener.registerHandler(Stats.class, statsHandler);

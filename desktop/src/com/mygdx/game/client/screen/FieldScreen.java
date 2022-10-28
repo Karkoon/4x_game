@@ -107,6 +107,7 @@ public class FieldScreen extends ScreenAdapter {
     saveCameraPosition(viewport.getCamera());
     positionCamera(viewport.getCamera());
     setUpInput();
+    infieldHUD.prepareHudSceleton();
   }
 
   @Override
