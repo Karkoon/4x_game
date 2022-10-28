@@ -4,6 +4,7 @@ import com.mygdx.game.config.FieldConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.InRecruitment;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.initialize.SubfieldMapInitializer;
@@ -38,11 +39,11 @@ public class FieldFactory {
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createFriendlyOrFoeComponent(entityId, null);
     componentFactory.createSightlineSubscribersComponent(entityId, 0);
-    var componentsToSend = new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class};
+    var componentsToSend = new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class, InRecruitment.class};
     componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
         componentsToSend,
-        new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class}
+        new Class[]{Coordinates.class, EntityConfigId.class, Field.class, Owner.class, InRecruitment.class}
     );
     return entityId;
   }
