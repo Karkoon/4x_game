@@ -5,14 +5,19 @@ import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.util.UiElementsCreator;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.util.MaterialUtilClient;
+import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
+import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.MaterialBase;
 import lombok.extern.java.Log;
 
@@ -23,6 +28,7 @@ import java.util.Map;
 @Log
 public class WorldHUD implements Disposable {
 
+  private final ChosenEntity chosenEntity;
   private final EndTurnService endTurnService;
   private final GameScreenAssets gameAssets;
   private final MaterialUtilClient materialUtilClient;
@@ -32,11 +38,16 @@ public class WorldHUD implements Disposable {
 
   private Button endTurnButton;
   private HorizontalGroup materialGroup;
+  private VerticalGroup activeUnitDescription;
 
+  private ComponentMapper<Name> nameMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<Movable> movableMapper;
 
   @Inject
   public WorldHUD(
+      ChosenEntity chosenEntity,
       EndTurnService endTurnService,
       GameScreenAssets gameScreenAssets,
       MaterialUtilClient materialUtilClient,
@@ -47,6 +58,7 @@ public class WorldHUD implements Disposable {
   ) {
     world.inject(this);
 
+    this.chosenEntity = chosenEntity;
     this.endTurnService = endTurnService;
     this.gameAssets = gameScreenAssets;
     this.materialUtilClient = materialUtilClient;
@@ -76,10 +88,15 @@ public class WorldHUD implements Disposable {
 
     this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
     var popupMaterial = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-100), 300, 50);
-    fillMaterialGroup(this.materialGroup, materialUtilClient.getPlayerMaterial());
+    fillMaterialGroup(materialGroup, materialUtilClient.getPlayerMaterial());
     fillMaterialGroup(popupMaterial, predictedIncome.getIncomes());
     uiElementsCreator.addHoverPopupWithActor(this.materialGroup, popupMaterial, stage);
 
+    if (chosenEntity.isAnyChosen() && movableMapper.has(chosenEntity.peek())) {
+      this.activeUnitDescription = uiElementsCreator.createVerticalContainer(0, (int) (stage.getHeight() - 200), 150, 200);
+      prepareUnitGroup(activeUnitDescription);
+      stage.addActor(activeUnitDescription);
+    }
 
     stage.addActor(materialGroup);
     stage.addActor(endTurnButton);
@@ -99,6 +116,24 @@ public class WorldHUD implements Disposable {
       group.addActor(image);
       group.addActor(text);
     }
+  }
+
+  private void prepareUnitGroup(VerticalGroup activeUnitGroup) {
+    var name = nameMapper.get(chosenEntity.peek());
+    var nameLabel = uiElementsCreator.createLabel(name.getName(), 0, 0);
+    activeUnitGroup.addActor(nameLabel);
+
+    var stats = statsMapper.get(chosenEntity.peek());
+    var hpLabel = uiElementsCreator.createLabel("hp: " + stats.getHp() + "/" + stats.getMaxHp(), 0, 0);
+    activeUnitGroup.addActor(hpLabel);
+    var attackLabel = uiElementsCreator.createLabel("attack: " + stats.getAttackPower() + " range: " + stats.getAttackRange(), 0, 0);
+    activeUnitGroup.addActor(attackLabel);
+    var defenseLabel = uiElementsCreator.createLabel("defense: " + stats.getDefense(), 0, 0);
+    activeUnitGroup.addActor(defenseLabel);
+    var moveLabel = uiElementsCreator.createLabel("moveRange: " + stats.getMoveRange() + "/" + stats.getMaxMoveRange(), 0, 0);
+    activeUnitGroup.addActor(moveLabel);
+    var sightLabel = uiElementsCreator.createLabel("sight: " + stats.getSightRadius(), 0, 0);
+    activeUnitGroup.addActor(sightLabel);
   }
 
   private void addEndTurnAction() {

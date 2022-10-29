@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.mygdx.game.client.ecs.component.Choosable;
+import com.mygdx.game.client.hud.WorldHUD;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
@@ -28,6 +29,7 @@ public class ChooseSystem extends IteratingSystem {
   private final Lazy<ChooseEntityDialogFactory> dialogFactory;
   private final ChosenEntity chosenEntities;
   private final ClickedEntities clickedEntities;
+  private final Lazy<WorldHUD> worldHUD;
 
   private ComponentMapper<Position> positionMapper;
 
@@ -35,12 +37,14 @@ public class ChooseSystem extends IteratingSystem {
   public ChooseSystem(
       ClickInput clickInput,
       Lazy<ChooseEntityDialogFactory> dialogFactory,
-      ChosenEntity chosenEntity
+      ChosenEntity chosenEntity,
+      Lazy<WorldHUD> worldHUD
   ) {
     this.clickInput = clickInput;
     this.dialogFactory = dialogFactory;
     this.chosenEntities = chosenEntity;
     this.clickedEntities = new ClickedEntities();
+    this.worldHUD = worldHUD;
   }
 
   @Override
@@ -61,13 +65,19 @@ public class ChooseSystem extends IteratingSystem {
       showChooseEntityDialog();
     } else if (clickedEntities.areAnyClicked()) {
       chosenEntities.addChosen(clickedEntities.getClickedEntity());
+      worldHUD.get().prepareHudSceleton();
     }
     clickInput.setHandled(true);
   }
 
   private void showChooseEntityDialog() {
     var allClicked = clickedEntities.getAllClicked();
-    dialogFactory.get().createAndShow(allClicked, chosenEntities::addChosen);
+    dialogFactory.get().createAndShow(allClicked, this::refresh);
+  }
+
+  private void refresh(int entityId) {
+    chosenEntities.addChosen(entityId);
+    worldHUD.get().prepareHudSceleton();
   }
 
   private class ClickedEntities {
