@@ -13,18 +13,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.model.ChosenEntity;
-import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.ui.NoUnitWithMoveRangeFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
-import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.util.MaterialUtilClient;
-import com.mygdx.game.core.ecs.component.Owner;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.MaterialBase;
@@ -47,7 +46,6 @@ public class WorldHUD implements Disposable {
   private final UiElementsCreator uiElementsCreator;
   private final Viewport viewport;
   private final NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory;
-  private final ChosenEntity chosenEntity;
 
   private Button endTurnButton;
   private Button nextUnitButton;
@@ -57,11 +55,11 @@ public class WorldHUD implements Disposable {
   @AspectDescriptor(one = {Movable.class, Owner.class, Stats.class})
   private EntitySubscription playerUnitsSubscriptions;
 
+  private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
   private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Movable> movableMapper;
 
@@ -77,8 +75,7 @@ public class WorldHUD implements Disposable {
       UiElementsCreator uiElementsCreator,
       World world,
       Viewport viewport,
-      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory,
-      ChosenEntity chosenEntity
+      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory
   ) {
     world.inject(this);
 
@@ -92,7 +89,6 @@ public class WorldHUD implements Disposable {
     this.uiElementsCreator = uiElementsCreator;
     this.viewport = viewport;
     this.noUnitWithMoveRangeFactory = noUnitWithMoveRangeFactory;
-    this.chosenEntity = chosenEntity;
     prepareHudSceleton();
   }
 
@@ -173,25 +169,36 @@ public class WorldHUD implements Disposable {
   }
 
   private void addNextUnitAction() {
+    // Check if unit can move
     for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
       int entityId = playerUnitsSubscriptions.getEntities().get(i);
       var owner = ownerMapper.get(entityId);
       var stats = statsMapper.get(entityId);
       if (playerInfo.getToken().equals(owner.getToken()) && stats != null && stats.getMoveRange() > 0) {
-        var position = positionMapper.get(entityId);
-        positionCamera(position);
-        chosenEntity.addChosen(entityId);
+        positionCamera(entityId);
+        return;
+      }
+    }
+    // Check if unit can attack
+    for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
+      int entityId = playerUnitsSubscriptions.getEntities().get(i);
+      var owner = ownerMapper.get(entityId);
+      var canAttack = canAttackMapper.get(entityId);
+      if (playerInfo.getToken().equals(owner.getToken()) && canAttack != null && canAttack.isCanAttack()) {
+        positionCamera(entityId);
         return;
       }
     }
     noUnitWithMoveRangeFactory.createAndShow("There is no available unit with move range");
   }
 
-  private void positionCamera(Position position) {
-    var positionValue = position.getValue();
+  private void positionCamera(int entityId) {
+    var positionValue = positionMapper.get(entityId).getValue();
     var cameraHeight = viewport.getCamera().position.y;
     viewport.getCamera().position.set(positionValue.x, cameraHeight, positionValue.z);
     viewport.getCamera().lookAt(positionValue.x, 0, positionValue.z);
+    chosenEntity.addChosen(entityId);
+    prepareHudSceleton();
   }
 
 }
