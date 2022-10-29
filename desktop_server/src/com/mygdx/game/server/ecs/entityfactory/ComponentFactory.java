@@ -14,6 +14,8 @@ import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.InRecruitment;
+import com.mygdx.game.core.ecs.component.InResearch;
 import com.mygdx.game.core.ecs.component.MaterialIncome;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -55,6 +57,8 @@ public class ComponentFactory {
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeMapper;
+  private ComponentMapper<InRecruitment> inRecruitmentMapper;
+  private ComponentMapper<InResearch> inResearchMapper;
   private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Owner> ownerMapper;
@@ -90,6 +94,8 @@ public class ComponentFactory {
     entityConfigIdMapper.create(entity);
     fieldMapper.create(entity);
     friendlyOrFoeMapper.create(entity);
+    inRecruitmentMapper.create(entity);
+    inResearchMapper.create(entity);
     nameMapper.create(entity);
     sharedComponentsMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
@@ -168,6 +174,29 @@ public class ComponentFactory {
       friendlies.set(room.getClients().indexOf(nullableClient));
     }
     friendlyOrFoe.setFriendlies(friendlies);
+  }
+
+  public void createInRecruitmentComponent(
+      int entityId,
+      int turnLeft,
+      long unitConfigId,
+      String clientToken
+  ) {
+
+    var inRecruitment = inRecruitmentMapper.create(entityId);
+    inRecruitment.setTurnLeft(turnLeft);
+    inRecruitment.setUnitConfigId(unitConfigId);
+    inRecruitment.setClientToken(clientToken);
+  }
+
+  public void createInResearchComponent(
+      int entityId,
+      int requiredScience
+  ) {
+
+    var inResearch = inResearchMapper.create(entityId);
+    inResearch.setConfigRequiredScience(requiredScience);
+    inResearch.setScienceLeft(requiredScience);
   }
 
   public void createMaterialIncomeComponent(SubFieldConfig config, int entityId) {

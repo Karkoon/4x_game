@@ -1,4 +1,4 @@
-package com.mygdx.game.client.network;
+package com.mygdx.game.client.network.comp_handlers;
 
 import com.artemis.World;
 import com.github.czyzby.websocket.WebSocket;

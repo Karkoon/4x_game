@@ -7,11 +7,14 @@ import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.InRecruitment;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.server.di.GameInstanceScope;
+import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.util.MaterialUtilServer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -20,23 +23,32 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class CreateUnitService extends WorldService {
 
-  private final UnitFactory unitFactory;
+  private final ComponentFactory componentFactory;
   private final GameConfigAssets assets;
+  private final MaterialUtilServer materialUtilServer;
+  private final UnitFactory unitFactory;
+  private final World world;
 
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<InRecruitment> inRecruitmentMapper;
   private ComponentMapper<SubField> subfieldsMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @Inject
   public CreateUnitService(
-      UnitFactory unitFactory,
+      ComponentFactory componentFactory,
       GameConfigAssets assets,
+      MaterialUtilServer materialUtilServer,
+      UnitFactory unitFactory,
       World world
   ) {
-    this.unitFactory = unitFactory;
+    this.componentFactory = componentFactory;
     this.assets = assets;
+    this.materialUtilServer = materialUtilServer;
+    this.unitFactory = unitFactory;
+    this.world = world;
     world.inject(this);
   }
 
@@ -44,7 +56,9 @@ public class CreateUnitService extends WorldService {
     var subFields = fieldMapper.get(fieldEntityId).getSubFields();
     var unitConfig = assets.getGameConfigs().get(UnitConfig.class, unitConfigId);
     long requiredBuilding = unitConfig.getRequiredBuilding();
+    var requiredMaterials = unitConfig.getMaterials();
     boolean canCreate = skipChecking;
+    boolean enoughtMaterials = materialUtilServer.checkIfCanBuy(client.getPlayerToken(), requiredMaterials);
     for (int i = 0; i < subFields.size; i++) {
       var subField = subfieldsMapper.get(subFields.get(i));
       int buildingEntityId = subField.getBuilding();
@@ -58,8 +72,17 @@ public class CreateUnitService extends WorldService {
 
     if (canCreate) {
       var config = assets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-      var coordinates = coordinatesMapper.get(fieldEntityId);
-      unitFactory.createEntity(config, coordinates, client);
+      if (skipChecking) {
+        var coordinates = coordinatesMapper.get(fieldEntityId);
+        unitFactory.createEntity(config, coordinates, client);
+      } else if (enoughtMaterials){
+        materialUtilServer.removeMaterials(client.getPlayerToken(), requiredMaterials);
+        String playerToken = client.getPlayerToken();
+        componentFactory.createInRecruitmentComponent(fieldEntityId, config.getTurnAmount(), config.getId(), playerToken);
+        setDirty(fieldEntityId, InRecruitment.class, world);
+      } else {
+        log.info("Not enought materials to create " + unitConfigId);
+      }
     } else {
       log.info("Field " + fieldEntityId + " don't have enough buildings to create " + unitConfigId);
     }

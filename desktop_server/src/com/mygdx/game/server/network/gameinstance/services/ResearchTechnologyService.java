@@ -59,6 +59,7 @@ public class ResearchTechnologyService extends WorldService {
     var entityConfigId = entityConfigIdMapper.get(entityId);
     var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId());
 
+    componentFactory.createInResearchComponent(entityId, technologyConfig.getRequiredScience());
     var inResearch = inResearchMapper.create(entityId);
     inResearch.setConfigRequiredScience(technologyConfig.getRequiredScience());
     inResearch.setScienceLeft(technologyConfig.getRequiredScience());

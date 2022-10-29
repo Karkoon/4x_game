@@ -11,5 +11,11 @@
   "sightRadius": 2,
   "moveRange": 2,
   "attackRange": 2,
-  "requiredBuilding": 502
+  "requiredBuilding": 502,
+  "turnAmount": 2,
+  "materials":
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      ]
 }

@@ -15,7 +15,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
-public class BuildingService extends WorldService {
+public class CreateBuildingService extends WorldService {
 
   private final BuildingFactory buildingFactory;
   private final ComponentFactory componentFactory;
@@ -24,7 +24,7 @@ public class BuildingService extends WorldService {
   private ComponentMapper<SubField> subfieldMapper;
 
   @Inject
-  BuildingService(
+  CreateBuildingService(
       BuildingFactory buildingFactory,
       ComponentFactory componentFactory,
       GameConfigAssets assets,

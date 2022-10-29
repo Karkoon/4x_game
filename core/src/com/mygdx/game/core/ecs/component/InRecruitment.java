@@ -1,12 +1,13 @@
 package com.mygdx.game.core.ecs.component;
 
+
 import com.artemis.Component;
 import lombok.Data;
 
 @Data
-public class UnderConstruction extends Component {
+public class InRecruitment extends Component {
 
-  private int buildingConfigId;
+  private long unitConfigId;
   private int turnLeft;
-  private int parentSubfield;
+  private String clientToken;
 }

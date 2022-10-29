@@ -1,7 +1,7 @@
 package com.mygdx.game.server.network.gameinstance.handlers;
 
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.gameinstance.services.BuildingService;
+import com.mygdx.game.server.network.gameinstance.services.CreateBuildingService;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -9,13 +9,13 @@ import javax.inject.Inject;
 @Log
 public class BuildHandler extends EntityCommandHandler {
 
-  private final BuildingService buildingService;
+  private final CreateBuildingService createBuildingService;
 
   @Inject
   public BuildHandler(
-      BuildingService buildingService
+      CreateBuildingService createBuildingService
   ) {
-    this.buildingService = buildingService;
+    this.createBuildingService = createBuildingService;
   }
 
   public void handle(String[] commands, Client client) {
@@ -24,6 +24,6 @@ public class BuildHandler extends EntityCommandHandler {
     var x = Integer.parseInt(commands[3]);
     var y = Integer.parseInt(commands[4]);
     var clientIndex = client.getGameRoom().getClients().indexOf(client);
-    buildingService.createBuilding(entityConfig, parentField, x, y, client.getGameRoom(), clientIndex);
+    createBuildingService.createBuilding(entityConfig, parentField, x, y, client.getGameRoom(), clientIndex);
   }
 }
