@@ -1,21 +1,29 @@
 package com.mygdx.game.client.hud;
 
 import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.World;
+import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client.ui.NoUnitWithMoveRangeFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.ecs.component.Movable;
+import com.mygdx.game.client_core.ecs.component.Position;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.util.MaterialUtilClient;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.MaterialBase;
@@ -32,16 +40,26 @@ public class WorldHUD implements Disposable {
   private final EndTurnService endTurnService;
   private final GameScreenAssets gameAssets;
   private final MaterialUtilClient materialUtilClient;
+  private final PlayerInfo playerInfo;
   private final PredictedIncome predictedIncome;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
+  private final Viewport viewport;
+  private final NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory;
 
   private Button endTurnButton;
+  private Button nextUnitButton;
   private HorizontalGroup materialGroup;
   private VerticalGroup activeUnitDescription;
 
+  @AspectDescriptor(one = {Movable.class, Owner.class, Stats.class})
+  private EntitySubscription playerUnitsSubscriptions;
+
+  private ComponentMapper<CanAttack> canAttackMapper;
+  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Movable> movableMapper;
 
@@ -51,10 +69,13 @@ public class WorldHUD implements Disposable {
       EndTurnService endTurnService,
       GameScreenAssets gameScreenAssets,
       MaterialUtilClient materialUtilClient,
+      PlayerInfo playerInfo,
       PredictedIncome predictedIncome,
       @Named(StageModule.GAME_SCREEN) Stage stage,
       UiElementsCreator uiElementsCreator,
-      World world
+      World world,
+      Viewport viewport,
+      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory
   ) {
     world.inject(this);
 
@@ -62,9 +83,12 @@ public class WorldHUD implements Disposable {
     this.endTurnService = endTurnService;
     this.gameAssets = gameScreenAssets;
     this.materialUtilClient = materialUtilClient;
+    this.playerInfo = playerInfo;
     this.predictedIncome = predictedIncome;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
+    this.viewport = viewport;
+    this.noUnitWithMoveRangeFactory = noUnitWithMoveRangeFactory;
     prepareHudSceleton();
   }
 
@@ -83,8 +107,11 @@ public class WorldHUD implements Disposable {
   public void prepareHudSceleton() {
     stage.clear();
 
-    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::addEndTurnAction, (int) (stage.getWidth()-150), 0);
-    uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 150, 40);
+    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::addEndTurnAction, (int) (stage.getWidth()-100), 0);
+    uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 100, 30);
+
+    this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::addNextUnitAction,  (int) (stage.getWidth()-200), 0);
+    uiElementsCreator.setActorWidthAndHeight(this.nextUnitButton, 100, 30);
 
     this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
     var popupMaterial = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-100), 300, 50);
@@ -100,6 +127,7 @@ public class WorldHUD implements Disposable {
 
     stage.addActor(materialGroup);
     stage.addActor(endTurnButton);
+    stage.addActor(nextUnitButton);
   }
 
   private void fillMaterialGroup(HorizontalGroup group, Map<MaterialBase, Integer> playerMaterial) {
@@ -138,6 +166,39 @@ public class WorldHUD implements Disposable {
 
   private void addEndTurnAction() {
     endTurnService.endTurn();
+  }
+
+  private void addNextUnitAction() {
+    // Check if unit can move
+    for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
+      int entityId = playerUnitsSubscriptions.getEntities().get(i);
+      var owner = ownerMapper.get(entityId);
+      var stats = statsMapper.get(entityId);
+      if (playerInfo.getToken().equals(owner.getToken()) && stats != null && stats.getMoveRange() > 0) {
+        positionCamera(entityId);
+        return;
+      }
+    }
+    // Check if unit can attack
+    for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
+      int entityId = playerUnitsSubscriptions.getEntities().get(i);
+      var owner = ownerMapper.get(entityId);
+      var canAttack = canAttackMapper.get(entityId);
+      if (playerInfo.getToken().equals(owner.getToken()) && canAttack != null && canAttack.isCanAttack()) {
+        positionCamera(entityId);
+        return;
+      }
+    }
+    noUnitWithMoveRangeFactory.createAndShow("There is no available unit with move range");
+  }
+
+  private void positionCamera(int entityId) {
+    var positionValue = positionMapper.get(entityId).getValue();
+    var cameraHeight = viewport.getCamera().position.y;
+    viewport.getCamera().position.set(positionValue.x, cameraHeight, positionValue.z);
+    viewport.getCamera().lookAt(positionValue.x, 0, positionValue.z);
+    chosenEntity.addChosen(entityId);
+    prepareHudSceleton();
   }
 
 }
