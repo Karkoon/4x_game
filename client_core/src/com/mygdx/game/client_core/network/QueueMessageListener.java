@@ -8,10 +8,7 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import lombok.extern.java.Log;
 
-import javax.inject.Singleton;
-
 @Log
-@Singleton
 public class QueueMessageListener extends AbstractWebSocketListener {
 
   private final ObjectMap<Class<?>, Queue<Handler>> handlers = new ObjectMap<>();
