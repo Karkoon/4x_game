@@ -18,12 +18,16 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.PlayerInfo;
+import com.mygdx.game.client_core.network.QueueMessageListener;
+import com.mygdx.game.client_core.network.service.GameInterruptedService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
+import com.mygdx.game.core.network.messages.GameInterruptedMessage;
 import com.mygdx.game.core.util.CompositeUpdatable;
 import com.mygdx.game.core.util.PositionUtil;
 import dagger.Lazy;
@@ -52,6 +56,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final GdxGame game;
   private final Lazy<FieldScreen> fieldScreen;
   private final Lazy<TechnologyScreen> technologyScreen;
+  private final QueueMessageListener queueMessageListener;
+  private final GameInterruptedService gameInterruptedService;
 
   private boolean initialized = false;
 
@@ -74,7 +80,9 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       ActiveToken activeToken,
       GdxGame game,
       Lazy<FieldScreen> fieldScreen,
-      Lazy<TechnologyScreen> technologyScreen
+      Lazy<TechnologyScreen> technologyScreen,
+      @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
+      GameInterruptedService gameInterruptedService
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -89,6 +97,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.game = game;
     this.fieldScreen = fieldScreen;
     this.technologyScreen = technologyScreen;
+    this.queueMessageListener = queueMessageListener;
+    this.gameInterruptedService = gameInterruptedService;
     this.world.inject(this);
   }
 
@@ -99,6 +109,10 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       playerTurnDialogFactory.initializeHandler();
       setUpUnitWithOwnerListener();
       initialized = true;
+      queueMessageListener.registerHandler(GameInterruptedMessage.class, ((webSocket, message) -> {
+        exit();
+        return true;
+      }));
     }
     setUpInput();
   }
@@ -198,7 +212,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   @Override
   public void exit() {
     dispose();
-    game.exit();
+    game.changeToGameRoomScreen();
+    gameInterruptedService.sendInterruptNotification();
   }
 
   public void setActivePlayerToken(String playerToken) {
