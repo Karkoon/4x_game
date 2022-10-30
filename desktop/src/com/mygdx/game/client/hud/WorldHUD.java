@@ -168,7 +168,7 @@ public class WorldHUD implements Disposable {
     endTurnService.endTurn();
   }
 
-  private void addNextUnitAction() {
+  public void addNextUnitAction() {
     // Check if unit can move
     for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
       int entityId = playerUnitsSubscriptions.getEntities().get(i);
