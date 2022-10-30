@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.model.ChosenEntity;
+import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client.ui.NoUnitWithMoveRangeFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.ecs.component.Movable;
@@ -27,6 +28,7 @@ import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.MaterialBase;
+import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -46,9 +48,11 @@ public class WorldHUD implements Disposable {
   private final UiElementsCreator uiElementsCreator;
   private final Viewport viewport;
   private final NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory;
+  private final Lazy<Navigator> navigator;
 
   private Button endTurnButton;
   private Button nextUnitButton;
+  private Button techScreenButton;
   private HorizontalGroup materialGroup;
   private VerticalGroup activeUnitDescription;
 
@@ -75,7 +79,8 @@ public class WorldHUD implements Disposable {
       UiElementsCreator uiElementsCreator,
       World world,
       Viewport viewport,
-      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory
+      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory,
+      Lazy<Navigator> navigator
   ) {
     world.inject(this);
 
@@ -89,6 +94,7 @@ public class WorldHUD implements Disposable {
     this.uiElementsCreator = uiElementsCreator;
     this.viewport = viewport;
     this.noUnitWithMoveRangeFactory = noUnitWithMoveRangeFactory;
+    this.navigator = navigator;
     prepareHudSceleton();
   }
 
@@ -113,6 +119,9 @@ public class WorldHUD implements Disposable {
     this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::addNextUnitAction,  (int) (stage.getWidth()-200), 0);
     uiElementsCreator.setActorWidthAndHeight(this.nextUnitButton, 100, 30);
 
+    this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::addTechScreenButton,  (int) (stage.getWidth()-300), 0);
+    uiElementsCreator.setActorWidthAndHeight(this.techScreenButton, 100, 30);
+
     this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
     var popupMaterial = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-100), 300, 50);
     fillMaterialGroup(materialGroup, materialUtilClient.getPlayerMaterial());
@@ -128,6 +137,7 @@ public class WorldHUD implements Disposable {
     stage.addActor(materialGroup);
     stage.addActor(endTurnButton);
     stage.addActor(nextUnitButton);
+    stage.addActor(techScreenButton);
   }
 
   private void fillMaterialGroup(HorizontalGroup group, Map<MaterialBase, Integer> playerMaterial) {
@@ -190,6 +200,10 @@ public class WorldHUD implements Disposable {
       }
     }
     noUnitWithMoveRangeFactory.createAndShow("There is no available unit with move range");
+  }
+
+  private void addTechScreenButton() {
+    navigator.get().changeToTechnologyScreen();
   }
 
   private void positionCamera(int entityId) {
