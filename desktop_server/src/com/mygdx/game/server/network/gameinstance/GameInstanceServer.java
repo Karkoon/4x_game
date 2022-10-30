@@ -6,6 +6,7 @@ import com.mygdx.game.server.model.GameInstance;
 import com.mygdx.game.server.network.gameinstance.handlers.AttackHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.BuildHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.EndTurnHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.InterruptHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.MoveHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.ResearchHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.SubfieldSubscriptionHandler;
@@ -25,6 +26,7 @@ public class GameInstanceServer {
   private final ResearchHandler researchHandler;
   private final SubfieldSubscriptionHandler subfieldSubscriptionHandler;
   private final UnitHandler unitHandler;
+  private final InterruptHandler interruptHandler;
   private final GameInstance gameInstance;
 
   @Inject
@@ -36,6 +38,7 @@ public class GameInstanceServer {
       ResearchHandler researchHandler,
       SubfieldSubscriptionHandler subfieldSubscriptionHandler,
       UnitHandler unitHandler,
+      InterruptHandler interruptHandler,
       GameInstance gameInstance
   ) {
     this.attackHandler = attackHandler;
@@ -45,14 +48,36 @@ public class GameInstanceServer {
     this.researchHandler = researchHandler;
     this.subfieldSubscriptionHandler = subfieldSubscriptionHandler;
     this.unitHandler = unitHandler;
+    this.interruptHandler = interruptHandler;
     this.gameInstance = gameInstance;
   }
 
   public void handle(String[] commands, Client client) {
-    if (!gameInstance.getActivePlayer().getPlayerToken().equals(client.getPlayerToken())) {
+    var handled = handleUnauthorized(commands, client);
+    if (!handled && isAuthorized(client)) {
+      if (!handleAuthorized(commands, client)) {
+        throw new RuntimeException("wtf");
+      }
+    } else {
       log.info("player " + client.getPlayerUsername() + " tried to send an unauthorized message");
-      return;
     }
+  }
+
+  private boolean isAuthorized(Client client) {
+    return gameInstance.getActivePlayer().getPlayerToken().equals(client.getPlayerToken());
+  }
+
+  private boolean handleUnauthorized(String[] commands, Client client) {
+    switch (commands[0]) {
+      case "interrupt" -> interruptHandler.handle(client);
+      default -> {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean handleAuthorized(String[] commands, Client client) {
     switch (commands[0]) {
       case "attack" -> attackHandler.handle(commands, client);
       case "build" -> buildHandler.handle(commands, client);
@@ -61,7 +86,10 @@ public class GameInstanceServer {
       case "field" -> subfieldSubscriptionHandler.handle(commands, client);
       case "research" -> researchHandler.handle(commands, client);
       case "move" -> moveHandler.handle(commands, client);
-      default -> throw new RuntimeException("wtf");
+      default -> {
+        return false;
+      }
     }
+    return true;
   }
 }

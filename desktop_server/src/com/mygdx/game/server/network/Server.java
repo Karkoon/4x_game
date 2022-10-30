@@ -45,7 +45,14 @@ public final class Server {
     switch (type) {
       case "start" -> startHandler.handle(commands, client);
       case "connect" -> connectHandler.handle(commands, client);
-      default -> client.getGameRoom().getGameInstance().getServer().handle(commands, client);
+      default -> {
+        var game = client.getGameRoom().getGameInstance();
+        if (game != null) {
+          game.getServer().handle(commands, client);
+        } else {
+          log.info("client tried to send a message before the game started");
+        }
+      }
     }
   }
 
