@@ -14,6 +14,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.network.gameinstance.services.WorldService;
 
 import javax.inject.Inject;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +80,11 @@ public class MaterialUtilServer extends WorldService {
       var playerToken = ownerMapper.get(entityId).getToken();
       var playerMaterial = playerMaterialMapper.get(entityId);
 
-      var incomeValue = incomes.get(playerToken).get(playerMaterial.getMaterial());
+      var playerIncome = incomes.get(playerToken);
+      if (playerIncome == null) {
+        continue;
+      }
+      var incomeValue = playerIncome.get(playerMaterial.getMaterial());
       playerMaterial.setValue(playerMaterial.getValue() + incomeValue);
       setDirty(entityId, PlayerMaterial.class, world);
     }
@@ -100,12 +105,12 @@ public class MaterialUtilServer extends WorldService {
     var incomes = new HashMap<String, Map<MaterialBase, Integer>>();
 
     for (int i = 0; i < ownerFieldsSubscriber.getEntities().size(); i++) {
-      int entityId = ownerFieldsSubscriber.getEntities().get(i);
+      var entityId = ownerFieldsSubscriber.getEntities().get(i);
 
       var ownerToken = ownerMapper.get(entityId).getToken();
       if (!incomes.containsKey(ownerToken)) {
-        incomes.put(ownerToken, new HashMap<>());
-        for (MaterialBase material : MaterialBase.values()) {
+        incomes.put(ownerToken, new EnumMap<>(MaterialBase.class));
+        for (var material : MaterialBase.values()) {
           incomes.get(ownerToken).put(material, 0);
 
         }
@@ -113,7 +118,7 @@ public class MaterialUtilServer extends WorldService {
 
       var field = fieldMapper.get(entityId);
       var subFields = field.getSubFields();
-      for (int subFieldEntityId : subFields.toArray()) {
+      for (var subFieldEntityId : subFields.toArray()) {
         var materialIncome = materialIncomeMapper.get(subFieldEntityId);
         for (MaterialUnit materialUnit : materialIncome.getMaterialIncomes()) {
           var previousValue = incomes.get(ownerToken).get(materialUnit.getBase());

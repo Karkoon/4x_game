@@ -1,10 +1,8 @@
 package com.mygdx.game.server.ecs.system;
 
 import com.artemis.BaseSystem;
-import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.network.messages.MaterialIncomeMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
-import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.MessageSender;
 import com.mygdx.game.server.util.MaterialUtilServer;
@@ -13,7 +11,6 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.Map;
 
 @Log
 @GameInstanceScope
@@ -38,10 +35,14 @@ public class IncomeSenderSystem extends BaseSystem {
   protected void processSystem() {
     var clients = gameRoom.getClients();
     var incomes = materialUtilServer.get().calculateIncomes();
-    for (Client client : clients) {
+    for (var client : clients) {
       var playerIncomes = incomes.get(client.getPlayerToken());
+      // fix crash when the income for the given key could be null
+      if (playerIncomes == null) {
+        return;
+      }
       var incomesNetwork = new HashMap<String, Integer>();
-      for (Map.Entry<MaterialBase, Integer> materialBaseIntegerEntry : playerIncomes.entrySet()) {
+      for (var materialBaseIntegerEntry : playerIncomes.entrySet()) {
         incomesNetwork.put(materialBaseIntegerEntry.getKey().name(), materialBaseIntegerEntry.getValue());
       }
       var msg = new MaterialIncomeMessage(incomesNetwork);

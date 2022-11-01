@@ -7,6 +7,7 @@ import com.mygdx.game.server.ecs.system.AddOwnerToChangeSubscribersSystem;
 import com.mygdx.game.server.ecs.system.AddOwnerToSightlineSubscribersSystem;
 import com.mygdx.game.server.ecs.system.ComponentSyncSystem;
 import com.mygdx.game.server.ecs.system.IncomeSenderSystem;
+import com.mygdx.game.server.ecs.system.LoseCheckSystem;
 import com.mygdx.game.server.ecs.system.MarkDeadEntitiesSystem;
 import com.mygdx.game.server.ecs.system.RemoveDeadSystem;
 import com.mygdx.game.server.ecs.system.VisibilitySystem;
@@ -31,6 +32,7 @@ public class WorldModule {
       MarkDeadEntitiesSystem markDeadSystem,
       RemoveDeadSystem removeDeadSystem,
       IncomeSenderSystem incomeSenderSystem,
+      LoseCheckSystem loseCheckSystem,
       AddFieldOwnerIfUnitPresentSystem addFieldOwnerIfUnitPresentSystem
   ) {
     log.log(Level.INFO, "provided Server World Configuration");
@@ -43,6 +45,7 @@ public class WorldModule {
     conf.setSystem(componentSyncSystem);
     conf.setSystem(removeDeadSystem);
     conf.setSystem(incomeSenderSystem);
+    conf.setSystem(loseCheckSystem);
     return conf;
   }
 
