@@ -24,7 +24,7 @@ public class AttackEntityService {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
-  public void attack(int attackerEntity, int attackedEntity) {
+  public void attack(int attackerEntity, int attackedEntity) { // todo think if the conditons should be checked here or not
     var networkAttacker = networkWorldEntityMapper.getNetworkEntity(attackerEntity);
     var networkAttacked = networkWorldEntityMapper.getNetworkEntity(attackedEntity);
     sender.get().send("attack:" + networkAttacker + ":" + networkAttacked);

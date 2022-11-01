@@ -6,16 +6,14 @@ import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.artemis.utils.IntBag;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
-import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.core.ecs.component.Field;
-import com.mygdx.game.core.ecs.component.MaterialIncome;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 @GameInstanceScope
@@ -27,25 +25,17 @@ public class MaterialUtilClient {
   @AspectDescriptor(one = {PlayerMaterial.class})
   private EntitySubscription playerMaterialSubscriber;
 
-  private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
-
-  private final PlayerInfo playerInfo;
-
 
   @Inject
   MaterialUtilClient(
-      PlayerInfo playerInfo,
       World world
   ) {
     world.inject(this);
-    this.playerInfo = playerInfo;
   }
 
   public Map<MaterialBase, Integer> getPlayerMaterial() {
-    var materialMap = new HashMap<MaterialBase, Integer>();
+    var materialMap = new EnumMap<MaterialBase, Integer>(MaterialBase.class);
     for (int i = 0; i < playerMaterialSubscriber.getEntities().size(); i++) {
       int materialEntityId = playerMaterialSubscriber.getEntities().get(i);
       var materialComponent = playerMaterialMapper.get(materialEntityId);

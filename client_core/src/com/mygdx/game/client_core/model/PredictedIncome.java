@@ -5,7 +5,7 @@ import com.mygdx.game.core.model.MaterialBase;
 import lombok.Data;
 
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 @GameInstanceScope
@@ -15,10 +15,9 @@ public class PredictedIncome {
   private Map<MaterialBase, Integer> incomes;
 
   @Inject
-  public PredictedIncome(
-  ) {
-    this.incomes = new HashMap<>();
-    for (MaterialBase value : MaterialBase.values()) {
+  public PredictedIncome() {
+    this.incomes = new EnumMap<>(MaterialBase.class);
+    for (var value : MaterialBase.values()) {
       incomes.put(value, 0);
     }
   }

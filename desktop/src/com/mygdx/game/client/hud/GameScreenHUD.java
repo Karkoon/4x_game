@@ -113,13 +113,13 @@ public class GameScreenHUD implements Disposable {
   public void prepareHudSceleton() {
     stage.clear();
 
-    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::addEndTurnAction, (int) (stage.getWidth()-100), 0);
+    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::endTurn, (int) (stage.getWidth()-100), 0);
     uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 100, 30);
 
-    this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::addNextUnitAction,  (int) (stage.getWidth()-200), 0);
+    this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::selectNextUnit,  (int) (stage.getWidth()-200), 0);
     uiElementsCreator.setActorWidthAndHeight(this.nextUnitButton, 100, 30);
 
-    this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::addTechScreenButton,  (int) (stage.getWidth()-300), 0);
+    this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::changeToTechnologyScreen,  (int) (stage.getWidth()-300), 0);
     uiElementsCreator.setActorWidthAndHeight(this.techScreenButton, 100, 30);
 
     this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
@@ -174,11 +174,11 @@ public class GameScreenHUD implements Disposable {
     activeUnitGroup.addActor(sightLabel);
   }
 
-  private void addEndTurnAction() {
+  private void endTurn() {
     endTurnService.endTurn();
   }
 
-  public void addNextUnitAction() {
+  public void selectNextUnit() {
     // Check if unit can move
     for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
       int entityId = playerUnitsSubscriptions.getEntities().get(i);
@@ -202,7 +202,7 @@ public class GameScreenHUD implements Disposable {
     noUnitWithMoveRangeFactory.createAndShow("There is no available unit with move range");
   }
 
-  private void addTechScreenButton() {
+  private void changeToTechnologyScreen() {
     navigator.get().changeToTechnologyScreen();
   }
 

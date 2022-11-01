@@ -9,10 +9,8 @@ import dagger.Subcomponent;
 @Subcomponent(
     modules = {
         WorldModule.class,
-        NavigatorModule.class,
         WorldConfigurationModule.class,
         ComponentMessageListenerModule.class,
-        SetterBindingsModule.class,
         MessageHandlerBindingsModule.class,
         GameInstanceNetworkModule.class,
         GameInstanceWebSocketListenerBindingsModule.class

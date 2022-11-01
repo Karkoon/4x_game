@@ -8,7 +8,7 @@
   "maxHp": 100,
   "attackPower": 125,
   "defense": 25,
-  "sightRadius": 2,
+  "sightRadius": 5,
   "moveRange": 2,
   "attackRange": 1,
   "turnAmount": 2,

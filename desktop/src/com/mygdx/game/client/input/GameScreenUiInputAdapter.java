@@ -35,7 +35,7 @@ public class GameScreenUiInputAdapter extends InputAdapter {
     switch (keycode) {
       case Input.Keys.T -> openTechnologyScreen();
       case Input.Keys.R -> endTurnService.endTurn();
-      case Input.Keys.N -> gameScreenHUD.addNextUnitAction();
+      case Input.Keys.N -> gameScreenHUD.selectNextUnitAction();
       case Input.Keys.ESCAPE -> exitGame();
     }
     return false;

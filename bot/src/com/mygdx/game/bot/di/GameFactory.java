@@ -10,9 +10,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = {
-    ViewportModule.class,
     AssetManagerModule.class,
-    StageModule.class,
     NetworkModule.class,
     GameScreenModule.class,
     WebSocketListenerBindingsModule.class,
