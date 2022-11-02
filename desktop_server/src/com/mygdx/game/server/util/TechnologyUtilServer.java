@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.artemis.utils.IntBag;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.AppliedTechnologies;
@@ -15,6 +16,8 @@ import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
+import com.mygdx.game.core.model.TechnologyImpactType;
+import com.mygdx.game.core.model.TechnologyImpactValue;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.network.gameinstance.services.WorldService;
 import lombok.extern.java.Log;
@@ -43,6 +46,9 @@ public class TechnologyUtilServer extends WorldService {
 
   @AspectDescriptor(all = {Unit.class, Owner.class})
   private EntitySubscription unitOwnerSubscriber;
+
+  @AspectDescriptor(all = {Researched.class, Owner.class})
+  private EntitySubscription researchedOwnerSubscriber;
 
   @Inject
   TechnologyUtilServer(
@@ -80,6 +86,7 @@ public class TechnologyUtilServer extends WorldService {
           applyTechnologyToExistingEntities(technologyEntityId, owner);
         }
       }
+      world.process();
     }
   }
 
@@ -94,11 +101,64 @@ public class TechnologyUtilServer extends WorldService {
             applyTechnologyToUnit(technologyConfig, entityId);
         }
       }
+      case MATERIAL_IMPACT -> {
+        // TODO
+      }
+      case BUILDING_IMPACT -> {
+        // TODO
+      }
     }
   }
 
+  public void applyTechnologyToNewEntities(int unitEntityId, TechnologyImpactType technologyType) {
+    var owner = ownerMapper.get(unitEntityId);
+    var entities = researchedOwnerSubscriber.getEntities();
+    switch (technologyType) {
+      case UNIT_IMPACT -> {
+        for (int i = 0; i < entities.size(); i++) {
+          int entityId = entities.get(i);
+          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType) && ownerMapper.get(entityId).getToken().equals(owner.getToken())) {
+            log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to unit " + unitEntityId);
+            applyTechnologyToUnit(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), unitEntityId);
+          }
+        }
+      }
+      case BUILDING_IMPACT -> {
+        // TODO
+      }
+      case MATERIAL_IMPACT -> {
+        // TODO
+      }
+    }
+
+  }
+
   private void applyTechnologyToUnit(TechnologyConfig technologyConfig, int entityId) {
-    var stats = statsMapper.get(entityId);
-    var technologyImpactValues = technologyConfig.getImpact().getTechnologyImpactValues();
+    var appliedTechnologies = appliedTechnologiesMapper.get(entityId);
+    if (!appliedTechnologies.getTechnologies().contains(technologyConfig.getId())) {
+      var stats = statsMapper.get(entityId);
+      var technologyImpactValues = technologyConfig.getImpact().getTechnologyImpactValues();
+      for (TechnologyImpactValue technologyImpactValue : technologyImpactValues) {
+        var operation = technologyImpactValue.getOperation();
+        var parameter = technologyImpactValue.getParameter();
+        var value = technologyImpactValue.getValue();
+        switch (parameter) {
+          case HP ->
+            stats.setMaxHp(operation.function.apply((float) stats.getMaxHp(), (float) value).intValue());
+          case ATTACK_POWER ->
+            stats.setAttackPower(operation.function.apply((float) stats.getAttackPower(), (float) value).intValue());
+          case DEFENSE ->
+            stats.setDefense(operation.function.apply((float) stats.getDefense(), (float) value).intValue());
+          case SIGHT_RADIUS ->
+            stats.setSightRadius(operation.function.apply((float) stats.getSightRadius(), (float) value).intValue());
+          case MOVE_RANGE ->
+            stats.setMaxMoveRange(operation.function.apply((float) stats.getMaxMoveRange(), (float) value).intValue());
+          case ATTACK_RANGE ->
+            stats.setAttackRange(operation.function.apply((float) stats.getAttackRange(), (float) value).intValue());
+        }
+        setDirty(entityId, Stats.class, world);
+      }
+      appliedTechnologies.add(technologyConfig.getId());
+    }
   }
 }

@@ -11,14 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 public class AppliedTechnologies extends PooledComponent {
 
-  private List<Integer> technologies = new ArrayList<>();
+  private List<Long> technologies = new ArrayList<>();
 
   @Override
   protected void reset() {
     technologies = new ArrayList<>();
   }
 
-  public void add(int technologyConfigId) {
+  public void add(long technologyConfigId) {
     this.technologies.add(technologyConfigId);
   }
 }

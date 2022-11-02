@@ -1,7 +1,6 @@
 package com.mygdx.game.server.ecs.entityfactory;
 
 import com.mygdx.game.config.UnitConfig;
-import com.mygdx.game.core.ecs.component.AppliedTechnologies;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -27,7 +26,7 @@ public class UnitFactory {
     this.componentFactory = componentFactory;
   }
 
-  public void createEntity(
+  public int createEntity(
       @NonNull UnitConfig config,
       @NonNull Coordinates coordinates,
       @NonNull Client client
@@ -44,12 +43,13 @@ public class UnitFactory {
     componentFactory.createStatsComponent(entityId, config);
     componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createCanAttackComponent(entityId);
-    var componentsToSend = new Class[]{Coordinates.class, Stats.class, EntityConfigId.class, Owner.class, CanAttack.class, AppliedTechnologies.class};
+    var componentsToSend = new Class[]{Coordinates.class, Stats.class, EntityConfigId.class, Owner.class, CanAttack.class};
     componentFactory.createDirtyComponent(entityId, componentsToSend);
     componentFactory.createSharedComponents(entityId,
         componentsToSend,
         new Class[]{Coordinates.class, EntityConfigId.class, Owner.class}
     );
+    return entityId;
   }
 
 }
