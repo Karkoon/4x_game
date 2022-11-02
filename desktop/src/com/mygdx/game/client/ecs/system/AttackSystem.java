@@ -24,6 +24,7 @@ public class AttackSystem extends IteratingSystem {
   private final ChosenEntity chosenEntity;
   private final AttackEntityService attackEntityService;
   private final CanNotAttackDialogFactory attackDialog;
+  private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Stats> statsComponentMapper;
   private ComponentMapper<Owner> ownerComponentMapper;
@@ -61,6 +62,7 @@ public class AttackSystem extends IteratingSystem {
       else {
         attackDialog.createAndShow("You can't attack yourself!!! You fool!");
       }
+      highlightedMapper.remove(attacker);
     }
   }
 

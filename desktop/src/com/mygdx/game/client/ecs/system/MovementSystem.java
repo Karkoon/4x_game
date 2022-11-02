@@ -59,8 +59,8 @@ public class MovementSystem extends IteratingSystem {
       }
       else {
         moveEntityService.moveEntity(entityId, targetCoordinate);
-        highlightedMapper.remove(entityId);
       }
+      highlightedMapper.remove(entityId);
     }
   }
 
