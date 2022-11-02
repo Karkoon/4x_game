@@ -9,7 +9,6 @@ import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.InRecruitment;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
@@ -43,9 +42,7 @@ public class RoundEndService extends WorldService {
 
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
-  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 

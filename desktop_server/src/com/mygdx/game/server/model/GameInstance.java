@@ -9,10 +9,12 @@ import com.mygdx.game.server.initialize.TechnologyInitializer;
 import com.mygdx.game.server.network.gameinstance.GameInstanceServer;
 import com.mygdx.game.server.network.gameinstance.services.RoundEndService;
 import dagger.Lazy;
+import lombok.Setter;
 
 import javax.inject.Inject;
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.Set;
 
 @GameInstanceScope
 public class GameInstance {
@@ -27,6 +29,8 @@ public class GameInstance {
   private final Lazy<GameInstanceServer> gameInstanceServer;
   private final RoundEndService roundEndService;
   private Queue<Client> playerOrder;
+  @Setter
+  private Set<String> loserTokens;
   private Client activePlayer;
 
   @Inject
@@ -64,7 +68,10 @@ public class GameInstance {
   public Client changeToNextPlayer() {
     if (playerOrder.isEmpty()) {
       roundEndService.makeEndRoundSteps();
-      playerOrder.addAll(room.getClients());
+      var currentPlayers = room.getClients().stream()
+          .filter(client -> !loserTokens.contains(client.getPlayerToken()))
+          .toList();
+      playerOrder.addAll(currentPlayers);
     }
     activePlayer = playerOrder.remove();
     return activePlayer;

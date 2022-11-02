@@ -18,6 +18,7 @@ import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
+import com.mygdx.game.client.ui.WinAnnouncementDialogFactory;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
@@ -51,6 +52,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final ClickInputAdapter clickInputAdapter;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
   private final PlayerTurnDialogFactory playerTurnDialogFactory;
+  private final WinAnnouncementDialogFactory winAnnouncementDialogFactory;
   private final PlayerInfo playerInfo;
   private final ActiveToken activeToken;
   private final GdxGame game;
@@ -76,6 +78,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       ClickInputAdapter clickInputAdapter,
       GameScreenUiInputAdapter gameScreenUiInputAdapter,
       PlayerTurnDialogFactory playerTurnDialogFactory,
+      WinAnnouncementDialogFactory winAnnouncementDialogFactory,
       PlayerInfo playerInfo,
       ActiveToken activeToken,
       GdxGame game,
@@ -92,6 +95,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
     this.playerTurnDialogFactory = playerTurnDialogFactory;
+    this.winAnnouncementDialogFactory = winAnnouncementDialogFactory;
     this.playerInfo = playerInfo;
     this.activeToken = activeToken;
     this.game = game;
@@ -107,12 +111,13 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     log.info("GameScreen shown");
     if (!initialized) {
       playerTurnDialogFactory.initializeHandler();
+      winAnnouncementDialogFactory.initializeHandler();
       setUpUnitWithOwnerListener();
-      initialized = true;
       queueMessageListener.registerHandler(GameInterruptedMessage.class, ((webSocket, message) -> {
         exit();
         return true;
       }));
+      initialized = true;
     }
     setUpInput();
   }
