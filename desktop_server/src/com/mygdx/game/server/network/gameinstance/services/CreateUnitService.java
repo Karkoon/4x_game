@@ -3,6 +3,7 @@ package com.mygdx.game.server.network.gameinstance.services;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -10,6 +11,9 @@ import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.InRecruitment;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
+import com.mygdx.game.core.model.BuildingImpactParameter;
+import com.mygdx.game.core.model.BuildingImpactValue;
+import com.mygdx.game.core.model.BuildingType;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
@@ -55,18 +59,25 @@ public class CreateUnitService extends WorldService {
   public void createUnit(int unitConfigId, int fieldEntityId, Client client, boolean skipChecking) {
     var subFields = fieldMapper.get(fieldEntityId).getSubFields();
     var unitConfig = assets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-    long requiredBuilding = unitConfig.getRequiredBuilding();
     var requiredMaterials = unitConfig.getMaterials();
     boolean canCreate = skipChecking;
     boolean enoughtMaterials = materialUtilServer.checkIfCanBuy(client.getPlayerToken(), requiredMaterials);
-    for (int i = 0; i < subFields.size; i++) {
+    for (int i = 0; i < subFields.size && !canCreate; i++) {
       var subField = subfieldsMapper.get(subFields.get(i));
       int buildingEntityId = subField.getBuilding();
       if (buildingEntityId != -0xC0FEE && !underConstructionMapper.has(buildingEntityId)) {
         var entityConfigId = entityConfigIdMapper.get(buildingEntityId);
         long buildingConfigId = entityConfigId.getId();
-        if (buildingConfigId == requiredBuilding)
-          canCreate = true;
+        var buildingConfig = assets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+        if (buildingConfig.getImpact().getBuildingType() == BuildingType.RECRUITMENT_BUILDING) {
+          for (BuildingImpactValue buildingImpactValue : buildingConfig.getImpact().getBuildingImpactValues()) {
+            if (buildingImpactValue.getParameter() == BuildingImpactParameter.RECRUIT &&
+                buildingImpactValue.getValue() == unitConfigId) {
+              canCreate = true;
+              break;
+            }
+          }
+        }
       }
     }
 

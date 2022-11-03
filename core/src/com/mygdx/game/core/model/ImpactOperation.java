@@ -2,7 +2,7 @@ package com.mygdx.game.core.model;
 
 import java.util.function.BiFunction;
 
-public enum TechnologyImpactOperation {
+public enum ImpactOperation {
 
   PLUS(Float::sum),
   MINUS((x,y) -> x - y),
@@ -12,7 +12,7 @@ public enum TechnologyImpactOperation {
 
   public final BiFunction<Float, Float, Float> function;
 
-  TechnologyImpactOperation(BiFunction<Float, Float, Float> function) {
+  ImpactOperation(BiFunction<Float, Float, Float> function) {
     this.function = function;
   }
 
