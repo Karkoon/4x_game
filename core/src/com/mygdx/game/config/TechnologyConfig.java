@@ -1,5 +1,6 @@
 package com.mygdx.game.config;
 
+import com.mygdx.game.core.model.TechnologyImpact;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,6 @@ public class TechnologyConfig implements Config, TextureConfig {
   private int x;
   private int y;
   private int requiredScience;
+  @NonNull
+  private TechnologyImpact impact;
 }

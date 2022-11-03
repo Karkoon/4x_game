@@ -5,5 +5,14 @@
   "textureName": "technologies/attack.png",
   "x": 0,
   "y": 0,
-  "requiredScience": 10
+  "requiredScience": 10,
+  "impact":
+      {
+        "class": com.mygdx.game.core.model.TechnologyImpact,
+        "technologyImpactType":"UNIT_IMPACT",
+        "technologyImpactValues":
+        [
+          {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "HP", "operation": "PLUS", "value": 100}
+        ]
+      }
 }

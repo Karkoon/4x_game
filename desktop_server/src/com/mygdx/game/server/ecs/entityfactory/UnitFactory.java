@@ -26,12 +26,13 @@ public class UnitFactory {
     this.componentFactory = componentFactory;
   }
 
-  public void createEntity(
+  public int createEntity(
       @NonNull UnitConfig config,
       @NonNull Coordinates coordinates,
       @NonNull Client client
   ) {
     int entityId = componentFactory.createEntityId();
+    componentFactory.createAppliedTechnologies(entityId);
     componentFactory.createUnitComponent(entityId);
     componentFactory.createCoordinateComponent(coordinates, entityId);
     componentFactory.setUpEntityConfig(config, entityId);
@@ -48,6 +49,7 @@ public class UnitFactory {
         componentsToSend,
         new Class[]{Coordinates.class, EntityConfigId.class, Owner.class}
     );
+    return entityId;
   }
 
 }

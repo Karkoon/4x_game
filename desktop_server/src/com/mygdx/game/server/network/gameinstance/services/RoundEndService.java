@@ -14,6 +14,7 @@ import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
+import com.mygdx.game.core.model.TechnologyImpactType;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
@@ -148,8 +149,10 @@ public class RoundEndService extends WorldService {
         var client = room.getClientByToken(inRecruitment.getClientToken());
         stateSyncer.sendComponentTo(inRecruitment, entityId, client);
         var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-        this.unitFactory.createEntity(unitConfig, coordinates, client);
+        int unitEntityId = this.unitFactory.createEntity(unitConfig, coordinates, client);
+        world.process();
         this.inRecruitmentMapper.remove(entityId);
+        technologyUtilServer.applyTechnologyToNewEntities(unitEntityId, TechnologyImpactType.UNIT_IMPACT);
       }
     }
   }

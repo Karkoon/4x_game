@@ -9,6 +9,7 @@ import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.SubFieldConfig;
 import com.mygdx.game.config.UnitConfig;
+import com.mygdx.game.core.ecs.component.AppliedTechnologies;
 import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -49,6 +50,7 @@ public class ComponentFactory {
   private final ComponentClassToIndexCache componentIndicesCache;
   private final Random random;
 
+  private ComponentMapper<AppliedTechnologies> appliedTechnologiesMapper;
   private ComponentMapper<Building> buildingMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
@@ -86,6 +88,7 @@ public class ComponentFactory {
 
   private void createAndDeleteEntityWithAllComponents() {
     var entity = createEntityId();
+    appliedTechnologiesMapper.create(entity);
     buildingMapper.create(entity);
     changeSubscribersMapper.create(entity);
     canAttackMapper.create(entity);
@@ -106,6 +109,10 @@ public class ComponentFactory {
 
   public int createEntityId() {
     return world.create();
+  }
+
+  public void createAppliedTechnologies(int entityId) {
+    appliedTechnologiesMapper.create(entityId);
   }
 
   public void createBuildingComponent(int entityId, int parent) {

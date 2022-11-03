@@ -5,5 +5,14 @@
   "textureName": "technologies/defense.png",
   "x": 1,
   "y": 1,
-  "requiredScience": 20
+  "requiredScience": 20,
+  "impact":
+    {
+      "class": com.mygdx.game.core.model.TechnologyImpact,
+      "technologyImpactType":"UNIT_IMPACT",
+      "technologyImpactValues":
+      [
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "HP", "operation": "PLUS", "value": 100}
+      ]
+    }
 }
