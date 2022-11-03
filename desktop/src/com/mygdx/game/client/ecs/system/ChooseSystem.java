@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.mygdx.game.client.ecs.component.Choosable;
-import com.mygdx.game.client.hud.WorldHUD;
+import com.mygdx.game.client.hud.GameScreenHUD;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.ClickInput;
 import com.mygdx.game.client.ui.ChooseEntityDialogFactory;
@@ -29,7 +29,7 @@ public class ChooseSystem extends IteratingSystem {
   private final Lazy<ChooseEntityDialogFactory> dialogFactory;
   private final ChosenEntity chosenEntities;
   private final ClickedEntities clickedEntities;
-  private final Lazy<WorldHUD> worldHUD;
+  private final Lazy<GameScreenHUD> worldHUD;
 
   private ComponentMapper<Position> positionMapper;
 
@@ -38,7 +38,7 @@ public class ChooseSystem extends IteratingSystem {
       ClickInput clickInput,
       Lazy<ChooseEntityDialogFactory> dialogFactory,
       ChosenEntity chosenEntity,
-      Lazy<WorldHUD> worldHUD
+      Lazy<GameScreenHUD> worldHUD
   ) {
     this.clickInput = clickInput;
     this.dialogFactory = dialogFactory;
