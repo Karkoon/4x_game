@@ -4,10 +4,17 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.config.BuildingConfig;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.MaterialIncome;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
+import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
+import com.mygdx.game.core.model.BuildingImpactValue;
+import com.mygdx.game.core.model.BuildingType;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -21,23 +28,30 @@ import java.util.Map;
 @GameInstanceScope
 public class MaterialUtilServer extends WorldService {
 
+  private final GameConfigAssets gameConfigAssets;
+
   @AspectDescriptor(all = {Owner.class, Field.class})
   private EntitySubscription ownerFieldsSubscriber;
 
   @AspectDescriptor(all = {Owner.class, PlayerMaterial.class})
   private EntitySubscription ownerPlayerMaterialSubscriber;
 
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<SubField> subfieldMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   private final World world;
 
   @Inject
   MaterialUtilServer(
+      GameConfigAssets gameConfigAssets,
       World world
   ) {
+    this.gameConfigAssets = gameConfigAssets;
     world.inject(this);
     this.world = world;
   }
@@ -120,13 +134,33 @@ public class MaterialUtilServer extends WorldService {
       var subFields = field.getSubFields();
       for (var subFieldEntityId : subFields.toArray()) {
         var materialIncome = materialIncomeMapper.get(subFieldEntityId);
+        var subfield = subfieldMapper.get(subFieldEntityId);
         for (MaterialUnit materialUnit : materialIncome.getMaterialIncomes()) {
           var previousValue = incomes.get(ownerToken).get(materialUnit.getBase());
-          incomes.get(ownerToken).put(materialUnit.getBase(), previousValue + materialUnit.getAmount());
+          int addAmount = materialUnit.getAmount();
+          if (subfield.hasBuilding() && !underConstructionMapper.has(subfield.getBuilding())) {
+            addAmount = calculateWithBuildingImpact(addAmount, subfield.getBuilding(), materialUnit.getBase());
+          }
+          incomes.get(ownerToken).put(materialUnit.getBase(), previousValue + addAmount);
         }
       }
     }
 
     return incomes;
+  }
+
+  private int calculateWithBuildingImpact(int addAmount, int buildingEntityId, MaterialBase materialBase) {
+    var entityConfigId = entityConfigIdMapper.get(buildingEntityId);
+    var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, entityConfigId.getId());
+    if (buildingConfig.getImpact().getBuildingType() == BuildingType.MATERIALS_BUILDING) {
+      for (BuildingImpactValue buildingImpactValue : buildingConfig.getImpact().getBuildingImpactValues()) {
+        if (buildingImpactValue.getParameter().name.equals(materialBase.name)) {
+          var operation = buildingImpactValue.getOperation();
+          int newAmount = operation.function.apply((float) addAmount, (float) buildingImpactValue.getValue()).intValue();
+          return newAmount;
+        }
+      }
+    }
+    return addAmount;
   }
 }

@@ -16,4 +16,8 @@ public class SubField extends PooledComponent {
     this.parent = -0xC0FEE;
     this.building = -0xC0FEE;
   }
+
+  public boolean hasBuilding() {
+    return building != -0xC0FEE;
+  }
 }

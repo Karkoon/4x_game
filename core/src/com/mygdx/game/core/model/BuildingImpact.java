@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class TechnologyImpactValue {
+public class BuildingImpact {
 
-  private TechnologyImpactParameter parameter;
-  private ImpactOperation operation;
-  private int value;
+  private BuildingType buildingType;
+  private List<BuildingImpactValue> buildingImpactValues;
 }

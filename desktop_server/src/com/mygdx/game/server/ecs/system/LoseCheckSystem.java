@@ -59,7 +59,7 @@ public class LoseCheckSystem extends IteratingSystem {
 
   @Override
   protected void end() {
-    if (currentPlayers.size() == 1) {
+    if (currentPlayers.size() == 1 && gameRoom.getClients().size() != 1) {
       currentPlayers.stream()
           .findFirst()
           .ifPresent(winner -> {

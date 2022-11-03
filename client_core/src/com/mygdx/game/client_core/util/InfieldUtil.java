@@ -7,12 +7,16 @@ import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
+import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
+import com.mygdx.game.core.model.BuildingImpactParameter;
+import com.mygdx.game.core.model.BuildingImpactValue;
+import com.mygdx.game.core.model.BuildingType;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import lombok.extern.java.Log;
@@ -55,7 +59,6 @@ public class InfieldUtil {
     var field = fieldMapper.get(fieldEntityId);
     var subFields = field.getSubFields();
     var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-    long requiredBuilding = unitConfig.getRequiredBuilding();
 
     for (int i = 0; i < subFields.size; i++) {
       int subfieldEntityId = subFields.get(i);
@@ -65,8 +68,15 @@ public class InfieldUtil {
       if (buildingEntityId != -0xC0FEE && !underConstructionMapper.has(buildingEntityId)) {
         var entityConfigId = entityConfigIdMapper.get(buildingEntityId);
         long buildingConfigId = entityConfigId.getId();
-        if (buildingConfigId == requiredBuilding)
-          return true;
+        var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+        if (buildingConfig.getImpact().getBuildingType() == BuildingType.RECRUITMENT_BUILDING) {
+          for (BuildingImpactValue buildingImpactValue : buildingConfig.getImpact().getBuildingImpactValues()) {
+            if (buildingImpactValue.getParameter() == BuildingImpactParameter.RECRUIT &&
+                    buildingImpactValue.getValue() == unitConfigId) {
+              return true;
+            }
+          }
+        }
       }
     }
     return false;

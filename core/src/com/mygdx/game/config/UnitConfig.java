@@ -33,7 +33,6 @@ public class UnitConfig implements Config, ModelConfig {
   private int sightRadius;
   private int moveRange;
   private int attackRange;
-  private long requiredBuilding;
   private int turnAmount;
   @NonNull
   private List<MaterialUnit> materials;

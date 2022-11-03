@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class TechnologyImpactValue {
+public class BuildingImpactValue {
 
-  private TechnologyImpactParameter parameter;
+  private BuildingImpactParameter parameter;
   private ImpactOperation operation;
   private int value;
+
 }
