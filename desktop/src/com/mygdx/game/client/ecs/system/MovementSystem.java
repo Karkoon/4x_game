@@ -11,6 +11,7 @@ import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
@@ -29,6 +30,7 @@ public class MovementSystem extends IteratingSystem {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
 
   @Inject
   public MovementSystem(
@@ -44,23 +46,29 @@ public class MovementSystem extends IteratingSystem {
   @Override
   protected void process(int entityId) {
     if (chosenEntity.isAnyChosen() && fieldMapper.has(chosenEntity.peek())) {
-      log.info("some are chosen and there's a movable highlighted entity");
-
-      var targetCoordinate = coordinatesMapper.get(chosenEntity.pop());
-      var currentCoordinate = coordinatesMapper.get(entityId);
-
-      var distance = DistanceUtil.distance(currentCoordinate, targetCoordinate);
-      var range = statsMapper.get(entityId).getMoveRange();
-
-      log.info("Chce przejsc " + distance + " ale zostało mi " + range);
-
-      if (distance > range){
-        moveRangeDialog.createAndShow(range, distance);
+      if (!(ownerComponentMapper.get(chosenEntity.peek()) == null) &&
+              !ownerComponentMapper.get(chosenEntity.peek()).getToken()
+              .equals(ownerComponentMapper.get(entityId).getToken())){
+        log.info("Cannot move on enemy's field!");
       }
       else {
-        moveEntityService.moveEntity(entityId, targetCoordinate);
+        log.info("some are chosen and there's a movable highlighted entity");
+
+        var targetCoordinate = coordinatesMapper.get(chosenEntity.pop());
+        var currentCoordinate = coordinatesMapper.get(entityId);
+
+        var distance = DistanceUtil.distance(currentCoordinate, targetCoordinate);
+        var range = statsMapper.get(entityId).getMoveRange();
+
+        log.info("Chce przejsc " + distance + " ale zostało mi " + range);
+
+        if (distance > range) {
+          moveRangeDialog.createAndShow(range, distance);
+        } else {
+          moveEntityService.moveEntity(entityId, targetCoordinate);
+        }
+        highlightedMapper.remove(entityId);
       }
-      highlightedMapper.remove(entityId);
     }
   }
 
