@@ -5,6 +5,7 @@ import com.artemis.World;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.config.TechnologyConfig;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 @Log
 public class TechnologyFactory {
 
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Technology> technologyMapper;
@@ -29,6 +31,7 @@ public class TechnologyFactory {
 
   public void createEntity(@NonNull TechnologyConfig config, int entity) {
     setUpName(config, entity);
+    entityConfigIdMapper.create(entity).setId(config.getId());
     setUpTechnology(entity);
     positionMapper.create(entity);
   }

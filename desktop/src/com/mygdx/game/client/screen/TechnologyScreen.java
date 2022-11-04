@@ -9,11 +9,13 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
@@ -23,20 +25,26 @@ import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
 import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
+import com.mygdx.game.config.TechnologyConfig;
+import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.InResearch;
 import com.mygdx.game.core.ecs.component.Researched;
+import com.mygdx.game.core.ecs.component.Technology;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Log
 @GameInstanceScope
 public class TechnologyScreen extends ScreenAdapter {
 
   private final Stage stage;
+  private final ShapeRenderer shapeRenderer;
   private final Viewport viewport;
+  private final GameConfigAssets gameConfigAssets;
   private final GameScreenAssets gameScreenAssets;
   private final @NonNull Technologies technologies;
   private final UiElementsCreator uiElementsCreator;
@@ -49,20 +57,27 @@ public class TechnologyScreen extends ScreenAdapter {
   private final Texture researchedTexture;
   private final Texture unblockedTexture;
 
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<TextureComp> textureMapper;
 
+  boolean draw = false;
+
   @AspectDescriptor(all = {InResearch.class})
   private EntitySubscription inResearchSubscriber;
+
+  @AspectDescriptor(all = {Technology.class})
+  private EntitySubscription technologySubscriber;
 
   @Inject
   public TechnologyScreen(
       World world,
       Stage stage,
       Viewport viewport,
+      GameConfigAssets gameConfigAssets,
       GameScreenAssets gameScreenAssets,
       Technologies technologies,
       UiElementsCreator uiElementsCreator,
@@ -73,7 +88,9 @@ public class TechnologyScreen extends ScreenAdapter {
     world.inject(this);
     this.world = world;
     this.stage = stage;
+    this.shapeRenderer = new ShapeRenderer();
     this.viewport = viewport;
+    this.gameConfigAssets = gameConfigAssets;
     this.gameScreenAssets = gameScreenAssets;
     this.technologies = technologies;
     this.uiElementsCreator = uiElementsCreator;
@@ -87,6 +104,7 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void show() {
+    draw = true;
     log.info("Technology tree shown");
     setUpTechnologyButtons();
     setUpInput();
@@ -96,6 +114,11 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    if (draw) {
+      for (int i = 0; i < technologies.getAllTechnologies().size(); i++) {
+        drawDependencies(technologies.getAllTechnologies().get(i));
+      }
+    }
     world.setDelta(delta);
     world.process();
     stage.draw();
@@ -112,6 +135,7 @@ public class TechnologyScreen extends ScreenAdapter {
   @Override
   public void hide() {
     restoreCameraPosition(viewport.getCamera());
+    draw = false;
   }
 
   public void refresh() {
@@ -165,6 +189,7 @@ public class TechnologyScreen extends ScreenAdapter {
           researchTechnology(entityId);
         }
       });
+
       uiElementsCreator.addHoverPopupWithActor(secondImage, label, stage);
       stage.addActor(secondImage);
     }
@@ -183,8 +208,57 @@ public class TechnologyScreen extends ScreenAdapter {
       var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - it's researched");
       log.info("Can't research");
       stage.addActor(dialog);
+    } else if (!allRequiredTechnologiesResearched(entityId)) {
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - dependent technologies not researched");
+      log.info("Can't research");
+      stage.addActor(dialog);
     } else {
       researchTechnologyService.researchTechnology(entityId);
     }
+  }
+
+  private boolean allRequiredTechnologiesResearched(int techEntityId) {
+    var entityConfigId = entityConfigIdMapper.get(techEntityId);
+    var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId());
+    List<Integer> dependecies = technologyConfig.getDependencies();
+    for (int i = 0; i < technologies.getAllTechnologies().size(); i++) {
+      int alltechEntityId = technologies.getAllTechnologies().get(i);
+      if (researchedMapper.has(alltechEntityId)) {
+        if (dependecies.contains((int) entityConfigIdMapper.get(alltechEntityId).getId())) {
+          Integer integer = (int) entityConfigIdMapper.get(alltechEntityId).getId();
+          dependecies.remove(integer);
+        }
+      }
+    }
+    return dependecies.size() == 0;
+  }
+
+  private void drawDependencies(int entityId) {
+    var entityConfigId = entityConfigIdMapper.get(entityId);
+    var position = positionMapper.get(entityId).getValue();
+    var dependencies = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId()).getDependencies();
+    for (Integer dependency : dependencies) {
+      int entityIdOfConfig = findEntityIdOfConfig(dependency);
+      var dependencyPosition = positionMapper.get(entityIdOfConfig).getValue();
+      shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
+      shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+      if (researchedMapper.has(entityIdOfConfig))
+        shapeRenderer.setColor(0, 1, 0, 1);
+      else if (inResearchMapper.has(entityIdOfConfig))
+        shapeRenderer.setColor(1, 1, 0, 1);
+      else
+        shapeRenderer.setColor(1, 0, 0, 1);
+      shapeRenderer.rectLine(position.x, position.z, dependencyPosition.x, dependencyPosition.z, 10f);
+      shapeRenderer.end();
+    }
+  }
+
+  private int findEntityIdOfConfig(int configId) {
+    for (int i = 0; i < technologySubscriber.getEntities().size(); i++) {
+      int entityId = technologySubscriber.getEntities().get(i);
+      if (entityConfigIdMapper.get(entityId).getId() == configId)
+        return entityId;
+    }
+    return -1;
   }
 }
