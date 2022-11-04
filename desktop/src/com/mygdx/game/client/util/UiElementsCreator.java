@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -114,6 +115,18 @@ public class UiElementsCreator {
     dialog.pad(20);
     dialog.getTitleLabel().setAlignment(Align.center);
     return dialog;
+  }
+
+  public Table createTable(float x, float y) {
+    var table = new Table(menuSkin);
+    table.setPosition(x, y);
+    table.align(Align.top);
+    return table;
+  }
+
+  public void addCellToTable(Actor actor, Table table) {
+    table.add(actor);
+    table.row();
   }
 
   public void scaleLabel(Label label, float scale) {

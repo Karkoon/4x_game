@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client.ui.TextInputDialogFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 
@@ -23,7 +22,6 @@ public class GameRoomListScreen extends ScreenAdapter {
   private final GameConnectService connectService;
   private final GdxGame game;
   private final Stage stage;
-  private final TextInputDialogFactory textInputDialogFactory;
   private final UiElementsCreator uiElementsCreator;
 
   private String roomName = "defaultRoom";
@@ -34,32 +32,18 @@ public class GameRoomListScreen extends ScreenAdapter {
       GameConnectService connectService,
       GdxGame game,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      TextInputDialogFactory textInputDialogFactory,
       UiElementsCreator uiElementsCreator
   ) {
     this.connectService = connectService;
     this.game = game;
     this.stage = stage;
-    this.textInputDialogFactory = textInputDialogFactory;
     this.uiElementsCreator = uiElementsCreator;
   }
 
   @Override
   public void show() {
     stage.clear();
-//    textInputDialogFactory.create(
-//        "Room List",
-//        "Type room identifier",
-//        "Connect",
-//        "Return",
-//        positiveInput -> {
-//          game.changeToGameRoomScreen();
-//          connectService.connect(positiveInput);
-//        },
-//        () -> {
-//
-//        }
-//    ).show(stage);
+
     var title = "Room List";
     var dialog = uiElementsCreator.createDialog(title);
     var table = new Table();
@@ -125,7 +109,7 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   private void joinRoom() {
     game.changeToGameRoomScreen();
-    connectService.connect(roomName);
+    connectService.connect(roomName, userName);
   }
 
   private void backToMenu() {

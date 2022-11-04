@@ -6,6 +6,8 @@ import com.mygdx.game.server.model.GameRoomManager;
 import com.mygdx.game.server.network.MessageSender;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConnectHandler {
 
@@ -30,7 +32,10 @@ public class ConnectHandler {
     var room = rooms.getRoom(roomId);
     room.addClient(client);
     client.setGameRoom(room);
-    var msg = new PlayerJoinedRoomMessage(room.getNumberOfClients());
+    List<String> userNames = room.getClients()
+      .stream()
+      .map(Client::getPlayerUsername).collect(Collectors.toList());
+    var msg = new PlayerJoinedRoomMessage(userNames);
     sender.sendToAll(msg, room.getClients());
   }
 }

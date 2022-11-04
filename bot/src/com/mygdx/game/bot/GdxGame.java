@@ -68,7 +68,7 @@ public class GdxGame extends Game {
       return FULLY_HANDLED;
     }));
 
-    gameConnectService.connect("default");
+    gameConnectService.connect("default", "bot");
     main.start();
   }
 }
