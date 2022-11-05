@@ -27,8 +27,10 @@ public class ConnectHandler {
     var userName = commands[1];
     var userToken = commands[2];
     var roomId = commands[3];
+    long civId = Long.parseLong(commands[4]);
     client.setPlayerUsername(userName);
     client.setPlayerToken(userToken);
+    client.setCivId(civId);
     var room = rooms.getRoom(roomId);
     room.addClient(client);
     client.setGameRoom(room);

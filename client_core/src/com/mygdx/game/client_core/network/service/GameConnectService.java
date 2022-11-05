@@ -25,6 +25,7 @@ public class GameConnectService {
     log.info("connect request sent");
     playerInfo.setUserName(userName);
     sender.send("connect:" + userName + ":" + playerInfo.getToken() + ":" + gameRoomName);
+    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization());
   }
 
 }

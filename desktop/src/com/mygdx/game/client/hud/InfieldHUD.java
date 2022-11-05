@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
@@ -14,6 +15,7 @@ import com.mygdx.game.client.model.ChosenConfig;
 import com.mygdx.game.client.model.InField;
 import com.mygdx.game.client.ui.CanNotCreateUnitFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.client_core.util.InfieldUtil;
 import com.mygdx.game.client_core.util.MaterialUtilClient;
@@ -40,6 +42,7 @@ public class InfieldHUD implements Disposable {
   private final Stage stage;
   private final Texture inRecruitmentImageTexture;
   private final Lazy<MaterialUtilClient> materialUtilClient;
+  private final PlayerInfo playerInfo;
 
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
@@ -55,6 +58,7 @@ public class InfieldHUD implements Disposable {
       GameScreenAssets gameAssets,
       CreateUnitService createUnitService,
       Lazy<MaterialUtilClient> materialUtilClient,
+      PlayerInfo playerInfo,
       World world
   ) {
     this.assets = assets;
@@ -68,6 +72,7 @@ public class InfieldHUD implements Disposable {
     this.uiElementsCreator = uiElementsCreator;
     this.materialUtilClient = materialUtilClient;
     this.inRecruitmentImageTexture = gameAssets.getTexture("units/in_recruitment.png");
+    this.playerInfo = playerInfo;
     world.inject(this);
 
     prepareHudSceleton();
@@ -127,7 +132,7 @@ public class InfieldHUD implements Disposable {
   }
 
   private void createUnitList() {
-    var units = assets.getGameConfigs().getAll(UnitConfig.class);
+    var units = getUnits();
     var sampleTexture = gameAssets.getTexture(units.get(0).getIconName());
     var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
     uiElementsCreator.removeActorAfterClick(container);
@@ -174,6 +179,16 @@ public class InfieldHUD implements Disposable {
     }
 
     stage.addActor(container);
+  }
+
+  private Array<UnitConfig> getUnits() {
+    var allUnits = assets.getGameConfigs().getAll(UnitConfig.class);
+    var civUnits = new Array<UnitConfig>();
+    for (UnitConfig unit : allUnits) {
+      if (unit.getCivilizationConfigId() == playerInfo.getCivilization())
+        civUnits.add(unit);
+    }
+    return civUnits;
   }
 
 
