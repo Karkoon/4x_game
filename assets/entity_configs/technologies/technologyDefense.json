@@ -14,5 +14,6 @@
       [
         {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "HP", "operation": "PLUS", "value": 100}
       ]
-    }
+    },
+  "dependencies" : [301]
 }

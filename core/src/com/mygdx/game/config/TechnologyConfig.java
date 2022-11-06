@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class TechnologyConfig implements Config, TextureConfig {
   private int requiredScience;
   @NonNull
   private TechnologyImpact impact;
+  @NonNull
+  private List<Integer> dependencies;
 }

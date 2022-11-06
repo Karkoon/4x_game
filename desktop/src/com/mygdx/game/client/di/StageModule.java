@@ -28,7 +28,6 @@ public class StageModule {
     return stage;
   }
 
-
   @Provides
   @Singleton
   @Named(GAME_SCREEN)
