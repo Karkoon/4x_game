@@ -36,6 +36,7 @@ public class UnitConfig implements Config, ModelConfig {
   private int turnAmount;
   @NonNull
   private List<MaterialUnit> materials;
+  private int civilizationConfigId;
 
   public Map<MaterialBase, MaterialUnit> getMaterials() {
     var parsedEntries = new EnumMap<MaterialBase, MaterialUnit>(MaterialBase.class);
