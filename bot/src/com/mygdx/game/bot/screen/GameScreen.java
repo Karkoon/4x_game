@@ -1,9 +1,7 @@
 package com.mygdx.game.bot.screen;
 
 import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
 import com.artemis.World;
-import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.mygdx.game.bot.GdxGame;
 import com.mygdx.game.bot.hud.NextFieldUtil;
@@ -19,7 +17,6 @@ import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
 import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
@@ -152,4 +149,6 @@ public class GameScreen extends ScreenAdapter {
     activeToken.setActiveToken(playerToken);
     runBotIteration();
   }
+
+
 }

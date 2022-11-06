@@ -38,11 +38,11 @@ public class GdxGame extends Game {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
-    gameConnectService.connect(gameRoomName); //todo get the game room name from Args
+    gameConnectService.connect(gameRoomName, "bot"); //todo get the game room name from Args
 
     changeToGameRoomScreen();
   }
-  private String gameRoomName = "Type room identifier"; // default value from the desktop client
+  private String gameRoomName = "defaultRoom"; // default value from the desktop client
   // to make it easier to connect to the same room at this point in time
   @Override
   public void render() {
