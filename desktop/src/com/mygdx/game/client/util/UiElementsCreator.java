@@ -6,17 +6,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.assets.GameScreenAssetPaths;
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.MenuScreenAssetPaths;
+import com.mygdx.game.assets.MenuScreenAssets;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -26,17 +32,20 @@ import javax.inject.Singleton;
 @Singleton
 public class UiElementsCreator {
 
-  private final Skin skin;
+  private final Skin gameSkin;
+  private final Skin menuSkin;
 
   @Inject
   public UiElementsCreator(
-      GameScreenAssets gameAssets
+      GameScreenAssets gameAssets,
+      MenuScreenAssets menuScreenAssets
   ) {
-    skin = gameAssets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    gameSkin = gameAssets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
+    menuSkin = menuScreenAssets.getSkin(MenuScreenAssetPaths.SKIN);
   }
 
   public Button createActionButton(String text, Runnable runnable, int x, int y) {
-    var button = new TextButton(text, skin);
+    var button = new TextButton(text, gameSkin);
     button.setPosition(x, y);
     button.addListener(new ClickListener() {
       @Override
@@ -60,7 +69,7 @@ public class UiElementsCreator {
   }
 
   public Label createLabel(String message, int x, int y) {
-    var label = new Label(message, skin);
+    var label = new Label(message, gameSkin);
     label.setPosition(x, y);
 
     return label;
@@ -81,6 +90,43 @@ public class UiElementsCreator {
     horizontalGroup.setWidth(width);
     horizontalGroup.setHeight(height);
     return horizontalGroup;
+  }
+
+  public Label createDialogLabel(String value) {
+    var label = new Label(value, menuSkin);
+    label.setAlignment(Align.center);
+    return label;
+  }
+
+  public TextButton createDialogButton(String text) {
+    return new TextButton(text, menuSkin);
+  }
+
+  public TextField createDialogTextField(String initialValue) {
+    var textField = new TextField(initialValue, menuSkin);
+    textField.setAlignment(Align.center);
+    return textField;
+  }
+
+  public Dialog createDialog(String title) {
+    var dialog = new Dialog(title, menuSkin);
+    dialog.setMovable(false);
+    dialog.setResizable(false);
+    dialog.pad(20);
+    dialog.getTitleLabel().setAlignment(Align.center);
+    return dialog;
+  }
+
+  public Table createTable(float x, float y) {
+    var table = new Table(menuSkin);
+    table.setPosition(x, y);
+    table.align(Align.top);
+    return table;
+  }
+
+  public void addCellToTable(Actor actor, Table table) {
+    table.add(actor);
+    table.row();
   }
 
   public void scaleLabel(Label label, float scale) {

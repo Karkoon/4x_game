@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client.hud.WorldHUD;
+import com.mygdx.game.client.hud.GameScreenHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final ModelInstanceRenderer renderer;
 
   private final Stage stage;
-  private final WorldHUD worldHUD;
+  private final GameScreenHUD gameScreenHUD;
   private final ClickInputAdapter clickInputAdapter;
   private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
   private final PlayerTurnDialogFactory playerTurnDialogFactory;
@@ -74,7 +74,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       World world,
       Viewport viewport,
       @Named(StageModule.GAME_SCREEN) Stage stage,
-      WorldHUD worldHUD,
+      GameScreenHUD gameScreenHUD,
       ClickInputAdapter clickInputAdapter,
       GameScreenUiInputAdapter gameScreenUiInputAdapter,
       PlayerTurnDialogFactory playerTurnDialogFactory,
@@ -91,7 +91,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.world = world;
     this.viewport = viewport;
     this.stage = stage;
-    this.worldHUD = worldHUD;
+    this.gameScreenHUD = gameScreenHUD;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
     this.clickInputAdapter = clickInputAdapter;
     this.playerTurnDialogFactory = playerTurnDialogFactory;
@@ -130,10 +130,10 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     viewport.getCamera().update();
 
     stage.draw();
-    worldHUD.draw();
+    gameScreenHUD.draw();
 
     stage.act(delta);
-    worldHUD.act(delta);
+    gameScreenHUD.act(delta);
   }
 
   @Override

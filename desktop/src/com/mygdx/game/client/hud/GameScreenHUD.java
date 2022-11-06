@@ -36,7 +36,7 @@ import javax.inject.Named;
 import java.util.Map;
 
 @Log
-public class WorldHUD implements Disposable {
+public class GameScreenHUD implements Disposable {
 
   private final ChosenEntity chosenEntity;
   private final EndTurnService endTurnService;
@@ -68,7 +68,7 @@ public class WorldHUD implements Disposable {
   private ComponentMapper<Movable> movableMapper;
 
   @Inject
-  public WorldHUD(
+  public GameScreenHUD(
       ChosenEntity chosenEntity,
       EndTurnService endTurnService,
       GameScreenAssets gameScreenAssets,

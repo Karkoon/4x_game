@@ -1,7 +1,7 @@
 package com.mygdx.game.client.network.message_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.client.hud.WorldHUD;
+import com.mygdx.game.client.hud.GameScreenHUD;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.QueueMessageListener;
@@ -20,15 +20,15 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class MaterialIncomeMessageHandler implements QueueMessageListener.Handler<MaterialIncomeMessage>  {
 
   private final PredictedIncome predictedIncome;
-  private final WorldHUD worldHUD;
+  private final GameScreenHUD gameScreenHUD;
 
   @Inject
   public MaterialIncomeMessageHandler(
       PredictedIncome predictedIncome,
-      WorldHUD worldHUD
+      GameScreenHUD gameScreenHUD
   ) {
     this.predictedIncome = predictedIncome;
-    this.worldHUD = worldHUD;
+    this.gameScreenHUD = gameScreenHUD;
   }
 
   @Override
@@ -39,7 +39,7 @@ public class MaterialIncomeMessageHandler implements QueueMessageListener.Handle
       var value = incomes.get(base.toString());
       predictedIncome.setIncome(base, value);
     }
-    worldHUD.prepareHudSceleton();
+    gameScreenHUD.prepareHudSceleton();
     return FULLY_HANDLED;
   }
 

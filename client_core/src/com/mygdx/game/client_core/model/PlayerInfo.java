@@ -10,12 +10,16 @@ import java.util.UUID;
 @Singleton
 public class PlayerInfo {
 
-  private final String userName;
+  private String userName;
   private final String token;
 
   @Inject
   public PlayerInfo() { // TODO: 10.10.2022 make username configurable
-    userName = UUID.randomUUID().toString();
     token = UUID.randomUUID().toString();
   }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
 }

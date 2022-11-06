@@ -2,7 +2,7 @@ package com.mygdx.game.client.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.mygdx.game.client.hud.WorldHUD;
+import com.mygdx.game.client.hud.GameScreenHUD;
 import com.mygdx.game.client.screen.Navigator;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.EndTurnService;
@@ -17,17 +17,17 @@ public class GameScreenUiInputAdapter extends InputAdapter {
 
   private final Lazy<Navigator> navigator;
   private final EndTurnService endTurnService;
-  private final WorldHUD worldHUD;
+  private final GameScreenHUD gameScreenHUD;
 
   @Inject
   public GameScreenUiInputAdapter(
       Lazy<Navigator> navigator,
       EndTurnService endTurnService,
-      WorldHUD worldHUD
+      GameScreenHUD gameScreenHUD
   ) {
     this.navigator = navigator;
     this.endTurnService = endTurnService;
-    this.worldHUD = worldHUD;
+    this.gameScreenHUD = gameScreenHUD;
   }
 
   @Override
@@ -35,7 +35,7 @@ public class GameScreenUiInputAdapter extends InputAdapter {
     switch (keycode) {
       case Input.Keys.T -> openTechnologyScreen();
       case Input.Keys.R -> endTurnService.endTurn();
-      case Input.Keys.N -> worldHUD.addNextUnitAction();
+      case Input.Keys.N -> gameScreenHUD.addNextUnitAction();
       case Input.Keys.ESCAPE -> exitGame();
     }
     return false;

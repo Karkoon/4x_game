@@ -21,9 +21,10 @@ public class GameConnectService {
     this.playerInfo = playerInfo;
   }
 
-  public void connect(String gameRoomName) {
+  public void connect(String gameRoomName, String userName) {
     log.info("connect request sent");
-    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName);
+    playerInfo.setUserName(userName);
+    sender.send("connect:" + userName + ":" + playerInfo.getToken() + ":" + gameRoomName);
   }
 
 }
