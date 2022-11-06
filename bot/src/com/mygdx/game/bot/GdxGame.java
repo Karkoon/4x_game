@@ -1,74 +1,62 @@
 package com.mygdx.game.bot;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.bot.di.bot.BotClient;
-import com.mygdx.game.client_core.di.CoreNames;
-import com.mygdx.game.client_core.model.ActiveToken;
-import com.mygdx.game.client_core.network.QueueMessageListener;
+import com.mygdx.game.bot.screen.GameRoomScreen;
 import com.mygdx.game.client_core.network.service.GameConnectService;
-import com.mygdx.game.core.network.messages.GameStartedMessage;
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import lombok.NonNull;
+import dagger.Lazy;
+
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
-
-import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
 @Singleton
 public class GdxGame extends Game {
 
+
   private final GameConfigAssets assets;
-  private final GameConnectService gameConnectService;
-  private final BotClient botClient;
-  private final QueueMessageListener handler;
-  private final ActiveToken activeToken;
-  private final Scheduler main;
+  private final Lazy<GameRoomScreen> gameRoomScreen;
 
   @Inject
   GdxGame(
-      @NonNull GameConfigAssets assets,
-      @NonNull GameConnectService gameConnectService,
-      @NonNull BotClient botClient,
-      @NonNull QueueMessageListener listener,
-      @NonNull ActiveToken activeToken,
-      @NonNull @Named(CoreNames.MAIN_THREAD) Scheduler main
+    GameConfigAssets assets,
+    Lazy<GameRoomScreen> gameRoomScreen,
+    GameConnectService gameConnectService
   ) {
     this.assets = assets;
+    this.gameRoomScreen = gameRoomScreen;
     this.gameConnectService = gameConnectService;
-    this.botClient = botClient;
-    this.handler = listener;
-    this.activeToken = activeToken;
-    this.main = main;
   }
+  private final GameConnectService gameConnectService;
 
   @Override
   public void create() {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
+    gameConnectService.connect(gameRoomName, "bot"); //todo get the game room name from Args
 
-    log.info("Waiting for game start.");
+    changeToGameRoomScreen();
+  }
+  private String gameRoomName = "defaultRoom"; // default value from the desktop client
+  // to make it easier to connect to the same room at this point in time
+  @Override
+  public void render() {
+    ScreenUtils.clear(0f, 0f, 0f, 1, true);
+    super.render();
+  }
 
-    handler.registerHandler(GameStartedMessage.class, ((webSocket, message) -> {
-      Completable.fromAction(() -> {
-            log.info("Starting bot.");
-            activeToken.setActiveToken(message.getPlayerToken());
-            botClient.run();
-          })
-          .observeOn(Schedulers.io())
-          .subscribeOn(main)
-          .subscribe();
-      return FULLY_HANDLED;
-    }));
+  @Override
+  public void dispose() {
+    super.dispose();
+    Gdx.app.exit();
+  }
 
-    gameConnectService.connect("default", "bot");
-    main.start();
+  public void changeToGameRoomScreen() {
+    setScreen(gameRoomScreen.get());
   }
 }

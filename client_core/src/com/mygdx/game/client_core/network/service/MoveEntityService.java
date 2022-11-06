@@ -1,5 +1,6 @@
 package com.mygdx.game.client_core.network.service;
 
+import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -9,6 +10,7 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
+@GameInstanceScope
 public class MoveEntityService {
 
   private final Lazy<MessageSender> sender;
@@ -24,7 +26,7 @@ public class MoveEntityService {
   }
 
   public void moveEntity(int selectedUnit, Coordinates coordinates) {
-    log.info("Send from client to server");
+    log.info("Send move message from client to server");
     selectedUnit = networkWorldEntityMapper.getNetworkEntity(selectedUnit);
     sender.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
   }

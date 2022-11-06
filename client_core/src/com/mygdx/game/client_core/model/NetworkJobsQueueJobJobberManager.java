@@ -21,14 +21,16 @@ public class NetworkJobsQueueJobJobberManager {
     this.webSocketListenerSet = webSocketListenerSet;
   }
 
-  public void doAllJobs() {
+  public boolean doAllJobs() {
     var datum = queueContainer.peek();
+    var anyHandled = false;
     while (datum != null) {
       log.info("data tried to be handled content: " + hashCode() + " " + datum);
       var handled = false;
       for (var listener : webSocketListenerSet) {
         if (listener.onMessage(datum.socket(), datum.data())) {
           handled = true;
+          anyHandled = true;
         }
       }
       if (!handled) {
@@ -38,5 +40,6 @@ public class NetworkJobsQueueJobJobberManager {
       queueContainer.remove();
       datum = queueContainer.peek();
     }
+    return anyHandled;
   }
 }

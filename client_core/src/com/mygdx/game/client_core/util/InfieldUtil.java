@@ -31,7 +31,6 @@ public class InfieldUtil {
   private final GameConfigAssets gameConfigAssets;
   private final MaterialUtilClient materialUtilClient;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
-  private final World world;
 
   @AspectDescriptor(all = {PlayerMaterial.class})
   private EntitySubscription playerMaterialSubscriber;
@@ -51,7 +50,6 @@ public class InfieldUtil {
     this.gameConfigAssets = gameConfigAssets;
     this.materialUtilClient = materialUtilClient;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
-    this.world = world;
     world.inject(this);
   }
 

@@ -28,7 +28,7 @@ public class CanNotBuildDialogFactory {
 
   public void createAndShow(String message) {
     var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
-    var dialog = new Dialog("Attack", skin);
+    var dialog = new Dialog("Can't build", skin);
     dialog.text(message);
     dialog.button("OK");
     dialog.show(stage);
