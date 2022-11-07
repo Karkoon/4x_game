@@ -10,6 +10,7 @@ import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.ui.WarningDialogFactory;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
@@ -33,6 +34,7 @@ public class MovementSystem extends IteratingSystem {
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Owner> ownerComponentMapper;
+  private final PlayerInfo playerInfo;
 
   @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription units;
@@ -41,17 +43,25 @@ public class MovementSystem extends IteratingSystem {
   public MovementSystem(
       ChosenEntity chosenEntity,
       MoveEntityService moveEntityService,
-      WarningDialogFactory warningDialog
+      WarningDialogFactory warningDialog,
+      PlayerInfo playerInfo
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
     this.warningDialog = warningDialog;
+    this.playerInfo = playerInfo;
   }
 
   @Override
   protected void process(int entityId) {
     if (chosenEntity.isAnyChosen() && fieldMapper.has(chosenEntity.peek())) {
       var chosenEntityId = chosenEntity.pop();
+      if (!playerInfo.getToken().equals(ownerComponentMapper.get(entityId).getToken())){
+        warningDialog.createAndShow("Movement restricted!",
+                "You cannot move this unit! You are not an owner!");
+        highlightedMapper.remove(entityId);
+        return;
+      }
 
       boolean canMove = true;
       for (int i = 0; i < units.getEntities().size(); i++) {
