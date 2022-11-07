@@ -43,6 +43,7 @@ public class MoveEntityService extends WorldService {
               .equals(ownerComponentMapper.get(entityId).getToken())) {
         canMove = false;
         log.info("Cannot move on enemy's field!");
+        break;
       }
     }
 

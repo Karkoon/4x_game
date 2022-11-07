@@ -24,12 +24,6 @@ public class Coordinates extends PooledComponent {
     this.y = y;
   }
 
-  //TODO: Nie działa mi overload metody
-//  public void setCoordinates(Coordinates destination) {
-//    this.x = destination.getX();
-//    this.y = destination.getY();
-//  }
-
   public void setCoordinates(@NonNull Coordinates other) {
     setCoordinates(other.x, other.y);
   }

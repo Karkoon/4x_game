@@ -73,6 +73,7 @@ public class MovementSystem extends IteratingSystem {
                 .equals(ownerComponentMapper.get(entityId).getToken())) {
           canMove = false;
           log.info("Cannot move on enemy's field!");
+          break;
         }
       }
       if (canMove) {
