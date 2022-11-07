@@ -5,7 +5,6 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
-import com.mygdx.game.client.ui.CanNotAttackDialogFactory;
 import com.mygdx.game.client.ui.WarningDialogFactory;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PlayerInfo;
