@@ -27,4 +27,9 @@ public class GameConnectService {
     sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization());
   }
 
+  public void reconnect() {
+    log.info("connect request sent");
+    sender.send("reconnect:"  + playerInfo.getCivilization());
+  }
+
 }

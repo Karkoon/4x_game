@@ -18,6 +18,11 @@ public class CivilizationConfig implements Config {
 
   @Override
   public long getId() {
-    return 0;
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 }

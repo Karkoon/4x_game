@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.mygdx.game.core.model.PlayerLobby;
 import io.vertx.core.http.ServerWebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode.Exclude;
@@ -16,4 +17,8 @@ public class Client {
   private String playerToken;
   @Exclude
   private long civId;
+
+  public PlayerLobby mapToPlayerLobby() {
+    return new PlayerLobby(playerUsername, civId);
+  }
 }
