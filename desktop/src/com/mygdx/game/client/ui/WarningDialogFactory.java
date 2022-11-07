@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 
 @Log
 @Singleton
-public class CanNotAttackDialogFactory {
+public class WarningDialogFactory {
     private final GameScreenAssets assets;
     private final Stage stage;
 
     @Inject
-    public CanNotAttackDialogFactory(
+    public WarningDialogFactory(
             GameScreenAssets assets,
             @Named(StageModule.GAME_SCREEN) Stage stage
     ) {
@@ -26,11 +26,15 @@ public class CanNotAttackDialogFactory {
         this.stage = stage;
     }
 
-    public void createAndShow(String message) {
+
+    public void createAndShow(String dialogTitle, String dialogMessage) {
         var skin = assets.getSkin(GameScreenAssetPaths.DIALOG_SKIN);
-        var dialog = new Dialog("Attack", skin);
-        dialog.text(message);
+        var dialog = new Dialog(dialogTitle, skin);
+        dialog.text(dialogMessage);
         dialog.button("OK");
         dialog.show(stage);
     }
 }
+
+
+

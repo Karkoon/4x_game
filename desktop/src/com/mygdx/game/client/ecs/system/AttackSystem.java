@@ -5,8 +5,9 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.mygdx.game.client.ecs.component.Highlighted;
 import com.mygdx.game.client.model.ChosenEntity;
-import com.mygdx.game.client.ui.CanNotAttackDialogFactory;
+import com.mygdx.game.client.ui.WarningDialogFactory;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.AttackEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -23,20 +24,24 @@ public class AttackSystem extends IteratingSystem {
 
   private final ChosenEntity chosenEntity;
   private final AttackEntityService attackEntityService;
-  private final CanNotAttackDialogFactory attackDialog;
+  private final WarningDialogFactory warningDialog;
+  private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Stats> statsComponentMapper;
   private ComponentMapper<Owner> ownerComponentMapper;
+  private final PlayerInfo playerInfo;
 
   @Inject
   public AttackSystem(
       ChosenEntity chosenEntity,
       AttackEntityService attackEntityService,
-      CanNotAttackDialogFactory attackDialog
+      WarningDialogFactory warningDialog,
+      PlayerInfo playerInfo
   ) {
     this.chosenEntity = chosenEntity;
     this.attackEntityService = attackEntityService;
-    this.attackDialog = attackDialog;
+    this.warningDialog = warningDialog;
+    this.playerInfo = playerInfo;
   }
 
   @Override
@@ -44,6 +49,12 @@ public class AttackSystem extends IteratingSystem {
     if (chosenEntity.isAnyChosen() && statsComponentMapper.has(chosenEntity.peek())) {
       log.info("attack system clicked");
       var attacked = chosenEntity.pop();
+      if (!playerInfo.getToken().equals(ownerComponentMapper.get(attacker).getToken())){
+        warningDialog.createAndShow("Attack restricted!",
+                "You cannot use attack with this unit! You are not an owner!");
+        highlightedMapper.remove(attacker);
+        return;
+      }
 
       if (haveDifferentOwner(attacker, attacked)) {
         Coordinates attackerCoordinates = coordinatesMapper.get(attacker);
@@ -52,15 +63,16 @@ public class AttackSystem extends IteratingSystem {
         Stats attackerStats = statsComponentMapper.get(attacker);
         int attackerAttackRange = attackerStats.getAttackRange();
         if (DistanceUtil.distance(attackerCoordinates, attackedCoordinates) > attackerAttackRange){
-          attackDialog.createAndShow("You can't attack this unit! Enemy is to far.");
+          warningDialog.createAndShow("Atack range","You can't attack this unit! Enemy is to far.");
         }
         else {
           attackEntityService.attack(attacker, attacked);
         }
       }
       else {
-        attackDialog.createAndShow("You can't attack yourself!!! You fool!");
+        warningDialog.createAndShow("Attack","You can't attack yourself!!!");
       }
+      highlightedMapper.remove(attacker);
     }
   }
 
