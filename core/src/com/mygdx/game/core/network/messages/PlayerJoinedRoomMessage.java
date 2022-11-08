@@ -1,5 +1,6 @@
 package com.mygdx.game.core.network.messages;
 
+import com.mygdx.game.core.model.PlayerLobby;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayerJoinedRoomMessage {
 
-  List<String> userNames;
+  List<PlayerLobby> users;
 }

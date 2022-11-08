@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -124,9 +126,23 @@ public class UiElementsCreator {
     return table;
   }
 
+  public SelectBox createSelectBox() {
+    var selectBox = new SelectBox(menuSkin);
+    return selectBox;
+  }
+
+  public ScrollPane createScrollPane(Actor child) {
+    var scrollPane = new ScrollPane(child, menuSkin);
+    return scrollPane;
+  }
+
   public void addCellToTable(Actor actor, Table table) {
     table.add(actor);
     table.row();
+  }
+
+  public void addToTableRow(Actor actor, Table table) {
+    table.add(actor);
   }
 
   public void scaleLabel(Label label, float scale) {

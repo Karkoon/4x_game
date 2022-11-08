@@ -43,11 +43,11 @@ public class MenuScreen extends ScreenAdapter {
   @Override
   public void show() {
     stage.clear();
-    Gdx.input.setInputProcessor(stage);
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
     starBackground = new StarBackground(assets, stage.getCamera());
     planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+    Gdx.input.setInputProcessor(stage);
   }
 
   @Override

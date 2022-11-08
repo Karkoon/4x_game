@@ -9,18 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
+import com.mygdx.game.client.hud.GameRoomHUD;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton
+@Log
 public class GameRoomListScreen extends ScreenAdapter {
 
   private final GameConnectService connectService;
   private final GdxGame game;
+  private final GameRoomHUD gameRoomHUD;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
 
@@ -31,11 +35,13 @@ public class GameRoomListScreen extends ScreenAdapter {
   public GameRoomListScreen(
       GameConnectService connectService,
       GdxGame game,
+      GameRoomHUD gameRoomHUD,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
       UiElementsCreator uiElementsCreator
   ) {
     this.connectService = connectService;
     this.game = game;
+    this.gameRoomHUD = gameRoomHUD;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
   }
@@ -108,8 +114,8 @@ public class GameRoomListScreen extends ScreenAdapter {
   }
 
   private void joinRoom() {
-    game.changeToGameRoomScreen();
     connectService.connect(roomName, userName);
+    game.changeToGameRoomScreen();
   }
 
   private void backToMenu() {

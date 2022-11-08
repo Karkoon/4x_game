@@ -14,7 +14,7 @@ public class PlayerInfo {
 
   private String userName;
   private final String token;
-  private final long civilization;
+  private long civilization;
 
   @Inject
   public PlayerInfo() { // TODO: 10.10.2022 make username configurable
@@ -26,4 +26,7 @@ public class PlayerInfo {
     this.userName = userName;
   }
 
+  public void setCivilization(long civilization) {
+    this.civilization = civilization;
+  }
 }
