@@ -2,16 +2,15 @@ package com.mygdx.game.client.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.assets.MenuScreenAssetPaths;
-import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
@@ -43,11 +42,9 @@ public class GameRoomHUD implements Disposable {
   private final GameStartService gameStartService;
   private final GameScreenSubcomponent.Builder gameScreenBuilder;
   private final GdxGame game;
-  private final MenuScreenAssets menuScreenAssets;
   private final Stage stage;
   private final Viewport viewport;
   private final PlayerInfo playerInfo;
-  private final Skin menuScreenSkin;
   private final UiElementsCreator uiElementsCreator;
   private final QueueMessageListener queueMessageListener;
   private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
@@ -64,7 +61,6 @@ public class GameRoomHUD implements Disposable {
       GameScreenSubcomponent.Builder gameScreenBuilder,
       GdxGame game,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      MenuScreenAssets menuScreenAssets,
       Viewport viewport,
       PlayerInfo playerInfo,
       UiElementsCreator uiElementsCreator,
@@ -79,13 +75,11 @@ public class GameRoomHUD implements Disposable {
     this.stage = stage;
     this.viewport = viewport;
     this.playerInfo = playerInfo;
-    this.menuScreenAssets = menuScreenAssets;
     this.uiElementsCreator = uiElementsCreator;
     this.queueMessageListener = queueMessageListener;
     this.playerAlreadyInTheRoomDialogFactory = playerAlreadyInTheRoomDialogFactory;
 
     this.players = new ArrayList<>();
-    menuScreenSkin = menuScreenAssets.getSkin(MenuScreenAssetPaths.SKIN);
 
     registerHandlers();
     prepareHudSceleton();
@@ -105,8 +99,14 @@ public class GameRoomHUD implements Disposable {
 
   private void registerHandlers() {
     queueMessageListener.registerHandler(PlayerAlreadyInTheRoomMessage.class, ((webSocket, message) -> {
-      game.changeToGameRoomListScreen();
-      playerAlreadyInTheRoomDialogFactory.createAndShow();
+      var dialog = playerAlreadyInTheRoomDialogFactory.createAndShow();
+      dialog.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          game.changeToGameRoomListScreen();
+        }
+      });
+      dialog.show(stage);
       return FULLY_HANDLED;
     }));
     queueMessageListener.registerHandler(PlayerJoinedRoomMessage.class, ((webSocket, o) -> {
@@ -152,7 +152,7 @@ public class GameRoomHUD implements Disposable {
         public void changed (ChangeEvent event, Actor actor) {
           log.info(selectBox.getSelected().toString());
           playerInfo.setCivilization(((CivilizationConfig) selectBox.getSelected()).getId());
-          connectService.reconnect();
+          connectService.changeLobby();
         }
       });
       if (!player.getUserName().equals(playerInfo.getUserName()))

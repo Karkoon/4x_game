@@ -10,13 +10,13 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReconnectHandler {
+public class LobbyChangeHandler {
 
   private final MessageSender sender;
   private final GameRoomManager rooms;
 
   @Inject
-  public ReconnectHandler(
+  public LobbyChangeHandler(
       MessageSender sender,
       GameRoomManager rooms
   ) {

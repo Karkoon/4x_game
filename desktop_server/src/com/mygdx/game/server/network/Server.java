@@ -3,7 +3,7 @@ package com.mygdx.game.server.network;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.handlers.CloseHandler;
 import com.mygdx.game.server.network.handlers.ConnectHandler;
-import com.mygdx.game.server.network.handlers.ReconnectHandler;
+import com.mygdx.game.server.network.handlers.LobbyChangeHandler;
 import com.mygdx.game.server.network.handlers.StartHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -22,7 +22,7 @@ public final class Server {
   private final StartHandler startHandler;
   private final ConnectHandler connectHandler;
   private final CloseHandler closeHandler;
-  private final ReconnectHandler reconnectHandler;
+  private final LobbyChangeHandler lobbyChangeHandler;
 
   private HttpServer server;
 
@@ -31,12 +31,12 @@ public final class Server {
       StartHandler startHandler,
       ConnectHandler connectHandler,
       CloseHandler closeHandler,
-      ReconnectHandler reconnectHandler
+      LobbyChangeHandler lobbyChangeHandler
   ) {
     this.startHandler = startHandler;
     this.connectHandler = connectHandler;
     this.closeHandler = closeHandler;
-    this.reconnectHandler = reconnectHandler;
+    this.lobbyChangeHandler = lobbyChangeHandler;
   }
 
   private void handle(
@@ -49,7 +49,7 @@ public final class Server {
     switch (type) {
       case "start" -> startHandler.handle(commands, client);
       case "connect" -> connectHandler.handle(commands, client);
-      case "reconnect" -> reconnectHandler.handle(commands, client);
+      case "lobby" -> lobbyChangeHandler.handle(commands, client);
       default -> {
         var game = client.getGameRoom().getGameInstance();
         if (game != null) {

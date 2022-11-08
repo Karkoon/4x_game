@@ -12,6 +12,7 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.UUID;
 
 @Log
 @Singleton
@@ -38,7 +39,7 @@ public class GdxGame extends Game {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
-    gameConnectService.connect(gameRoomName, "bot"); //todo get the game room name from Args
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID()); //todo get the game room name from Args
 
     changeToGameRoomScreen();
   }

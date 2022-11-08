@@ -17,11 +17,6 @@ public class CivilizationConfig implements Config {
   private String polishName;
 
   @Override
-  public long getId() {
-    return id;
-  }
-
-  @Override
   public String toString() {
     return name;
   }

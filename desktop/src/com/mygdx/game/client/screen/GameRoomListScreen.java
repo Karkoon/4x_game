@@ -10,9 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.hud.GameRoomHUD;
-import com.mygdx.game.client.ui.PlayerAlreadyInTheRoomDialogFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
-import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import lombok.extern.java.Log;
 
@@ -29,8 +27,6 @@ public class GameRoomListScreen extends ScreenAdapter {
   private final GameRoomHUD gameRoomHUD;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
-  private final QueueMessageListener queueMessageListener;
-  private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
 
   private String roomName = "defaultRoom";
   private String userName = "defaultUser";
@@ -41,17 +37,13 @@ public class GameRoomListScreen extends ScreenAdapter {
       GdxGame game,
       GameRoomHUD gameRoomHUD,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      UiElementsCreator uiElementsCreator,
-      QueueMessageListener queueMessageListener,
-      PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory
+      UiElementsCreator uiElementsCreator
   ) {
     this.connectService = connectService;
     this.game = game;
     this.gameRoomHUD = gameRoomHUD;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
-    this.queueMessageListener = queueMessageListener;
-    this.playerAlreadyInTheRoomDialogFactory = playerAlreadyInTheRoomDialogFactory;
   }
 
   @Override
