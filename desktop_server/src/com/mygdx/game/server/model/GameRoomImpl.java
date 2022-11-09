@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.mygdx.game.core.model.MapSize;
 import com.mygdx.game.server.di.GameInstanceSubcomponent;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
@@ -19,12 +20,14 @@ public class GameRoomImpl implements GameRoom {
   private final String roomId;
   private final GameInstanceSubcomponent.Builder gameInstanceSubcomponentBuilder;
   private GameInstance activeGameInstance;
+  private MapSize mapSize;
 
   @AssistedInject
   public GameRoomImpl(
       GameInstanceSubcomponent.Builder gameInstanceSubcomponentBuilder,
       @Assisted String roomId
   ) {
+    this.mapSize = MapSize.VERY_SMALL;
     this.roomId = roomId;
     this.gameInstanceSubcomponentBuilder = gameInstanceSubcomponentBuilder;
   }
@@ -67,6 +70,16 @@ public class GameRoomImpl implements GameRoom {
   public void tearDownGameInstance() {
     log.info("stopped game");
     activeGameInstance = null;
+  }
+
+  @Override
+  public void setMapSize(MapSize mapSize) {
+    this.mapSize = mapSize;
+  }
+
+  @Override
+  public MapSize getMapSize() {
+    return mapSize;
   }
 
   @NonNull

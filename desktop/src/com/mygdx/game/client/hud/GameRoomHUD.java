@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -21,10 +22,12 @@ import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.CivilizationConfig;
+import com.mygdx.game.core.model.MapSize;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerAlreadyInTheRoomMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -50,7 +53,11 @@ public class GameRoomHUD implements Disposable {
   private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
 
   private List<PlayerLobby> players;
+  private MapSize selectedMapSize;
+
+
   private Table playerTable;
+  private SelectBox mapSizeSelectBox;
   private Button startButton;
 
   @Inject
@@ -80,6 +87,7 @@ public class GameRoomHUD implements Disposable {
     this.playerAlreadyInTheRoomDialogFactory = playerAlreadyInTheRoomDialogFactory;
 
     this.players = new ArrayList<>();
+    this.selectedMapSize = MapSize.VERY_SMALL;
 
     registerHandlers();
     prepareHudSceleton();
@@ -122,12 +130,19 @@ public class GameRoomHUD implements Disposable {
       gameScreen.changeToGameScreen();
       return FULLY_HANDLED;
     }));
+    queueMessageListener.registerHandler(RoomConfigMessage.class, ((webSocket, o) -> {
+      selectedMapSize = o.getMapSize();
+      log.info("Changed room config=" + o);
+      prepareHudSceleton();
+      return FULLY_HANDLED;
+    }));
   }
 
   public void prepareHudSceleton() {
     stage.clear();
 
     preparePlayerTable();
+    prepareMapSizeSelectBox();
     prepareStartButton();
 
     Gdx.input.setInputProcessor(stage);
@@ -150,9 +165,8 @@ public class GameRoomHUD implements Disposable {
       selectBox.addListener(new ChangeListener() {
         @Override
         public void changed (ChangeEvent event, Actor actor) {
-          log.info(selectBox.getSelected().toString());
           playerInfo.setCivilization(((CivilizationConfig) selectBox.getSelected()).getId());
-          connectService.changeLobby();
+          connectService.changeUser();
         }
       });
       if (!player.getUserName().equals(playerInfo.getUserName()))
@@ -167,12 +181,31 @@ public class GameRoomHUD implements Disposable {
   private void prepareStartButton() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.8), (int) (height * 0.1));
+    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.7), (int) (height * 0.1));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.2), (int) (height * 0.05));
     stage.addActor(startButton);
   }
 
+  private void prepareMapSizeSelectBox() {
+    float width = stage.getWidth();
+    float height = stage.getHeight();
+    this.mapSizeSelectBox = uiElementsCreator.createSelectBox();
+    uiElementsCreator.setActorPosition(mapSizeSelectBox, (int) (width * 0.7), (int) (height * 0.3));
+    uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (width * 0.2), (int) (height * 0.05));
+    this.mapSizeSelectBox.setItems(MapSize.values());
+    this.mapSizeSelectBox.setSelected(selectedMapSize);
+    this.mapSizeSelectBox.addListener(new ChangeListener() {
+      @Override
+      public void changed (ChangeEvent event, Actor actor) {
+        selectedMapSize = (MapSize) mapSizeSelectBox.getSelected();
+        connectService.changeLobby(selectedMapSize);
+      }
+    });
+    stage.addActor(mapSizeSelectBox);
+  }
+
   private void startGame() {
-    gameStartService.startGame(5, 5, 401);
+    gameStartService.startGame(401);
   }
 
   public void setPlayers(List<PlayerLobby> players) {

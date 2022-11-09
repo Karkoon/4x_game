@@ -3,6 +3,7 @@ package com.mygdx.game.server.network.handlers;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.PlayerAlreadyInTheRoomMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoomManager;
 import com.mygdx.game.server.network.MessageSender;
@@ -45,6 +46,8 @@ public class ConnectHandler {
               .map(Client::mapToPlayerLobby).collect(Collectors.toList());
       var msg = new PlayerJoinedRoomMessage(users);
       sender.sendToAll(msg, room.getClients());
+      var msg2 = new RoomConfigMessage(room.getMapSize());
+      sender.sendToAll(msg2, room.getClients());
     }
   }
 }

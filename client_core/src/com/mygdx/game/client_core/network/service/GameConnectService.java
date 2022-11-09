@@ -2,6 +2,7 @@ package com.mygdx.game.client_core.network.service;
 
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.MessageSender;
+import com.mygdx.game.core.model.MapSize;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -27,9 +28,15 @@ public class GameConnectService {
     sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization());
   }
 
-  public void changeLobby() {
-    log.info("connect request sent");
-    sender.send("lobby:"  + playerInfo.getCivilization());
+  public void changeUser() {
+    log.info("change user request sent");
+    sender.send("change_user:"  + playerInfo.getCivilization());
+  }
+
+  public void changeLobby(MapSize selectedMapSize) {
+    var enumName = selectedMapSize.name();
+    log.info("change lobby request sent");
+    sender.send("change_lobby:"  + enumName);
   }
 
 }
