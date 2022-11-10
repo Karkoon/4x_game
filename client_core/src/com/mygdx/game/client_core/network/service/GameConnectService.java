@@ -33,10 +33,10 @@ public class GameConnectService {
     sender.send("change_user:"  + playerInfo.getCivilization());
   }
 
-  public void changeLobby(MapSize selectedMapSize) {
-    var enumName = selectedMapSize.name();
+  public void changeLobby(MapSize selectedMapSize, int mapType) {
+    var mapSize = selectedMapSize.name();
     log.info("change lobby request sent");
-    sender.send("change_lobby:"  + enumName);
+    sender.send("change_lobby:"  + mapSize + ":" + mapType);
   }
 
 }

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class RoomConfigMessage {
 
   MapSize mapSize;
+  int mapType;
 }

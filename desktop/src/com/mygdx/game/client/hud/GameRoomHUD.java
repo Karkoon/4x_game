@@ -22,6 +22,8 @@ import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.CivilizationConfig;
+import com.mygdx.game.config.GameConfigs;
+import com.mygdx.game.config.MapTypeConfig;
 import com.mygdx.game.core.model.MapSize;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
@@ -54,10 +56,12 @@ public class GameRoomHUD implements Disposable {
 
   private List<PlayerLobby> players;
   private MapSize selectedMapSize;
+  private MapTypeConfig selectedMapTypeConfig;
 
 
   private Table playerTable;
   private SelectBox mapSizeSelectBox;
+  private SelectBox mapTypeConfigSelectBox;
   private Button startButton;
 
   @Inject
@@ -88,7 +92,7 @@ public class GameRoomHUD implements Disposable {
 
     this.players = new ArrayList<>();
     this.selectedMapSize = MapSize.VERY_SMALL;
-
+    this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, GameConfigs.MAP_TYPE_MIN);
     registerHandlers();
     prepareHudSceleton();
   }
@@ -132,6 +136,7 @@ public class GameRoomHUD implements Disposable {
     }));
     queueMessageListener.registerHandler(RoomConfigMessage.class, ((webSocket, o) -> {
       selectedMapSize = o.getMapSize();
+      selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, o.getMapType());
       log.info("Changed room config=" + o);
       prepareHudSceleton();
       return FULLY_HANDLED;
@@ -143,6 +148,7 @@ public class GameRoomHUD implements Disposable {
 
     preparePlayerTable();
     prepareMapSizeSelectBox();
+    prepareMapTypeSelectBox();
     prepareStartButton();
 
     Gdx.input.setInputProcessor(stage);
@@ -182,7 +188,7 @@ public class GameRoomHUD implements Disposable {
     float width = stage.getWidth();
     float height = stage.getHeight();
     this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.7), (int) (height * 0.1));
-    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.2), (int) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.25), (int) (height * 0.05));
     stage.addActor(startButton);
   }
 
@@ -190,22 +196,41 @@ public class GameRoomHUD implements Disposable {
     float width = stage.getWidth();
     float height = stage.getHeight();
     this.mapSizeSelectBox = uiElementsCreator.createSelectBox();
-    uiElementsCreator.setActorPosition(mapSizeSelectBox, (int) (width * 0.7), (int) (height * 0.3));
-    uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (width * 0.2), (int) (height * 0.05));
+    uiElementsCreator.setActorPosition(mapSizeSelectBox, (int) (width * 0.7), (int) (height * 0.2));
+    uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (width * 0.25), (int) (height * 0.05));
     this.mapSizeSelectBox.setItems(MapSize.values());
     this.mapSizeSelectBox.setSelected(selectedMapSize);
     this.mapSizeSelectBox.addListener(new ChangeListener() {
       @Override
       public void changed (ChangeEvent event, Actor actor) {
         selectedMapSize = (MapSize) mapSizeSelectBox.getSelected();
-        connectService.changeLobby(selectedMapSize);
+        connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
       }
     });
     stage.addActor(mapSizeSelectBox);
   }
 
+  private void prepareMapTypeSelectBox() {
+    float width = stage.getWidth();
+    float height = stage.getHeight();
+    var mapTypes = gameConfigAssets.getGameConfigs().getAll(MapTypeConfig.class);
+    this.mapTypeConfigSelectBox = uiElementsCreator.createSelectBox();
+    uiElementsCreator.setActorPosition(mapTypeConfigSelectBox, (int) (width * 0.7), (int) (height * 0.3));
+    uiElementsCreator.setActorWidthAndHeight(mapTypeConfigSelectBox, (int) (width * 0.25), (int) (height * 0.05));
+    this.mapTypeConfigSelectBox.setItems(mapTypes);
+    this.mapTypeConfigSelectBox.setSelected(selectedMapTypeConfig);
+    this.mapTypeConfigSelectBox.addListener(new ChangeListener() {
+      @Override
+      public void changed (ChangeEvent event, Actor actor) {
+        selectedMapTypeConfig = (MapTypeConfig) mapTypeConfigSelectBox.getSelected();
+        connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
+      }
+    });
+    stage.addActor(mapTypeConfigSelectBox);
+  }
+
   private void startGame() {
-    gameStartService.startGame(401);
+    gameStartService.startGame();
   }
 
   public void setPlayers(List<PlayerLobby> players) {

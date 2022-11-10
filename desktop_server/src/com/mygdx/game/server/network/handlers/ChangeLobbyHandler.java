@@ -27,12 +27,11 @@ public class ChangeLobbyHandler {
 
   public void handle(String[] commands, Client client) {
     MapSize mapSize = MapSize.valueOf(commands[1]);
+    int mapType = Integer.parseInt(commands[2]);
     var room = rooms.getRoom(client.getGameRoom().getRoomId());
     room.setMapSize(mapSize);
-    List<PlayerLobby> users = room.getClients()
-            .stream()
-            .map(Client::mapToPlayerLobby).collect(Collectors.toList());
-    var msg = new RoomConfigMessage(room.getMapSize());
+    room.setMapType(mapType);
+    var msg = new RoomConfigMessage(room.getMapSize(), room.getMapType());
     sender.sendToAll(msg, room.getClients());
   }
 }

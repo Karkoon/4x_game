@@ -22,13 +22,12 @@ public class StartHandler {
 
   public void handle(String[] commands, Client client) {
     Gdx.app.postRunnable(() -> {
-      var mapType = Long.parseLong(commands[1]);
       var room = client.getGameRoom();
       var msg = new GameStartedMessage(room.getClients().get(0).getPlayerToken());
       log.info("GameStartedMessage: " + msg + " room " + room.getClients().toString());
       sender.sendToAll(msg, room.getClients());
       room.setupGameInstance();
-      room.getGameInstance().startGame(mapType);
+      room.getGameInstance().startGame();
     });
   }
 }
