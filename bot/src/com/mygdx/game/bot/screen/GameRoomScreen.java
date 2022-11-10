@@ -10,6 +10,7 @@ import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -48,6 +49,7 @@ public class GameRoomScreen extends ScreenAdapter {
           }
       );
       listener.registerHandler(PlayerJoinedRoomMessage.class, this::noOp);
+      listener.registerHandler(RoomConfigMessage.class, this::noOp2);
       initialized = true;
     }
   }
@@ -59,6 +61,9 @@ public class GameRoomScreen extends ScreenAdapter {
   }
 
   private boolean noOp(WebSocket webSocket, PlayerJoinedRoomMessage message) {
+    return true;
+  }
+  private boolean noOp2(WebSocket webSocket, RoomConfigMessage message) {
     return true;
   }
 }

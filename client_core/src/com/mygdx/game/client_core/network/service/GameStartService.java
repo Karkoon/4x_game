@@ -18,8 +18,8 @@ public class GameStartService {
     this.sender = sender;
   }
 
-  public void startGame(int width, int height, int mapType) {
+  public void startGame(int mapType) {
     log.info("start game request sent");
-    sender.get().send(String.format("start:%d:%d:%d", width, height, mapType));
+    sender.get().send(String.format("start:%d", mapType));
   }
 }

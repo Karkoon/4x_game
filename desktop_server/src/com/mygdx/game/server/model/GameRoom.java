@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.mygdx.game.core.model.MapSize;
 import lombok.NonNull;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public interface GameRoom {
   void tearDownGameInstance();
 
   GameInstance getGameInstance();
+
+  void setMapSize(MapSize mapSize);
+
+  MapSize getMapSize();
 }

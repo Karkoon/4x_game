@@ -1,9 +1,10 @@
 package com.mygdx.game.server.network;
 
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.handlers.ChangeLobbyHandler;
+import com.mygdx.game.server.network.handlers.ChangeUserHandler;
 import com.mygdx.game.server.network.handlers.CloseHandler;
 import com.mygdx.game.server.network.handlers.ConnectHandler;
-import com.mygdx.game.server.network.handlers.LobbyChangeHandler;
 import com.mygdx.game.server.network.handlers.StartHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -22,7 +23,8 @@ public final class Server {
   private final StartHandler startHandler;
   private final ConnectHandler connectHandler;
   private final CloseHandler closeHandler;
-  private final LobbyChangeHandler lobbyChangeHandler;
+  private final ChangeUserHandler changeUserHandler;
+  private final ChangeLobbyHandler changeLobbyHandler;
 
   private HttpServer server;
 
@@ -31,12 +33,14 @@ public final class Server {
       StartHandler startHandler,
       ConnectHandler connectHandler,
       CloseHandler closeHandler,
-      LobbyChangeHandler lobbyChangeHandler
+      ChangeUserHandler changeUserHandler,
+      ChangeLobbyHandler changeLobbyHandler
   ) {
     this.startHandler = startHandler;
     this.connectHandler = connectHandler;
     this.closeHandler = closeHandler;
-    this.lobbyChangeHandler = lobbyChangeHandler;
+    this.changeUserHandler = changeUserHandler;
+    this.changeLobbyHandler = changeLobbyHandler;
   }
 
   private void handle(
@@ -49,7 +53,8 @@ public final class Server {
     switch (type) {
       case "start" -> startHandler.handle(commands, client);
       case "connect" -> connectHandler.handle(commands, client);
-      case "lobby" -> lobbyChangeHandler.handle(commands, client);
+      case "change_user" -> changeUserHandler.handle(commands, client);
+      case "change_lobby" -> changeLobbyHandler.handle(commands, client);
       default -> {
         var game = client.getGameRoom().getGameInstance();
         if (game != null) {

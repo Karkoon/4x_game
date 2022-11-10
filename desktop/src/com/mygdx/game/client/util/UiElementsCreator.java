@@ -156,6 +156,10 @@ public class UiElementsCreator {
     actor.setHeight(height);
   }
 
+  public void setActorPosition(Actor actor, int x, int y) {
+    actor.setPosition(x, y);
+  }
+
   public void addHoverPopupWithActor(Actor uiElement, Actor popup, Stage stage) {
     uiElement.addListener(new ClickListener() {
       @Override
