@@ -62,6 +62,7 @@ project(":desktop") {
 
     dependencies {
         implementation project(":client_core")
+        implementation project(":bot")
         annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }

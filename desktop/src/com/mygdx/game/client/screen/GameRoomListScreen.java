@@ -114,7 +114,7 @@ public class GameRoomListScreen extends ScreenAdapter {
   }
 
   private void joinRoom() {
-    connectService.connect(roomName, userName);
+    connectService.connect(roomName, userName, "PLAYER");
     game.changeToGameRoomScreen();
   }
 

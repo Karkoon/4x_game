@@ -11,4 +11,5 @@ public class PlayerLobby {
 
   private String userName;
   private long civId;
+  private boolean isBot;
 }

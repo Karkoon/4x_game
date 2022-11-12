@@ -39,7 +39,7 @@ public class GdxGame extends Game {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
-    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID()); //todo get the game room name from Args
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), "BOT"); //todo get the game room name from Args
 
     changeToGameRoomScreen();
   }

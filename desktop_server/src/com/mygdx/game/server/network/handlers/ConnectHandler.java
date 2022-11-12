@@ -30,6 +30,7 @@ public class ConnectHandler {
     var userName = commands[1];
     var userToken = commands[2];
     var roomId = commands[3];
+    var playerType = commands[5];
     if (rooms.getRoom(roomId).getClients().stream().map(Client::getPlayerUsername).anyMatch(name -> name.equals(userName))) {
       var msg = new PlayerAlreadyInTheRoomMessage();
       sender.send(msg, client);
@@ -38,6 +39,7 @@ public class ConnectHandler {
       client.setPlayerUsername(userName);
       client.setPlayerToken(userToken);
       client.setCivId(civId);
+      client.setBot(playerType.equals("BOT"));
       var room = rooms.getRoom(roomId);
       room.addClient(client);
       client.setGameRoom(room);

@@ -17,8 +17,10 @@ public class Client {
   private String playerToken;
   @Exclude
   private long civId;
+  @Exclude
+  private boolean isBot;
 
   public PlayerLobby mapToPlayerLobby() {
-    return new PlayerLobby(playerUsername, civId);
+    return new PlayerLobby(playerUsername, civId, isBot);
   }
 }
