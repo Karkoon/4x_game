@@ -13,4 +13,9 @@ public class MapTypeConfig implements Config {
   private String name;
   private String polishName;
   private String textureName; // icon
+
+  @Override
+  public String toString() {
+    return name + " (" + id + ")";
+  }
 }

@@ -46,7 +46,7 @@ public class ConnectHandler {
               .map(Client::mapToPlayerLobby).collect(Collectors.toList());
       var msg = new PlayerJoinedRoomMessage(users);
       sender.sendToAll(msg, room.getClients());
-      var msg2 = new RoomConfigMessage(room.getMapSize());
+      var msg2 = new RoomConfigMessage(room.getMapSize(), room.getMapType());
       sender.send(msg2, client);
     }
   }

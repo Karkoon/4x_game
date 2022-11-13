@@ -53,6 +53,7 @@ public class GameScreenHUD implements Disposable {
   private Button endTurnButton;
   private Button nextUnitButton;
   private Button techScreenButton;
+  private Button exitGameButton;
   private HorizontalGroup materialGroup;
   private VerticalGroup activeUnitDescription;
 
@@ -122,6 +123,9 @@ public class GameScreenHUD implements Disposable {
     this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::changeToTechnologyScreen,  (int) (stage.getWidth()-300), 0);
     uiElementsCreator.setActorWidthAndHeight(this.techScreenButton, 100, 30);
 
+    this.exitGameButton = uiElementsCreator.createActionButton("EXIT", this::exit, 0, (int) (stage.getHeight()-30));
+    uiElementsCreator.setActorWidthAndHeight(this.exitGameButton, 100, 30);
+
     this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
     var popupMaterial = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-100), 300, 50);
     fillMaterialGroup(materialGroup, materialUtilClient.getPlayerMaterial());
@@ -138,6 +142,7 @@ public class GameScreenHUD implements Disposable {
     stage.addActor(endTurnButton);
     stage.addActor(nextUnitButton);
     stage.addActor(techScreenButton);
+    stage.addActor(exitGameButton);
   }
 
   private void fillMaterialGroup(HorizontalGroup group, Map<MaterialBase, Integer> playerMaterial) {
@@ -204,6 +209,10 @@ public class GameScreenHUD implements Disposable {
 
   private void changeToTechnologyScreen() {
     navigator.get().changeToTechnologyScreen();
+  }
+
+  private void exit() {
+    navigator.get().exit();
   }
 
   private void positionCamera(int entityId) {

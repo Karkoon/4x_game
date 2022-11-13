@@ -30,4 +30,8 @@ public interface GameRoom {
   void setMapSize(MapSize mapSize);
 
   MapSize getMapSize();
+
+  void setMapType(int mapType);
+
+  int getMapType();
 }

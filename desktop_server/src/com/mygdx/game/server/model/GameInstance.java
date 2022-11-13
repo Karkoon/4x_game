@@ -54,8 +54,9 @@ public class GameInstance {
     this.roundEndService = roundEndService;
   }
 
-  public void startGame(long mapType) {
+  public void startGame() {
     var mapSize = room.getMapSize();
+    var mapType = room.getMapType();
     var map = mapInitializer.get().initializeMap(mapSize.width, mapSize.height, mapType);
     technologyInitializer.get().initializeTechnologies();
     materialInitializer.get().initializeMaterials();
