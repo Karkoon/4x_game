@@ -2,8 +2,8 @@ package com.mygdx.game.server.initialize;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
+import com.mygdx.game.config.CivilizationConfig;
 import com.mygdx.game.config.GameConfigs;
-import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.gameinstance.services.CreateUnitService;
@@ -32,23 +32,18 @@ public class StartUnitInitializer {
   }
 
   public void initializeStartingUnits(IntArray map) {
-    var anyConfig = GameConfigs.UNIT_MIN;
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
       var client = gameRoom.getClients().get(i);
       log.info("client id " + client.getPlayerToken());
-      var config = getCivConfig(client.getCivId());
+      var config = getStartUnitOfCiv(client.getCivId());
       var fieldId = getUnusedField(map);
       createUnitService.createUnit((int) config, fieldId, client, true);
     }
   }
 
-  private long getCivConfig(long civId) {
-    var allUnits = gameConfigs.getAll(UnitConfig.class);
-    for (UnitConfig unit : allUnits) {
-      if (unit.getCivilizationConfigId() == civId)
-        return unit.getId();
-    }
-    return allUnits.get(0).getId();
+  private long getStartUnitOfCiv(long civId) {
+    var civConfig = gameConfigs.get(CivilizationConfig.class, civId);
+    return civConfig.getStartUnit();
   }
 
   private int getUnusedField(IntArray map) {
@@ -56,7 +51,7 @@ public class StartUnitInitializer {
     while (usedMapPositions.contains(fieldId)) {
       fieldId = map.random();
       if (usedMapPositions.size == map.size) {
-        throw new RuntimeException("all positions have been used");
+        throw new RuntimeException("all positions have been used"); // todo handle it without crashing the server
       }
     }
     usedMapPositions.add(fieldId);

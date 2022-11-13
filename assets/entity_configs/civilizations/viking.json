@@ -1,5 +1,6 @@
 {
   "id": 601,
   "name": "Viking",
-  "polishName": "Wikingowie"
+  "polishName": "Wikingowie",
+  "startUnit": 101
 }
