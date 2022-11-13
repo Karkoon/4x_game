@@ -8,5 +8,14 @@ public enum TechnologyImpactParameter {
   DEFENSE,
   SIGHT_RADIUS,
   MOVE_RANGE,
-  ATTACK_RANGE
+  ATTACK_RANGE,
+
+  // building parameters
+  TIME,
+  GOLD,
+  FOOD,
+  SCIENCE,
+  PRODUCTION
+
+
 }

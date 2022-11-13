@@ -152,7 +152,7 @@ public class RoundEndService extends WorldService {
         int unitEntityId = this.unitFactory.createEntity(unitConfig, coordinates, client);
         world.process();
         this.inRecruitmentMapper.remove(entityId);
-        technologyUtilServer.applyTechnologyToNewEntities(unitEntityId, TechnologyImpactType.UNIT_IMPACT);
+        technologyUtilServer.applyTechnologyToNewEntities(unitEntityId, client.getPlayerToken(), TechnologyImpactType.UNIT_IMPACT);
       }
     }
   }
