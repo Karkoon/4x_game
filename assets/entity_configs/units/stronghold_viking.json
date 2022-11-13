@@ -1,0 +1,21 @@
+{
+  "id": 105,
+  "name": "stronghold",
+  "polishName": "twierda",
+  "modelPath": "basic.g3db",
+  "textureName": "units/stronghold.png",
+  "iconName": "units/stronghold_viking_icon.png",
+  "maxHp": 1000,
+  "attackPower": 0,
+  "defense": 0,
+  "sightRadius": 1,
+  "moveRange": 0,
+  "attackRange": 0,
+  "turnAmount": 0,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+  ],
+  "civilizationConfigId": 601
+}
