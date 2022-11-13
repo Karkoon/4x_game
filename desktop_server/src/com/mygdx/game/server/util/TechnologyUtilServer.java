@@ -4,7 +4,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
-import com.artemis.utils.IntBag;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.AppliedTechnologies;
@@ -13,6 +12,8 @@ import com.mygdx.game.core.ecs.component.InResearch;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
@@ -40,12 +41,17 @@ public class TechnologyUtilServer extends WorldService {
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<SubField> subfieldMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @AspectDescriptor(all = {InResearch.class})
   private EntitySubscription inResearchSubscriber;
 
   @AspectDescriptor(all = {Unit.class, Owner.class})
   private EntitySubscription unitOwnerSubscriber;
+
+  @AspectDescriptor(all = {UnderConstruction.class})
+  private EntitySubscription underConstructionSubscriber;
 
   @AspectDescriptor(all = {Researched.class, Owner.class})
   private EntitySubscription researchedOwnerSubscriber;
@@ -101,30 +107,43 @@ public class TechnologyUtilServer extends WorldService {
             applyTechnologyToUnit(technologyConfig, entityId);
         }
       }
-      case MATERIAL_IMPACT -> {
-        // TODO
-      }
       case BUILDING_IMPACT -> {
+        for (int i = 0; i < underConstructionSubscriber.getEntities().size(); i++) {
+          int entityId = underConstructionSubscriber.getEntities().get(i);
+          int parent = subfieldMapper.get(underConstructionMapper.get(entityId).getParentSubfield()).getParent();
+          if (ownerMapper.get(parent).getToken().equals(owner.getToken()))
+            applyTechnologyToBuilding(technologyConfig, entityId);
+        }
+      }
+      case MATERIAL_IMPACT -> {
         // TODO
       }
     }
   }
 
-  public void applyTechnologyToNewEntities(int unitEntityId, TechnologyImpactType technologyType) {
-    var owner = ownerMapper.get(unitEntityId);
+  public void applyTechnologyToNewEntities(int newEntityId, String ownerToken, TechnologyImpactType technologyType) {
     var entities = researchedOwnerSubscriber.getEntities();
     switch (technologyType) {
       case UNIT_IMPACT -> {
         for (int i = 0; i < entities.size(); i++) {
           int entityId = entities.get(i);
-          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType) && ownerMapper.get(entityId).getToken().equals(owner.getToken())) {
-            log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to unit " + unitEntityId);
-            applyTechnologyToUnit(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), unitEntityId);
+          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType)
+                  && ownerMapper.get(entityId).getToken().equals(ownerToken)) {
+            log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to unit " + newEntityId);
+            applyTechnologyToUnit(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), newEntityId);
           }
         }
       }
       case BUILDING_IMPACT -> {
-        // TODO
+        for (int i = 0; i < entities.size(); i++) {
+          int entityId = entities.get(i);
+          int parent = subfieldMapper.get(underConstructionMapper.get(newEntityId).getParentSubfield()).getParent();
+          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType)
+                  && ownerMapper.get(parent).getToken().equals(ownerToken)) {
+            log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to building " + newEntityId);
+            applyTechnologyToBuilding(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), newEntityId);
+          }
+        }
       }
       case MATERIAL_IMPACT -> {
         // TODO
@@ -160,5 +179,59 @@ public class TechnologyUtilServer extends WorldService {
       }
       appliedTechnologies.add(technologyConfig.getId());
     }
+  }
+
+  private void applyTechnologyToBuilding(TechnologyConfig technologyConfig, int entityId) {
+    var technologyImpactValues = technologyConfig.getImpact().getTechnologyImpactValues();
+    var underConstruction = underConstructionMapper.get(entityId);
+    for (TechnologyImpactValue technologyImpactValue : technologyImpactValues) {
+      var operation = technologyImpactValue.getOperation();
+      var parameter = technologyImpactValue.getParameter();
+      var value = technologyImpactValue.getValue();
+      switch (parameter) {
+        case TIME ->
+          underConstruction.setTurnLeft(Math.max(1, operation.function.apply((float) underConstruction.getTurnLeft(), (float) value).intValue()));
+      }
+    }
+  }
+
+  public Map<MaterialBase, MaterialUnit> getReducedParametersForBuilding(Map<MaterialBase, MaterialUnit> materials, String playerToken) {
+    var newMaterials = new HashMap<MaterialBase, MaterialUnit>();
+    for (MaterialBase materialBase : materials.keySet()) {
+      newMaterials.put(materialBase, materials.get(materialBase));
+    }
+
+    for (int i = 0; i < researchedOwnerSubscriber.getEntities().size(); i++) {
+      int techEntityId = researchedOwnerSubscriber.getEntities().get(i);
+      var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(techEntityId).getId());
+      if (technologyConfig.getImpact().getTechnologyImpactType().equals(TechnologyImpactType.BUILDING_IMPACT)
+              && ownerMapper.get(techEntityId).getToken().equals(playerToken)) {
+        log.info("Apply technology " + entityConfigIdMapper.get(techEntityId).getId() + " to building materials");
+        for (TechnologyImpactValue technologyImpactValue : technologyConfig.getImpact().getTechnologyImpactValues()) {
+          var operation = technologyImpactValue.getOperation();
+          var parameter = technologyImpactValue.getParameter();
+          var value = technologyImpactValue.getValue();
+          switch (parameter) {
+            case GOLD -> {
+              if (newMaterials.containsKey(MaterialBase.GOLD))
+                newMaterials.get(MaterialBase.GOLD).setAmount(Math.max(operation.function.apply((float) newMaterials.get(MaterialBase.GOLD).getAmount(), (float) value).intValue(), 0));
+            }
+            case FOOD -> {
+              if (newMaterials.containsKey(MaterialBase.FOOD))
+                newMaterials.get(MaterialBase.FOOD).setAmount(Math.max(operation.function.apply((float) newMaterials.get(MaterialBase.FOOD).getAmount(), (float) value).intValue(), 0));
+            }
+            case PRODUCTION -> {
+              if (newMaterials.containsKey(MaterialBase.PRODUCTION))
+                newMaterials.get(MaterialBase.PRODUCTION).setAmount(Math.max(operation.function.apply((float) newMaterials.get(MaterialBase.PRODUCTION).getAmount(), (float) value).intValue(), 0));
+            }
+            case SCIENCE -> {
+              if (newMaterials.containsKey(MaterialBase.SCIENCE))
+                newMaterials.get(MaterialBase.SCIENCE).setAmount(Math.max(operation.function.apply((float) newMaterials.get(MaterialBase.SCIENCE).getAmount(), (float) value).intValue(), 0));
+            }
+          }
+        }
+      }
+    }
+    return newMaterials;
   }
 }

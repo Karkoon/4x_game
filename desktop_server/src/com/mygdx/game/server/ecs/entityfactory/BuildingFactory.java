@@ -29,7 +29,7 @@ public class BuildingFactory {
     this.world.inject(this);
   }
 
-  public void createBeforeEntity(
+  public int createBeforeEntity(
       @NonNull BuildingConfig config,
       @NonNull Coordinates coordinates,
       int parentSubfield, int clientIndex
@@ -44,6 +44,7 @@ public class BuildingFactory {
     componentFactory.createSharedComponents(entityId,
             new Class[]{Coordinates.class, UnderConstruction.class},
             new Class[]{Coordinates.class, UnderConstruction.class});
+    return entityId;
   }
 
   public void createEntity(
