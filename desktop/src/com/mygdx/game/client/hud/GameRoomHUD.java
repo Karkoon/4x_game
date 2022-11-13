@@ -63,6 +63,7 @@ public class GameRoomHUD implements Disposable {
   private SelectBox mapSizeSelectBox;
   private SelectBox mapTypeConfigSelectBox;
   private Button startButton;
+  private Button addBotButton;
 
   @Inject
   public GameRoomHUD(
@@ -157,8 +158,8 @@ public class GameRoomHUD implements Disposable {
   private void preparePlayerTable() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.playerTable = uiElementsCreator.createTable((float) (width * 0.1), (float) (height * 0.1));
-    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.4), (int) (height * 0.8));
+    this.playerTable = uiElementsCreator.createTable((float) (width * 0.05), (float) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.5), (int) (height * 0.85));
     for (PlayerLobby player : players) {
       var singlePlayerTable = uiElementsCreator.createTable((float) 0, (float) 0);
       var label = uiElementsCreator.createLabel("Nickname: " + player.getUserName(), 0, 0);
@@ -178,9 +179,20 @@ public class GameRoomHUD implements Disposable {
       if (!player.getUserName().equals(playerInfo.getUserName()))
         selectBox.setDisabled(true);
       uiElementsCreator.addToTableRow(selectBox, singlePlayerTable);
-
+      if (player.isBot()) {
+        var removeButton = uiElementsCreator.createDialogButton("REMOVE");
+        removeButton.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            removePlayer(player.getUserName());
+          }
+        });
+        uiElementsCreator.addToTableRow(removeButton, singlePlayerTable);
+      }
       uiElementsCreator.addCellToTable(singlePlayerTable, playerTable);
     }
+    this.addBotButton = uiElementsCreator.createActionButton("ADD BOT", this::addBot, 0, 0);
+    uiElementsCreator.addCellToTable(addBotButton, playerTable);
     stage.addActor(playerTable);
   }
 
@@ -210,6 +222,10 @@ public class GameRoomHUD implements Disposable {
     stage.addActor(mapSizeSelectBox);
   }
 
+  private void removePlayer(String playerName) {
+    connectService.removeUser(playerName);
+  }
+
   private void prepareMapTypeSelectBox() {
     float width = stage.getWidth();
     float height = stage.getHeight();
@@ -233,7 +249,8 @@ public class GameRoomHUD implements Disposable {
     gameStartService.startGame();
   }
 
-  public void setPlayers(List<PlayerLobby> players) {
-    this.players = players;
+  private void addBot() {
+    connectService.addBot();
   }
+
 }

@@ -22,10 +22,10 @@ public class GameConnectService {
     this.playerInfo = playerInfo;
   }
 
-  public void connect(String gameRoomName, String userName) {
+  public void connect(String gameRoomName, String userName, String isBot) {
     log.info("connect request sent");
     playerInfo.setUserName(userName);
-    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization());
+    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization() + ":" + isBot);
   }
 
   public void changeUser() {
@@ -39,4 +39,13 @@ public class GameConnectService {
     sender.send("change_lobby:"  + mapSize + ":" + mapType);
   }
 
+  public void removeUser(String userName) {
+    log.info("remove user request sent");
+    sender.send("remove_user:"  + userName);
+  }
+
+  public void addBot() {
+    log.info("add bot");
+    sender.send("add_bot");
+  }
 }
