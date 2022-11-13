@@ -43,4 +43,9 @@ public class GameConnectService {
     log.info("remove user request sent");
     sender.send("remove_user:"  + userName);
   }
+
+  public void addBot() {
+    log.info("add bot");
+    sender.send("add_bot");
+  }
 }

@@ -62,7 +62,6 @@ project(":desktop") {
 
     dependencies {
         implementation project(":client_core")
-        implementation project(":bot")
         annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     }
 }
@@ -81,6 +80,7 @@ project(":desktop_server") {
     apply plugin: "java-library"
 
     dependencies {
+        implementation project(":bot")
         implementation project(":core")
         annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
         implementation "io.vertx:vertx-core:$vertxVersion"

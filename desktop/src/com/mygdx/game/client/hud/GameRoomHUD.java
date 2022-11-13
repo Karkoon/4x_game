@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.BotLauncher;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
@@ -35,9 +34,6 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,26 +250,7 @@ public class GameRoomHUD implements Disposable {
   }
 
   private void addBot() {
-    String[] args = {};
-
-    var thread = new Thread(() -> BotLauncher.main(args));
-    thread.start();
+    connectService.addBot();
   }
 
-  private static void printLines(String name, InputStream ins) throws Exception {
-    String line = null;
-    BufferedReader in = new BufferedReader(
-            new InputStreamReader(ins));
-    while ((line = in.readLine()) != null) {
-      System.out.println(name + " " + line);
-    }
-  }
-
-  private static void runProcess(String command) throws Exception {
-    Process pro = Runtime.getRuntime().exec(command);
-    printLines(command + " stdout:", pro.getInputStream());
-    printLines(command + " stderr:", pro.getErrorStream());
-    pro.waitFor();
-    System.out.println(command + " exitValue() " + pro.exitValue());
-  }
 }
