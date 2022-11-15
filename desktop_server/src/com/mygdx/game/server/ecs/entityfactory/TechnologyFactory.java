@@ -28,6 +28,7 @@ public class TechnologyFactory {
     int entityId = componentFactory.createEntityId();
     componentFactory.setUpEntityConfig(config, entityId);
     componentFactory.createNameComponent(entityId, "technology " + config.getName() + " " + entityId);
+    componentFactory.createTechnologyComponent(entityId, config);
     componentFactory.createChangeSubscribersComponent(entityId);
     componentFactory.createOwnerComponent(entityId, client);
     componentFactory.createFriendlyOrFoeComponent(entityId, client);

@@ -5,7 +5,6 @@ import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.assets.GameConfigAssets;
-import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.AppliedTechnologies;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.InResearch;
@@ -13,10 +12,12 @@ import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.Technology;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
+import com.mygdx.game.core.model.TechnologyImpact;
 import com.mygdx.game.core.model.TechnologyImpactType;
 import com.mygdx.game.core.model.TechnologyImpactValue;
 import com.mygdx.game.server.di.GameInstanceScope;
@@ -31,7 +32,6 @@ import java.util.Map;
 @Log
 public class TechnologyUtilServer extends WorldService {
 
-  private final GameConfigAssets gameConfigAssets;
   private final MaterialUtilServer materialUtilServer;
   private final World world;
 
@@ -42,6 +42,7 @@ public class TechnologyUtilServer extends WorldService {
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<SubField> subfieldMapper;
+  private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @AspectDescriptor(all = {InResearch.class})
@@ -58,12 +59,10 @@ public class TechnologyUtilServer extends WorldService {
 
   @Inject
   TechnologyUtilServer(
-      GameConfigAssets gameConfigAssets,
       MaterialUtilServer materialUtilServer,
       World world
   ) {
     world.inject(this);
-    this.gameConfigAssets = gameConfigAssets;
     this.materialUtilServer = materialUtilServer;
     this.world = world;
   }
@@ -98,13 +97,13 @@ public class TechnologyUtilServer extends WorldService {
 
   private void applyTechnologyToExistingEntities(int technologyEntityId, Owner owner) {
     var entityConfigId = entityConfigIdMapper.get(technologyEntityId);
-    var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId());
-    switch (technologyConfig.getImpact().getTechnologyImpactType()) {
+    var technologyImpact = technologyMapper.get(technologyEntityId).getImpact();
+    switch (technologyImpact.getTechnologyImpactType()) {
       case UNIT_IMPACT -> {
         for (int i = 0; i < unitOwnerSubscriber.getEntities().size(); i++) {
           int entityId = unitOwnerSubscriber.getEntities().get(i);
           if (ownerMapper.get(entityId).getToken().equals(owner.getToken()))
-            applyTechnologyToUnit(technologyConfig, entityId);
+            applyTechnologyToUnit(technologyImpact, entityId, (int) entityConfigId.getId());
         }
       }
       case BUILDING_IMPACT -> {
@@ -112,11 +111,8 @@ public class TechnologyUtilServer extends WorldService {
           int entityId = underConstructionSubscriber.getEntities().get(i);
           int parent = subfieldMapper.get(underConstructionMapper.get(entityId).getParentSubfield()).getParent();
           if (ownerMapper.get(parent).getToken().equals(owner.getToken()))
-            applyTechnologyToBuilding(technologyConfig, entityId);
+            applyTechnologyToBuilding(technologyImpact, entityId);
         }
-      }
-      case MATERIAL_IMPACT -> {
-        // TODO
       }
     }
   }
@@ -127,36 +123,35 @@ public class TechnologyUtilServer extends WorldService {
       case UNIT_IMPACT -> {
         for (int i = 0; i < entities.size(); i++) {
           int entityId = entities.get(i);
-          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType)
+          var impact = technologyMapper.get(entityId).getImpact();
+          if (impact.getTechnologyImpactType().equals(technologyType)
                   && ownerMapper.get(entityId).getToken().equals(ownerToken)) {
             log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to unit " + newEntityId);
-            applyTechnologyToUnit(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), newEntityId);
+            applyTechnologyToUnit(impact, newEntityId, (int) entityConfigIdMapper.get(entityId).getId());
           }
         }
       }
       case BUILDING_IMPACT -> {
         for (int i = 0; i < entities.size(); i++) {
           int entityId = entities.get(i);
+          var impact = technologyMapper.get(entityId).getImpact();
           int parent = subfieldMapper.get(underConstructionMapper.get(newEntityId).getParentSubfield()).getParent();
-          if (gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()).getImpact().getTechnologyImpactType().equals(technologyType)
+          if (impact.getTechnologyImpactType().equals(technologyType)
                   && ownerMapper.get(parent).getToken().equals(ownerToken)) {
             log.info("Apply technology " + entityConfigIdMapper.get(entityId).getId() + " to building " + newEntityId);
-            applyTechnologyToBuilding(gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(entityId).getId()), newEntityId);
+            applyTechnologyToBuilding(impact, newEntityId);
           }
         }
-      }
-      case MATERIAL_IMPACT -> {
-        // TODO
       }
     }
 
   }
 
-  private void applyTechnologyToUnit(TechnologyConfig technologyConfig, int entityId) {
+  private void applyTechnologyToUnit(TechnologyImpact technologyImpact, int entityId, int techConfigId) {
     var appliedTechnologies = appliedTechnologiesMapper.get(entityId);
-    if (!appliedTechnologies.getTechnologies().contains(technologyConfig.getId())) {
+    if (!appliedTechnologies.getTechnologies().contains(techConfigId)) {
       var stats = statsMapper.get(entityId);
-      var technologyImpactValues = technologyConfig.getImpact().getTechnologyImpactValues();
+      var technologyImpactValues = technologyImpact.getTechnologyImpactValues();
       for (TechnologyImpactValue technologyImpactValue : technologyImpactValues) {
         var operation = technologyImpactValue.getOperation();
         var parameter = technologyImpactValue.getParameter();
@@ -177,12 +172,12 @@ public class TechnologyUtilServer extends WorldService {
         }
         setDirty(entityId, Stats.class, world);
       }
-      appliedTechnologies.add(technologyConfig.getId());
+      appliedTechnologies.add(techConfigId);
     }
   }
 
-  private void applyTechnologyToBuilding(TechnologyConfig technologyConfig, int entityId) {
-    var technologyImpactValues = technologyConfig.getImpact().getTechnologyImpactValues();
+  private void applyTechnologyToBuilding(TechnologyImpact technologyImpact, int entityId) {
+    var technologyImpactValues = technologyImpact.getTechnologyImpactValues();
     var underConstruction = underConstructionMapper.get(entityId);
     for (TechnologyImpactValue technologyImpactValue : technologyImpactValues) {
       var operation = technologyImpactValue.getOperation();
@@ -203,11 +198,11 @@ public class TechnologyUtilServer extends WorldService {
 
     for (int i = 0; i < researchedOwnerSubscriber.getEntities().size(); i++) {
       int techEntityId = researchedOwnerSubscriber.getEntities().get(i);
-      var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigIdMapper.get(techEntityId).getId());
-      if (technologyConfig.getImpact().getTechnologyImpactType().equals(TechnologyImpactType.BUILDING_IMPACT)
+      var technologyImpact = technologyMapper.get(techEntityId).getImpact();
+      if (technologyImpact.getTechnologyImpactType().equals(TechnologyImpactType.BUILDING_IMPACT)
               && ownerMapper.get(techEntityId).getToken().equals(playerToken)) {
         log.info("Apply technology " + entityConfigIdMapper.get(techEntityId).getId() + " to building materials");
-        for (TechnologyImpactValue technologyImpactValue : technologyConfig.getImpact().getTechnologyImpactValues()) {
+        for (TechnologyImpactValue technologyImpactValue : technologyImpact.getTechnologyImpactValues()) {
           var operation = technologyImpactValue.getOperation();
           var parameter = technologyImpactValue.getParameter();
           var value = technologyImpactValue.getValue();

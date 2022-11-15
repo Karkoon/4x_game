@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.Config;
 import com.mygdx.game.config.SubFieldConfig;
+import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.AppliedTechnologies;
 import com.mygdx.game.core.ecs.component.Building;
@@ -23,6 +24,7 @@ import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.Technology;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.model.MaterialBase;
@@ -69,6 +71,7 @@ public class ComponentFactory {
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<SubField> subFieldMapper;
+  private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
   private ComponentMapper<Unit> unitMapper;
 
@@ -103,6 +106,7 @@ public class ComponentFactory {
     sharedComponentsMapper.create(entity);
     sightlineSubscribersMapper.create(entity);
     subFieldMapper.create(entity);
+    technologyMapper.create(entity);
     underConstructionMapper.create(entity);
     world.delete(entity); //todo create a system to do it automatically?
   }
@@ -265,6 +269,11 @@ public class ComponentFactory {
   public void createSubFieldComponent(int fieldId, int entityId) {
     var subField = subFieldMapper.create(entityId);
     subField.setParent(fieldId);
+  }
+
+  public void createTechnologyComponent(int entityId, @NonNull TechnologyConfig config) {
+    var technology = technologyMapper.create(entityId);
+    technology.setImpact(config.getImpact());
   }
 
   public void createUnitComponent(int entityId) {
