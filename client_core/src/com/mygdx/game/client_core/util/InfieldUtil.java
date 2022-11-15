@@ -17,12 +17,9 @@ import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.model.BuildingImpactParameter;
 import com.mygdx.game.core.model.BuildingImpactValue;
 import com.mygdx.game.core.model.BuildingType;
-import com.mygdx.game.core.model.MaterialBase;
-import com.mygdx.game.core.model.MaterialUnit;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 @GameInstanceScope
 @Log
@@ -56,8 +53,6 @@ public class InfieldUtil {
   public boolean checkIfCanBuildUnit(int fieldEntityId, long unitConfigId) {
     var field = fieldMapper.get(fieldEntityId);
     var subFields = field.getSubFields();
-    var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-
     for (int i = 0; i < subFields.size; i++) {
       int subfieldEntityId = subFields.get(i);
       subfieldEntityId = networkWorldEntityMapper.getWorldEntity(subfieldEntityId);
@@ -82,7 +77,7 @@ public class InfieldUtil {
 
   public boolean checkIfEnoughMaterialsToRecruitUnit(long unitConfigId) {
     var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
-    Map<MaterialBase, MaterialUnit> requiredMaterials = unitConfig.getMaterials();
+    var requiredMaterials = unitConfig.getMaterials();
     return materialUtilClient.checkIfCanBuy(requiredMaterials, playerMaterialSubscriber.getEntities());
   }
 }

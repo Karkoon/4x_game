@@ -19,7 +19,9 @@
       [
         {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 101},
         {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 102},
-        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 103}
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 103},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 104},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 105}
       ]
     }
 }
