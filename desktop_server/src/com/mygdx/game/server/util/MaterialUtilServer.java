@@ -11,12 +11,16 @@ import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.MaterialIncome;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.PlayerMaterial;
+import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.core.ecs.component.SubField;
+import com.mygdx.game.core.ecs.component.Technology;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.model.BuildingImpactValue;
 import com.mygdx.game.core.model.BuildingType;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
+import com.mygdx.game.core.model.TechnologyImpactType;
+import com.mygdx.game.core.model.TechnologyImpactValue;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.network.gameinstance.services.WorldService;
 
@@ -36,12 +40,16 @@ public class MaterialUtilServer extends WorldService {
   @AspectDescriptor(all = {Owner.class, PlayerMaterial.class})
   private EntitySubscription ownerPlayerMaterialSubscriber;
 
+  @AspectDescriptor(all = {Researched.class, Owner.class})
+  private EntitySubscription researchedOwnerSubscriber;
+
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<MaterialIncome> materialIncomeMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<PlayerMaterial> playerMaterialMapper;
   private ComponentMapper<SubField> subfieldMapper;
+  private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   private final World world;
@@ -146,6 +154,12 @@ public class MaterialUtilServer extends WorldService {
       }
     }
 
+    for (Map.Entry<String, Map<MaterialBase, Integer>> entry : incomes.entrySet()) {
+      for (Map.Entry<MaterialBase, Integer> playerEntry : entry.getValue().entrySet()) {
+        var newValue = applyTechnologiesForMaterialImpact(playerEntry.getKey(), playerEntry.getValue(), entry.getKey());
+        playerEntry.setValue(newValue);
+      }
+    }
     return incomes;
   }
 
@@ -162,5 +176,24 @@ public class MaterialUtilServer extends WorldService {
       }
     }
     return addAmount;
+  }
+
+  public Integer applyTechnologiesForMaterialImpact(MaterialBase materialBase, Integer oldValue, String playerToken) {
+    for (int i = 0; i < researchedOwnerSubscriber.getEntities().size(); i++) {
+      int entityId = researchedOwnerSubscriber.getEntities().get(i);
+      String owner = ownerMapper.get(entityId).getToken();
+      var impact = technologyMapper.get(entityId).getImpact();
+      if (owner.equals(playerToken) && impact.getTechnologyImpactType() == TechnologyImpactType.MATERIAL_IMPACT) {
+        for (TechnologyImpactValue technologyImpactValue : impact.getTechnologyImpactValues()) {
+          var parameter = technologyImpactValue.getParameter();
+          if (MaterialBase.valueOf(parameter.name()) == materialBase) {
+            var operation = technologyImpactValue.getOperation();
+            var value = technologyImpactValue.getValue();
+            return operation.function.apply((float) oldValue, (float) value).intValue();
+          }
+        }
+      }
+    }
+    return oldValue;
   }
 }

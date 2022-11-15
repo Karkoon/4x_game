@@ -4,7 +4,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
-import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.core.ecs.component.AppliedTechnologies;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.InResearch;
