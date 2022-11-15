@@ -11,7 +11,7 @@
   "sightRadius": 1,
   "moveRange": 0,
   "attackRange": 0,
-  "turnAmount": 0,
+  "turnAmount": 1,
   "materials":
   [
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
