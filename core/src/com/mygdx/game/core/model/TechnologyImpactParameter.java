@@ -12,10 +12,13 @@ public enum TechnologyImpactParameter {
 
   // building parameters
   TIME,
+
+  // building & material parameters
   GOLD,
   FOOD,
   SCIENCE,
   PRODUCTION
+
 
 
 }

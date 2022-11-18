@@ -9,10 +9,10 @@
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
-      "technologyImpactType":"UNIT_IMPACT",
+      "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "HP", "operation": "PLUS", "value": 100}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 1000}
       ]
     },
   "dependencies" : []
