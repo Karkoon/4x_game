@@ -65,8 +65,8 @@ public class InfieldUtil {
       int buildingEntityId = subField.getBuilding();
       if (buildingEntityId != -0xC0FEE && !underConstructionMapper.has(buildingEntityId)) {
         var entityConfigId = entityConfigIdMapper.get(buildingEntityId);
-        long buildingConfigId = entityConfigId.getId();
-        var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+        long buildingConfigId = entityConfigId.getId();        var buildingConfig = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+
         if (buildingConfig.getImpact().getBuildingType() == BuildingType.RECRUITMENT_BUILDING) {
           for (BuildingImpactValue buildingImpactValue : buildingConfig.getImpact().getBuildingImpactValues()) {
             if (buildingImpactValue.getParameter() == BuildingImpactParameter.RECRUIT &&

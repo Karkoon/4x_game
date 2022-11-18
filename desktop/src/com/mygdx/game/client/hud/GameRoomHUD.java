@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
@@ -24,6 +25,7 @@ import com.mygdx.game.client_core.network.service.GameStartService;
 import com.mygdx.game.config.CivilizationConfig;
 import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.config.MapTypeConfig;
+import com.mygdx.game.core.model.BotType;
 import com.mygdx.game.core.model.MapSize;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
@@ -179,7 +181,21 @@ public class GameRoomHUD implements Disposable {
       if (!player.getUserName().equals(playerInfo.getUserName()))
         selectBox.setDisabled(true);
       uiElementsCreator.addToTableRow(selectBox, singlePlayerTable);
-      if (player.isBot()) {
+      if (player.getBotType() != BotType.NOT_BOT) {
+        var botBox = uiElementsCreator.createSelectBox();
+        Array<String> types = new Array<>();
+        types.add(BotType.TRAINED.name());
+        types.add(BotType.RANDOM_FIRST.name());
+        botBox.setItems(types);
+        botBox.setSelected(player.getBotType().name());
+        botBox.addListener(new ChangeListener() {
+          @Override
+          public void changed (ChangeEvent event, Actor actor) {
+            connectService.changeUser(player.getUserName(), (String) botBox.getSelected());
+          }
+        });
+        uiElementsCreator.addToTableRow(botBox, singlePlayerTable);
+
         var removeButton = uiElementsCreator.createDialogButton("REMOVE");
         removeButton.addListener(new ClickListener() {
           @Override
