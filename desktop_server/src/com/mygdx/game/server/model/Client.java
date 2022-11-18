@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.mygdx.game.core.model.BotType;
 import com.mygdx.game.core.model.PlayerLobby;
 import io.vertx.core.http.ServerWebSocket;
 import lombok.Data;
@@ -18,9 +19,9 @@ public class Client {
   @Exclude
   private long civId;
   @Exclude
-  private boolean isBot;
+  private BotType botType;
 
   public PlayerLobby mapToPlayerLobby() {
-    return new PlayerLobby(playerUsername, civId, isBot);
+    return new PlayerLobby(playerUsername, civId, botType);
   }
 }

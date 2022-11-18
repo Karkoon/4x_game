@@ -1,5 +1,6 @@
 package com.mygdx.game.server.network.handlers;
 
+import com.mygdx.game.core.model.BotType;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
 import com.mygdx.game.server.model.Client;
@@ -25,8 +26,19 @@ public class ChangeUserHandler {
   }
 
   public void handle(String[] commands, Client client) {
-    long civId = Long.parseLong(commands[1]);
-    client.setCivId(civId);
+    String userName = commands[1];
+    long civId = Long.parseLong(commands[2]);
+    BotType botType = BotType.valueOf(commands[3]);
+    List<Client> clients = client.getGameRoom().getClients();
+    for (Client oneClient : clients) {
+      if (oneClient.getPlayerUsername().equals(userName)) {
+        oneClient.setCivId(civId);
+        if (oneClient.getBotType() != BotType.NOT_BOT) {
+          oneClient.setBotType(botType);
+        }
+        break;
+      }
+    }
     var room = rooms.getRoom(client.getGameRoom().getRoomId());
     List<PlayerLobby> users = room.getClients()
             .stream()

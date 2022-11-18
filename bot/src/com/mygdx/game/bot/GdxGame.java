@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.screen.GameRoomScreen;
 import com.mygdx.game.client_core.network.service.GameConnectService;
+import com.mygdx.game.core.model.BotType;
 import dagger.Lazy;
 
 import lombok.extern.java.Log;
@@ -17,7 +18,6 @@ import java.util.UUID;
 @Log
 @Singleton
 public class GdxGame extends Game {
-
 
   private final GameConfigAssets assets;
   private final Lazy<GameRoomScreen> gameRoomScreen;
@@ -39,7 +39,7 @@ public class GdxGame extends Game {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
-    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), "BOT"); //todo get the game room name from Args
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), BotType.RANDOM_FIRST.name()); //todo get the game room name from Args
 
     changeToGameRoomScreen();
   }

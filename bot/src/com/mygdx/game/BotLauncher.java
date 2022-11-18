@@ -9,8 +9,6 @@ public class BotLauncher {
   public static void main(String[] arg) {
     var config = new Lwjgl3ApplicationConfiguration();
     config.setForegroundFPS(60);
-/*    var gameRoom = arg[0];
-    var botToken = arg[1]; // ?*/
     new Lwjgl3Application(DaggerGameFactory.create().providesGame(), config);
   }
 }

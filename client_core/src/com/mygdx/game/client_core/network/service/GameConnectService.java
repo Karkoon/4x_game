@@ -2,6 +2,7 @@ package com.mygdx.game.client_core.network.service;
 
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.MessageSender;
+import com.mygdx.game.core.model.BotType;
 import com.mygdx.game.core.model.MapSize;
 import lombok.extern.java.Log;
 
@@ -30,7 +31,12 @@ public class GameConnectService {
 
   public void changeUser() {
     log.info("change user request sent");
-    sender.send("change_user:"  + playerInfo.getCivilization());
+    sender.send("change_user:"  + playerInfo.getUserName() + ":" + playerInfo.getCivilization() + ":" + BotType.NOT_BOT.name());
+  }
+
+  public void changeUser(String otherUser, String botType) {
+    log.info("change user request sent");
+    sender.send("change_user:"  + otherUser + ":" + playerInfo.getCivilization() + ":" + botType);
   }
 
   public void changeLobby(MapSize selectedMapSize, int mapType) {
