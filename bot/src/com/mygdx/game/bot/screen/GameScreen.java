@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.mygdx.game.bot.GdxGame;
 import com.mygdx.game.bot.hud.NextFieldUtil;
 import com.mygdx.game.bot.hud.NextUnitUtil;
+import com.mygdx.game.bot.util.BotAttackUtil;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.ActiveToken;
@@ -34,6 +35,7 @@ public class GameScreen extends ScreenAdapter {
 
   private final World world;
 
+  private final BotAttackUtil botAttackUtil;
   private final PredictedIncome predictedIncome;
   private final NextUnitUtil nextUnitUtil;
   private final PlayerInfo playerInfo;
@@ -54,6 +56,7 @@ public class GameScreen extends ScreenAdapter {
   @Inject
   public GameScreen(
       World world,
+      BotAttackUtil botAttackUtil,
       PredictedIncome predictedIncome,
       NextUnitUtil nextUnitUtil,
       PlayerInfo playerInfo,
@@ -68,6 +71,7 @@ public class GameScreen extends ScreenAdapter {
       ChangesApplied changesApplied
   ) {
     this.world = world;
+    this.botAttackUtil = botAttackUtil;
     this.predictedIncome = predictedIncome;
     this.nextUnitUtil = nextUnitUtil;
     this.playerInfo = playerInfo;
@@ -132,6 +136,7 @@ public class GameScreen extends ScreenAdapter {
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
     log.info("moving entity");
     moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
+    botAttackUtil.attack(unit);
   }
 
   @Override
