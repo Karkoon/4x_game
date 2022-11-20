@@ -7,6 +7,7 @@ import com.mygdx.game.bot.GdxGame;
 import com.mygdx.game.bot.hud.NextFieldUtil;
 import com.mygdx.game.bot.hud.NextUnitUtil;
 import com.mygdx.game.bot.util.BotAttackUtil;
+import com.mygdx.game.bot.util.BotTechnologyUtil;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.ActiveToken;
@@ -18,6 +19,7 @@ import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
 import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
@@ -36,6 +38,7 @@ public class GameScreen extends ScreenAdapter {
   private final World world;
 
   private final BotAttackUtil botAttackUtil;
+  private final BotTechnologyUtil botTechnologyUtil;
   private final PredictedIncome predictedIncome;
   private final NextUnitUtil nextUnitUtil;
   private final PlayerInfo playerInfo;
@@ -52,11 +55,13 @@ public class GameScreen extends ScreenAdapter {
   private boolean initialized = false;
 
   private ComponentMapper<Coordinates> coordinatesComponentMapper;
+  private ComponentMapper<Stats> statsMapper;
 
   @Inject
   public GameScreen(
       World world,
       BotAttackUtil botAttackUtil,
+      BotTechnologyUtil botTechnologyUtil,
       PredictedIncome predictedIncome,
       NextUnitUtil nextUnitUtil,
       PlayerInfo playerInfo,
@@ -72,6 +77,7 @@ public class GameScreen extends ScreenAdapter {
   ) {
     this.world = world;
     this.botAttackUtil = botAttackUtil;
+    this.botTechnologyUtil = botTechnologyUtil;
     this.predictedIncome = predictedIncome;
     this.nextUnitUtil = nextUnitUtil;
     this.playerInfo = playerInfo;
@@ -130,13 +136,18 @@ public class GameScreen extends ScreenAdapter {
     if (unit == 0xC0FFEE) { // todo ensure the case where a unit that has moveRange and attack but no possible
       // ways to use it be skipped
       log.info("end turn");
-      endTurnService.endTurn();
+      endTurn();
       return;
     }
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
     log.info("moving entity");
     moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
     botAttackUtil.attack(unit);
+  }
+
+  private void endTurn() {
+    botTechnologyUtil.research();
+    endTurnService.endTurn();
   }
 
   @Override
