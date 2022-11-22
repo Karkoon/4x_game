@@ -121,4 +121,8 @@ public final class CameraMoverInputProcessor extends InputAdapter {
       default -> throw new IllegalArgumentException("Not an arrow-key");
     };
   }
+
+  public void stopMoving() {
+    cameraControl.stopMoving(Direction.ANY);
+  }
 }
