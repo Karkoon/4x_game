@@ -28,7 +28,6 @@ public class BotAttackUtil {
   private final ChosenBotType chosenBotType;
   private final PlayerInfo playerInfo;
   private final Random random;
-  private final World world;
 
   @AspectDescriptor(all = {Stats.class, Owner.class, Coordinates.class})
   private EntitySubscription unitsSubscription;
@@ -48,7 +47,6 @@ public class BotAttackUtil {
     this.chosenBotType = chosenBotType;
     this.playerInfo = playerInfo;
     this.random = new Random();
-    this.world = world;
     world.inject(this);
   }
 

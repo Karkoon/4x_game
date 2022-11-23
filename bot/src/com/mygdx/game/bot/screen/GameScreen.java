@@ -1,12 +1,16 @@
 package com.mygdx.game.bot.screen;
 
 import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.World;
+import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.mygdx.game.bot.GdxGame;
 import com.mygdx.game.bot.hud.NextFieldUtil;
 import com.mygdx.game.bot.hud.NextUnitUtil;
 import com.mygdx.game.bot.util.BotAttackUtil;
+import com.mygdx.game.bot.util.BotBuildUtil;
+import com.mygdx.game.bot.util.BotRecruitUtil;
 import com.mygdx.game.bot.util.BotTechnologyUtil;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
@@ -19,6 +23,8 @@ import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Field;
+import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
@@ -38,6 +44,8 @@ public class GameScreen extends ScreenAdapter {
   private final World world;
 
   private final BotAttackUtil botAttackUtil;
+  private final BotBuildUtil botBuildUtil;
+  private final BotRecruitUtil botRecruitUtil;
   private final BotTechnologyUtil botTechnologyUtil;
   private final PredictedIncome predictedIncome;
   private final NextUnitUtil nextUnitUtil;
@@ -55,12 +63,18 @@ public class GameScreen extends ScreenAdapter {
   private boolean initialized = false;
 
   private ComponentMapper<Coordinates> coordinatesComponentMapper;
+  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Stats> statsMapper;
+
+  @AspectDescriptor(all = {Owner.class, Field.class})
+  private EntitySubscription fieldSubscriber;
 
   @Inject
   public GameScreen(
       World world,
       BotAttackUtil botAttackUtil,
+      BotBuildUtil botBuildUtil,
+      BotRecruitUtil botRecruitUtil,
       BotTechnologyUtil botTechnologyUtil,
       PredictedIncome predictedIncome,
       NextUnitUtil nextUnitUtil,
@@ -77,6 +91,8 @@ public class GameScreen extends ScreenAdapter {
   ) {
     this.world = world;
     this.botAttackUtil = botAttackUtil;
+    this.botBuildUtil = botBuildUtil;
+    this.botRecruitUtil = botRecruitUtil;
     this.botTechnologyUtil = botTechnologyUtil;
     this.predictedIncome = predictedIncome;
     this.nextUnitUtil = nextUnitUtil;
@@ -135,19 +151,21 @@ public class GameScreen extends ScreenAdapter {
     var unit = nextUnitUtil.selectNextUnit();
     if (unit == 0xC0FFEE) { // todo ensure the case where a unit that has moveRange and attack but no possible
       // ways to use it be skipped
+      for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
+        if (ownerMapper.get(fieldSubscriber.getEntities().get(i)).getToken().equals(playerInfo.getToken())) {
+          botBuildUtil.build(fieldSubscriber.getEntities().get(i));
+          botRecruitUtil.recruitUnit(fieldSubscriber.getEntities().get(i));
+        }
+      }
+      botTechnologyUtil.research();
       log.info("end turn");
-      endTurn();
+      endTurnService.endTurn();
       return;
     }
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
     log.info("moving entity");
     moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
     botAttackUtil.attack(unit);
-  }
-
-  private void endTurn() {
-    botTechnologyUtil.research();
-    endTurnService.endTurn();
   }
 
   @Override
