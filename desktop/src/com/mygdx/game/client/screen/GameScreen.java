@@ -17,6 +17,7 @@ import com.mygdx.game.client.hud.GameScreenHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.GameScreenUiInputAdapter;
+import com.mygdx.game.client.model.WindowConfig;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
 import com.mygdx.game.client.ui.WinAnnouncementDialogFactory;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
@@ -33,6 +34,7 @@ import com.mygdx.game.core.util.CompositeUpdatable;
 import com.mygdx.game.core.util.PositionUtil;
 import dagger.Lazy;
 import lombok.extern.java.Log;
+import org.lwjgl.glfw.GLFW;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -67,6 +69,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private EntitySubscription unitsWithOwner;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
+  private CameraMoverInputProcessor cameraInputProcessor;
 
   @Inject
   public GameScreen(
@@ -104,6 +107,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.queueMessageListener = queueMessageListener;
     this.gameInterruptedService = gameInterruptedService;
     this.world.inject(this);
+
+    this.cameraInputProcessor = new CameraMoverInputProcessor(viewport);
   }
 
   @Override
@@ -134,6 +139,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
 
     stage.act(delta);
     gameScreenHUD.act(delta);
+    if (GLFW.glfwGetWindowAttrib(WindowConfig.windowHandle, GLFW.GLFW_FOCUSED) == 0)
+      cameraInputProcessor.stopMoving();
   }
 
   @Override
@@ -153,7 +160,6 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   }
 
   private void setUpInput() {
-    var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
     var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, gameScreenUiInputAdapter, stage, clickInputAdapter);
     compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
     Gdx.input.setInputProcessor(inputMultiplexer);
