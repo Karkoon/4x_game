@@ -10,6 +10,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
 
@@ -23,6 +24,12 @@ public class NextFieldUtil {
   private ComponentMapper<Coordinates> coordinatesComponentMapper;
   private ComponentMapper<Stats> statsComponentMapper;
 
+  @AspectDescriptor(all = {Field.class})
+  private EntitySubscription fields;
+
+  @AspectDescriptor(all = {Unit.class})
+  private EntitySubscription units;
+
   @Inject
   public NextFieldUtil(
       World world
@@ -30,14 +37,11 @@ public class NextFieldUtil {
     world.inject(this);
   }
 
-  @AspectDescriptor(all = {Field.class})
-  private EntitySubscription fields;
-
   public int selectFieldInRangeOfUnit(int unit) {
     var fieldsInRange = new IntSet();
     for (int i = 0; i < fields.getEntities().size(); i++) {
       int field = fields.getEntities().get(i);
-      if (inRange(unit, field)) {
+      if (inRange(unit, field) && anyEnemyUnits(unit, field)) {
         fieldsInRange.add(field);
       }
     }
@@ -55,6 +59,19 @@ public class NextFieldUtil {
     var unitOwner = ownerComponentMapper.get(unit);
     var fieldOwner = ownerComponentMapper.get(field);
     return fieldOwner == null || !unitOwner.getToken().equals(fieldOwner.getToken());
+  }
+
+  private boolean anyEnemyUnits(int unit, int field) {
+    var unitOwner = ownerComponentMapper.get(unit);
+    var coordinatesVar = coordinatesComponentMapper.get(field);
+
+    for (int i = 0; i < units.getEntities().size(); i++) {
+      var owner = ownerComponentMapper.get(units.getEntities().get(i));
+      var coordinates = coordinatesComponentMapper.get(units.getEntities().get(i));
+      if (coordinatesVar.equals(coordinates) && !unitOwner.getToken().equals(owner.getToken()))
+        return false;
+    }
+    return true;
   }
 
   private boolean inRange(int unit, int field) {

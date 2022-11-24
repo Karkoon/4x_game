@@ -42,6 +42,7 @@ public class BotRecruitUtil {
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final PlayerInfo playerInfo;
   private final Random random;
+  private final World world;
 
   @AspectDescriptor(all = {Stats.class, Owner.class, Coordinates.class})
   private EntitySubscription unitsSubscription;
@@ -68,6 +69,7 @@ public class BotRecruitUtil {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
     this.playerInfo = playerInfo;
     this.random = new Random();
+    this.world = world;
     world.inject(this);
   }
 
@@ -81,20 +83,22 @@ public class BotRecruitUtil {
           int subfieldEntityId = subFields.get(i);
           int sufieldWorldEntityId = networkWorldEntityMapper.getWorldEntity(subfieldEntityId);
           var subField = subfieldMapper.get(sufieldWorldEntityId);
-          int buildingEntityId = subField.getBuilding();
-          if (buildingEntityId != -0xC0FEE) {
-            var buildingConfig = gameConfigAssets.getGameConfigs().get(
-              BuildingConfig.class,
-              entityConfigIdMapper.get(buildingEntityId).getId()
-            );
-            if (buildingConfig.getImpact().getBuildingType().equals(BuildingType.RECRUITMENT_BUILDING)) {
-              for (BuildingImpactValue unitConfigId : buildingConfig.getImpact().getBuildingImpactValues()) {
-                var untiConfig = gameConfigAssets.getGameConfigs().get(
-                  UnitConfig.class,
-                  unitConfigId.getValue()
-                );
-                if (untiConfig.getCivilizationConfigId() == playerInfo.getCivilization())
-                  availableUnits.add(unitConfigId.getValue());
+          if (subField != null) {
+            int buildingEntityId = subField.getBuilding();
+            if (buildingEntityId != -0xC0FEE) {
+              var buildingConfig = gameConfigAssets.getGameConfigs().get(
+                      BuildingConfig.class,
+                      entityConfigIdMapper.get(buildingEntityId).getId()
+              );
+              if (buildingConfig.getImpact().getBuildingType().equals(BuildingType.RECRUITMENT_BUILDING)) {
+                for (BuildingImpactValue unitConfigId : buildingConfig.getImpact().getBuildingImpactValues()) {
+                  var untiConfig = gameConfigAssets.getGameConfigs().get(
+                          UnitConfig.class,
+                          unitConfigId.getValue()
+                  );
+                  if (untiConfig.getCivilizationConfigId() == playerInfo.getCivilization())
+                    availableUnits.add(unitConfigId.getValue());
+                }
               }
             }
           }
