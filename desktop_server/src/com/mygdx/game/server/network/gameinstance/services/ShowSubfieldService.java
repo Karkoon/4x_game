@@ -7,7 +7,6 @@ import com.mygdx.game.core.ecs.component.Building;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
-import com.mygdx.game.core.network.messages.GotIntoFieldMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.model.Client;
@@ -55,8 +54,6 @@ public class ShowSubfieldService extends WorldService {
       }
     }
     log.info("Shown subfield");
-    world.process();
-    sender.send(new GotIntoFieldMessage(client.getPlayerToken()), client);
     world.process();
   }
 }

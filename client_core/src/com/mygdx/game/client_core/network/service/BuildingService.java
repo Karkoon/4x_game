@@ -31,4 +31,10 @@ public class BuildingService {
     sender.get().send("build:" + buildingConfigId + ":" + networkEntity + ":" + coordinates.getX() + ":" + coordinates.getY());
   }
 
+  public void createBuilding(long buildingConfigId, int fieldEntityId) {
+    log.info("build_bot:" + buildingConfigId + ":" + fieldEntityId);
+    int networkEntity = networkWorldEntityMapper.getNetworkEntity(fieldEntityId);
+    sender.get().send("build_bot:" + buildingConfigId + ":" + networkEntity);
+  }
+
 }

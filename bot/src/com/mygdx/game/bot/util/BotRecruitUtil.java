@@ -118,7 +118,7 @@ public class BotRecruitUtil {
 
   public boolean propabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
-    return value <= probabilityValue;
+    return probabilityValue <= value;
   }
 
   public int randomBetween(int min, int max) {

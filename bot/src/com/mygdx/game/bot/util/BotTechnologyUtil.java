@@ -101,7 +101,7 @@ public class BotTechnologyUtil {
 
   public boolean propabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
-    return value <= probabilityValue;
+    return probabilityValue <= value;
   }
 
   private boolean fulfilledDependencies(ArrayList<Integer> researchedConfigIds, List<Integer> dependencies) {

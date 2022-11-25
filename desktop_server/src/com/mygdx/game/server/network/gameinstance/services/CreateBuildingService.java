@@ -5,10 +5,14 @@ import com.artemis.World;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.core.ecs.component.Coordinates;
+import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.core.model.TechnologyImpactType;
+import com.mygdx.game.core.network.messages.BotWorkOnFieldDoneMessage;
+import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.MessageSender;
 import com.mygdx.game.server.util.MaterialUtilServer;
 import com.mygdx.game.server.ecs.entityfactory.BuildingFactory;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
@@ -27,6 +31,9 @@ public class CreateBuildingService extends WorldService {
   private final GameConfigAssets assets;
   private final MaterialUtilServer materialUtilServer;
   private final TechnologyUtilServer technologyUtilServer;
+  private final MessageSender sender;
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subfieldMapper;
 
   @Inject
@@ -36,6 +43,7 @@ public class CreateBuildingService extends WorldService {
       GameConfigAssets assets,
       MaterialUtilServer materialUtilServer,
       TechnologyUtilServer technologyUtilServer,
+      MessageSender sender,
       World world
   ) {
     this.buildingFactory = buildingFactory;
@@ -43,6 +51,7 @@ public class CreateBuildingService extends WorldService {
     this.assets = assets;
     this.materialUtilServer = materialUtilServer;
     this.technologyUtilServer = technologyUtilServer;
+    this.sender = sender;
     world.inject(this);
   }
 
@@ -70,5 +79,42 @@ public class CreateBuildingService extends WorldService {
       technologyUtilServer.applyTechnologyToNewEntities(buildingEntityId, playerToken, TechnologyImpactType.BUILDING_IMPACT);
       world.process();
     }
+  }
+
+  public void createBuilding(int entityConfig, int parentField, GameRoom room, Client client) {
+    log.info("Create building by bot");
+    int clientIndex = client.getGameRoom().getClients().indexOf(client);
+    var buildingConfig = assets.getGameConfigs().get(BuildingConfig.class, entityConfig);
+    String playerToken = room.getClients().get(clientIndex).getPlayerToken();
+
+    Map<MaterialBase, MaterialUnit> reducedMaterials = technologyUtilServer.getReducedParametersForBuilding(buildingConfig.getMaterials(), playerToken);
+
+    if(!materialUtilServer.checkIfCanBuy(playerToken, reducedMaterials)) {
+      log.info("NOT ENOUGH RESOURCES");
+    } else {
+      log.info("Create building by bot - looking for a subfield");
+      var field = fieldMapper.get(parentField);
+      var subFields = field.getSubFields();
+      for (int i = 0; i < subFields.size; i++) {
+        int subfieldEntityId = subFields.get(i);
+        var subField = subfieldMapper.get(subfieldEntityId);
+        if (subField.getBuilding() == -0xC0FEE) {
+          var world = room.getGameInstance().getWorld();
+          materialUtilServer.removeMaterials(playerToken, reducedMaterials);
+          var coordinates = coordinatesMapper.get(subfieldEntityId);
+          int buildingEntityId = buildingFactory.createBeforeEntity(
+                  buildingConfig,
+                  coordinates,
+                  subfieldEntityId,
+                  clientIndex
+          );
+          log.info("Create building by bot - building created");
+          technologyUtilServer.applyTechnologyToNewEntities(buildingEntityId, playerToken, TechnologyImpactType.BUILDING_IMPACT);
+          world.process();
+          break;
+        }
+      }
+    }
+    sender.send(new BotWorkOnFieldDoneMessage(parentField), client);
   }
 }

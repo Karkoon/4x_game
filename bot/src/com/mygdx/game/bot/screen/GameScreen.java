@@ -18,6 +18,7 @@ import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.ChangesApplied;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.model.PredictedIncome;
+import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
@@ -27,9 +28,9 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.network.messages.BotWorkOnFieldDoneMessage;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
-import com.mygdx.game.core.network.messages.GotIntoFieldMessage;
 import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
 import dagger.Lazy;
 import lombok.extern.java.Log;
@@ -37,8 +38,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
@@ -65,8 +66,8 @@ public class GameScreen extends ScreenAdapter {
   private final NextFieldUtil nextFieldUtil;
   private final ChangesApplied changesApplied;
   private final ShowSubfieldService showSubfieldService;
-  private final Queue<Integer> fieldsQueue;
-  private boolean inField;
+  private final NetworkWorldEntityMapper networkWorldEntityMapper;
+  private List<Integer> worksOnFields;
 
   private boolean initialized = false;
 
@@ -96,7 +97,8 @@ public class GameScreen extends ScreenAdapter {
       EndTurnService endTurnService,
       NextFieldUtil nextFieldUtil,
       ChangesApplied changesApplied,
-      ShowSubfieldService showSubfieldService
+      ShowSubfieldService showSubfieldService,
+      NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
     this.world = world;
     this.botAttackUtil = botAttackUtil;
@@ -116,9 +118,10 @@ public class GameScreen extends ScreenAdapter {
     this.nextFieldUtil = nextFieldUtil;
     this.changesApplied = changesApplied;
     this.showSubfieldService = showSubfieldService;
+    this.networkWorldEntityMapper = networkWorldEntityMapper;
     this.world.inject(this);
-    this.fieldsQueue = new PriorityQueue<Integer>();
-    this.inField = false;
+
+    this.worksOnFields = new ArrayList<>();
   }
 
   @Override
@@ -133,8 +136,11 @@ public class GameScreen extends ScreenAdapter {
         return FULLY_HANDLED;
       }));
 
-      queueMessageListener.registerHandler(GotIntoFieldMessage.class, ((webSocket, message) -> {
-        flip();
+      queueMessageListener.registerHandler(BotWorkOnFieldDoneMessage.class, ((webSocket, message) -> {
+        Integer worldEntity = networkWorldEntityMapper.getWorldEntity(message.getNetworkFieldEntityId());
+        worksOnFields.remove(worldEntity);
+        if (worksOnFields.size() == 0)
+          endTurn();
         return FULLY_HANDLED;
       }));
 
@@ -167,7 +173,7 @@ public class GameScreen extends ScreenAdapter {
     log.info("start turn");
     var unit = nextUnitUtil.selectNextUnit();
     if (unit == 0xC0FFEE) {
-      prepareFields();
+      buildBuildings();
       return;
     }
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
@@ -176,50 +182,31 @@ public class GameScreen extends ScreenAdapter {
     botAttackUtil.attack(unit);
   }
 
-  private void prepareFields() {
-    fieldsQueue.clear();
+  private void buildBuildings() {
+    log.info("build buildings");
+    boolean noBuilding = true;
+    worksOnFields = new ArrayList<>();
+    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
+      worksOnFields.add(fieldSubscriber.getEntities().get(i));
+    }
     for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
       if (ownerMapper.get(fieldSubscriber.getEntities().get(i)).getToken().equals(playerInfo.getToken())) {
-        fieldsQueue.add(fieldSubscriber.getEntities().get(i));
+        if (!botBuildUtil.build(fieldSubscriber.getEntities().get(i)))
+          worksOnFields.remove(Integer.valueOf(fieldSubscriber.getEntities().get(i)));
+        else
+          noBuilding = false;
       }
     }
-    if (fieldsQueue.size() == 0) {
+    if (noBuilding)
+      endTurn();
+  }
+
+  private void endTurn() {
+    if (activeToken.isActiveToken(playerInfo.getToken())) {
+      botTechnologyUtil.research();
+      log.info("end turn");
       endTurnService.endTurn();
-    } else {
-      showSubfieldService.flipSubscriptionState(fieldsQueue.peek());
     }
-  }
-
-  private void flip() {
-    inField = !inField;
-    log.info("Flip inField to " + inField);
-    if (inField) {
-      buildAndRecruit();
-    }
-    else {
-      if (fieldsQueue.size() > 0) {
-        var fieldId = fieldsQueue.peek();
-        showSubfieldService.flipSubscriptionState(fieldId);
-      } else {
-        technologyAndEndTurn();
-      }
-    }
-
-  }
-  private void buildAndRecruit() {
-    var fieldId = fieldsQueue.poll();
-    log.info("Process field: " + fieldId);
-    log.info("Recruit Unit: ");
-    botRecruitUtil.recruitUnit(fieldId);
-    log.info("Build building: ");
-    botBuildUtil.build(fieldId);
-    showSubfieldService.flipSubscriptionState(fieldId);
-  }
-
-  private void technologyAndEndTurn() {
-    botTechnologyUtil.research();
-    log.info("end turn");
-    endTurnService.endTurn();
   }
 
   @Override

@@ -69,7 +69,7 @@ public class BotAttackUtil {
 
   public boolean propabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
-    return value <= probabilityValue;
+    return probabilityValue <= value;
   }
 
   private boolean haveDifferentOwner(String thisPlayerToken, int otherEntity) {

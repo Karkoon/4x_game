@@ -25,7 +25,7 @@ import java.util.Random;
 @Log
 public class BotBuildUtil {
 
-  private final float SHOULD_BUILD_RANDOM_FIRST = 0.2f;
+  private final float SHOULD_BUILD_RANDOM_FIRST = 0.1f;
 
   private final BuildingService buildingService;
   private final ChosenBotType chosenBotType;
@@ -59,31 +59,25 @@ public class BotBuildUtil {
     world.inject(this);
   }
 
-  public void build(int fieldEntityId) {
+  public boolean build(int fieldEntityId) {
     if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
       if (propabilityCheck(SHOULD_BUILD_RANDOM_FIRST)) {
         var buildings = gameConfigAssets.getGameConfigs().getAll(BuildingConfig.class);
         int id = randomBetween(0, buildings.size);
         var buildingConfig = buildings.get(id);
         if (materialUtilClient.checkIfCanBuy(buildingConfig.getMaterials(), playerMaterialSubscriber.getEntities())) {
-          var field = fieldMapper.get(fieldEntityId);
-          var subFields = field.getSubFields();
-          for (int i = 0; i < subFields.size; i++) {
-            int sufieldNetworkEntityId = subFields.get(i);
-            int subfieldWorldEntityId = networkWorldEntityMapper.getWorldEntity(sufieldNetworkEntityId);
-            if (underConstructionMapper.has(subfieldWorldEntityId)) {
-              log.info("Create building " + buildingConfig.getId() + " on field " + fieldEntityId);
-              buildingService.createBuilding(buildingConfig.getId(), subfieldWorldEntityId, coordinatesMapper.get(subfieldWorldEntityId));
-            }
-          }
+          buildingService.createBuilding(buildingConfig.getId(), fieldEntityId);
+          log.info("Create building " + buildingConfig.getId() + " on field " + fieldEntityId);
+          return true;
         }
       }
     }
+    return false;
   }
 
   public boolean propabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
-    return value <= probabilityValue;
+    return probabilityValue <= value;
   }
 
   public int randomBetween(int min, int max) {

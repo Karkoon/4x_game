@@ -4,6 +4,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameInstance;
 import com.mygdx.game.server.network.gameinstance.handlers.AttackHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.BuildBotHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.BuildHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.EndTurnHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.InterruptHandler;
@@ -21,6 +22,7 @@ public class GameInstanceServer {
 
   private final AttackHandler attackHandler;
   private final BuildHandler buildHandler;
+  private final BuildBotHandler buildBotHandler;
   private final EndTurnHandler endTurnHandler;
   private final MoveHandler moveHandler;
   private final ResearchHandler researchHandler;
@@ -33,6 +35,7 @@ public class GameInstanceServer {
   public GameInstanceServer(
       AttackHandler attackHandler,
       BuildHandler buildHandler,
+      BuildBotHandler buildBotHandler,
       EndTurnHandler endTurnHandler,
       MoveHandler moveHandler,
       ResearchHandler researchHandler,
@@ -43,6 +46,7 @@ public class GameInstanceServer {
   ) {
     this.attackHandler = attackHandler;
     this.buildHandler = buildHandler;
+    this.buildBotHandler = buildBotHandler;
     this.endTurnHandler = endTurnHandler;
     this.moveHandler = moveHandler;
     this.researchHandler = researchHandler;
@@ -81,6 +85,7 @@ public class GameInstanceServer {
     switch (commands[0]) {
       case "attack" -> attackHandler.handle(commands, client);
       case "build" -> buildHandler.handle(commands, client);
+      case "build_bot" -> buildBotHandler.handle(commands, client);
       case "create_unit" -> unitHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle();
       case "field" -> subfieldSubscriptionHandler.handle(commands, client);

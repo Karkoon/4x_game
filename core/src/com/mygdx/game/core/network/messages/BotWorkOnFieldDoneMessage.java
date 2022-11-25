@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GotIntoFieldMessage {
+public class BotWorkOnFieldDoneMessage {
 
-  String playerToken;
+  Integer networkFieldEntityId;
 }
