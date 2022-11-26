@@ -3,10 +3,11 @@ package com.mygdx.game.bot.screen;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.bot.GdxGame;
-import com.mygdx.game.bot.hud.NextFieldUtil;
-import com.mygdx.game.bot.hud.NextUnitUtil;
+import com.mygdx.game.bot.hud.UnitUtil;
 import com.mygdx.game.bot.util.BotAttackUtil;
+import com.mygdx.game.bot.util.BotMoveUtil;
 import com.mygdx.game.bot.util.BotTechnologyUtil;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
@@ -18,6 +19,7 @@ import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
@@ -38,9 +40,10 @@ public class GameScreen extends ScreenAdapter {
   private final World world;
 
   private final BotAttackUtil botAttackUtil;
+  private final BotMoveUtil botMoveUtil;
   private final BotTechnologyUtil botTechnologyUtil;
   private final PredictedIncome predictedIncome;
-  private final NextUnitUtil nextUnitUtil;
+  private final UnitUtil unitUtil;
   private final PlayerInfo playerInfo;
   private final ActiveToken activeToken;
   private final GdxGame game;
@@ -49,21 +52,23 @@ public class GameScreen extends ScreenAdapter {
   private final QueueMessageListener queueMessageListener;
   private final MoveEntityService moveEntityService;
   private final EndTurnService endTurnService;
-  private final NextFieldUtil nextFieldUtil;
   private final ChangesApplied changesApplied;
 
   private boolean initialized = false;
 
   private ComponentMapper<Coordinates> coordinatesComponentMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<CanAttack> canAttackComponentMapper;
+  private boolean lock = false;
 
   @Inject
   public GameScreen(
       World world,
       BotAttackUtil botAttackUtil,
+      BotMoveUtil botMoveUtil,
       BotTechnologyUtil botTechnologyUtil,
       PredictedIncome predictedIncome,
-      NextUnitUtil nextUnitUtil,
+      UnitUtil unitUtil,
       PlayerInfo playerInfo,
       ActiveToken activeToken,
       GdxGame game,
@@ -72,14 +77,14 @@ public class GameScreen extends ScreenAdapter {
       @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
       MoveEntityService moveEntityService,
       EndTurnService endTurnService,
-      NextFieldUtil nextFieldUtil,
       ChangesApplied changesApplied
   ) {
     this.world = world;
     this.botAttackUtil = botAttackUtil;
+    this.botMoveUtil = botMoveUtil;
     this.botTechnologyUtil = botTechnologyUtil;
     this.predictedIncome = predictedIncome;
-    this.nextUnitUtil = nextUnitUtil;
+    this.unitUtil = unitUtil;
     this.playerInfo = playerInfo;
     this.activeToken = activeToken;
     this.game = game;
@@ -88,7 +93,6 @@ public class GameScreen extends ScreenAdapter {
     this.queueMessageListener = queueMessageListener;
     this.moveEntityService = moveEntityService;
     this.endTurnService = endTurnService;
-    this.nextFieldUtil = nextFieldUtil;
     this.changesApplied = changesApplied;
     this.world.inject(this);
   }
@@ -101,12 +105,12 @@ public class GameScreen extends ScreenAdapter {
       queueMessageListener.registerHandler(GameInterruptedMessage.class, handleGameInterrupted());
 
       queueMessageListener.registerHandler(ChangeTurnMessage.class, ((webSocket, message) -> {
-        runBotIteration();
+//        runBotIteration();
         return FULLY_HANDLED;
       }));
 
       initialized = true;
-      changesApplied.setChangesAppliedListener(this::runBotIteration);
+//      changesApplied.setChangesAppliedListener(this::runBotIteration);
     }
   }
 
@@ -132,17 +136,21 @@ public class GameScreen extends ScreenAdapter {
       return;
     }
     log.info("start turn");
-    var unit = nextUnitUtil.selectNextUnit();
-    if (unit == 0xC0FFEE) { // todo ensure the case where a unit that has moveRange and attack but no possible
+    IntArray availableUnits = unitUtil.getAllUnits();
+    if (availableUnits == null) { // todo ensure the case where a unit that has moveRange and attack but no possible
       // ways to use it be skipped
       log.info("end turn");
       endTurn();
       return;
     }
-    var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
-    log.info("moving entity");
-    moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
-    botAttackUtil.attack(unit);
+    for (int unit:availableUnits.items) {
+      botAttackUtil.attack(unit);
+      botMoveUtil.move(unit);
+      if (canAttackComponentMapper.get(unit) != null && canAttackComponentMapper.get(unit).isCanAttack()) {
+        botAttackUtil.attack(unit);
+      }
+    }
+    endTurn();
   }
 
   private void endTurn() {

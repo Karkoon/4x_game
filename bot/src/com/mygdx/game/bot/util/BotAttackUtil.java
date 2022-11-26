@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.bot.model.ChosenBotType;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PlayerInfo;
@@ -12,7 +13,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.BotType;
-import com.mygdx.game.core.util.DistanceUtil;
+import com.mygdx.game.bot.hud.UnitUtil;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ public class BotAttackUtil {
   private final AttackEntityService attackEntityService;
   private final ChosenBotType chosenBotType;
   private final PlayerInfo playerInfo;
+  private final UnitUtil unitUtil;
   private final Random random;
   private final World world;
 
@@ -41,11 +43,13 @@ public class BotAttackUtil {
   public BotAttackUtil (
       AttackEntityService attackEntityService,
       ChosenBotType chosenBotType,
+      UnitUtil unitUtil,
       PlayerInfo playerInfo,
       World world
   ) {
     this.attackEntityService = attackEntityService;
     this.chosenBotType = chosenBotType;
+    this.unitUtil = unitUtil;
     this.playerInfo = playerInfo;
     this.random = new Random();
     this.world = world;
@@ -55,16 +59,13 @@ public class BotAttackUtil {
   public void attack(int unitId) {
     if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
       if (propabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
-        var coordinates = coordinatesMapper.get(unitId);
-        var stats = statsMapper.get(unitId);
-        var entities = unitsSubscription.getEntities();
-        for (int i = 0; i < entities.size(); i++) {
-          int otherUnitIt = entities.get(i);
-          if (haveDifferentOwner(playerInfo.getToken(), otherUnitIt) && DistanceUtil.distance(coordinates, coordinatesMapper.get(otherUnitIt)) <= stats.getAttackRange()) {
-            log.info("Unit " + unitId + " attack " + otherUnitIt);
-            attackEntityService.attack(unitId, otherUnitIt);
-          }
+        IntArray unitsInRange = unitUtil.getUnitsInRange(unitId);
+        if (unitsInRange == null || unitsInRange.isEmpty()){
+          return;
         }
+        int enemyUnitId = unitsInRange.random();
+        log.info("Unit " + unitId + " attack " + enemyUnitId);
+        attackEntityService.attack(unitId, enemyUnitId);
       }
     }
   }
@@ -72,9 +73,5 @@ public class BotAttackUtil {
   public boolean propabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
     return value <= probabilityValue;
-  }
-
-  private boolean haveDifferentOwner(String thisPlayerToken, int otherEntity) {
-    return !thisPlayerToken.equals(ownerMapper.get(otherEntity).getToken());
   }
 }
