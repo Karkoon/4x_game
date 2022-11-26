@@ -6,11 +6,11 @@ import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
-import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.util.DistanceUtil;
 import lombok.extern.java.Log;
 
@@ -27,7 +27,7 @@ public class NextFieldUtil {
   @AspectDescriptor(all = {Field.class})
   private EntitySubscription fields;
 
-  @AspectDescriptor(all = {Unit.class})
+  @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription units;
 
   @Inject
@@ -41,7 +41,7 @@ public class NextFieldUtil {
     var fieldsInRange = new IntSet();
     for (int i = 0; i < fields.getEntities().size(); i++) {
       int field = fields.getEntities().get(i);
-      if (inRange(unit, field) && anyEnemyUnits(unit, field)) {
+      if (inRange(unit, field) && noEnemyUnits(unit, field)) {
         fieldsInRange.add(field);
       }
     }
@@ -62,15 +62,14 @@ public class NextFieldUtil {
   }
 
   // Chyba jeszcze nie działa
-  private boolean anyEnemyUnits(int unit, int field) {
+  private boolean noEnemyUnits(int unit, int field) {
     var unitOwner = ownerComponentMapper.get(unit);
     var fieldCoordinates = coordinatesComponentMapper.get(field);
 
     for (int i = 0; i < units.getEntities().size(); i++) {
-      var otherUnitowner = ownerComponentMapper.get(units.getEntities().get(i));
+      var otherUnitOwner = ownerComponentMapper.get(units.getEntities().get(i));
       var unitCoordinates = coordinatesComponentMapper.get(units.getEntities().get(i));
-      if (fieldCoordinates == unitCoordinates
-              && !unitOwner.getToken().equals(otherUnitowner.getToken()))
+      if (fieldCoordinates.equals(unitCoordinates) && !unitOwner.getToken().equals(otherUnitOwner.getToken()))
         return false;
     }
     return true;

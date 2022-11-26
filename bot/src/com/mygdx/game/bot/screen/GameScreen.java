@@ -187,6 +187,10 @@ public class GameScreen extends ScreenAdapter {
     }
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
     log.info("moving entity");
+    if (field == 0xC0FFEE) {
+      buildBuildings();
+      return;
+    }
     moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
     botAttackUtil.attack(unit);
   }
