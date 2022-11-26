@@ -3,20 +3,19 @@ package com.mygdx.game.server.network.gameinstance.services;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
-import com.mygdx.game.core.ecs.component.Unit;
 import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import lombok.extern.java.Log;
-import com.artemis.annotations.AspectDescriptor;
-import com.artemis.EntitySubscription;
-import static com.artemis.Aspect.all;
 
 import javax.inject.Inject;
+
+import static com.artemis.Aspect.all;
 
 @Log
 @GameInstanceScope
 public class MoveEntityService extends WorldService {
+
   @Inject
   MoveEntityService() {
     super();

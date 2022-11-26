@@ -11,6 +11,7 @@ import com.mygdx.game.server.network.gameinstance.handlers.InterruptHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.MoveHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.ResearchHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.SubfieldSubscriptionHandler;
+import com.mygdx.game.server.network.gameinstance.handlers.UnitBotHandler;
 import com.mygdx.game.server.network.gameinstance.handlers.UnitHandler;
 import lombok.extern.java.Log;
 
@@ -28,6 +29,7 @@ public class GameInstanceServer {
   private final ResearchHandler researchHandler;
   private final SubfieldSubscriptionHandler subfieldSubscriptionHandler;
   private final UnitHandler unitHandler;
+  private final UnitBotHandler unitBotHandler;
   private final InterruptHandler interruptHandler;
   private final GameInstance gameInstance;
 
@@ -41,6 +43,7 @@ public class GameInstanceServer {
       ResearchHandler researchHandler,
       SubfieldSubscriptionHandler subfieldSubscriptionHandler,
       UnitHandler unitHandler,
+      UnitBotHandler unitBotHandler,
       InterruptHandler interruptHandler,
       GameInstance gameInstance
   ) {
@@ -52,6 +55,7 @@ public class GameInstanceServer {
     this.researchHandler = researchHandler;
     this.subfieldSubscriptionHandler = subfieldSubscriptionHandler;
     this.unitHandler = unitHandler;
+    this.unitBotHandler = unitBotHandler;
     this.interruptHandler = interruptHandler;
     this.gameInstance = gameInstance;
   }
@@ -87,6 +91,7 @@ public class GameInstanceServer {
       case "build" -> buildHandler.handle(commands, client);
       case "build_bot" -> buildBotHandler.handle(commands, client);
       case "create_unit" -> unitHandler.handle(commands, client);
+      case "create_unit_bot" -> unitBotHandler.handle(commands, client);
       case "end_turn" -> endTurnHandler.handle();
       case "field" -> subfieldSubscriptionHandler.handle(commands, client);
       case "research" -> researchHandler.handle(commands, client);

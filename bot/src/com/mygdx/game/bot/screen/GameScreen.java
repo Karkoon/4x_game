@@ -28,9 +28,10 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
-import com.mygdx.game.core.network.messages.BotWorkOnFieldDoneMessage;
+import com.mygdx.game.core.network.messages.BuildingBuildedMessage;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
+import com.mygdx.game.core.network.messages.UnitRecruitedMessage;
 import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
 import dagger.Lazy;
 import lombok.extern.java.Log;
@@ -136,7 +137,15 @@ public class GameScreen extends ScreenAdapter {
         return FULLY_HANDLED;
       }));
 
-      queueMessageListener.registerHandler(BotWorkOnFieldDoneMessage.class, ((webSocket, message) -> {
+      queueMessageListener.registerHandler(BuildingBuildedMessage.class, ((webSocket, message) -> {
+        Integer worldEntity = networkWorldEntityMapper.getWorldEntity(message.getNetworkFieldEntityId());
+        worksOnFields.remove(worldEntity);
+        if (worksOnFields.size() == 0)
+          recruitUnits();
+        return FULLY_HANDLED;
+      }));
+
+      queueMessageListener.registerHandler(UnitRecruitedMessage.class, ((webSocket, message) -> {
         Integer worldEntity = networkWorldEntityMapper.getWorldEntity(message.getNetworkFieldEntityId());
         worksOnFields.remove(worldEntity);
         if (worksOnFields.size() == 0)
@@ -198,6 +207,25 @@ public class GameScreen extends ScreenAdapter {
       }
     }
     if (noBuilding)
+      recruitUnits();
+  }
+
+  private void recruitUnits() {
+    log.info("recruitUnits");
+    boolean noUnits = true;
+    worksOnFields = new ArrayList<>();
+    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
+      worksOnFields.add(fieldSubscriber.getEntities().get(i));
+    }
+    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
+      if (ownerMapper.get(fieldSubscriber.getEntities().get(i)).getToken().equals(playerInfo.getToken())) {
+        if (!botRecruitUtil.recruitUnit(fieldSubscriber.getEntities().get(i)))
+          worksOnFields.remove(Integer.valueOf(fieldSubscriber.getEntities().get(i)));
+        else
+          noUnits = false;
+      }
+    }
+    if (noUnits)
       endTurn();
   }
 

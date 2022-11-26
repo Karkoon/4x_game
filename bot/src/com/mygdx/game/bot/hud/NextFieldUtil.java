@@ -61,14 +61,16 @@ public class NextFieldUtil {
     return fieldOwner == null || !unitOwner.getToken().equals(fieldOwner.getToken());
   }
 
+  // Chyba jeszcze nie działa
   private boolean anyEnemyUnits(int unit, int field) {
     var unitOwner = ownerComponentMapper.get(unit);
-    var coordinatesVar = coordinatesComponentMapper.get(field);
+    var fieldCoordinates = coordinatesComponentMapper.get(field);
 
     for (int i = 0; i < units.getEntities().size(); i++) {
-      var owner = ownerComponentMapper.get(units.getEntities().get(i));
-      var coordinates = coordinatesComponentMapper.get(units.getEntities().get(i));
-      if (coordinatesVar.equals(coordinates) && !unitOwner.getToken().equals(owner.getToken()))
+      var otherUnitowner = ownerComponentMapper.get(units.getEntities().get(i));
+      var unitCoordinates = coordinatesComponentMapper.get(units.getEntities().get(i));
+      if (fieldCoordinates == unitCoordinates
+              && !unitOwner.getToken().equals(otherUnitowner.getToken()))
         return false;
     }
     return true;

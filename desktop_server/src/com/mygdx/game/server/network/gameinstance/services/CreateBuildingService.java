@@ -10,7 +10,7 @@ import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.core.model.TechnologyImpactType;
-import com.mygdx.game.core.network.messages.BotWorkOnFieldDoneMessage;
+import com.mygdx.game.core.network.messages.BuildingBuildedMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.MessageSender;
 import com.mygdx.game.server.util.MaterialUtilServer;
@@ -115,6 +115,6 @@ public class CreateBuildingService extends WorldService {
         }
       }
     }
-    sender.send(new BotWorkOnFieldDoneMessage(parentField), client);
+    sender.send(new BuildingBuildedMessage(parentField), client);
   }
 }
