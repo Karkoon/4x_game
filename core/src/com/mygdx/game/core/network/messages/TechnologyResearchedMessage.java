@@ -5,5 +5,5 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UnitRecruitedMessage {
+public class TechnologyResearchedMessage {
 }

@@ -69,7 +69,7 @@ public class BotRecruitUtil {
   }
 
   public boolean recruitUnit(int fieldEntityId) {
-    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
+    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
       if (propabilityCheck(SHOULD_RECRUIT_RANDOM_FIRST)) {
         log.info("Recruit unit on field " + fieldEntityId);
         createUnitService.createUnit(fieldEntityId);
