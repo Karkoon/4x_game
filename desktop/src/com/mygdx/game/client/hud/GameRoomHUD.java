@@ -30,7 +30,7 @@ import com.mygdx.game.core.model.MapSize;
 import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
 import com.mygdx.game.core.network.messages.PlayerAlreadyInTheRoomMessage;
-import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.PlayerLobbyChangedMessage;
 import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import lombok.extern.java.Log;
 
@@ -56,7 +56,7 @@ public class GameRoomHUD implements Disposable {
   private final QueueMessageListener queueMessageListener;
   private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
 
-  private List<PlayerLobby> players;
+  private Array<PlayerLobby> players;
   private MapSize selectedMapSize;
   private MapTypeConfig selectedMapTypeConfig;
 
@@ -93,7 +93,7 @@ public class GameRoomHUD implements Disposable {
     this.queueMessageListener = queueMessageListener;
     this.playerAlreadyInTheRoomDialogFactory = playerAlreadyInTheRoomDialogFactory;
 
-    this.players = new ArrayList<>();
+    this.players = new Array<>();
     this.selectedMapSize = MapSize.VERY_SMALL;
     this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, GameConfigs.MAP_TYPE_MIN);
     registerHandlers();
@@ -124,7 +124,7 @@ public class GameRoomHUD implements Disposable {
       dialog.show(stage);
       return FULLY_HANDLED;
     }));
-    queueMessageListener.registerHandler(PlayerJoinedRoomMessage.class, ((webSocket, o) -> {
+    queueMessageListener.registerHandler(PlayerLobbyChangedMessage.class, ((webSocket, o) -> {
       players = (o.getUsers());
       log.info("A player joined the room: name=" + o);
       prepareHudSceleton();
@@ -162,7 +162,8 @@ public class GameRoomHUD implements Disposable {
     float height = stage.getHeight();
     this.playerTable = uiElementsCreator.createTable((float) (width * 0.05), (float) (height * 0.05));
     uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.5), (int) (height * 0.85));
-    for (PlayerLobby player : players) {
+    for (int i = 0; i < players.size; i++) {
+      var player = players.get(i);
       var singlePlayerTable = uiElementsCreator.createTable((float) 0, (float) 0);
       var label = uiElementsCreator.createLabel("Nickname: " + player.getUserName(), 0, 0);
       uiElementsCreator.addToTableRow(label, singlePlayerTable);

@@ -90,6 +90,7 @@ public class GameInstanceServer {
         return false;
       }
     }
+    gameInstance.getWorld().process();
     return true;
   }
 }

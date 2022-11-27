@@ -49,6 +49,5 @@ public class ShowSubfieldService extends WorldService {
       }
     }
     log.info("Shown subfield");
-    world.process();
   }
 }

@@ -1,15 +1,12 @@
 package com.mygdx.game.server.network.handlers;
 
 import com.mygdx.game.core.model.MapSize;
-import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoomManager;
 import com.mygdx.game.server.network.MessageSender;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ChangeLobbyHandler {
 
@@ -26,7 +23,7 @@ public class ChangeLobbyHandler {
   }
 
   public void handle(String[] commands, Client client) {
-    MapSize mapSize = MapSize.valueOf(commands[1]);
+    var mapSize = MapSize.valueOf(commands[1]);
     int mapType = Integer.parseInt(commands[2]);
     var room = rooms.getRoom(client.getGameRoom().getRoomId());
     room.setMapSize(mapSize);

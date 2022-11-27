@@ -2,8 +2,8 @@ package com.mygdx.game.bot.screen;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.bot.GdxGame;
 import com.mygdx.game.bot.hud.UnitUtil;
 import com.mygdx.game.bot.util.BotAttackUtil;
@@ -103,14 +103,13 @@ public class GameScreen extends ScreenAdapter {
     if (!initialized) {
       queueMessageListener.registerHandler(WinAnnouncementMessage.class, handleGameWon());
       queueMessageListener.registerHandler(GameInterruptedMessage.class, handleGameInterrupted());
-
       queueMessageListener.registerHandler(ChangeTurnMessage.class, ((webSocket, message) -> {
-//        runBotIteration();
+        runBotIteration();
         return FULLY_HANDLED;
       }));
 
       initialized = true;
-//      changesApplied.setChangesAppliedListener(this::runBotIteration);
+      changesApplied.setChangesAppliedListener(this::runBotIteration);
     }
   }
 
@@ -123,37 +122,76 @@ public class GameScreen extends ScreenAdapter {
   }
   private QueueMessageListener.Handler<GameInterruptedMessage> handleGameInterrupted() {
     return (webSocket, message) -> {
-      log.info("game interrupted");
+      log.info(Thread.currentThread().getName()+ " " + Thread.currentThread().getId() + "game interrupted");
       exit();
       return true;
     };
   }
 
+  boolean a = false;
   private void runBotIteration() {
-    log.info("run bot iteration");
+    log.info(Thread.currentThread().getName()+ " " + Thread.currentThread().getId() + "run bot iteration");
+    if (a) {
+      log.info("wtf");
+      Gdx.app.exit();
+    }
+    a = true;
     if (!activeToken.isActiveToken(playerInfo.getToken())) {
+      a = false;
       log.info("quick exit");
       return;
     }
-    log.info("start turn");
-    IntArray availableUnits = unitUtil.getAllUnits();
-    if (availableUnits == null) { // todo ensure the case where a unit that has moveRange and attack but no possible
+    endTurn();
+    log.info("ending bot iteration");
+    return;
+/*    log.info("start turn");
+    if (selectedUnit == 0xC0FFEE) {
+      log.info("selecting next unit");
+      selectedUnit = unitUtil.selectNextUnit(); // obtain next unit to control
+      // todo ensure the case where a unit that has moveRange and attack but no possible
       // ways to use it be skipped
-      log.info("end turn");
+    } else {
+      log.info("continuing unit " + selectedUnit);
+    }
+    if (selectedUnit == 0xC0FFEE) { // if that unit doesn't exist then end turn
       endTurn();
       return;
     }
-    for (int unit:availableUnits.items) {
-      botAttackUtil.attack(unit);
-      botMoveUtil.move(unit);
-      if (canAttackComponentMapper.get(unit) != null && canAttackComponentMapper.get(unit).isCanAttack()) {
-        botAttackUtil.attack(unit);
-      }
+    switch (currentStage) { // the bot has several states in which it can exist
+      case PRE_MOVE_ATTACK -> handlePreMoveAttackStage();
+      case MOVE -> handleMoveStage();
+      case POST_MOVE_ATTACK -> handlePostMoveAttackStage();
+    }*/
+  }
+
+  private void handlePostMoveAttackStage() {
+    log.info("post move attack stage");
+    if (canAttackComponentMapper.get(selectedUnit) != null
+        && canAttackComponentMapper.get(selectedUnit).isCanAttack()) {
+      botAttackUtil.attack(selectedUnit);
     }
-    endTurn();
+    currentStage = BotStage.PRE_MOVE_ATTACK;
+    selectedUnit = 0xC0FFEE;
+    runBotIteration();
+  }
+
+  private void handlePreMoveAttackStage() {
+    log.info("pre move attack stage");
+    if (!botAttackUtil.attack(selectedUnit)) {
+      handleMoveStage();
+    }
+    currentStage = BotStage.MOVE;
+  }
+
+  private void handleMoveStage() {
+    log.info("move stage");
+    botMoveUtil.move(selectedUnit);
+    currentStage = BotStage.POST_MOVE_ATTACK;
   }
 
   private void endTurn() {
+    a = false;
+    log.info("end turn");
     botTechnologyUtil.research();
     endTurnService.endTurn();
   }
@@ -174,5 +212,11 @@ public class GameScreen extends ScreenAdapter {
     runBotIteration();
   }
 
+  private int selectedUnit = 0xC0FFEE;
+  private BotStage currentStage = BotStage.PRE_MOVE_ATTACK;
+
+  enum BotStage {
+    PRE_MOVE_ATTACK, MOVE, POST_MOVE_ATTACK
+  }
 
 }

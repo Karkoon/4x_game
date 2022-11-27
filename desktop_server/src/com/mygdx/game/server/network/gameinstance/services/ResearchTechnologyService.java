@@ -73,7 +73,6 @@ public class ResearchTechnologyService extends WorldService {
     inResearch.setScienceLeft(technologyConfig.getRequiredScience());
 
     setDirty(entityId, InResearch.class, world);
-    world.process();
   }
 
   private boolean requiredTechnologiesNotResearched(int entityId, String playerToken) {

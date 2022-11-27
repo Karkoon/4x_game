@@ -5,6 +5,7 @@ import com.github.czyzby.websocket.CommonWebSockets;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.WebSockets;
+import com.github.czyzby.websocket.serialization.Serializer;
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
 import lombok.extern.java.Log;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Log
 public class ServerConnection implements MessageSender {
   private final ConcurrentLinkedQueue<String> dataToSend = new ConcurrentLinkedQueue<>();
-
+  private WebSocket activeWebSocket;
   private WebSocketListener persistentListener;
   private final WebSocketListener serverConnectionListener = new WebSocketListener() {
     @Override
@@ -35,13 +36,13 @@ public class ServerConnection implements MessageSender {
 
     @Override
     public boolean onMessage(WebSocket webSocket, String packet) {
-      log.info("message string " + packet);
+      log.info("message string received");
       return persistentListener.onMessage(webSocket, packet);
     }
 
     @Override
     public boolean onMessage(WebSocket webSocket, byte[] packet) {
-      log.info("message packet " + Arrays.toString(packet));
+      log.info("message packet received");
       return persistentListener.onMessage(webSocket, packet);
     }
 
@@ -53,7 +54,6 @@ public class ServerConnection implements MessageSender {
       return false;
     }
   };
-  private WebSocket activeWebSocket;
 
   @Inject
   public ServerConnection() {
@@ -116,5 +116,9 @@ public class ServerConnection implements MessageSender {
 
   public void setPersistentListener(WebSocketListener messageListener) {
     persistentListener = messageListener;
+  }
+
+  public Serializer getSerializer() {
+    return activeWebSocket.getSerializer();
   }
 }

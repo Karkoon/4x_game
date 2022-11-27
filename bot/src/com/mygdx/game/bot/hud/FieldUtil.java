@@ -7,6 +7,7 @@ import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -34,12 +35,11 @@ public class FieldUtil {
   @AspectDescriptor(one = {Field.class})
   private EntitySubscription fields;
 
-  @AspectDescriptor(one = {Stats.class})
+  @AspectDescriptor(one = {Stats.class, Owner.class, Coordinates.class, Movable.class})
   private EntitySubscription units;
 
   public IntArray selectAvailableFields(int unit) {
-    var fieldsInRange = new IntArray();
-
+    var fieldsInRange = new IntSet();
     for (int i = 0; i < fields.getEntities().size(); i++) {
       int field = fields.getEntities().get(i);
       if (inRange(unit, field) && !isOccupied(unit, field)) {
@@ -47,13 +47,7 @@ public class FieldUtil {
       }
     }
 
-    return fieldsInRange;
-  }
-
-  private boolean haveDifferentOwner(int unit, int field) {
-    var unitOwner = ownerComponentMapper.get(unit);
-    var fieldOwner = ownerComponentMapper.get(field);
-    return fieldOwner == null || !unitOwner.getToken().equals(fieldOwner.getToken());
+    return fieldsInRange.iterator().toArray();
   }
 
   private boolean inRange(int unit, int field) {
@@ -68,7 +62,7 @@ public class FieldUtil {
     return range >= distance;
   }
 
-  private boolean isOccupied(int unit, int field){
+  private boolean isOccupied(int unit, int field) {
     for (int i = 0; i < units.getEntities().size(); i++) {
       var otherUnit = units.getEntities().get(i);
       if (!coordinatesComponentMapper.get(otherUnit).equals(coordinatesComponentMapper.get(field))){

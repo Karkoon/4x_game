@@ -4,11 +4,11 @@ import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
-import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.bot.model.ChosenBotType;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.AttackEntityService;
+import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
@@ -38,6 +38,8 @@ public class BotAttackUtil {
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<CanAttack> canAttackMapper;
+
 
   @Inject
   public BotAttackUtil (
@@ -56,18 +58,24 @@ public class BotAttackUtil {
     world.inject(this);
   }
 
-  public void attack(int unitId) {
+  public boolean attack(int unitId) {
+    if (!canAttackMapper.has(unitId)){
+      return false;
+    }
     if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
       if (propabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
-        IntArray unitsInRange = unitUtil.getUnitsInRange(unitId);
-        if (unitsInRange == null || unitsInRange.isEmpty()){
-          return;
+        var unitsInRange = unitUtil.getUnitsInRange(unitId);
+        if (unitsInRange.isEmpty()){
+          return false;
         }
-        int enemyUnitId = unitsInRange.random();
+        var enemyUnitId = unitsInRange.random();
         log.info("Unit " + unitId + " attack " + enemyUnitId);
         attackEntityService.attack(unitId, enemyUnitId);
       }
+    } else if (chosenBotType.getBotType() == BotType.TRAINED) {
+      // tutaj qlearning dla ataku
     }
+    return true;
   }
 
   public boolean propabilityCheck(float value) {

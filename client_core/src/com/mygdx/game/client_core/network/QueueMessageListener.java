@@ -2,14 +2,13 @@ package com.mygdx.game.client_core.network;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Queue;
-import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import lombok.extern.java.Log;
 
 @Log
-public class QueueMessageListener extends AbstractWebSocketListener {
+public class QueueMessageListener implements OnMessageListener {
 
   private final ObjectMap<Class<?>, Queue<Handler>> handlers = new ObjectMap<>();
 
@@ -28,13 +27,8 @@ public class QueueMessageListener extends AbstractWebSocketListener {
   }
 
   @Override
-  protected boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
-    try {
-      return routeMessageToHandler(webSocket, packet);
-    } catch (final Exception exception) {
-      return onError(webSocket,
-          new WebSocketException("Unable to handle the received packet: " + packet, exception));
-    }
+  public boolean onMessage(final WebSocket webSocket, final Object packet) throws WebSocketException {
+    return routeMessageToHandler(webSocket, packet);
   }
 
   private boolean routeMessageToHandler(WebSocket webSocket, Object message) {

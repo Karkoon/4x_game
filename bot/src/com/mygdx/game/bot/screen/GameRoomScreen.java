@@ -9,9 +9,8 @@ import com.mygdx.game.bot.model.ChosenBotType;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.QueueMessageListener;
-import com.mygdx.game.core.model.PlayerLobby;
 import com.mygdx.game.core.network.messages.GameStartedMessage;
-import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.PlayerLobbyChangedMessage;
 import com.mygdx.game.core.network.messages.RoomConfigMessage;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -59,7 +58,7 @@ public class GameRoomScreen extends ScreenAdapter {
             return FULLY_HANDLED;
           }
       );
-      listener.registerHandler(PlayerJoinedRoomMessage.class, this::changeType);
+      listener.registerHandler(PlayerLobbyChangedMessage.class, this::changeType);
       listener.registerHandler(RoomConfigMessage.class, this::noOp2);
       initialized = true;
     }
@@ -71,8 +70,8 @@ public class GameRoomScreen extends ScreenAdapter {
     jobManager.doAllJobs();
   }
 
-  private boolean changeType(WebSocket webSocket, PlayerJoinedRoomMessage message) {
-    for (PlayerLobby user : message.getUsers()) {
+  private boolean changeType(WebSocket webSocket, PlayerLobbyChangedMessage message) {
+    for (var user : message.getUsers()) {
       if (user.getUserName().equals(playerInfo.getUserName())) {
         chosenBotType.setBotType(user.getBotType());
       }
