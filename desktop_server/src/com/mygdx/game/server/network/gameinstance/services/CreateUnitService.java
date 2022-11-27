@@ -152,7 +152,7 @@ public class CreateUnitService extends WorldService {
         log.info("Player don't have enought materials");
       }
     }
-    sender.send(new UnitRecruitedMessage(fieldEntityId), client);
+    sender.send(new UnitRecruitedMessage(), client);
   }
 
   public int randomBetween(int min, int max) {

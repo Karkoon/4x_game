@@ -10,13 +10,15 @@ import com.mygdx.game.core.ecs.component.EntityConfigId;
 import com.mygdx.game.core.ecs.component.InResearch;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Researched;
+import com.mygdx.game.core.model.BotType;
+import com.mygdx.game.core.network.messages.TechnologyResearchedMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.List;
 
 @GameInstanceScope
 @Log
@@ -24,6 +26,7 @@ public class ResearchTechnologyService extends WorldService {
 
   private final ComponentFactory componentFactory;
   private final GameConfigAssets gameConfigAssets;
+  private final MessageSender messageSender;
   private World world;
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
@@ -41,10 +44,12 @@ public class ResearchTechnologyService extends WorldService {
   public ResearchTechnologyService(
       ComponentFactory componentFactory,
       GameConfigAssets gameConfigAssets,
+      MessageSender messageSender,
       World world
   ) {
     this.componentFactory = componentFactory;
     this.gameConfigAssets = gameConfigAssets;
+    this.messageSender = messageSender;
     world.inject(this);
   }
 
@@ -74,6 +79,9 @@ public class ResearchTechnologyService extends WorldService {
 
     setDirty(entityId, InResearch.class, world);
     world.process();
+
+    if (client.getBotType() != BotType.NOT_BOT)
+      messageSender.send(new TechnologyResearchedMessage(), client);
   }
 
   private boolean requiredTechnologiesNotResearched(int entityId, String playerToken) {

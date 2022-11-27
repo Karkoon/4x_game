@@ -6,6 +6,7 @@ import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.bot.model.ChosenBotType;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.AttackEntityService;
 import com.mygdx.game.core.ecs.component.Coordinates;
@@ -29,7 +30,7 @@ public class BotAttackUtil {
   private final PlayerInfo playerInfo;
   private final Random random;
 
-  @AspectDescriptor(all = {Stats.class, Owner.class, Coordinates.class})
+  @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription unitsSubscription;
 
   private ComponentMapper<Coordinates> coordinatesMapper;
@@ -51,7 +52,7 @@ public class BotAttackUtil {
   }
 
   public void attack(int unitId) {
-    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
+    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
       if (propabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
         var coordinates = coordinatesMapper.get(unitId);
         var stats = statsMapper.get(unitId);

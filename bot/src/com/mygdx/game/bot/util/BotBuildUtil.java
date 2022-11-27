@@ -60,7 +60,7 @@ public class BotBuildUtil {
   }
 
   public boolean build(int fieldEntityId) {
-    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
+    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
       if (propabilityCheck(SHOULD_BUILD_RANDOM_FIRST)) {
         var buildings = gameConfigAssets.getGameConfigs().getAll(BuildingConfig.class);
         int id = randomBetween(0, buildings.size);

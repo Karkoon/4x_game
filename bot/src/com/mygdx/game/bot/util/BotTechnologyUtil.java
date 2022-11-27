@@ -67,8 +67,8 @@ public class BotTechnologyUtil {
     world.inject(this);
   }
 
-  public void research() {
-    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST) {
+  public boolean research() {
+    if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
       if (propabilityCheck(SHOULD_RESEARCH_RANDOM_FIRST)
           && inResearchSubscriber.getEntities().size() == 0
           && notResearchedSubscriber.getEntities().size() > 0
@@ -91,12 +91,13 @@ public class BotTechnologyUtil {
           var dependencies = technologyConfig.getDependencies();
           if (fulfilledDependencies(researchedConfigIds, dependencies)) {
             researchTechnologyService.researchTechnology(notResearchedEntities.get(i));
-            break;
+            return true;
           }
         }
 
       }
     }
+    return false;
   }
 
   public boolean propabilityCheck(float value) {

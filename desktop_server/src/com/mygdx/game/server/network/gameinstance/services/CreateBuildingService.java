@@ -115,6 +115,6 @@ public class CreateBuildingService extends WorldService {
         }
       }
     }
-    sender.send(new BuildingBuildedMessage(parentField), client);
+    sender.send(new BuildingBuildedMessage(), client);
   }
 }

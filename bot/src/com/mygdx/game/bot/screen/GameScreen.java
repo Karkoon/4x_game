@@ -31,6 +31,7 @@ import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.network.messages.BuildingBuildedMessage;
 import com.mygdx.game.core.network.messages.ChangeTurnMessage;
 import com.mygdx.game.core.network.messages.GameInterruptedMessage;
+import com.mygdx.game.core.network.messages.TechnologyResearchedMessage;
 import com.mygdx.game.core.network.messages.UnitRecruitedMessage;
 import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
 import dagger.Lazy;
@@ -138,18 +139,17 @@ public class GameScreen extends ScreenAdapter {
       }));
 
       queueMessageListener.registerHandler(BuildingBuildedMessage.class, ((webSocket, message) -> {
-        Integer worldEntity = networkWorldEntityMapper.getWorldEntity(message.getNetworkFieldEntityId());
-        worksOnFields.remove(worldEntity);
-        if (worksOnFields.size() == 0)
-          recruitUnits();
+        buildBuildings();
         return FULLY_HANDLED;
       }));
 
       queueMessageListener.registerHandler(UnitRecruitedMessage.class, ((webSocket, message) -> {
-        Integer worldEntity = networkWorldEntityMapper.getWorldEntity(message.getNetworkFieldEntityId());
-        worksOnFields.remove(worldEntity);
-        if (worksOnFields.size() == 0)
-          endTurn();
+        recruitUnits();
+        return FULLY_HANDLED;
+      }));
+
+      queueMessageListener.registerHandler(TechnologyResearchedMessage.class, ((webSocket, message) -> {
+        endTurn();
         return FULLY_HANDLED;
       }));
 
@@ -182,63 +182,76 @@ public class GameScreen extends ScreenAdapter {
     log.info("start turn");
     var unit = nextUnitUtil.selectNextUnit();
     if (unit == 0xC0FFEE) {
-      buildBuildings();
+      buildBuildingsPrepare();
       return;
     }
     var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
     log.info("moving entity");
     if (field == 0xC0FFEE) {
-      buildBuildings();
+      buildBuildingsPrepare();
       return;
     }
     moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
     botAttackUtil.attack(unit);
   }
 
+  private void buildBuildingsPrepare() {
+    log.info("build buildings prepare");
+    prepareFields();
+    buildBuildings();
+  }
+
   private void buildBuildings() {
     log.info("build buildings");
-    boolean noBuilding = true;
-    worksOnFields = new ArrayList<>();
-    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
-      worksOnFields.add(fieldSubscriber.getEntities().get(i));
-    }
-    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
-      if (ownerMapper.get(fieldSubscriber.getEntities().get(i)).getToken().equals(playerInfo.getToken())) {
-        if (!botBuildUtil.build(fieldSubscriber.getEntities().get(i)))
-          worksOnFields.remove(Integer.valueOf(fieldSubscriber.getEntities().get(i)));
-        else
-          noBuilding = false;
+    if (worksOnFields.size() > 0) {
+      Integer workingField = worksOnFields.get(0);
+      worksOnFields.remove(workingField);
+      if (!botBuildUtil.build(workingField)) {
+        buildBuildings();
       }
+    } else {
+      recruitUnitsPrepare();
     }
-    if (noBuilding)
-      recruitUnits();
+  }
+
+  private void recruitUnitsPrepare() {
+    log.info("recruit units prepare");
+    prepareFields();
+    recruitUnits();
   }
 
   private void recruitUnits() {
-    log.info("recruitUnits");
-    boolean noUnits = true;
+    log.info("recruit units");
+    if (worksOnFields.size() > 0) {
+      Integer workingField = worksOnFields.get(0);
+      worksOnFields.remove(workingField);
+      if (!botRecruitUtil.recruitUnit(workingField)) {
+        recruitUnits();
+      }
+    } else {
+      researchTechnology();
+    }
+  }
+
+  private void prepareFields() {
     worksOnFields = new ArrayList<>();
     for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
-      worksOnFields.add(fieldSubscriber.getEntities().get(i));
-    }
-    for (int i = 0; i < fieldSubscriber.getEntities().size(); i++) {
       if (ownerMapper.get(fieldSubscriber.getEntities().get(i)).getToken().equals(playerInfo.getToken())) {
-        if (!botRecruitUtil.recruitUnit(fieldSubscriber.getEntities().get(i)))
-          worksOnFields.remove(Integer.valueOf(fieldSubscriber.getEntities().get(i)));
-        else
-          noUnits = false;
+        worksOnFields.add(fieldSubscriber.getEntities().get(i));
       }
     }
-    if (noUnits)
+  }
+
+  private void researchTechnology() {
+    log.info("research technology");
+    if (!botTechnologyUtil.research()) {
       endTurn();
+    }
   }
 
   private void endTurn() {
-    if (activeToken.isActiveToken(playerInfo.getToken())) {
-      botTechnologyUtil.research();
-      log.info("end turn");
-      endTurnService.endTurn();
-    }
+    log.info("end turn");
+    endTurnService.endTurn();
   }
 
   @Override
