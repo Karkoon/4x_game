@@ -57,7 +57,6 @@ public class AttackEntityService extends WorldService {
     setDirty(attacker, CanAttack.class, world);
     setDirty(attacker, Stats.class, world);
     setDirty(attacked, Stats.class, world);
-    world.process();
   }
 
   private void attackAndCounterAttack(Stats attacker, Stats attacked) {

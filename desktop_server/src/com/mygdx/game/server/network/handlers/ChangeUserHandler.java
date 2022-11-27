@@ -1,8 +1,9 @@
 package com.mygdx.game.server.network.handlers;
 
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.core.model.BotType;
 import com.mygdx.game.core.model.PlayerLobby;
-import com.mygdx.game.core.network.messages.PlayerJoinedRoomMessage;
+import com.mygdx.game.core.network.messages.PlayerLobbyChangedMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoomManager;
 import com.mygdx.game.server.network.MessageSender;
@@ -40,10 +41,11 @@ public class ChangeUserHandler {
       }
     }
     var room = rooms.getRoom(client.getGameRoom().getRoomId());
-    List<PlayerLobby> users = room.getClients()
-            .stream()
-            .map(Client::mapToPlayerLobby).collect(Collectors.toList());
-    var msg = new PlayerJoinedRoomMessage(users);
+    var players = new PlayerLobby[room.getClients().size()];
+    for (int i = 0; i < room.getClients().size(); i++) {
+      players[i] = room.getClients().get(i).mapToPlayerLobby();
+    }
+    var msg = new PlayerLobbyChangedMessage(new Array<>(players));
     sender.sendToAll(msg, room.getClients());
   }
 }

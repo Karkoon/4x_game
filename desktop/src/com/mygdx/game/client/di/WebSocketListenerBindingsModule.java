@@ -1,6 +1,6 @@
 package com.mygdx.game.client.di;
 
-import com.github.czyzby.websocket.WebSocketListener;
+import com.mygdx.game.client_core.network.OnMessageListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import dagger.Binds;
 import dagger.Module;
@@ -14,5 +14,5 @@ public interface WebSocketListenerBindingsModule {
   @Binds
   @IntoSet
   @Singleton
-  WebSocketListener queueMessageListener(QueueMessageListener queueMessageListener);
+  OnMessageListener queueMessageListener(QueueMessageListener queueMessageListener);
 }

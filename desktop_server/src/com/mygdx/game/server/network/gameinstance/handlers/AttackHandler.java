@@ -23,4 +23,5 @@ public class AttackHandler extends EntityCommandHandler {
     var attacker = Integer.parseInt(commands[1]);
     var attacked = Integer.parseInt(commands[2]);
     attackEntityService.attackEntity(attacker, attacked);
-  }}
+  }
+}

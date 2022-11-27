@@ -1,10 +1,8 @@
 package com.mygdx.game.server.network.gameinstance;
 
-import com.artemis.Component;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.mygdx.game.core.network.messages.ComponentMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.Transaction;
@@ -26,7 +24,7 @@ public class StateSyncer {
     super();
   }
 
-  public synchronized void beginTransaction(Client client) {
+  private synchronized void beginTransaction(Client client) {
     var transaction = transactionMap.get(client);
     if (transaction == null) {
       transactionMap.put(client, new Transaction());
@@ -40,28 +38,29 @@ public class StateSyncer {
     }
     var buffer = transaction.getMessageBuffer();
     log.info("sending " + buffer.size + " " + buffer + "\nto " + client.getPlayerUsername());
-    sendSavingClassInJson(transaction.getMessageBuffer(), client);
+    send(transaction.getMessageBuffer(), client);
     transaction.clear();
   }
 
-  public synchronized void sendComponentTo(@NonNull Component component, int entityId, Client client) {
+  public synchronized void sendObjectTo(@NonNull Object component, Client client) {
     if (!transactionMap.containsKey(client)) {
+      beginTransaction(client);
       log.info("Sending component " + component + " to " + client);
-      var message = new ComponentMessage<>(component, entityId);
-      sendSavingClassInJson(message, client);
-    } else {
-      saveToBuffer(component, entityId, client);
     }
+    saveToBuffer(component, client);
   }
 
-  private void saveToBuffer(Component component, int entityId, Client client) {
-    var message = new ComponentMessage<>(component, entityId);
-    transactionMap.get(client).addToBuffer(message);
+  private void saveToBuffer(Object component, Client client) {
+    transactionMap.get(client).addToBuffer(component);
   }
 
-  private void sendSavingClassInJson(Object message, Client client) {
-    var jsonString = json.toJson(message, (Class<?>) null); // required to save type information inside json
-    client.getSocket().write(Buffer.buffer(jsonString));
+  private Buffer bufferize(Object object) {
+    var jsonString = json.toJson(object, (Class<?>) null); // required to save type information inside json
+    return Buffer.buffer(jsonString);
+  }
+
+  private void send(Object message, Client client) {
+    client.getSocket().write(bufferize(message));
   }
 
   public void flush() {

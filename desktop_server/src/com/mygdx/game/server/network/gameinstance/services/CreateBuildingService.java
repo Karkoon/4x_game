@@ -23,7 +23,6 @@ import java.util.Map;
 public class CreateBuildingService extends WorldService {
 
   private final BuildingFactory buildingFactory;
-  private final ComponentFactory componentFactory;
   private final GameConfigAssets assets;
   private final MaterialUtilServer materialUtilServer;
   private final TechnologyUtilServer technologyUtilServer;
@@ -32,14 +31,12 @@ public class CreateBuildingService extends WorldService {
   @Inject
   CreateBuildingService(
       BuildingFactory buildingFactory,
-      ComponentFactory componentFactory,
       GameConfigAssets assets,
       MaterialUtilServer materialUtilServer,
       TechnologyUtilServer technologyUtilServer,
       World world
   ) {
     this.buildingFactory = buildingFactory;
-    this.componentFactory = componentFactory;
     this.assets = assets;
     this.materialUtilServer = materialUtilServer;
     this.technologyUtilServer = technologyUtilServer;
@@ -50,16 +47,15 @@ public class CreateBuildingService extends WorldService {
     log.info("Create building");
 
     var buildingConfig = assets.getGameConfigs().get(BuildingConfig.class, entityConfig);
-    String playerToken = room.getClients().get(clientIndex).getPlayerToken();
+    var playerToken = room.getClients().get(clientIndex).getPlayerToken();
 
-    Map<MaterialBase, MaterialUnit> reducedMaterials = technologyUtilServer.getReducedParametersForBuilding(buildingConfig.getMaterials(), playerToken);
+    var reducedMaterials = technologyUtilServer.getReducedParametersForBuilding(buildingConfig.getMaterials(), playerToken);
 
     if (subfieldMapper.get(parentSubfield).getBuilding() != -0xC0FEE) {
       log.info("THERE IS BUILDING WITH PARENT: " + parentSubfield);
     } else if(!materialUtilServer.checkIfCanBuy(playerToken, reducedMaterials)) {
       log.info("NOT ENOUGH RESOURCES");
     } else {
-      var world = room.getGameInstance().getWorld();
       materialUtilServer.removeMaterials(playerToken, reducedMaterials);
       int buildingEntityId = buildingFactory.createBeforeEntity(
               buildingConfig,
@@ -68,7 +64,6 @@ public class CreateBuildingService extends WorldService {
               clientIndex
       );
       technologyUtilServer.applyTechnologyToNewEntities(buildingEntityId, playerToken, TechnologyImpactType.BUILDING_IMPACT);
-      world.process();
     }
   }
 }

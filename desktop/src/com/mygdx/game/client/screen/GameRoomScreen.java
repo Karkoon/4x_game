@@ -28,9 +28,6 @@ public class GameRoomScreen extends ScreenAdapter {
   GameRoomScreen(
       @Named(StageModule.SCREEN_STAGE) Stage stage,
       GameRoomHUD gameRoomHUD,
-      GameScreenSubcomponent.Builder gameScreenBuilder,
-      GameStartService gameStartService,
-      QueueMessageListener connection,
       NetworkJobsQueueJobJobberManager jobManager
   ) {
     this.stage = stage;

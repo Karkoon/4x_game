@@ -26,7 +26,7 @@ public class ChangeTurnMessageHandler implements QueueMessageListener.Handler<Ch
 
   @Override
   public boolean handle(WebSocket webSocket, ChangeTurnMessage message) {
-    log.info("Handle change turn message ");
+    log.info("Handle change turn message");
     activeToken.setActiveToken(message.getPlayerToken());
     return FULLY_HANDLED;
   }

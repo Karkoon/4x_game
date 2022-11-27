@@ -44,7 +44,6 @@ public class UnitHandler extends EntityCommandHandler {
     }
     else {
       createUnitService.createUnit(unitConfigId, fieldEntityId, client, false);
-      world.process();
     }
   }
 }
