@@ -27,4 +27,5 @@ public class Coordinates extends PooledComponent {
   public void setCoordinates(@NonNull Coordinates other) {
     setCoordinates(other.x, other.y);
   }
+
 }

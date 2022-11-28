@@ -6,12 +6,12 @@ import com.mygdx.game.client.screen.Navigator;
 
 import javax.inject.Inject;
 
-public class SubFieldUiInputProcessor extends InputAdapter {
+public class FieldUIInputAdapter extends InputAdapter {
 
   private final Navigator navigator;
 
   @Inject
-  public SubFieldUiInputProcessor(
+  public FieldUIInputAdapter(
       Navigator navigator
   ) {
     this.navigator = navigator;

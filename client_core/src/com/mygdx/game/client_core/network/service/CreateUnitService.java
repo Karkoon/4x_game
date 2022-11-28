@@ -43,8 +43,18 @@ public class CreateUnitService {
       log.info("You don't have enough materials");
     } else {
       var fieldNetworkId = networkWorldEntityMapper.getNetworkEntity(fieldId);
-      log.info("create unit for unit " + unitConfigId + " for field " + fieldNetworkId + " request send");
+      log.info("create unit " + unitConfigId + " for field " + fieldNetworkId + " request send");
       sender.get().send("create_unit" + ":" + unitConfigId + ":" + fieldNetworkId);
+    }
+  }
+
+  public void createUnit(int fieldId) {
+    if (inRecruitmentMapper.has(fieldId)) {
+      log.info("There is another recruited unit");
+    } else {
+      var fieldNetworkId = networkWorldEntityMapper.getNetworkEntity(fieldId);
+      log.info("create unit by boy for field " + fieldNetworkId + " request send");
+      sender.get().send("create_unit_bot" + ":" + fieldNetworkId);
     }
   }
 }

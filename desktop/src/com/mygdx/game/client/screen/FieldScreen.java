@@ -17,7 +17,7 @@ import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.hud.InfieldHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
-import com.mygdx.game.client.input.SubFieldUiInputProcessor;
+import com.mygdx.game.client.input.FieldUIInputAdapter;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
@@ -47,7 +47,7 @@ public class FieldScreen extends ScreenAdapter {
   private final InfieldHUD infieldHUD;
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
-  private final SubFieldUiInputProcessor subFieldUiInputProcessor;
+  private final FieldUIInputAdapter subFieldUiInputProcessor;
 
   private int fieldParent = -1;
 
@@ -65,7 +65,7 @@ public class FieldScreen extends ScreenAdapter {
       InfieldHUD infieldHUD,
       ChosenEntity chosenEntity,
       ShowSubfieldService showSubfieldService,
-      SubFieldUiInputProcessor subFieldUiInputProcessor,
+      FieldUIInputAdapter subFieldUiInputProcessor,
       InField inField
   ) {
     this.world = world;

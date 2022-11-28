@@ -10,6 +10,7 @@ import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -22,12 +23,16 @@ public class ShowSubfieldService extends WorldService {
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
+
+  private final MessageSender sender;
   private final World world;
 
   @Inject
   ShowSubfieldService(
+      MessageSender sender,
       World world
   ) {
+    this.sender = sender;
     world.inject(this);
     this.world = world;
   }

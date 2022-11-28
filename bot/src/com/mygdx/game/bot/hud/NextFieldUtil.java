@@ -6,6 +6,7 @@ import com.artemis.World;
 import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.ecs.component.Movable;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
@@ -23,6 +24,12 @@ public class NextFieldUtil {
   private ComponentMapper<Coordinates> coordinatesComponentMapper;
   private ComponentMapper<Stats> statsComponentMapper;
 
+  @AspectDescriptor(all = {Field.class})
+  private EntitySubscription fields;
+
+  @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
+  private EntitySubscription units;
+
   @Inject
   public NextFieldUtil(
       World world
@@ -30,14 +37,11 @@ public class NextFieldUtil {
     world.inject(this);
   }
 
-  @AspectDescriptor(all = {Field.class})
-  private EntitySubscription fields;
-
   public int selectFieldInRangeOfUnit(int unit) {
     var fieldsInRange = new IntSet();
     for (int i = 0; i < fields.getEntities().size(); i++) {
       int field = fields.getEntities().get(i);
-      if (inRange(unit, field)) {
+      if (inRange(unit, field) && noEnemyUnits(unit, field)) {
         fieldsInRange.add(field);
       }
     }
@@ -55,6 +59,20 @@ public class NextFieldUtil {
     var unitOwner = ownerComponentMapper.get(unit);
     var fieldOwner = ownerComponentMapper.get(field);
     return fieldOwner == null || !unitOwner.getToken().equals(fieldOwner.getToken());
+  }
+
+  // Chyba jeszcze nie działa
+  private boolean noEnemyUnits(int unit, int field) {
+    var unitOwner = ownerComponentMapper.get(unit);
+    var fieldCoordinates = coordinatesComponentMapper.get(field);
+
+    for (int i = 0; i < units.getEntities().size(); i++) {
+      var otherUnitOwner = ownerComponentMapper.get(units.getEntities().get(i));
+      var unitCoordinates = coordinatesComponentMapper.get(units.getEntities().get(i));
+      if (fieldCoordinates.equals(unitCoordinates) && !unitOwner.getToken().equals(otherUnitOwner.getToken()))
+        return false;
+    }
+    return true;
   }
 
   private boolean inRange(int unit, int field) {
