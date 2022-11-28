@@ -7,7 +7,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
-import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -17,26 +17,26 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class RemoveClientEntityService {
 
-  private final MessageSender sender;
+  private final StateSyncer syncer;
   private final GameRoom room;
   private ComponentMapper<ChangeSubscribers> subscribersComponentMapper;
 
 
   @Inject
   RemoveClientEntityService(
-      MessageSender sender,
+      StateSyncer syncer,
       World world,
       GameRoom room
   ) {
     super();
-    this.sender = sender;
+    this.syncer = syncer;
     this.room = room;
     world.inject(this);
   }
 
   public void removeEntity(int entityId, @NonNull Client client) {
     var msg = new RemoveEntityMessage(entityId);
-    sender.send(msg, client);
+    syncer.sendObjectTo(msg, client);
   }
 
   public void removeEntityForAll(int entityId) {
@@ -48,7 +48,7 @@ public class RemoveClientEntityService {
         clientIndex = clients.nextSetBit(clientIndex + 1)
     ) {
       var client = room.getClients().get(clientIndex);
-      sender.send(msg, client);
+      syncer.sendObjectTo(msg, client);
     }
   }
 }

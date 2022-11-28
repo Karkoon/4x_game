@@ -13,57 +13,57 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Log
 public class AddJobToQueueListener implements WebSocketListener {
 
-    private final ConcurrentLinkedQueue<OnMessageArgs> queue = new ConcurrentLinkedQueue<>();
+  private final ConcurrentLinkedQueue<OnMessageArgs> queue = new ConcurrentLinkedQueue<>();
 
-    public OnMessageArgs peek() {
-        return queue.peek();
-    }
+  public OnMessageArgs peek() {
+    return queue.peek();
+  }
 
-    public void remove() {
-        queue.remove();
-    }
+  public void remove() {
+    queue.remove();
+  }
 
-    public record OnMessageArgs(WebSocket socket, byte[] data) {
-        @Override
-        public String toString() {
-            return new String(data);
-        }
-    }
-
-    @Inject
-    public AddJobToQueueListener() {
-        super();
-    }
-
+  public record OnMessageArgs(WebSocket socket, byte[] data) {
     @Override
-    public boolean onOpen(WebSocket webSocket) {
-        return false;
+    public String toString() {
+      return new String(data);
     }
+  }
 
-    @Override
-    public boolean onClose(WebSocket webSocket, int closeCode, String reason) {
-        return false;
-    }
+  @Inject
+  public AddJobToQueueListener() {
+    super();
+  }
 
-    @Override
-    public boolean onMessage(WebSocket webSocket, String packet) {
-        return onMessage(webSocket, packet.getBytes());
-    }
+  @Override
+  public boolean onOpen(WebSocket webSocket) {
+    return false;
+  }
 
-    @Override
-    public boolean onMessage(WebSocket webSocket, byte[] packet) {
-        try {
-            log.info("onMessage register job args");
-            queue.add(new OnMessageArgs(webSocket, packet));
-            return true;
-        } catch (final Exception exception) {
-            return onError(webSocket,
-                new WebSocketException("Unable to handle the received packet: " + packet, exception));
-        }
-    }
+  @Override
+  public boolean onClose(WebSocket webSocket, int closeCode, String reason) {
+    return false;
+  }
 
-    @Override
-    public boolean onError(WebSocket webSocket, Throwable error) {
-        return false;
+  @Override
+  public boolean onMessage(WebSocket webSocket, String packet) {
+    return onMessage(webSocket, packet.getBytes());
+  }
+
+  @Override
+  public boolean onMessage(WebSocket webSocket, byte[] packet) {
+    try {
+      log.info("onMessage register job args");
+      queue.add(new OnMessageArgs(webSocket, packet));
+      return true;
+    } catch (final Exception exception) {
+      return onError(webSocket,
+          new WebSocketException("Unable to handle the received packet: " + packet, exception));
     }
+  }
+
+  @Override
+  public boolean onError(WebSocket webSocket, Throwable error) {
+    return false;
+  }
 }

@@ -1,8 +1,8 @@
 package com.mygdx.game.client.di.gameinstance;
 
-import com.github.czyzby.websocket.WebSocketListener;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
+import com.mygdx.game.client_core.network.OnMessageListener;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import dagger.Binds;
@@ -18,19 +18,19 @@ public interface GameInstanceWebSocketListenerBindingsModule {
 
   @Multibinds
   @Named(GameInstanceNetworkModule.GAME_INSTANCE)
-  Set<WebSocketListener> webListenerSet();
+  Set<OnMessageListener> webListenerSet();
 
   @Binds
   @IntoSet
   @GameInstanceScope
   @Named(GameInstanceNetworkModule.GAME_INSTANCE)
-  WebSocketListener componentMessageListener(ComponentMessageListener listener);
+  OnMessageListener componentMessageListener(ComponentMessageListener listener);
 
   @Binds
   @IntoSet
   @GameInstanceScope
   @Named(GameInstanceNetworkModule.GAME_INSTANCE)
-  WebSocketListener queueMessageListener(
+  OnMessageListener queueMessageListener(
       @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener
   );
 }
