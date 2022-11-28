@@ -90,4 +90,12 @@ public class GameInstance {
   public GameInstanceServer getServer() {
     return gameInstanceServer.get();
   }
+
+  public void notifyLosers(Set<String> losers) {
+    for (String loserToken : losers) {
+      if (!loserTokens.contains(loserToken)) {
+        playerOrder.remove(room.getClientByToken(loserToken));
+      }
+    }
+  }
 }

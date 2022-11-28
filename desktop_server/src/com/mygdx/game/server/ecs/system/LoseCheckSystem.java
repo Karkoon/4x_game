@@ -70,6 +70,7 @@ public class LoseCheckSystem extends IteratingSystem {
       var losers = gameRoom.getClients().stream().map(Client::getPlayerToken)
           .filter(token -> !currentPlayers.contains(token))
           .collect(Collectors.toUnmodifiableSet());
+      gameInstance.get().notifyLosers(losers);
       gameInstance.get().setLoserTokens(losers);
     }
   }
