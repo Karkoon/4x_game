@@ -5,7 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
-import com.mygdx.game.client.hud.GameRoomHUD;
+import com.mygdx.game.client.hud.GameRoomScreenHUD;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.GameStartService;
@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 @Singleton
 public class GameRoomScreen extends ScreenAdapter {
 
-  private final GameRoomHUD gameRoomHUD;
+  private final GameRoomScreenHUD gameRoomScreenHUD;
   private final Stage stage;
   private final NetworkJobsQueueJobJobberManager jobManager;
 
@@ -27,14 +27,14 @@ public class GameRoomScreen extends ScreenAdapter {
   @Inject
   GameRoomScreen(
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      GameRoomHUD gameRoomHUD,
+      GameRoomScreenHUD gameRoomScreenHUD,
       GameScreenSubcomponent.Builder gameScreenBuilder,
       GameStartService gameStartService,
       QueueMessageListener connection,
       NetworkJobsQueueJobJobberManager jobManager
   ) {
     this.stage = stage;
-    this.gameRoomHUD = gameRoomHUD;
+    this.gameRoomScreenHUD = gameRoomScreenHUD;
     this.jobManager = jobManager;
   }
 
@@ -42,7 +42,7 @@ public class GameRoomScreen extends ScreenAdapter {
   public void show() {
     log.info("gameroomscreen shown");
     Gdx.input.setInputProcessor(stage);
-    gameRoomHUD.prepareHudSceleton();
+    gameRoomScreenHUD.prepareHudSceleton();
     log.info("initialized gameroomscreen");
   }
 
@@ -50,9 +50,9 @@ public class GameRoomScreen extends ScreenAdapter {
   public void render(float delta) {
     super.render(delta);
     stage.draw();
-    gameRoomHUD.draw();
+    gameRoomScreenHUD.draw();
     stage.act(delta);
-    gameRoomHUD.act(delta);
+    gameRoomScreenHUD.act(delta);
     jobManager.doAllJobs();
   }
 

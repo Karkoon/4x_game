@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
-import com.mygdx.game.client.hud.InfieldHUD;
+import com.mygdx.game.client.hud.FieldScreenHUD;
 import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.FieldUIInputAdapter;
@@ -44,7 +44,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private final Stage stage;
   private final ClickInputAdapter clickInputAdapter;
-  private final InfieldHUD infieldHUD;
+  private final FieldScreenHUD fieldScreenHUD;
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
   private final FieldUIInputAdapter subFieldUiInputProcessor;
@@ -62,7 +62,7 @@ public class FieldScreen extends ScreenAdapter {
       Viewport viewport,
       @Named(StageModule.FIELD_SCREEN) Stage stage,
       ClickInputAdapter clickInputAdapter,
-      InfieldHUD infieldHUD,
+      FieldScreenHUD fieldScreenHUD,
       ChosenEntity chosenEntity,
       ShowSubfieldService showSubfieldService,
       FieldUIInputAdapter subFieldUiInputProcessor,
@@ -74,7 +74,7 @@ public class FieldScreen extends ScreenAdapter {
     this.viewport = viewport;
     this.stage = stage;
     this.clickInputAdapter = clickInputAdapter;
-    this.infieldHUD = infieldHUD;
+    this.fieldScreenHUD = fieldScreenHUD;
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
@@ -107,7 +107,7 @@ public class FieldScreen extends ScreenAdapter {
     saveCameraPosition(viewport.getCamera());
     positionCamera(viewport.getCamera());
     setUpInput();
-    infieldHUD.prepareHudSceleton();
+    fieldScreenHUD.prepareHudSceleton();
   }
 
   @Override
@@ -118,10 +118,10 @@ public class FieldScreen extends ScreenAdapter {
     viewport.getCamera().update();
 
     stage.draw();
-    infieldHUD.draw();
+    fieldScreenHUD.draw();
 
     stage.act(delta);
-    infieldHUD.act(delta);
+    fieldScreenHUD.act(delta);
   }
 
   @Override

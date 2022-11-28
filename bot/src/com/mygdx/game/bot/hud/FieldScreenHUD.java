@@ -10,13 +10,13 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 
 @Log
-public class InfieldHUD {
+public class FieldScreenHUD {
 
   private final CreateUnitService createUnitService;
   private final GameConfigAssets assets;
 
   @Inject
-  public InfieldHUD(
+  public FieldScreenHUD(
       GameConfigAssets assets,
       CreateUnitService createUnitService,
       World world

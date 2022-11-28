@@ -42,7 +42,7 @@ import java.util.List;
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @Log
-public class GameRoomHUD implements Disposable {
+public class GameRoomScreenHUD implements Disposable {
 
   private final GameConnectService connectService;
   private final GameConfigAssets gameConfigAssets;
@@ -68,7 +68,7 @@ public class GameRoomHUD implements Disposable {
   private Button addBotButton;
 
   @Inject
-  public GameRoomHUD(
+  public GameRoomScreenHUD(
       GameConnectService connectService,
       GameConfigAssets gameConfigAssets,
       GameStartService gameStartService,
