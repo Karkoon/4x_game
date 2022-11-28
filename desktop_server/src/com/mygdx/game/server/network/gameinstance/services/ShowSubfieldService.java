@@ -24,17 +24,12 @@ public class ShowSubfieldService extends WorldService {
   private ComponentMapper<SubField> subFieldMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
 
-  private final MessageSender sender;
-  private final World world;
 
   @Inject
   ShowSubfieldService(
-      MessageSender sender,
       World world
   ) {
-    this.sender = sender;
     world.inject(this);
-    this.world = world;
   }
 
   public void flipSubscriptionState(int parentId, Client client) {
@@ -54,6 +49,5 @@ public class ShowSubfieldService extends WorldService {
       }
     }
     log.info("Shown subfield");
-    world.process();
   }
 }

@@ -99,7 +99,6 @@ public class CreateBuildingService extends WorldService {
         int subfieldEntityId = subFields.get(i);
         var subField = subfieldMapper.get(subfieldEntityId);
         if (subField.getBuilding() == -0xC0FEE) {
-          var world = room.getGameInstance().getWorld();
           materialUtilServer.removeMaterials(playerToken, reducedMaterials);
           var coordinates = coordinatesMapper.get(subfieldEntityId);
           int buildingEntityId = buildingFactory.createBeforeEntity(
@@ -110,7 +109,6 @@ public class CreateBuildingService extends WorldService {
           );
           log.info("Create building by bot - building created");
           technologyUtilServer.applyTechnologyToNewEntities(buildingEntityId, playerToken, TechnologyImpactType.BUILDING_IMPACT);
-          world.process();
           break;
         }
       }

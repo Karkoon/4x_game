@@ -15,7 +15,7 @@ import com.mygdx.game.core.network.messages.TechnologyResearchedMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class ResearchTechnologyService extends WorldService {
 
   private final ComponentFactory componentFactory;
   private final GameConfigAssets gameConfigAssets;
-  private final MessageSender messageSender;
+  private final StateSyncer stateSyncer;
   private World world;
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
@@ -44,12 +44,12 @@ public class ResearchTechnologyService extends WorldService {
   public ResearchTechnologyService(
       ComponentFactory componentFactory,
       GameConfigAssets gameConfigAssets,
-      MessageSender messageSender,
+      StateSyncer stateSyncer,
       World world
   ) {
     this.componentFactory = componentFactory;
     this.gameConfigAssets = gameConfigAssets;
-    this.messageSender = messageSender;
+    this.stateSyncer = stateSyncer;
     world.inject(this);
   }
 
@@ -78,10 +78,10 @@ public class ResearchTechnologyService extends WorldService {
     inResearch.setScienceLeft(technologyConfig.getRequiredScience());
 
     setDirty(entityId, InResearch.class, world);
-    world.process();
 
-    if (client.getBotType() != BotType.NOT_BOT)
-      messageSender.send(new TechnologyResearchedMessage(), client);
+    if (client.getBotType() != BotType.NOT_BOT) {
+      stateSyncer.sendObjectTo(new TechnologyResearchedMessage(), client);
+    }
   }
 
   private boolean requiredTechnologiesNotResearched(int entityId, String playerToken) {

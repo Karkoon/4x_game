@@ -19,7 +19,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.entityfactory.ComponentFactory;
 import com.mygdx.game.server.ecs.entityfactory.UnitFactory;
 import com.mygdx.game.server.model.Client;
-import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import com.mygdx.game.server.util.MaterialUtilServer;
 import lombok.extern.java.Log;
 
@@ -35,7 +35,7 @@ public class CreateUnitService extends WorldService {
   private final GameConfigAssets assets;
   private final MaterialUtilServer materialUtilServer;
   private final UnitFactory unitFactory;
-  private final MessageSender sender;
+  private final StateSyncer sender;
   private final Random random;
   private final World world;
 
@@ -52,7 +52,7 @@ public class CreateUnitService extends WorldService {
       GameConfigAssets assets,
       MaterialUtilServer materialUtilServer,
       UnitFactory unitFactory,
-      MessageSender sender,
+      StateSyncer sender,
       World world
   ) {
     this.componentFactory = componentFactory;
@@ -152,7 +152,7 @@ public class CreateUnitService extends WorldService {
         log.info("Player don't have enought materials");
       }
     }
-    sender.send(new UnitRecruitedMessage(), client);
+    sender.sendObjectTo(new UnitRecruitedMessage(), client);
   }
 
   public int randomBetween(int min, int max) {

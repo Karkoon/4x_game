@@ -1,8 +1,8 @@
 package com.mygdx.game.client_core.di;
 
-import com.github.czyzby.websocket.WebSocketListener;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
 import com.mygdx.game.client_core.model.ServerConnectionConfig;
+import com.mygdx.game.client_core.network.OnMessageListener;
 import com.mygdx.game.client_core.network.MessageSender;
 import com.mygdx.game.client_core.network.AddJobToQueueListener;
 import com.mygdx.game.client_core.network.QueueMessageListener;
@@ -51,8 +51,9 @@ public class NetworkModule {
   @Singleton
   public NetworkJobsQueueJobJobberManager providesNetworkJobsQueueJobJobberManager(
       AddJobToQueueListener listener,
-      Set<WebSocketListener> listenerSet
+      Set<OnMessageListener> listenerSet,
+      ServerConnection serverConnection
   ) {
-    return new NetworkJobsQueueJobJobberManager(listener, listenerSet);
+    return new NetworkJobsQueueJobJobberManager(listener, listenerSet, serverConnection.getSerializer());
   }
 }

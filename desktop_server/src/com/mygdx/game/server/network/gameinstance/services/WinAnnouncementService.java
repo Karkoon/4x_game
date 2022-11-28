@@ -4,17 +4,18 @@ import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 
 import javax.inject.Inject;
 
 @GameInstanceScope
 public class WinAnnouncementService {
-  private final MessageSender sender;
+  private final StateSyncer sender;
   private final GameRoom room;
 
   @Inject
   WinAnnouncementService(
-      MessageSender sender,
+      StateSyncer sender,
       GameRoom room
   ) {
     super();
@@ -26,7 +27,9 @@ public class WinAnnouncementService {
     var winnerName = room.getClientByToken(winnerToken).getPlayerUsername();
     var msg = new WinAnnouncementMessage(winnerToken, winnerName);
     room.tearDownGameInstance();
-    sender.sendToAll(msg, room.getClients());
+    for (int i = 0; i < room.getClients().size(); i++) {
+      sender.sendObjectTo(msg, room.getClients().get(i));
+    }
   }
 
 

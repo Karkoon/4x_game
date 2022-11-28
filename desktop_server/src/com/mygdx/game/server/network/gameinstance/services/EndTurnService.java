@@ -5,6 +5,7 @@ import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameInstance;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -13,13 +14,13 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class EndTurnService {
 
-  private final MessageSender sender;
+  private final StateSyncer sender;
   private final GameRoom room;
   private final GameInstance gameInstance;
 
   @Inject
   EndTurnService(
-      MessageSender sender,
+      StateSyncer sender,
       GameRoom room,
       GameInstance gameInstance
   ) {
@@ -33,7 +34,9 @@ public class EndTurnService {
     var nextClient = gameInstance.changeToNextPlayer();
     log.info("Give control to player " + nextClient.getPlayerUsername());
     var msg = new ChangeTurnMessage(nextClient.getPlayerToken());
-    sender.sendToAll(msg, room.getClients());
+    for (int i = 0; i < room.getClients().size(); i++) {
+      var client = room.getClients().get(i);
+      sender.sendObjectTo(msg, client);
+    }
   }
-
 }

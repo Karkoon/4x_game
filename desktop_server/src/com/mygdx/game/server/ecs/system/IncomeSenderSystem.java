@@ -5,6 +5,7 @@ import com.mygdx.game.core.network.messages.MaterialIncomeMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.MessageSender;
+import com.mygdx.game.server.network.gameinstance.StateSyncer;
 import com.mygdx.game.server.util.MaterialUtilServer;
 import dagger.Lazy;
 import lombok.extern.java.Log;
@@ -18,13 +19,13 @@ public class IncomeSenderSystem extends BaseSystem {
 
   private final GameRoom gameRoom;
   private final Lazy<MaterialUtilServer> materialUtilServer;
-  private final MessageSender messageSender;
+  private final StateSyncer messageSender;
 
   @Inject
   public IncomeSenderSystem(
       final GameRoom gameRoom,
       final Lazy<MaterialUtilServer> materialUtilServer,
-      final MessageSender messageSender
+      final StateSyncer messageSender
   ) {
     this.gameRoom = gameRoom;
     this.materialUtilServer = materialUtilServer;
@@ -46,7 +47,7 @@ public class IncomeSenderSystem extends BaseSystem {
         incomesNetwork.put(materialBaseIntegerEntry.getKey().name(), materialBaseIntegerEntry.getValue());
       }
       var msg = new MaterialIncomeMessage(incomesNetwork);
-      messageSender.send(msg, client);
+      messageSender.sendObjectTo(msg, client);
     }
   }
 

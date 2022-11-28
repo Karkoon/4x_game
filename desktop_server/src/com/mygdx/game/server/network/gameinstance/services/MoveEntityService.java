@@ -63,7 +63,6 @@ public class MoveEntityService extends WorldService {
         log.info("Unit has " + updatedRange + " move points left");
         setDirty(entityId, Coordinates.class, world);
         setDirty(entityId, Stats.class, world);
-        world.process();
       }
     }
     else {

@@ -5,6 +5,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Bits;
 import com.mygdx.game.core.ecs.component.Name;
+import com.mygdx.game.core.network.messages.ComponentMessage;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.ecs.component.ChangeSubscribers;
 import com.mygdx.game.server.ecs.component.DirtyComponents;
@@ -59,12 +60,6 @@ public class ComponentSyncSystem extends IteratingSystem {
     dirtyFlags.getDirtyComponents().clear();
   }
 
-  @Override
-  protected void end() {
-    stateSyncer.flush();
-    super.end();
-  }
-
   private void handleUnsubscribedClients(int entityId) {
     var clientsToUpdate = changeSubscribersMapper.get(entityId);
     var subscribers = clientsToUpdate.getClients();
@@ -98,7 +93,7 @@ public class ComponentSyncSystem extends IteratingSystem {
     changedSubscriptionState.and(friendlyOrFoeMapper.get(entityId).getFriendlies());
     log.info("id: " + entityId + " friendlyorfoe bits: " + friendlyOrFoeMapper.get(entityId).getFriendlies()
         + " change subscribers:" + clients + " changed subscription state: " + changedSubscriptionState
-    + " friendlies:" + friendlies + " changed subscription state " + changedSubscriptionState );
+        + " friendlies:" + friendlies + " changed subscription state " + changedSubscriptionState );
     var friendComponents = sharedComponentsMapper.get(entityId).getFriendlies();
     sendComponentsToClients(entityId, friendlies, friendComponents, changedSubscriptionState);
   }
@@ -111,7 +106,6 @@ public class ComponentSyncSystem extends IteratingSystem {
         clientIndex = clients.nextSetBit(clientIndex + 1)
     ) {
       var client = gameRoom.getClients().get(clientIndex);
-      stateSyncer.beginTransaction(client); //problematic
       for (
           var mapperIndex = components.nextSetBit(0);
           mapperIndex != -1;
@@ -128,7 +122,8 @@ public class ComponentSyncSystem extends IteratingSystem {
         }
         var componentToSend = mapper.get(entityId);
         log.info("sending name:" +  nameComponentMapper.get(entityId) + " to " + client.getPlayerToken());
-        stateSyncer.sendComponentTo(componentToSend, entityId, client);
+        var message = new ComponentMessage<>(componentToSend, entityId);
+        stateSyncer.sendObjectTo(message, client);
       }
     }
   }
