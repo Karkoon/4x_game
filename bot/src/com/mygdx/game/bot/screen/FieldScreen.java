@@ -2,7 +2,7 @@ package com.mygdx.game.bot.screen;
 
 import com.artemis.World;
 import com.badlogic.gdx.ScreenAdapter;
-import com.mygdx.game.bot.hud.InfieldHUD;
+import com.mygdx.game.bot.hud.FieldScreenHUD;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.util.CompositeUpdatable;
@@ -18,7 +18,7 @@ public class FieldScreen extends ScreenAdapter {
 
   private final World world;
 
-  private final InfieldHUD infieldHUD;
+  private final FieldScreenHUD fieldScreenHUD;
   private final ShowSubfieldService showSubfieldService;
 
   private int fieldParent = -1;
@@ -26,12 +26,12 @@ public class FieldScreen extends ScreenAdapter {
   @Inject
   public FieldScreen(
       World world,
-      InfieldHUD infieldHUD,
+      FieldScreenHUD fieldScreenHUD,
       ShowSubfieldService showSubfieldService
   ) {
     this.world = world;
     world.inject(this);
-    this.infieldHUD = infieldHUD;
+    this.fieldScreenHUD = fieldScreenHUD;
     this.showSubfieldService = showSubfieldService;
   }
 
@@ -39,7 +39,7 @@ public class FieldScreen extends ScreenAdapter {
   public void show() {
     log.info("SubArea shown");
     showSubfieldService.flipSubscriptionState(fieldParent);
-    infieldHUD.prepareHudSceleton();
+    fieldScreenHUD.prepareHudSceleton();
   }
 
   @Override

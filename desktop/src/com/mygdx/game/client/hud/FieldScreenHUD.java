@@ -5,6 +5,7 @@ import com.artemis.World;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -29,52 +30,54 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Log
-public class InfieldHUD implements Disposable {
+public class FieldScreenHUD implements Disposable {
 
   private final CanNotCreateUnitFactory canNotCreateUnitFactory;
   private final ChosenConfig chosenConfig;
   private final CreateUnitService createUnitService;
-  private final GameConfigAssets assets;
-  private final GameScreenAssets gameAssets;
+  private final GameConfigAssets gameConfigAssets;
+  private final GameScreenAssets gameScreenAssets;
   private final InField inField;
   private final InfieldUtil infieldUtil;
-  private final UiElementsCreator uiElementsCreator;
-  private final Stage stage;
-  private final Texture inRecruitmentImageTexture;
   private final Lazy<MaterialUtilClient> materialUtilClient;
   private final PlayerInfo playerInfo;
+  private final Stage stage;
+  private final Texture inRecruitmentImageTexture;
+  private final UiElementsCreator uiElementsCreator;
 
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
+  private VerticalGroup unitAndBuildingContainer;
+
   @Inject
-  public InfieldHUD(
-      @Named(StageModule.FIELD_SCREEN) Stage stage,
-      UiElementsCreator uiElementsCreator,
+  public FieldScreenHUD(
       CanNotCreateUnitFactory canNotCreateUnitFactory,
+      CreateUnitService createUnitService,
       ChosenConfig chosenConfig,
+      GameConfigAssets gameConfigAssets,
+      GameScreenAssets gameScreenAssets,
       InField inField,
       InfieldUtil infieldUtil,
-      GameConfigAssets assets,
-      GameScreenAssets gameAssets,
-      CreateUnitService createUnitService,
       Lazy<MaterialUtilClient> materialUtilClient,
       PlayerInfo playerInfo,
+      @Named(StageModule.FIELD_SCREEN) Stage stage,
+      UiElementsCreator uiElementsCreator,
       World world
   ) {
-    this.assets = assets;
     this.canNotCreateUnitFactory = canNotCreateUnitFactory;
     this.chosenConfig = chosenConfig;
     this.createUnitService = createUnitService;
-    this.gameAssets = gameAssets;
+    this.gameConfigAssets = gameConfigAssets;
+    this.gameScreenAssets = gameScreenAssets;
     this.inField = inField;
     this.infieldUtil = infieldUtil;
+    this.inRecruitmentImageTexture = gameScreenAssets.getTexture("units/in_recruitment.png");
+    this.materialUtilClient = materialUtilClient;
+    this.playerInfo = playerInfo;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
-    this.materialUtilClient = materialUtilClient;
-    this.inRecruitmentImageTexture = gameAssets.getTexture("units/in_recruitment.png");
-    this.playerInfo = playerInfo;
-    world.inject(this);
 
+    world.inject(this);
     prepareHudSceleton();
   }
 
@@ -109,15 +112,17 @@ public class InfieldHUD implements Disposable {
   }
 
   private void createBuildingList() {
-    var buildings = assets.getGameConfigs().getAll(BuildingConfig.class);
-    var sampleTexture = gameAssets.getTexture(buildings.get(0).getIconName());
-    var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * buildings.size);
-    uiElementsCreator.removeActorAfterClick(container);
+    if (unitAndBuildingContainer != null)
+      unitAndBuildingContainer.remove();
+    var buildings = gameConfigAssets.getGameConfigs().getAll(BuildingConfig.class);
+    var sampleTexture = gameScreenAssets.getTexture(buildings.get(0).getIconName());
+    this.unitAndBuildingContainer = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * buildings.size);
+    uiElementsCreator.removeActorAfterClick(unitAndBuildingContainer);
     for (int i = 0; i < buildings.size; i++) {
       var building = buildings.get(i);
       long buildingId = building.getId();
 
-      var texture = gameAssets.getTexture(building.getIconName());
+      var texture = gameScreenAssets.getTexture(building.getIconName());
       var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
       imageButton.addListener(new ClickListener() {
         @Override
@@ -125,28 +130,30 @@ public class InfieldHUD implements Disposable {
           chooseBuilding(buildingId);
         }
       });
-      container.addActor(imageButton);
+      unitAndBuildingContainer.addActor(imageButton);
     }
 
-    stage.addActor(container);
+    stage.addActor(unitAndBuildingContainer);
   }
 
   private void createUnitList() {
+    if (unitAndBuildingContainer != null)
+      unitAndBuildingContainer.remove();
     var units = getUnits();
-    var sampleTexture = gameAssets.getTexture(units.get(0).getIconName());
-    var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
-    uiElementsCreator.removeActorAfterClick(container);
+    var sampleTexture = gameScreenAssets.getTexture(units.get(0).getIconName());
+    this.unitAndBuildingContainer = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
+    uiElementsCreator.removeActorAfterClick(unitAndBuildingContainer);
     for (int i = 0; i < units.size; i++) {
       var unit = units.get(i);
       long unitId = unit.getId();
 
-      var texture = gameAssets.getTexture(unit.getIconName());
+      var texture = gameScreenAssets.getTexture(unit.getIconName());
       var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
       if (!infieldUtil.checkIfCanBuildUnit(inField.getField(), unitId)) {
         imageButton.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            container.remove();
+            unitAndBuildingContainer.remove();
             canNotCreateUnitFactory.createAndShow("You don't have enough buildings");
           }
         });
@@ -154,7 +161,7 @@ public class InfieldHUD implements Disposable {
         imageButton.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            container.remove();
+            unitAndBuildingContainer.remove();
             canNotCreateUnitFactory.createAndShow("There is another recruited unit");
           }
         });
@@ -162,7 +169,7 @@ public class InfieldHUD implements Disposable {
         imageButton.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            container.remove();
+            unitAndBuildingContainer.remove();
             canNotCreateUnitFactory.createAndShow("You don't have enough materials");
           }
         });
@@ -175,14 +182,14 @@ public class InfieldHUD implements Disposable {
         });
       }
 
-      container.addActor(imageButton);
+      unitAndBuildingContainer.addActor(imageButton);
     }
 
-    stage.addActor(container);
+    stage.addActor(unitAndBuildingContainer);
   }
 
   private Array<UnitConfig> getUnits() {
-    var allUnits = assets.getGameConfigs().getAll(UnitConfig.class);
+    var allUnits = gameConfigAssets.getGameConfigs().getAll(UnitConfig.class);
     var civUnits = new Array<UnitConfig>();
     for (UnitConfig unit : allUnits) {
       if (unit.getCivilizationConfigId() == playerInfo.getCivilization())
