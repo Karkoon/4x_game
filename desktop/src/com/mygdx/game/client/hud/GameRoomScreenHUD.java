@@ -16,6 +16,7 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
+import com.mygdx.game.client.model.ChosenMapSize;
 import com.mygdx.game.client.ui.PlayerAlreadyInTheRoomDialogFactory;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.model.PlayerInfo;
@@ -138,6 +139,7 @@ public class GameRoomScreenHUD implements Disposable {
       return FULLY_HANDLED;
     }));
     queueMessageListener.registerHandler(RoomConfigMessage.class, ((webSocket, o) -> {
+      ChosenMapSize.mapSize = o.getMapSize();
       selectedMapSize = o.getMapSize();
       selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, o.getMapType());
       log.info("Changed room config=" + o);

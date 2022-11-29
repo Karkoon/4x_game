@@ -4,11 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client.di.gameinstance.GameScreenSubcomponent;
 import com.mygdx.game.client.hud.GameRoomScreenHUD;
 import com.mygdx.game.client_core.model.NetworkJobsQueueJobJobberManager;
-import com.mygdx.game.client_core.network.QueueMessageListener;
-import com.mygdx.game.client_core.network.service.GameStartService;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -28,9 +25,6 @@ public class GameRoomScreen extends ScreenAdapter {
   GameRoomScreen(
       @Named(StageModule.SCREEN_STAGE) Stage stage,
       GameRoomScreenHUD gameRoomScreenHUD,
-      GameScreenSubcomponent.Builder gameScreenBuilder,
-      GameStartService gameStartService,
-      QueueMessageListener connection,
       NetworkJobsQueueJobJobberManager jobManager
   ) {
     this.stage = stage;

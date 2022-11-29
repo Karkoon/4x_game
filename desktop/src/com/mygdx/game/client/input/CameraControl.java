@@ -3,19 +3,19 @@ package com.mygdx.game.client.input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.mygdx.game.client.model.ChosenMapSize;
 import com.mygdx.game.core.util.Updatable;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Log
 class CameraControl implements Updatable {
 
   private static final float SPEED = 5f;
-  private static final BoundingBox validCameraSpace = new BoundingBox(
-      new Vector3(0, 0, 0),
-      new Vector3(1395.0f, 650f, 1300f) // todo bind camera space to amount of tiles, current values are empirical
-  );
+  private BoundingBox validCameraSpace;
   private final Camera camera;
   private final Set<Direction> activeDirections = new HashSet<>();
 
@@ -23,6 +23,10 @@ class CameraControl implements Updatable {
       @NonNull Camera camera
   ) {
     this.camera = camera;
+    this.validCameraSpace = new BoundingBox(
+            new Vector3(0, 0, 0),
+            new Vector3(195f * ChosenMapSize.mapSize.width, 650f, 165f * ChosenMapSize.mapSize.height)
+    );
   }
 
   void stopMoving(@NonNull Direction direction) {
