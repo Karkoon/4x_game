@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
@@ -27,15 +28,15 @@ import com.mygdx.game.client_core.model.Technologies;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
-import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.InResearch;
 import com.mygdx.game.core.ecs.component.Researched;
 import com.mygdx.game.core.ecs.component.Technology;
+import com.mygdx.game.core.model.TechnologyImpactValue;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.ArrayList;
 
 @Log
 @GameInstanceScope
@@ -45,7 +46,6 @@ public class TechnologyScreen extends ScreenAdapter {
   private final ShapeRenderer shapeRenderer;
   private final Viewport viewport;
   private final GameConfigAssets gameConfigAssets;
-  private final GameScreenAssets gameScreenAssets;
   private final @NonNull Technologies technologies;
   private final UiElementsCreator uiElementsCreator;
   private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
@@ -59,7 +59,6 @@ public class TechnologyScreen extends ScreenAdapter {
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
-  private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Researched> researchedMapper;
   private ComponentMapper<TextureComp> textureMapper;
@@ -91,7 +90,6 @@ public class TechnologyScreen extends ScreenAdapter {
     this.shapeRenderer = new ShapeRenderer();
     this.viewport = viewport;
     this.gameConfigAssets = gameConfigAssets;
-    this.gameScreenAssets = gameScreenAssets;
     this.technologies = technologies;
     this.uiElementsCreator = uiElementsCreator;
     this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
@@ -167,12 +165,13 @@ public class TechnologyScreen extends ScreenAdapter {
       int entityId = allTechnologies.get(i);
       var position = positionMapper.get(entityId).getValue();
       var texture = textureMapper.get(entityId).getTexture();
-      var name = nameMapper.get(entityId);
+      var entityConfigId = entityConfigIdMapper.get(entityId);
+      var technology = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, (int) entityConfigId.getId());
+
 
       var image = uiElementsCreator.createImage(texture, (int) position.x, (int) position.z);
-      var label = uiElementsCreator.createLabel(name.getName(), (int) position.x + 250, (int) position.z + 250);
-      uiElementsCreator.scaleLabel(label, 2.5f);
-      uiElementsCreator.addHoverPopupWithActor(image, label, stage);
+      var description = createTechDescription(technology, position);
+      uiElementsCreator.addHoverPopupWithActor(image, description, stage);
 
       stage.addActor(image);
       var secondImage = uiElementsCreator.createImage(unblockedTexture, (int) position.x, (int) position.z);
@@ -190,9 +189,35 @@ public class TechnologyScreen extends ScreenAdapter {
         }
       });
 
-      uiElementsCreator.addHoverPopupWithActor(secondImage, label, stage);
+      uiElementsCreator.addHoverPopupWithActor(secondImage, description, stage);
       stage.addActor(secondImage);
     }
+  }
+
+  private VerticalGroup createTechDescription(TechnologyConfig technology, Vector3 position) {
+    var techContainer = uiElementsCreator.createVerticalContainer((int) position.x + 250, (int) position.z + 250, 250, 400);
+
+    var nameLabel = uiElementsCreator.createLabel(technology.getName(), 0, 0);
+    uiElementsCreator.scaleLabel(nameLabel, 2.5f);
+    techContainer.addActor(nameLabel);
+
+    var requiredScienceLabel = uiElementsCreator.createLabel("Required science: " + technology.getRequiredScience(), 0, 0);
+    uiElementsCreator.scaleLabel(requiredScienceLabel, 2.5f);
+    techContainer.addActor(requiredScienceLabel);
+
+    var techTypeLabel = uiElementsCreator.createLabel("Type: " + technology.getImpact().getTechnologyImpactType().name, 0, 0);
+    uiElementsCreator.scaleLabel(techTypeLabel, 2.5f);
+    techContainer.addActor(techTypeLabel);
+
+    for (TechnologyImpactValue impactValue : technology.getImpact().getTechnologyImpactValues()) {
+      int value = impactValue.getValue();
+      var operation = impactValue.getOperation().name;
+      String impactName = impactValue.getParameter().name;
+      var impactLabel = uiElementsCreator.createLabel(impactName + " " + operation + " " + value, 0, 0);
+      uiElementsCreator.scaleLabel(impactLabel, 2.5f);
+      techContainer.addActor(impactLabel);
+    }
+    return techContainer;
   }
 
   public void researchTechnology(int entityId) {
@@ -220,17 +245,17 @@ public class TechnologyScreen extends ScreenAdapter {
   private boolean allRequiredTechnologiesResearched(int techEntityId) {
     var entityConfigId = entityConfigIdMapper.get(techEntityId);
     var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId());
-    List<Integer> dependecies = technologyConfig.getDependencies();
+    var dependencies = new ArrayList<>(technologyConfig.getDependencies());
     for (int i = 0; i < technologies.getAllTechnologies().size(); i++) {
       int alltechEntityId = technologies.getAllTechnologies().get(i);
       if (researchedMapper.has(alltechEntityId)) {
-        if (dependecies.contains((int) entityConfigIdMapper.get(alltechEntityId).getId())) {
+        if (dependencies.contains((int) entityConfigIdMapper.get(alltechEntityId).getId())) {
           Integer integer = (int) entityConfigIdMapper.get(alltechEntityId).getId();
-          dependecies.remove(integer);
+          dependencies.remove(integer);
         }
       }
     }
-    return dependecies.size() == 0;
+    return dependencies.size() == 0;
   }
 
   private void drawDependencies(int entityId) {

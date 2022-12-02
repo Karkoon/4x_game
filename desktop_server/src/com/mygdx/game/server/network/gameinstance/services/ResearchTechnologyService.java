@@ -19,6 +19,7 @@ import com.mygdx.game.server.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
 @GameInstanceScope
 @Log
@@ -87,7 +88,7 @@ public class ResearchTechnologyService extends WorldService {
   private boolean requiredTechnologiesNotResearched(int entityId, String playerToken) {
     var entityConfigId = entityConfigIdMapper.get(entityId);
     var technologyConfig = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId());
-    var dependencies = technologyConfig.getDependencies();
+    var dependencies = new ArrayList<>(technologyConfig.getDependencies());
     for (int i = 0; i < ownerResearchedSubscriber.getEntities().size(); i++) {
       int techEntityId = ownerResearchedSubscriber.getEntities().get(i);
       if (ownerMapper.get(techEntityId).getToken().equals(playerToken)

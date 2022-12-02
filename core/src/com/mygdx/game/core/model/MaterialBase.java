@@ -2,7 +2,7 @@ package com.mygdx.game.core.model;
 
 public enum MaterialBase {
 
-  GOLD("Gold", "Żywność", "materials/gold_icon.png"),
+  GOLD("Gold", "Złoto", "materials/gold_icon.png"),
   FOOD("Food", "Jedzenie", "materials/food_icon.png"),
   SCIENCE("Science", "Nauka", "materials/science_icon.png"),
   PRODUCTION("Production", "Produkcja", "materials/production_icon.png");
