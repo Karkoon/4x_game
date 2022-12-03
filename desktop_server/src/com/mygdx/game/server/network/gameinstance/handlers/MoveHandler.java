@@ -24,6 +24,6 @@ public class MoveHandler extends EntityCommandHandler {
     var entityId = Integer.parseInt(commands[1]);
     var x = Integer.parseInt(commands[2]);
     var y = Integer.parseInt(commands[3]);
-    moveEntityService.moveEntity(entityId, x, y, client.getGameRoom());
+    moveEntityService.moveEntity(entityId, x, y, client.getGameRoom(), client);
   }
 }

@@ -5,8 +5,12 @@ import com.artemis.World;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.model.BotType;
+import com.mygdx.game.core.network.messages.UnitAttackedMessage;
 import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.di.GameInstanceScope;
+import com.mygdx.game.server.model.Client;
+import com.mygdx.game.server.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -15,6 +19,8 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class AttackEntityService extends WorldService {
 
+  private final MessageSender messageSender;
+
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<CanAttack> canAttackMapper;
 
@@ -22,12 +28,14 @@ public class AttackEntityService extends WorldService {
 
   @Inject
   public AttackEntityService(
+      MessageSender messageSender,
       World world
   ) {
+    this.messageSender = messageSender;
     world.inject(this);
   }
 
-  public void attackEntity(int attacker, int attacked) {
+  public void attackEntity(int attacker, int attacked, Client client) {
     if (!canAttackMapper.get(attacker).isCanAttack()) {
       log.info("tried to attack unlawfully");
       return;
@@ -58,6 +66,8 @@ public class AttackEntityService extends WorldService {
     setDirty(attacker, Stats.class, world);
     setDirty(attacked, Stats.class, world);
     world.process();
+    if (client.getBotType() != BotType.NOT_BOT)
+      messageSender.send(new UnitAttackedMessage(), client);
   }
 
   private void attackAndCounterAttack(Stats attacker, Stats attacked) {
