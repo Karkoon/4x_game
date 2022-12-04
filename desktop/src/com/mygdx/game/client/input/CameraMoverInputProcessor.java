@@ -69,7 +69,7 @@ public final class CameraMoverInputProcessor extends InputAdapter {
     handleHorizontalMovement(xPercentage);
     handleVerticalMovement(yPercentage);
 
-    return true;
+    return false;
   }
 
   private void handleHorizontalMovement(float xPercentage) {
