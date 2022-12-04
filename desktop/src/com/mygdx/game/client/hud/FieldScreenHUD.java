@@ -23,11 +23,16 @@ import com.mygdx.game.client_core.util.MaterialUtilClient;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.InRecruitment;
+import com.mygdx.game.core.model.BuildingImpactValue;
+import com.mygdx.game.core.model.BuildingType;
+import com.mygdx.game.core.model.MaterialBase;
+import com.mygdx.game.core.model.MaterialUnit;
 import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Map;
 
 @Log
 public class FieldScreenHUD implements Disposable {
@@ -130,10 +135,61 @@ public class FieldScreenHUD implements Disposable {
           chooseBuilding(buildingId);
         }
       });
+      var buildingDescription = createBuildingDescription(building, 150, i * texture.getHeight() + 50);
+      uiElementsCreator.addHoverPopupWithActor(imageButton, buildingDescription, stage);
       unitAndBuildingContainer.addActor(imageButton);
     }
 
     stage.addActor(unitAndBuildingContainer);
+  }
+
+  private VerticalGroup createBuildingDescription(BuildingConfig building, int x, int y) {
+    var description = uiElementsCreator.createVerticalContainer(x, y, 150, 350);
+
+    var nameLabel = uiElementsCreator.createLabel(building.getName(), 0, 0);
+    description.addActor(nameLabel);
+
+    var materialsLabel = uiElementsCreator.createLabel("Materials", 0, 0);
+    description.addActor(materialsLabel);
+
+    for (Map.Entry<MaterialBase, MaterialUnit> materialEntry : building.getMaterials().entrySet()) {
+      if (materialEntry.getValue().getAmount() > 0) {
+        var material = uiElementsCreator.createHorizontalContainer(0, 0, 50, 40);
+        var materialImage = uiElementsCreator.createImage(gameScreenAssets.getTexture(materialEntry.getKey().iconPath), 0, 0);
+        var materialLabel = uiElementsCreator.createLabel(String.valueOf(materialEntry.getValue().getAmount()), 0, 0);
+        material.addActor(materialImage);
+        material.addActor(materialLabel);
+        description.addActor(material);
+      }
+    }
+
+    var impact = building.getImpact();
+    var buildingType = uiElementsCreator.createLabel("Building type: " + impact.getBuildingType().name, 0, 0);
+    description.addActor(buildingType);
+    if (impact.getBuildingType() == BuildingType.MATERIALS_BUILDING) {
+      var materialIncreaseLabel = uiElementsCreator.createLabel("Affected materials", 0, 0);
+      description.addActor(materialIncreaseLabel);
+      for (BuildingImpactValue buildingImpactValue : impact.getBuildingImpactValues()) {
+        var materialBase = MaterialBase.valueOf(buildingImpactValue.getParameter().name());
+        var material = uiElementsCreator.createHorizontalContainer(0, 0, 50, 40);
+        var materialImage = uiElementsCreator.createImage(gameScreenAssets.getTexture(materialBase.iconPath), 0, 0);
+        var materialLabel = uiElementsCreator.createLabel(buildingImpactValue.getOperation().name + " " + buildingImpactValue.getValue(), 0, 0);
+        material.addActor(materialImage);
+        material.addActor(materialLabel);
+        description.addActor(material);
+      }
+    } else if (impact.getBuildingType() == BuildingType.RECRUITMENT_BUILDING) {
+      var allowUnitsLabel = uiElementsCreator.createLabel("Can recruit", 0, 0);
+      description.addActor(allowUnitsLabel);
+      for (BuildingImpactValue buildingImpactValue : impact.getBuildingImpactValues()) {
+        int unitConfigId = buildingImpactValue.getValue();
+        var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
+        var unitLabel = uiElementsCreator.createLabel(unitConfig.getName(), 0, 0);
+        description.addActor(unitLabel);
+      }
+    }
+
+    return description;
   }
 
   private void createUnitList() {
@@ -149,6 +205,8 @@ public class FieldScreenHUD implements Disposable {
 
       var texture = gameScreenAssets.getTexture(unit.getIconName());
       var imageButton = uiElementsCreator.createImageButton(texture, 0, i * texture.getHeight());
+      var unitDescription = createUnitDescription(unit, 150, i * texture.getHeight() + 50);
+      uiElementsCreator.addHoverPopupWithActor(imageButton, unitDescription, stage);
       if (!infieldUtil.checkIfCanBuildUnit(inField.getField(), unitId)) {
         imageButton.addListener(new ClickListener() {
           @Override
@@ -186,6 +244,29 @@ public class FieldScreenHUD implements Disposable {
     }
 
     stage.addActor(unitAndBuildingContainer);
+  }
+
+  private VerticalGroup createUnitDescription(UnitConfig unit, int x, int y) {
+    var description = uiElementsCreator.createVerticalContainer(x, y, 150, 350);
+
+    var nameLabel = uiElementsCreator.createLabel(unit.getName(), 0, 0);
+    description.addActor(nameLabel);
+
+    var materialsLabel = uiElementsCreator.createLabel("Materials", 0, 0);
+    description.addActor(materialsLabel);
+
+    for (Map.Entry<MaterialBase, MaterialUnit> materialEntry : unit.getMaterials().entrySet()) {
+      if (materialEntry.getValue().getAmount() > 0) {
+        var material = uiElementsCreator.createHorizontalContainer(0, 0, 50, 40);
+        var materialImage = uiElementsCreator.createImage(gameScreenAssets.getTexture(materialEntry.getKey().iconPath), 0, 0);
+        var materialLabel = uiElementsCreator.createLabel(String.valueOf(materialEntry.getValue().getAmount()), 0, 0);
+        material.addActor(materialImage);
+        material.addActor(materialLabel);
+        description.addActor(material);
+      }
+    }
+
+    return description;
   }
 
   private Array<UnitConfig> getUnits() {

@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.hud.FieldScreenHUD;
-import com.mygdx.game.client.input.CameraMoverInputProcessor;
 import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.FieldUIInputAdapter;
 import com.mygdx.game.client.model.ChosenEntity;
@@ -154,9 +153,7 @@ public class FieldScreen extends ScreenAdapter {
   }
 
   private void setUpInput() {
-    var cameraInputProcessor = new CameraMoverInputProcessor(viewport);
-    var inputMultiplexer = new InputMultiplexer(cameraInputProcessor, subFieldUiInputProcessor, stage, clickInputAdapter);
-    compositeUpdatable.addUpdatable(cameraInputProcessor.getCameraControl());
+    var inputMultiplexer = new InputMultiplexer(subFieldUiInputProcessor, stage, clickInputAdapter);
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
