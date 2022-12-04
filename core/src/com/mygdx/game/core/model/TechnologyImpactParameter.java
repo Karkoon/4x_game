@@ -3,22 +3,26 @@ package com.mygdx.game.core.model;
 public enum TechnologyImpactParameter {
 
   // unit parameters
-  HP,
-  ATTACK_POWER,
-  DEFENSE,
-  SIGHT_RADIUS,
-  MOVE_RANGE,
-  ATTACK_RANGE,
+  HP("HP"),
+  ATTACK_POWER("Attack power"),
+  DEFENSE("Defense"),
+  SIGHT_RADIUS("Sight radius"),
+  MOVE_RANGE("Move range"),
+  ATTACK_RANGE("Attack range"),
 
   // building parameters
-  TIME,
+  TIME("Building time"),
 
   // building & material parameters
-  GOLD,
-  FOOD,
-  SCIENCE,
-  PRODUCTION
+  GOLD("Gold"),
+  FOOD("Food"),
+  SCIENCE("Science"),
+  PRODUCTION("Production");
+
+  public final String name;
 
 
-
+  TechnologyImpactParameter(String name) {
+    this.name = name;
+  }
 }
