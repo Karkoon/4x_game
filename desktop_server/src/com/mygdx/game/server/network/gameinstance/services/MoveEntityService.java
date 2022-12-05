@@ -3,9 +3,13 @@ package com.mygdx.game.server.network.gameinstance.services;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
+import com.mygdx.game.core.model.BotType;
+import com.mygdx.game.core.network.messages.UnitMovedMessage;
 import com.mygdx.game.core.util.DistanceUtil;
 import com.mygdx.game.server.di.GameInstanceScope;
+import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.model.GameRoom;
+import com.mygdx.game.server.network.MessageSender;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -16,12 +20,16 @@ import static com.artemis.Aspect.all;
 @GameInstanceScope
 public class MoveEntityService extends WorldService {
 
+  private final MessageSender messageSender;
+
   @Inject
-  MoveEntityService() {
-    super();
+  MoveEntityService(
+      MessageSender messageSender
+  ) {
+    this.messageSender = messageSender;
   }
 
-  public void moveEntity(int entityId, int x, int y, GameRoom room) {
+  public void moveEntity(int entityId, int x, int y, GameRoom room, Client client) {
     var world = room.getGameInstance().getWorld();
     var coordinatesMapper = world.getMapper(Coordinates.class);
     var statsMapper = world.getMapper(Stats.class);
@@ -69,6 +77,7 @@ public class MoveEntityService extends WorldService {
     else {
       log.info("Cannot move! Field occupied by enemy!");
     }
-
+    if (client.getBotType() != BotType.NOT_BOT)
+      messageSender.send(new UnitMovedMessage(), client);
   }
 }

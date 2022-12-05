@@ -51,7 +51,7 @@ public class BotAttackUtil {
     world.inject(this);
   }
 
-  public void attack(int unitId) {
+  public boolean attack(int unitId) {
     if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
       if (propabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
         var coordinates = coordinatesMapper.get(unitId);
@@ -62,10 +62,12 @@ public class BotAttackUtil {
           if (haveDifferentOwner(playerInfo.getToken(), otherUnitIt) && DistanceUtil.distance(coordinates, coordinatesMapper.get(otherUnitIt)) <= stats.getAttackRange()) {
             log.info("Unit " + unitId + " attack " + otherUnitIt);
             attackEntityService.attack(unitId, otherUnitIt);
+            return true;
           }
         }
       }
     }
+    return false;
   }
 
   public boolean propabilityCheck(float value) {

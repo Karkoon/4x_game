@@ -12,6 +12,8 @@ import com.mygdx.game.core.ecs.component.Stats;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log
 public class NextUnitUtil {
@@ -34,25 +36,29 @@ public class NextUnitUtil {
     this.playerInfo = playerInfo;
   }
 
-  public int selectNextUnit() {
-    // Check if unit can move
+  public ArrayList<Integer> selectMoveUnits() {
+    var movableUnits = new ArrayList<Integer>();
     for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
       int entityId = playerUnitsSubscriptions.getEntities().get(i);
       var owner = ownerMapper.get(entityId);
       var stats = statsMapper.get(entityId);
       if (playerInfo.getToken().equals(owner.getToken()) && stats != null && stats.getMoveRange() > 0) {
-        return entityId;
+        movableUnits.add(entityId);
       }
     }
-/*    // Check if unit can attack
+    return movableUnits;
+  }
+
+  public List<Integer> getUnitsToAttack() {
+    var attackUnits = new ArrayList<Integer>();
     for (int i = 0; i < playerUnitsSubscriptions.getEntities().size(); i++) {
       int entityId = playerUnitsSubscriptions.getEntities().get(i);
       var owner = ownerMapper.get(entityId);
       var canAttack = canAttackMapper.get(entityId);
       if (playerInfo.getToken().equals(owner.getToken()) && canAttack != null && canAttack.isCanAttack()) {
-        return entityId;
+        attackUnits.add(entityId);
       }
-    }*/
-    return 0xC0FFEE;
+    }
+    return attackUnits;
   }
 }

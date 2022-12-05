@@ -25,9 +25,10 @@ public class MoveEntityService {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
-  public void moveEntity(int selectedUnit, Coordinates coordinates) {
+  public boolean moveEntity(int selectedUnit, Coordinates coordinates) {
     log.info("Send move message from client to server");
     selectedUnit = networkWorldEntityMapper.getNetworkEntity(selectedUnit);
     sender.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
+    return true;
   }
 }

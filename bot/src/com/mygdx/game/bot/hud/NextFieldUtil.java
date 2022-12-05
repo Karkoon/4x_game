@@ -79,7 +79,11 @@ public class NextFieldUtil {
     var currentCoordinate = coordinatesComponentMapper.get(unit);
     var coordinates = coordinatesComponentMapper.get(field);
     var distance = DistanceUtil.distance(currentCoordinate, coordinates);
-    var range = statsComponentMapper.get(unit).getMoveRange();
-    return range >= distance;
+    if (statsComponentMapper.has(unit)) {
+      var range = statsComponentMapper.get(unit).getMoveRange();
+      return range >= distance;
+    } else {
+      return false;
+    }
   }
 }

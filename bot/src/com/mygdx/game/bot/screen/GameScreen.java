@@ -28,12 +28,7 @@ import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
 import com.mygdx.game.core.ecs.component.Stats;
-import com.mygdx.game.core.network.messages.BuildingBuildedMessage;
-import com.mygdx.game.core.network.messages.ChangeTurnMessage;
-import com.mygdx.game.core.network.messages.GameInterruptedMessage;
-import com.mygdx.game.core.network.messages.TechnologyResearchedMessage;
-import com.mygdx.game.core.network.messages.UnitRecruitedMessage;
-import com.mygdx.game.core.network.messages.WinAnnouncementMessage;
+import com.mygdx.game.core.network.messages.*;
 import dagger.Lazy;
 import lombok.extern.java.Log;
 
@@ -42,6 +37,7 @@ import javax.inject.Named;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
@@ -69,7 +65,11 @@ public class GameScreen extends ScreenAdapter {
   private final ChangesApplied changesApplied;
   private final ShowSubfieldService showSubfieldService;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
+  private final Random random;
   private List<Integer> worksOnFields;
+  private List<Integer> attackBefore;
+  private List<Integer> attackAfter;
+  private boolean isAttackBefore = true;
 
   private boolean initialized = false;
 
@@ -123,6 +123,7 @@ public class GameScreen extends ScreenAdapter {
     this.networkWorldEntityMapper = networkWorldEntityMapper;
     this.world.inject(this);
 
+    this.random = new Random();
     this.worksOnFields = new ArrayList<>();
   }
 
@@ -135,6 +136,20 @@ public class GameScreen extends ScreenAdapter {
 
       queueMessageListener.registerHandler(ChangeTurnMessage.class, ((webSocket, message) -> {
         runBotIteration();
+        return FULLY_HANDLED;
+      }));
+
+      queueMessageListener.registerHandler(UnitAttackedMessage.class, ((webSocket, message) -> {
+        if (isAttackBefore) {
+          attackBefore();
+        } else {
+          attackAfter();
+        }
+        return FULLY_HANDLED;
+      }));
+
+      queueMessageListener.registerHandler(UnitMovedMessage.class, ((webSocket, message) -> {
+        move();
         return FULLY_HANDLED;
       }));
 
@@ -180,19 +195,80 @@ public class GameScreen extends ScreenAdapter {
       return;
     }
     log.info("start turn");
-    var unit = nextUnitUtil.selectNextUnit();
-    if (unit == 0xC0FFEE) {
-      buildBuildingsPrepare();
-      return;
+    attackUnitPrepare();
+  }
+
+  private void attackUnitPrepare() {
+    log.info("attack unit prepare");
+    prepareUnits();
+    attackBefore();
+  }
+
+  private void prepareUnits() {
+    log.info("Prepare untis to attack");
+    attackBefore = new ArrayList<>();
+    attackAfter = new ArrayList<>();
+    var unitsToAttack = nextUnitUtil.getUnitsToAttack();
+    for (Integer unit : unitsToAttack) {
+      if (propabilityCheck(0.5f)) {
+        attackBefore.add(unit);
+      } else {
+        attackAfter.add(unit);
+      }
     }
-    var field = nextFieldUtil.selectFieldInRangeOfUnit(unit);
-    log.info("moving entity");
-    if (field == 0xC0FFEE) {
-      buildBuildingsPrepare();
-      return;
+    attackBefore();
+  }
+
+  private void attackBefore() {
+    log.info("Attack before");
+    if (attackBefore.size() > 0) {
+      Integer attackUnit = attackBefore.get(0);
+      attackBefore.remove(attackUnit);
+      if (!botAttackUtil.attack(attackUnit)) {
+        attackBefore();
+      }
+    } else {
+      isAttackBefore = false;
+      prepareMove();
     }
-    moveEntityService.moveEntity(unit, coordinatesComponentMapper.get(field));
-    botAttackUtil.attack(unit);
+  }
+
+  private void attackAfter() {
+    log.info("Attack after");
+    if (attackAfter.size() > 0) {
+      Integer attackUnit = attackAfter.get(0);
+      attackAfter.remove(attackUnit);
+      if (!botAttackUtil.attack(attackUnit)) {
+        attackBefore();
+      }
+    } else {
+      isAttackBefore = true;
+      buildBuildingsPrepare();
+    }
+  }
+
+  private void prepareMove() {
+    log.info("Prepare units to move");
+    worksOnFields = new ArrayList<>();
+    var unitstoMove = nextUnitUtil.selectMoveUnits();
+    for (Integer unit : unitstoMove) {
+      worksOnFields.add(unit);
+    }
+    move();
+  }
+
+  private void move() {
+    log.info("Unit move");
+    if (worksOnFields.size() > 0) {
+      Integer unitToMove = worksOnFields.get(0);
+      worksOnFields.remove(unitToMove);
+      var field = nextFieldUtil.selectFieldInRangeOfUnit(unitToMove);
+      if (field == 0xC0FFEE || !moveEntityService.moveEntity(unitToMove, coordinatesComponentMapper.get(field))) {
+        move();
+      }
+    } else {
+      attackAfter();
+    }
   }
 
   private void buildBuildingsPrepare() {
@@ -270,5 +346,9 @@ public class GameScreen extends ScreenAdapter {
     runBotIteration();
   }
 
+  public boolean propabilityCheck(float value) {
+    float probabilityValue = random.nextFloat();
+    return probabilityValue <= value;
+  }
 
 }
