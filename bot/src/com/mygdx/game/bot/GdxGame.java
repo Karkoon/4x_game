@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.assets.GameConfigAssets;
+import com.mygdx.game.bot.model.InitialBotRoom;
 import com.mygdx.game.bot.screen.GameRoomScreen;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.core.model.BotType;
@@ -39,12 +40,20 @@ public class GdxGame extends Game {
     log.info("Loading assets...");
     assets.loadAssetsSync();
     log.info("Assets loaded.");
-    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), BotType.RANDOM_FIRST.name()); //todo get the game room name from Args
+    if (InitialBotRoom.roomName != null)
+      gameRoomName = InitialBotRoom.roomName;
+    try {
+      if (InitialBotRoom.botType != null) {
+        BotType.valueOf(InitialBotRoom.botType);
+        botType = InitialBotRoom.botType;
+      }
+    } catch (IllegalArgumentException ignored) {}
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), botType);
 
     changeToGameRoomScreen();
   }
-  private String gameRoomName = "defaultRoom"; // default value from the desktop client
-  // to make it easier to connect to the same room at this point in time
+  private String gameRoomName = "defaultRoom";
+  private String botType = BotType.RANDOM_FIRST.name();
   @Override
   public void render() {
     ScreenUtils.clear(0f, 0f, 0f, 1, true);
