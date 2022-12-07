@@ -62,7 +62,7 @@ public final class Server {
       case "change_lobby" -> changeLobbyHandler.handle(commands, client);
       case "remove_user" -> removeHandler.handle(commands, client);
       case "add_bot" -> {
-        String[] args = {};
+        String[] args = {client.getGameRoom().getRoomId()};
         var thread = new Thread(() -> BotLauncher.main(args));
         thread.start();
       }
