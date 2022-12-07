@@ -23,10 +23,10 @@ public class GameConnectService {
     this.playerInfo = playerInfo;
   }
 
-  public void connect(String gameRoomName, String userName, String isBot) {
+  public void connect(String gameRoomName, String userName, String isBot, Integer civId) {
     log.info("connect request sent");
     playerInfo.setUserName(userName);
-    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + playerInfo.getCivilization() + ":" + isBot);
+    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + civId + ":" + isBot);
   }
 
   public void changeUser() {
@@ -34,9 +34,9 @@ public class GameConnectService {
     sender.send("change_user:"  + playerInfo.getUserName() + ":" + playerInfo.getCivilization() + ":" + BotType.NOT_BOT.name());
   }
 
-  public void changeUser(String otherUser, String botType) {
+  public void changeUser(String userName, long civId, String botType) {
     log.info("change user request sent");
-    sender.send("change_user:"  + otherUser + ":" + playerInfo.getCivilization() + ":" + botType);
+    sender.send("change_user:"  + userName + ":" + civId + ":" + botType);
   }
 
   public void changeLobby(MapSize selectedMapSize, int mapType) {

@@ -23,7 +23,7 @@ import java.util.Random;
 @Log
 public class BotAttackUtil {
 
-  private final float SHOULD_ATTACK_RANDOM_FIRST = 0.5f;
+  private final float SHOULD_ATTACK_RANDOM_FIRST = 0.35f;
 
   private final AttackEntityService attackEntityService;
   private final ChosenBotType chosenBotType;

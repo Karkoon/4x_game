@@ -173,15 +173,24 @@ public class GameRoomScreenHUD implements Disposable {
       var allCivs = gameConfigAssets.getGameConfigs().getAll(CivilizationConfig.class);
       selectBox.setItems(allCivs);
       selectBox.setSelected(gameConfigAssets.getGameConfigs().get(CivilizationConfig.class, player.getCivId()));
-      selectBox.addListener(new ChangeListener() {
-        @Override
-        public void changed (ChangeEvent event, Actor actor) {
-          playerInfo.setCivilization(((CivilizationConfig) selectBox.getSelected()).getId());
-          connectService.changeUser();
-        }
-      });
-      if (!player.getUserName().equals(playerInfo.getUserName()))
+      if (player.getUserName().equals(playerInfo.getUserName())) {
+        selectBox.addListener(new ChangeListener() {
+          @Override
+          public void changed(ChangeEvent event, Actor actor) {
+            playerInfo.setCivilization(((CivilizationConfig) selectBox.getSelected()).getId());
+            connectService.changeUser();
+          }
+        });
+      } else if (player.getBotType() != BotType.NOT_BOT) {
+        selectBox.addListener(new ChangeListener() {
+          @Override
+          public void changed(ChangeEvent event, Actor actor) {
+            connectService.changeUser(player.getUserName(), ((CivilizationConfig) selectBox.getSelected()).getId(), player.getBotType().name());
+          }
+        });
+      } else {
         selectBox.setDisabled(true);
+      }
       uiElementsCreator.addToTableRow(selectBox, singlePlayerTable);
       if (player.getBotType() != BotType.NOT_BOT) {
         var botBox = uiElementsCreator.createSelectBox();
@@ -193,7 +202,7 @@ public class GameRoomScreenHUD implements Disposable {
         botBox.addListener(new ChangeListener() {
           @Override
           public void changed (ChangeEvent event, Actor actor) {
-            connectService.changeUser(player.getUserName(), (String) botBox.getSelected());
+            connectService.changeUser(player.getUserName(), player.getCivId(), (String) botBox.getSelected());
           }
         });
         uiElementsCreator.addToTableRow(botBox, singlePlayerTable);

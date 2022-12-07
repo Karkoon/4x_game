@@ -7,6 +7,7 @@ import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.model.InitialBotRoom;
 import com.mygdx.game.bot.screen.GameRoomScreen;
 import com.mygdx.game.client_core.network.service.GameConnectService;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.core.model.BotType;
 import dagger.Lazy;
 
@@ -48,12 +49,19 @@ public class GdxGame extends Game {
         botType = InitialBotRoom.botType;
       }
     } catch (IllegalArgumentException ignored) {}
-    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), botType);
+    try {
+      if (InitialBotRoom.botCiv != null && InitialBotRoom.botCiv >= GameConfigs.CIV_MIN && InitialBotRoom.botCiv <= GameConfigs.CIV_MAX ) {
+        botCiv = InitialBotRoom.botCiv;
+      }
+    } catch (Exception ignored) {}
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), botType, botCiv);
 
     changeToGameRoomScreen();
   }
   private String gameRoomName = "defaultRoom";
   private String botType = BotType.RANDOM_FIRST.name();
+  private Integer botCiv = GameConfigs.CIV_MIN;
+
   @Override
   public void render() {
     ScreenUtils.clear(0f, 0f, 0f, 1, true);
