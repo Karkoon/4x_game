@@ -4,4 +4,5 @@ public class InitialBotRoom {
 
     public static String roomName = null;
     public static String botType = null;
+    public static Integer botCiv = null;
 }

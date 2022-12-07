@@ -1,6 +1,7 @@
 package com.mygdx.game.server.network;
 
 import com.mygdx.game.BotLauncher;
+import com.mygdx.game.config.GameConfigs;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.handlers.ChangeLobbyHandler;
 import com.mygdx.game.server.network.handlers.ChangeUserHandler;
@@ -62,7 +63,7 @@ public final class Server {
       case "change_lobby" -> changeLobbyHandler.handle(commands, client);
       case "remove_user" -> removeHandler.handle(commands, client);
       case "add_bot" -> {
-        String[] args = {client.getGameRoom().getRoomId()};
+        String[] args = {client.getGameRoom().getRoomId(), "RANDOM_FIRST", String.valueOf(GameConfigs.CIV_MIN)};
         var thread = new Thread(() -> BotLauncher.main(args));
         thread.start();
       }

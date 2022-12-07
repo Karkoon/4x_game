@@ -12,6 +12,7 @@ import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.hud.GameRoomScreenHUD;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
+import com.mygdx.game.config.GameConfigs;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -114,7 +115,7 @@ public class GameRoomListScreen extends ScreenAdapter {
   }
 
   private void joinRoom() {
-    connectService.connect(roomName, userName, "NOT_BOT");
+    connectService.connect(roomName, userName, "NOT_BOT", GameConfigs.CIV_MIN);
     game.changeToGameRoomScreen();
   }
 

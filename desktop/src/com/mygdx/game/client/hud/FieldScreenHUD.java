@@ -149,6 +149,9 @@ public class FieldScreenHUD implements Disposable {
     var nameLabel = uiElementsCreator.createLabel(building.getName(), 0, 0);
     description.addActor(nameLabel);
 
+    var turnLabel = uiElementsCreator.createLabel("Turn amount: " + building.getTurnAmount(), 0, 0);
+    description.addActor(turnLabel);
+
     var materialsLabel = uiElementsCreator.createLabel("Materials", 0, 0);
     description.addActor(materialsLabel);
 
@@ -251,6 +254,9 @@ public class FieldScreenHUD implements Disposable {
 
     var nameLabel = uiElementsCreator.createLabel(unit.getName(), 0, 0);
     description.addActor(nameLabel);
+
+    var turnLabel = uiElementsCreator.createLabel("Turn amount: " + unit.getTurnAmount(), 0, 0);
+    description.addActor(turnLabel);
 
     var materialsLabel = uiElementsCreator.createLabel("Materials", 0, 0);
     description.addActor(materialsLabel);

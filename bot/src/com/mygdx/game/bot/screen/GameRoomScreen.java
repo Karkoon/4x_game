@@ -75,6 +75,7 @@ public class GameRoomScreen extends ScreenAdapter {
     for (PlayerLobby user : message.getUsers()) {
       if (user.getUserName().equals(playerInfo.getUserName())) {
         chosenBotType.setBotType(user.getBotType());
+        playerInfo.setCivilization(user.getCivId());
       }
     }
     return true;
