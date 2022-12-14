@@ -7,7 +7,7 @@ import com.artemis.annotations.AspectDescriptor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameScreenAssets;
@@ -55,7 +55,7 @@ public class GameScreenHUD implements Disposable {
   private Button techScreenButton;
   private Button exitGameButton;
   private HorizontalGroup materialGroup;
-  private VerticalGroup activeUnitDescription;
+  private Window activeUnitDescription;
 
   @AspectDescriptor(one = {Movable.class, Owner.class, Stats.class})
   private EntitySubscription playerUnitsSubscriptions;
@@ -111,30 +111,33 @@ public class GameScreenHUD implements Disposable {
     stage.dispose();
   }
 
+  public void resize () {
+    prepareHudSceleton();
+  }
+
   public void prepareHudSceleton() {
     stage.clear();
 
-    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::endTurn, (int) (stage.getWidth()-100), 0);
+    this.endTurnButton = uiElementsCreator.createActionButton("END TURN", this::endTurn, (int) (stage.getWidth()-100), (int) (stage.getHeight()-30));
     uiElementsCreator.setActorWidthAndHeight(this.endTurnButton, 100, 30);
 
-    this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::selectNextUnit,  (int) (stage.getWidth()-200), 0);
+    this.nextUnitButton = uiElementsCreator.createActionButton("NEXT UNIT", this::selectNextUnit,  (int) (stage.getWidth()-210), (int) (stage.getHeight()-30));
     uiElementsCreator.setActorWidthAndHeight(this.nextUnitButton, 100, 30);
 
-    this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::changeToTechnologyScreen,  (int) (stage.getWidth()-300), 0);
+    this.techScreenButton = uiElementsCreator.createActionButton("TECH SCREEN", this::changeToTechnologyScreen,  (int) (stage.getWidth()-320), (int) (stage.getHeight()-30));
     uiElementsCreator.setActorWidthAndHeight(this.techScreenButton, 100, 30);
 
     this.exitGameButton = uiElementsCreator.createActionButton("EXIT", this::exit, 0, (int) (stage.getHeight()-30));
     uiElementsCreator.setActorWidthAndHeight(this.exitGameButton, 100, 30);
 
-    this.materialGroup = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-50), 300, 50);
-    var popupMaterial = uiElementsCreator.createHorizontalContainer((int) (stage.getWidth()-300), (int) (stage.getHeight()-100), 300, 50);
+    this.materialGroup = uiElementsCreator.createHorizontalContainer(0, 0, 300, 50);
+    var popupMaterial = uiElementsCreator.createHorizontalContainer(0, 60, 300, 50);
     fillMaterialGroup(materialGroup, materialUtilClient.getPlayerMaterial());
     fillMaterialGroup(popupMaterial, predictedIncome.getIncomes());
     uiElementsCreator.addHoverPopupWithActor(this.materialGroup, popupMaterial, stage);
 
     if (chosenEntity.isAnyChosen() && movableMapper.has(chosenEntity.peek())) {
-      this.activeUnitDescription = uiElementsCreator.createVerticalContainer(0, (int) (stage.getHeight() - 200), 150, 200);
-      prepareUnitGroup(activeUnitDescription);
+      this.activeUnitDescription = prepareUnitGroup();
       stage.addActor(activeUnitDescription);
     }
 
@@ -161,10 +164,16 @@ public class GameScreenHUD implements Disposable {
     }
   }
 
-  private void prepareUnitGroup(VerticalGroup activeUnitGroup) {
+  private Window prepareUnitGroup() {
+    var activeUnitGroup = uiElementsCreator.createVerticalContainer(0, (int) (stage.getHeight() - 200), 170, 200);
+
     var name = nameMapper.get(chosenEntity.peek());
-    var nameLabel = uiElementsCreator.createLabel(name.getName(), 0, 0);
-    activeUnitGroup.addActor(nameLabel);
+    var activeUnitDescriptionWindow = uiElementsCreator.createWindow(name.getName());
+
+    uiElementsCreator.setActorPosition(activeUnitDescriptionWindow, (int) (stage.getWidth() * 0.05), (int) (stage.getHeight() - 250));
+    uiElementsCreator.setActorWidthAndHeight(activeUnitDescriptionWindow, 170, 200);
+
+    activeUnitDescriptionWindow.add(activeUnitGroup);
 
     var stats = statsMapper.get(chosenEntity.peek());
     var hpLabel = uiElementsCreator.createLabel("hp: " + stats.getHp() + "/" + stats.getMaxHp(), 0, 0);
@@ -177,6 +186,8 @@ public class GameScreenHUD implements Disposable {
     activeUnitGroup.addActor(moveLabel);
     var sightLabel = uiElementsCreator.createLabel("sight: " + stats.getSightRadius(), 0, 0);
     activeUnitGroup.addActor(sightLabel);
+
+    return activeUnitDescriptionWindow;
   }
 
   private void endTurn() {

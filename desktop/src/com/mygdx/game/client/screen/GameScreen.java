@@ -147,6 +147,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   public void resize(int width, int height) {
     viewport.update(width, height);
     stage.getViewport().update(width, height, true);
+    gameScreenHUD.resize();
   }
 
   @Override
