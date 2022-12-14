@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -52,7 +53,7 @@ public class FieldScreenHUD implements Disposable {
 
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
-  private VerticalGroup unitAndBuildingContainer;
+  private Window unitAndBuildingContainer;
 
   @Inject
   public FieldScreenHUD(
@@ -121,7 +122,11 @@ public class FieldScreenHUD implements Disposable {
       unitAndBuildingContainer.remove();
     var buildings = gameConfigAssets.getGameConfigs().getAll(BuildingConfig.class);
     var sampleTexture = gameScreenAssets.getTexture(buildings.get(0).getIconName());
-    this.unitAndBuildingContainer = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * buildings.size);
+    var window = uiElementsCreator.createGameWindow("Building list");
+    uiElementsCreator.setActorWidthAndHeight(window, sampleTexture.getWidth() + 50, sampleTexture.getHeight() * buildings.size + 30);
+    var container =  uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * buildings.size);
+    window.add(container);
+    this.unitAndBuildingContainer = window;
     uiElementsCreator.removeActorAfterClick(unitAndBuildingContainer);
     for (int i = 0; i < buildings.size; i++) {
       var building = buildings.get(i);
@@ -200,7 +205,11 @@ public class FieldScreenHUD implements Disposable {
       unitAndBuildingContainer.remove();
     var units = getUnits();
     var sampleTexture = gameScreenAssets.getTexture(units.get(0).getIconName());
-    this.unitAndBuildingContainer = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
+    var window = uiElementsCreator.createGameWindow("Unit list");
+    uiElementsCreator.setActorWidthAndHeight(window, sampleTexture.getWidth() + 50, sampleTexture.getHeight() * units.size + 30);
+    var container = uiElementsCreator.createVerticalContainer(100, 100, sampleTexture.getWidth(), sampleTexture.getHeight() * units.size);
+    window.add(container);
+    this.unitAndBuildingContainer = window;
     uiElementsCreator.removeActorAfterClick(unitAndBuildingContainer);
     for (int i = 0; i < units.size; i++) {
       var unit = units.get(i);

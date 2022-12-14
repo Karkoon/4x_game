@@ -54,7 +54,7 @@ public class GdxGame extends Game {
         botCiv = InitialBotRoom.botCiv;
       }
     } catch (Exception ignored) {}
-    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID(), botType, botCiv);
+    gameConnectService.connect(gameRoomName, "bot" + "_" + UUID.randomUUID().toString().substring(0, 4), botType, botCiv);
 
     changeToGameRoomScreen();
   }
