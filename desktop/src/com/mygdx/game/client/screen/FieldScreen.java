@@ -127,6 +127,7 @@ public class FieldScreen extends ScreenAdapter {
   public void resize(int width, int height) {
     viewport.update(width, height);
     stage.getViewport().update(width, height, true);
+    fieldScreenHUD.resize();
   }
 
   @Override

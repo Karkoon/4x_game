@@ -5,8 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -62,9 +61,9 @@ public class GameRoomScreenHUD implements Disposable {
   private MapTypeConfig selectedMapTypeConfig;
 
 
-  private Table playerTable;
-  private SelectBox mapSizeSelectBox;
-  private SelectBox mapTypeConfigSelectBox;
+  private Window playerTable;
+  private Window mapSizeWindow;
+  private Window mapTypeWindow;
   private Button startButton;
   private Button addBotButton;
 
@@ -162,11 +161,15 @@ public class GameRoomScreenHUD implements Disposable {
   private void preparePlayerTable() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.playerTable = uiElementsCreator.createTable((float) (width * 0.05), (float) (height * 0.05));
-    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.5), (int) (height * 0.85));
+    this.playerTable = uiElementsCreator.createWindow("Player list");
+    this.playerTable.setMovable(false);
+    uiElementsCreator.setActorPosition(this.playerTable, (int) (width * 0.05), (int) (height * 0.4));
+    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.9), (int) (height * 0.55));
+    var playerList = uiElementsCreator.createTable(0, 0);
+    this.playerTable.add(playerList);
     for (PlayerLobby player : players) {
       var singlePlayerTable = uiElementsCreator.createTable((float) 0, (float) 0);
-      var label = uiElementsCreator.createLabel("Nickname: " + player.getUserName(), 0, 0);
+      var label = uiElementsCreator.createLabel(player.getUserName(), 0, 0);
       uiElementsCreator.addToTableRow(label, singlePlayerTable);
 
       var selectBox = uiElementsCreator.createSelectBox();
@@ -216,37 +219,42 @@ public class GameRoomScreenHUD implements Disposable {
         });
         uiElementsCreator.addToTableRow(removeButton, singlePlayerTable);
       }
-      uiElementsCreator.addCellToTable(singlePlayerTable, playerTable);
+      uiElementsCreator.addCellToTable(singlePlayerTable, playerList);
     }
     this.addBotButton = uiElementsCreator.createActionButton("ADD BOT", this::addBot, 0, 0);
-    uiElementsCreator.addCellToTable(addBotButton, playerTable);
+    uiElementsCreator.addCellToTable(addBotButton, playerList);
     stage.addActor(playerTable);
   }
 
   private void prepareStartButton() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.7), (int) (height * 0.1));
-    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.25), (int) (height * 0.05));
+    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.35), (int) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.3), (int) (height * 0.05));
     stage.addActor(startButton);
   }
 
   private void prepareMapSizeSelectBox() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.mapSizeSelectBox = uiElementsCreator.createSelectBox();
-    uiElementsCreator.setActorPosition(mapSizeSelectBox, (int) (width * 0.7), (int) (height * 0.2));
+    this.mapSizeWindow = uiElementsCreator.createWindow("Map size");
+    this.mapSizeWindow.setMovable(false);
+    uiElementsCreator.setActorWidthAndHeight(mapSizeWindow, (int) (width * 0.4), (int) (height * 0.20));
+    uiElementsCreator.setActorPosition(mapSizeWindow, (int) (width * 0.05), (int) (height * 0.15));
+
+    var mapSizeSelectBox = uiElementsCreator.createSelectBox();
     uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (width * 0.25), (int) (height * 0.05));
-    this.mapSizeSelectBox.setItems(MapSize.values());
-    this.mapSizeSelectBox.setSelected(selectedMapSize);
-    this.mapSizeSelectBox.addListener(new ChangeListener() {
+    mapSizeSelectBox.setItems(MapSize.values());
+    mapSizeSelectBox.setSelected(selectedMapSize);
+    mapSizeSelectBox.addListener(new ChangeListener() {
       @Override
       public void changed (ChangeEvent event, Actor actor) {
         selectedMapSize = (MapSize) mapSizeSelectBox.getSelected();
         connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
       }
     });
-    stage.addActor(mapSizeSelectBox);
+    mapSizeWindow.add(mapSizeSelectBox);
+    stage.addActor(mapSizeWindow);
   }
 
   private void removePlayer(String playerName) {
@@ -257,20 +265,27 @@ public class GameRoomScreenHUD implements Disposable {
     float width = stage.getWidth();
     float height = stage.getHeight();
     var mapTypes = gameConfigAssets.getGameConfigs().getAll(MapTypeConfig.class);
-    this.mapTypeConfigSelectBox = uiElementsCreator.createSelectBox();
-    uiElementsCreator.setActorPosition(mapTypeConfigSelectBox, (int) (width * 0.7), (int) (height * 0.3));
+
+    this.mapTypeWindow = uiElementsCreator.createWindow("Map type");
+    this.mapTypeWindow.setMovable(false);
+    uiElementsCreator.setActorWidthAndHeight(mapTypeWindow, (int) (width * 0.4), (int) (height * 0.20));
+    uiElementsCreator.setActorPosition(mapTypeWindow, (int) (width * 0.55), (int) (height * 0.15));
+
+    var mapTypeConfigSelectBox = uiElementsCreator.createSelectBox();
     uiElementsCreator.setActorWidthAndHeight(mapTypeConfigSelectBox, (int) (width * 0.25), (int) (height * 0.05));
-    this.mapTypeConfigSelectBox.setItems(mapTypes);
-    this.mapTypeConfigSelectBox.setSelected(selectedMapTypeConfig);
-    this.mapTypeConfigSelectBox.addListener(new ChangeListener() {
+    mapTypeConfigSelectBox.setItems(mapTypes);
+    mapTypeConfigSelectBox.setSelected(selectedMapTypeConfig);
+    mapTypeConfigSelectBox.addListener(new ChangeListener() {
       @Override
       public void changed (ChangeEvent event, Actor actor) {
         selectedMapTypeConfig = (MapTypeConfig) mapTypeConfigSelectBox.getSelected();
         connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
       }
     });
-    stage.addActor(mapTypeConfigSelectBox);
+    mapTypeWindow.add(mapTypeConfigSelectBox);
+    stage.addActor(mapTypeWindow);
   }
+
 
   private void startGame() {
     gameStartService.startGame();

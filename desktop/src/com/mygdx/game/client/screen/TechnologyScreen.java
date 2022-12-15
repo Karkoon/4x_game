@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
@@ -194,8 +194,14 @@ public class TechnologyScreen extends ScreenAdapter {
     }
   }
 
-  private VerticalGroup createTechDescription(TechnologyConfig technology, Vector3 position) {
+  private Window createTechDescription(TechnologyConfig technology, Vector3 position) {
+    var techWindow = uiElementsCreator.createWindow("Technology");
     var techContainer = uiElementsCreator.createVerticalContainer((int) position.x + 250, (int) position.z + 250, 250, 400);
+    techWindow.add(techContainer);
+    techWindow.getTitleLabel().setFontScale(2f);
+    techWindow.getTitleLabel().setHeight(techWindow.getTitleLabel().getHeight() * 1.5f);
+    uiElementsCreator.setActorWidthAndHeight(techWindow, 500, 500);
+    uiElementsCreator.setActorPosition(techWindow, (int) position.x + 250, (int) position.z + 250);
 
     var nameLabel = uiElementsCreator.createLabel(technology.getName(), 0, 0);
     uiElementsCreator.scaleLabel(nameLabel, 2.5f);
@@ -217,7 +223,7 @@ public class TechnologyScreen extends ScreenAdapter {
       uiElementsCreator.scaleLabel(impactLabel, 2.5f);
       techContainer.addActor(impactLabel);
     }
-    return techContainer;
+    return techWindow;
   }
 
   public void researchTechnology(int entityId) {

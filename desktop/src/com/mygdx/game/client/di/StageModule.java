@@ -23,7 +23,7 @@ public class StageModule {
   public Stage providesStage() {
     var viewport = new ExtendViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
     var stage = new Stage(viewport);
-    stage.setDebugAll(true);
+//    stage.setDebugAll(true);
     log.info("provided Stage");
     return stage;
   }
@@ -33,7 +33,7 @@ public class StageModule {
   @Named(GAME_SCREEN)
   public Stage providesGameStage() {
     var stage = new Stage(new ScreenViewport());
-    stage.setDebugAll(true);
+//    stage.setDebugAll(true);
     log.info("provided GameScreen Stage");
     return stage;
   }
@@ -45,7 +45,7 @@ public class StageModule {
   @Named(FIELD_SCREEN)
   public Stage providesFieldStage() {
     var stage = new Stage(new ScreenViewport());
-    stage.setDebugAll(true);
+//    stage.setDebugAll(true);
     log.info("provided FieldScreen Stage");
     return stage;
   }
@@ -54,7 +54,7 @@ public class StageModule {
   @Named(SCREEN_STAGE)
   public Stage providesGameRoomListScreen() {
     var stage = new Stage(new ScreenViewport());
-    stage.setDebugAll(true);
+//    stage.setDebugAll(true);
     log.info("provided GameScreen Stage");
     return stage;
   }

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -187,5 +188,15 @@ public class UiElementsCreator {
 
   public void changeColorOfActor(Actor actor, float r, float g, float b, float a) {
     actor.setColor(r, g, b, a);
+  }
+
+  public Window createWindow(String title) {
+    Window window = new Window(title, menuSkin);
+    return window;
+  }
+
+  public Window createGameWindow(String title) {
+    Window window = new Window(title, gameSkin);
+    return window;
   }
 }
