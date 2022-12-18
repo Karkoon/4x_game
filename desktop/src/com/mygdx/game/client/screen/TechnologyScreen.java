@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
+import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.ui.CanNotResearchTechnologyDialogFactory;
+import com.mygdx.game.client.ui.decorations.StarBackgroundGame;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -56,6 +58,7 @@ public class TechnologyScreen extends ScreenAdapter {
   private final Texture inResearchTexture;
   private final Texture researchedTexture;
   private final Texture unblockedTexture;
+  private final StarBackgroundGame starBackground;
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
@@ -78,6 +81,7 @@ public class TechnologyScreen extends ScreenAdapter {
       Viewport viewport,
       GameConfigAssets gameConfigAssets,
       GameScreenAssets gameScreenAssets,
+      MenuScreenAssets menuScreenAssets,
       Technologies technologies,
       UiElementsCreator uiElementsCreator,
       TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
@@ -98,6 +102,7 @@ public class TechnologyScreen extends ScreenAdapter {
     this.inResearchTexture = gameScreenAssets.getTexture( "technologies/inresearch.png");
     this.unblockedTexture = gameScreenAssets.getTexture( "technologies/unblocked.png");
     this.researchedTexture = gameScreenAssets.getTexture( "technologies/researched.png");
+    this.starBackground = new StarBackgroundGame(menuScreenAssets, stage.getCamera());
   }
 
   @Override
@@ -112,11 +117,18 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    starBackground.update(delta);
+    stage.getBatch().begin();
+    starBackground.draw(stage.getBatch());
+    stage.getBatch().setShader(null);
+    stage.getBatch().end();
+
     if (draw) {
       for (int i = 0; i < technologies.getAllTechnologies().size(); i++) {
         drawDependencies(technologies.getAllTechnologies().get(i));
       }
     }
+
     world.setDelta(delta);
     world.process();
     stage.draw();
@@ -127,6 +139,7 @@ public class TechnologyScreen extends ScreenAdapter {
   @Override
   public void resize(int width, int height) {
     viewport.update(width, height);
+    starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
   }
 
