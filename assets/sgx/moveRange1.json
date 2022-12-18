@@ -2,17 +2,17 @@
   "id": 301,
   "name": "attack technology",
   "polishName": "technologia ataku",
-  "textureName": "technologies/attack1.png",
+  "textureName": "technologies/attack.png",
   "x": 0,
   "y": 0,
   "requiredScience": 10,
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
-      "technologyImpactType":"UNIT_IMPACT",
+      "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 1000}
       ]
     },
   "dependencies" : []

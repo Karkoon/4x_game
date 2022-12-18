@@ -1,11 +1,11 @@
 {
-  "id": 301,
+  "id": 302,
   "name": "attack technology",
   "polishName": "technologia ataku",
-  "textureName": "technologies/attack1.png",
+  "textureName": "technologies/attack2.png",
   "x": 0,
-  "y": 0,
-  "requiredScience": 10,
+  "y": 1,
+  "requiredScience": 20,
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
@@ -15,5 +15,5 @@
         {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 10}
       ]
     },
-  "dependencies" : []
+  "dependencies" : [301]
 }
