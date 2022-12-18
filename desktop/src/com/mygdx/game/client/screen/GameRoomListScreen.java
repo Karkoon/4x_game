@@ -7,11 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.hud.GameRoomScreenHUD;
-import com.mygdx.game.client.ui.decorations.StarBackgroundGame;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.config.GameConfigs;
@@ -27,11 +26,9 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   private final GameConnectService connectService;
   private final GdxGame game;
-  private final GameRoomScreenHUD gameRoomScreenHUD;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
-  private final StarBackgroundGame starBackground;
-  private final MenuScreenAssets assets;
+  private final StarBackground starBackground;
 
   private String roomName = "defaultRoom";
   private String userName = "defaultUser";
@@ -40,18 +37,15 @@ public class GameRoomListScreen extends ScreenAdapter {
   public GameRoomListScreen(
       GameConnectService connectService,
       GdxGame game,
-      GameRoomScreenHUD gameRoomScreenHUD,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
       UiElementsCreator uiElementsCreator,
-      MenuScreenAssets assets
+      StarBackground starBackground
   ) {
     this.connectService = connectService;
     this.game = game;
-    this.gameRoomScreenHUD = gameRoomScreenHUD;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
-    this.assets = assets;
-    this.starBackground = new StarBackgroundGame(assets, stage.getCamera());
+    this.starBackground = starBackground;
   }
 
   @Override
@@ -111,12 +105,13 @@ public class GameRoomListScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     super.render(delta);
-    stage.act(delta);
-
     starBackground.update(delta);
     stage.getBatch().begin();
-    starBackground.draw(stage.getBatch());
-    stage.getBatch().setShader(null);
+    starBackground.draw(stage.getBatch(), stage.getCamera());
+    stage.getBatch().end();
+
+    stage.act(delta);
+    stage.getBatch().begin();
     stage.getBatch().end();
 
     stage.draw();

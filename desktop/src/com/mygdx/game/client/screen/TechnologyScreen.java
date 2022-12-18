@@ -18,11 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.assets.GameScreenAssets;
-import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.ui.CanNotResearchTechnologyDialogFactory;
-import com.mygdx.game.client.ui.decorations.StarBackgroundGame;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -54,11 +53,11 @@ public class TechnologyScreen extends ScreenAdapter {
   private final ResearchTechnologyService researchTechnologyService;
   private final World world;
   private final CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory;
+  private final StarBackground starBackground;
   private Vector3 pos;
   private final Texture inResearchTexture;
   private final Texture researchedTexture;
   private final Texture unblockedTexture;
-  private final StarBackgroundGame starBackground;
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
@@ -81,13 +80,14 @@ public class TechnologyScreen extends ScreenAdapter {
       Viewport viewport,
       GameConfigAssets gameConfigAssets,
       GameScreenAssets gameScreenAssets,
-      MenuScreenAssets menuScreenAssets,
       Technologies technologies,
       UiElementsCreator uiElementsCreator,
       TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
       ResearchTechnologyService researchTechnologyService,
-      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory
+      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory,
+      StarBackground starBackground
   ) {
+    this.starBackground = starBackground;
     world.inject(this);
     this.world = world;
     this.stage = stage;
@@ -102,7 +102,6 @@ public class TechnologyScreen extends ScreenAdapter {
     this.inResearchTexture = gameScreenAssets.getTexture( "technologies/inresearch.png");
     this.unblockedTexture = gameScreenAssets.getTexture( "technologies/unblocked.png");
     this.researchedTexture = gameScreenAssets.getTexture( "technologies/researched.png");
-    this.starBackground = new StarBackgroundGame(menuScreenAssets, stage.getCamera());
   }
 
   @Override
@@ -119,8 +118,7 @@ public class TechnologyScreen extends ScreenAdapter {
   public void render(float delta) {
     starBackground.update(delta);
     stage.getBatch().begin();
-    starBackground.draw(stage.getBatch());
-    stage.getBatch().setShader(null);
+    starBackground.draw(stage.getBatch(), stage.getCamera());
     stage.getBatch().end();
 
     if (draw) {
@@ -274,18 +272,18 @@ public class TechnologyScreen extends ScreenAdapter {
         }
       }
     }
-    return dependencies.size() == 0;
+    return dependencies.isEmpty();
   }
 
   private void drawDependencies(int entityId) {
     var entityConfigId = entityConfigIdMapper.get(entityId);
     var position = positionMapper.get(entityId).getValue();
     var dependencies = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId()).getDependencies();
-    for (Integer dependency : dependencies) {
-      int entityIdOfConfig = findEntityIdOfConfig(dependency);
+    shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    for (var dependency : dependencies) {
+      var entityIdOfConfig = findEntityIdOfConfig(dependency);
       var dependencyPosition = positionMapper.get(entityIdOfConfig).getValue();
-      shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
-      shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
       if (researchedMapper.has(entityIdOfConfig))
         shapeRenderer.setColor(0, 1, 0, 1);
       else if (inResearchMapper.has(entityIdOfConfig))
@@ -293,8 +291,8 @@ public class TechnologyScreen extends ScreenAdapter {
       else
         shapeRenderer.setColor(1, 0, 0, 1);
       shapeRenderer.rectLine(position.x, position.z, dependencyPosition.x, dependencyPosition.z, 10f);
-      shapeRenderer.end();
     }
+    shapeRenderer.end();
   }
 
   private int findEntityIdOfConfig(int configId) {

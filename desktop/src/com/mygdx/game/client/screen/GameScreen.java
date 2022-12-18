@@ -10,7 +10,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.ModelInstanceRenderer;
 import com.mygdx.game.client.di.StageModule;
@@ -21,7 +20,7 @@ import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.model.WindowConfig;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
 import com.mygdx.game.client.ui.WinAnnouncementDialogFactory;
-import com.mygdx.game.client.ui.decorations.StarBackgroundGame;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
@@ -64,8 +63,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final Lazy<TechnologyScreen> technologyScreen;
   private final QueueMessageListener queueMessageListener;
   private final GameInterruptedService gameInterruptedService;
-  private final StarBackgroundGame starBackground;
-  private final MenuScreenAssets assets;
+  private final StarBackground starBackground;
 
   private boolean initialized = false;
 
@@ -73,7 +71,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private EntitySubscription unitsWithOwner;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private CameraMoverInputProcessor cameraInputProcessor;
+  private final CameraMoverInputProcessor cameraInputProcessor;
 
   @Inject
   public GameScreen(
@@ -93,7 +91,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       Lazy<TechnologyScreen> technologyScreen,
       @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
       GameInterruptedService gameInterruptedService,
-      MenuScreenAssets assets
+      StarBackground starBackground
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -112,8 +110,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.queueMessageListener = queueMessageListener;
     this.gameInterruptedService = gameInterruptedService;
     this.world.inject(this);
-    this.assets = assets;
-    this.starBackground = new StarBackgroundGame(assets, stage.getCamera());
+    this.starBackground = starBackground;
     this.cameraInputProcessor = new CameraMoverInputProcessor(viewport);
   }
 
@@ -139,9 +136,9 @@ public class GameScreen extends ScreenAdapter implements Navigator {
 
     starBackground.update(delta);
     stage.getBatch().begin();
-    starBackground.draw(stage.getBatch());
-    stage.getBatch().setShader(null);
+    starBackground.draw(stage.getBatch(), stage.getCamera());
     stage.getBatch().end();
+
 
     world.setDelta(delta);
     world.process();

@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.assets.MenuScreenAssets;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.ecs.component.Visible;
 import com.mygdx.game.client.hud.FieldScreenHUD;
@@ -20,7 +19,7 @@ import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.FieldUIInputAdapter;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
-import com.mygdx.game.client.ui.decorations.StarBackgroundGame;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Building;
@@ -49,8 +48,7 @@ public class FieldScreen extends ScreenAdapter {
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
   private final FieldUIInputAdapter subFieldUiInputProcessor;
-  private final StarBackgroundGame starBackground;
-  private final MenuScreenAssets assets;
+  private final StarBackground starBackground;
 
   private int fieldParent = -1;
 
@@ -70,7 +68,7 @@ public class FieldScreen extends ScreenAdapter {
       ShowSubfieldService showSubfieldService,
       FieldUIInputAdapter subFieldUiInputProcessor,
       InField inField,
-      MenuScreenAssets assets
+      StarBackground starBackground
   ) {
     this.world = world;
     this.inField = inField;
@@ -82,8 +80,7 @@ public class FieldScreen extends ScreenAdapter {
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
-    this.assets = assets;
-    this.starBackground = new StarBackgroundGame(assets, stage.getCamera());
+    this.starBackground = starBackground;
   }
 
   @Override
@@ -122,15 +119,12 @@ public class FieldScreen extends ScreenAdapter {
 
     starBackground.update(delta);
     stage.getBatch().begin();
-    starBackground.draw(stage.getBatch());
-    stage.getBatch().setShader(null);
+    starBackground.draw(stage.getBatch(), stage.getCamera());
     stage.getBatch().end();
 
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
-
-
 
     stage.draw();
     fieldScreenHUD.draw();
