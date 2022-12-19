@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
 import com.mygdx.game.client.hud.GameRoomScreenHUD;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
 import com.mygdx.game.config.GameConfigs;
@@ -25,9 +26,9 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   private final GameConnectService connectService;
   private final GdxGame game;
-  private final GameRoomScreenHUD gameRoomScreenHUD;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
+  private final StarBackground starBackground;
 
   private String roomName = "defaultRoom";
   private String userName = "defaultUser";
@@ -36,15 +37,15 @@ public class GameRoomListScreen extends ScreenAdapter {
   public GameRoomListScreen(
       GameConnectService connectService,
       GdxGame game,
-      GameRoomScreenHUD gameRoomScreenHUD,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      UiElementsCreator uiElementsCreator
+      UiElementsCreator uiElementsCreator,
+      StarBackground starBackground
   ) {
     this.connectService = connectService;
     this.game = game;
-    this.gameRoomScreenHUD = gameRoomScreenHUD;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
+    this.starBackground = starBackground;
   }
 
   @Override
@@ -104,13 +105,22 @@ public class GameRoomListScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     super.render(delta);
+    starBackground.update(delta);
+    stage.getBatch().begin();
+    starBackground.draw(stage.getBatch(), stage.getCamera());
+    stage.getBatch().end();
+
     stage.act(delta);
+    stage.getBatch().begin();
+    stage.getBatch().end();
+
     stage.draw();
   }
 
   @Override
   public void resize(int width, int height) {
     super.resize(width, height);
+    starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
   }
 

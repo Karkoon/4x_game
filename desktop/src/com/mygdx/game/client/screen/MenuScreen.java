@@ -24,18 +24,20 @@ public class MenuScreen extends ScreenAdapter {
   private final Stage stage;
   private final MenuScreenAssets assets;
   private final GdxGame navigator;
-  private StarBackground starBackground;
+  private final StarBackground starBackground;
   private Planet planet;
 
   @Inject
   public MenuScreen(
       Stage stage,
       MenuScreenAssets assets,
-      GdxGame navigator
+      GdxGame navigator,
+      StarBackground starBackground
   ) {
     this.stage = stage;
     this.assets = assets;
     this.navigator = navigator;
+    this.starBackground = starBackground;
 
     Gdx.input.setInputProcessor(stage);
   }
@@ -45,7 +47,6 @@ public class MenuScreen extends ScreenAdapter {
     stage.clear();
     var mainMenu = createMenu();
     stage.addActor(mainMenu);
-    starBackground = new StarBackground(assets, stage.getCamera());
     planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
     Gdx.input.setInputProcessor(stage);
   }
@@ -104,9 +105,8 @@ public class MenuScreen extends ScreenAdapter {
     starBackground.update(delta);
 
     stage.getBatch().begin();
-    starBackground.draw(stage.getBatch());
+    starBackground.draw(stage.getBatch(), stage.getCamera());
     planet.draw(stage.getBatch());
-    stage.getBatch().setShader(null);
     stage.getBatch().end();
 
     stage.draw();

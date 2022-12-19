@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.assetloaders.ArrayLoader;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -20,6 +21,7 @@ import javax.inject.Singleton;
 public class GameScreenAssets {
 
   @NonNull
+  @Getter
   private final AssetManager assetManager;
 
   @Inject

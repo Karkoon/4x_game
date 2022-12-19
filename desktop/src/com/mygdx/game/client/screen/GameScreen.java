@@ -20,6 +20,7 @@ import com.mygdx.game.client.input.GameScreenUiInputAdapter;
 import com.mygdx.game.client.model.WindowConfig;
 import com.mygdx.game.client.ui.PlayerTurnDialogFactory;
 import com.mygdx.game.client.ui.WinAnnouncementDialogFactory;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModule;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Movable;
@@ -43,6 +44,7 @@ import javax.inject.Named;
 @GameInstanceScope
 public class GameScreen extends ScreenAdapter implements Navigator {
 
+  private final ActiveToken activeToken;
   private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
 
   private final World world;
@@ -56,12 +58,12 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private final PlayerTurnDialogFactory playerTurnDialogFactory;
   private final WinAnnouncementDialogFactory winAnnouncementDialogFactory;
   private final PlayerInfo playerInfo;
-  private final ActiveToken activeToken;
   private final GdxGame game;
   private final Lazy<FieldScreen> fieldScreen;
   private final Lazy<TechnologyScreen> technologyScreen;
   private final QueueMessageListener queueMessageListener;
   private final GameInterruptedService gameInterruptedService;
+  private final StarBackground starBackground;
 
   private boolean initialized = false;
 
@@ -69,7 +71,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   private EntitySubscription unitsWithOwner;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private CameraMoverInputProcessor cameraInputProcessor;
+  private final CameraMoverInputProcessor cameraInputProcessor;
 
   @Inject
   public GameScreen(
@@ -88,7 +90,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
       Lazy<FieldScreen> fieldScreen,
       Lazy<TechnologyScreen> technologyScreen,
       @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
-      GameInterruptedService gameInterruptedService
+      GameInterruptedService gameInterruptedService,
+      StarBackground starBackground
   ) {
     this.renderer = renderer;
     this.world = world;
@@ -107,7 +110,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     this.queueMessageListener = queueMessageListener;
     this.gameInterruptedService = gameInterruptedService;
     this.world.inject(this);
-
+    this.starBackground = starBackground;
     this.cameraInputProcessor = new CameraMoverInputProcessor(viewport);
   }
 
@@ -130,6 +133,13 @@ public class GameScreen extends ScreenAdapter implements Navigator {
   @Override
   public void render(float delta) {
     compositeUpdatable.update(delta);
+
+    starBackground.update(delta);
+    stage.getBatch().begin();
+    starBackground.draw(stage.getBatch(), stage.getCamera());
+    stage.getBatch().end();
+
+
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
@@ -148,6 +158,8 @@ public class GameScreen extends ScreenAdapter implements Navigator {
     viewport.update(width, height);
     stage.getViewport().update(width, height, true);
     gameScreenHUD.resize();
+    starBackground.resize(width, height);
+
   }
 
   @Override

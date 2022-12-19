@@ -19,6 +19,7 @@ import com.mygdx.game.client.input.ClickInputAdapter;
 import com.mygdx.game.client.input.FieldUIInputAdapter;
 import com.mygdx.game.client.model.ChosenEntity;
 import com.mygdx.game.client.model.InField;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Building;
@@ -47,6 +48,7 @@ public class FieldScreen extends ScreenAdapter {
   private final ChosenEntity chosenEntity;
   private final ShowSubfieldService showSubfieldService;
   private final FieldUIInputAdapter subFieldUiInputProcessor;
+  private final StarBackground starBackground;
 
   private int fieldParent = -1;
 
@@ -65,7 +67,8 @@ public class FieldScreen extends ScreenAdapter {
       ChosenEntity chosenEntity,
       ShowSubfieldService showSubfieldService,
       FieldUIInputAdapter subFieldUiInputProcessor,
-      InField inField
+      InField inField,
+      StarBackground starBackground
   ) {
     this.world = world;
     this.inField = inField;
@@ -77,6 +80,7 @@ public class FieldScreen extends ScreenAdapter {
     this.chosenEntity = chosenEntity;
     this.showSubfieldService = showSubfieldService;
     this.subFieldUiInputProcessor = subFieldUiInputProcessor;
+    this.starBackground = starBackground;
   }
 
   @Override
@@ -112,6 +116,12 @@ public class FieldScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     compositeUpdatable.update(delta);
+
+    starBackground.update(delta);
+    stage.getBatch().begin();
+    starBackground.draw(stage.getBatch(), stage.getCamera());
+    stage.getBatch().end();
+
     world.setDelta(delta);
     world.process();
     viewport.getCamera().update();
@@ -126,6 +136,7 @@ public class FieldScreen extends ScreenAdapter {
   @Override
   public void resize(int width, int height) {
     viewport.update(width, height);
+    starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
     fieldScreenHUD.resize();
   }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import lombok.Getter;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.inject.Singleton;
 public class MenuScreenAssets {
 
   @NonNull
+  @Getter
   private final AssetManager assetManager;
 
   @Inject

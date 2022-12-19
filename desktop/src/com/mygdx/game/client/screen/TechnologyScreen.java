@@ -21,6 +21,7 @@ import com.mygdx.game.assets.GameScreenAssets;
 import com.mygdx.game.client.ecs.component.TextureComp;
 import com.mygdx.game.client.input.TechnologyScreenUiInputAdapter;
 import com.mygdx.game.client.ui.CanNotResearchTechnologyDialogFactory;
+import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Position;
@@ -52,6 +53,7 @@ public class TechnologyScreen extends ScreenAdapter {
   private final ResearchTechnologyService researchTechnologyService;
   private final World world;
   private final CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory;
+  private final StarBackground starBackground;
   private Vector3 pos;
   private final Texture inResearchTexture;
   private final Texture researchedTexture;
@@ -82,8 +84,10 @@ public class TechnologyScreen extends ScreenAdapter {
       UiElementsCreator uiElementsCreator,
       TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
       ResearchTechnologyService researchTechnologyService,
-      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory
+      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory,
+      StarBackground starBackground
   ) {
+    this.starBackground = starBackground;
     world.inject(this);
     this.world = world;
     this.stage = stage;
@@ -112,11 +116,17 @@ public class TechnologyScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    starBackground.update(delta);
+    stage.getBatch().begin();
+    starBackground.draw(stage.getBatch(), stage.getCamera());
+    stage.getBatch().end();
+
     if (draw) {
       for (int i = 0; i < technologies.getAllTechnologies().size(); i++) {
         drawDependencies(technologies.getAllTechnologies().get(i));
       }
     }
+
     world.setDelta(delta);
     world.process();
     stage.draw();
@@ -127,6 +137,7 @@ public class TechnologyScreen extends ScreenAdapter {
   @Override
   public void resize(int width, int height) {
     viewport.update(width, height);
+    starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
   }
 
@@ -261,18 +272,18 @@ public class TechnologyScreen extends ScreenAdapter {
         }
       }
     }
-    return dependencies.size() == 0;
+    return dependencies.isEmpty();
   }
 
   private void drawDependencies(int entityId) {
     var entityConfigId = entityConfigIdMapper.get(entityId);
     var position = positionMapper.get(entityId).getValue();
     var dependencies = gameConfigAssets.getGameConfigs().get(TechnologyConfig.class, entityConfigId.getId()).getDependencies();
-    for (Integer dependency : dependencies) {
-      int entityIdOfConfig = findEntityIdOfConfig(dependency);
+    shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    for (var dependency : dependencies) {
+      var entityIdOfConfig = findEntityIdOfConfig(dependency);
       var dependencyPosition = positionMapper.get(entityIdOfConfig).getValue();
-      shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
-      shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
       if (researchedMapper.has(entityIdOfConfig))
         shapeRenderer.setColor(0, 1, 0, 1);
       else if (inResearchMapper.has(entityIdOfConfig))
@@ -280,8 +291,8 @@ public class TechnologyScreen extends ScreenAdapter {
       else
         shapeRenderer.setColor(1, 0, 0, 1);
       shapeRenderer.rectLine(position.x, position.z, dependencyPosition.x, dependencyPosition.z, 10f);
-      shapeRenderer.end();
     }
+    shapeRenderer.end();
   }
 
   private int findEntityIdOfConfig(int configId) {
