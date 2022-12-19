@@ -1,0 +1,8 @@
+{
+  "id": 14,
+  "name": "Basic",
+  "polishName": "pole",
+  "modelPath": "basic.g3db",
+  "textureName": "fields/stable_basic.png",
+  "scoreValue": 3
+}

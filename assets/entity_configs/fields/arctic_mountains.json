@@ -1,0 +1,8 @@
+{
+  "id": 8,
+  "name": "Mountains",
+  "polishName": "pole",
+  "modelPath": "basic.g3db",
+  "textureName": "fields/arctic_mountains.png",
+  "scoreValue": 3
+}

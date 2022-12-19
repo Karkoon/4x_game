@@ -1,0 +1,8 @@
+{
+  "id": 12,
+  "name": "Mountains",
+  "polishName": "pole",
+  "modelPath": "basic.g3db",
+  "textureName": "fields/desert_mountains.png",
+  "scoreValue": 3
+}

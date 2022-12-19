@@ -1,0 +1,8 @@
+{
+  "id": 9,
+  "name": "River",
+  "polishName": "pole",
+  "modelPath": "basic.g3db",
+  "textureName": "fields/arctic_river.png",
+  "scoreValue": 3
+}
