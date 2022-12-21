@@ -67,6 +67,7 @@ public class GameRoomScreenHUD implements Disposable {
   private Window mapSizeWindow;
   private Window mapTypeWindow;
   private Button startButton;
+  private Button exitButton;
   private Button addBotButton;
 
   @Inject
@@ -97,8 +98,8 @@ public class GameRoomScreenHUD implements Disposable {
 
     this.players = new ArrayList<>();
     this.selectedMapSize = MapSize.VERY_SMALL;
-    this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, randomBetween(GameConfigs.MAP_TYPE_MIN, GameConfigs.MAP_TYPE_MAX));
     this.random = new Random();
+    this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, randomBetween(GameConfigs.MAP_TYPE_MIN, GameConfigs.MAP_TYPE_MAX));
     registerHandlers();
     prepareHudSceleton();
   }
@@ -157,6 +158,7 @@ public class GameRoomScreenHUD implements Disposable {
     prepareMapSizeSelectBox();
     prepareMapTypeSelectBox();
     prepareStartButton();
+    prepareExitButton();
 
     Gdx.input.setInputProcessor(stage);
   }
@@ -232,7 +234,15 @@ public class GameRoomScreenHUD implements Disposable {
   private void prepareStartButton() {
     float width = stage.getWidth();
     float height = stage.getHeight();
-    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.35), (int) (height * 0.05));
+    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.1), (int) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.3), (int) (height * 0.05));
+    stage.addActor(startButton);
+  }
+
+  private void prepareExitButton() {
+    float width = stage.getWidth();
+    float height = stage.getHeight();
+    this.startButton = uiElementsCreator.createActionButton("EXIT", this::exitGame, (int) (width * 0.6), (int) (height * 0.05));
     uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.3), (int) (height * 0.05));
     stage.addActor(startButton);
   }
@@ -292,6 +302,11 @@ public class GameRoomScreenHUD implements Disposable {
 
   private void startGame() {
     gameStartService.startGame();
+  }
+
+  private void exitGame() {
+    removePlayer(playerInfo.getUserName());
+    game.changeToMenuScreen();
   }
 
   private void addBot() {
