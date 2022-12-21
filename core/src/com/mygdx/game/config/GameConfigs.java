@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 public class GameConfigs {
 
   public static final int FIELD_MIN = 1;
-  public static final int FIELD_MAX = 17;
+  public static final int FIELD_MAX = 12;
   public static final int UNIT_MIN = 101;
   public static final int UNIT_MAX = 103;
   public static final int SUBFIELD_MIN = 201;
