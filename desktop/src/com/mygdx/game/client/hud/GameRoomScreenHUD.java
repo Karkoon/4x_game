@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
@@ -55,6 +56,7 @@ public class GameRoomScreenHUD implements Disposable {
   private final UiElementsCreator uiElementsCreator;
   private final QueueMessageListener queueMessageListener;
   private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
+  private final Random random;
 
   private List<PlayerLobby> players;
   private MapSize selectedMapSize;
@@ -95,7 +97,8 @@ public class GameRoomScreenHUD implements Disposable {
 
     this.players = new ArrayList<>();
     this.selectedMapSize = MapSize.VERY_SMALL;
-    this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, GameConfigs.MAP_TYPE_MIN);
+    this.selectedMapTypeConfig = gameConfigAssets.getGameConfigs().get(MapTypeConfig.class, randomBetween(GameConfigs.MAP_TYPE_MIN, GameConfigs.MAP_TYPE_MAX));
+    this.random = new Random();
     registerHandlers();
     prepareHudSceleton();
   }
@@ -293,6 +296,10 @@ public class GameRoomScreenHUD implements Disposable {
 
   private void addBot() {
     connectService.addBot();
+  }
+
+  public int randomBetween(int min, int max) {
+    return random.nextInt(max - min) + min;
   }
 
 }
