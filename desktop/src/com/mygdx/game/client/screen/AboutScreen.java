@@ -41,6 +41,10 @@ public class AboutScreen extends ScreenAdapter {
   @Override
   public void show() {
     Gdx.input.setInputProcessor(stage);
+    prepareSceleton();
+  }
+
+  private void prepareSceleton() {
     stage.clear();
 
     float width = stage.getWidth();
@@ -92,6 +96,7 @@ public class AboutScreen extends ScreenAdapter {
     super.resize(width, height);
     starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
+    prepareSceleton();
   }
 
   private void backToMenu() {

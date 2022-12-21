@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
@@ -51,7 +50,6 @@ public class GameRoomScreenHUD implements Disposable {
   private final GameScreenSubcomponent.Builder gameScreenBuilder;
   private final GdxGame game;
   private final Stage stage;
-  private final Viewport viewport;
   private final PlayerInfo playerInfo;
   private final UiElementsCreator uiElementsCreator;
   private final QueueMessageListener queueMessageListener;
@@ -78,7 +76,6 @@ public class GameRoomScreenHUD implements Disposable {
       GameScreenSubcomponent.Builder gameScreenBuilder,
       GdxGame game,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      Viewport viewport,
       PlayerInfo playerInfo,
       UiElementsCreator uiElementsCreator,
       QueueMessageListener queueMessageListener,
@@ -90,7 +87,6 @@ public class GameRoomScreenHUD implements Disposable {
     this.gameScreenBuilder = gameScreenBuilder;
     this.game = game;
     this.stage = stage;
-    this.viewport = viewport;
     this.playerInfo = playerInfo;
     this.uiElementsCreator = uiElementsCreator;
     this.queueMessageListener = queueMessageListener;
@@ -110,6 +106,11 @@ public class GameRoomScreenHUD implements Disposable {
 
   public void draw() {
     stage.draw();
+  }
+
+  public void resize(int width, int height) {
+    stage.getViewport().update(width, height, true);
+    prepareHudSceleton();
   }
 
   public void dispose (){
@@ -164,12 +165,10 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void preparePlayerTable() {
-    float width = stage.getWidth();
-    float height = stage.getHeight();
     this.playerTable = uiElementsCreator.createWindow("Player list");
     this.playerTable.setMovable(false);
-    uiElementsCreator.setActorPosition(this.playerTable, (int) (width * 0.05), (int) (height * 0.4));
-    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (width * 0.9), (int) (height * 0.55));
+    uiElementsCreator.setActorPosition(this.playerTable, (int) (stage.getWidth() * 0.05), (int) (stage.getHeight() * 0.4));
+    uiElementsCreator.setActorWidthAndHeight(this.playerTable, (int) (stage.getWidth() * 0.9), (int) (stage.getHeight() * 0.55));
     var playerList = uiElementsCreator.createTable(0, 0);
     this.playerTable.add(playerList);
     for (PlayerLobby player : players) {
@@ -232,31 +231,25 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void prepareStartButton() {
-    float width = stage.getWidth();
-    float height = stage.getHeight();
-    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (width * 0.1), (int) (height * 0.05));
-    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.3), (int) (height * 0.05));
+    this.startButton = uiElementsCreator.createActionButton("START", this::startGame, (int) (stage.getWidth() * 0.1), (int) (stage.getHeight() * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (stage.getWidth() * 0.3), (int) (stage.getHeight() * 0.05));
     stage.addActor(startButton);
   }
 
   private void prepareExitButton() {
-    float width = stage.getWidth();
-    float height = stage.getHeight();
-    this.startButton = uiElementsCreator.createActionButton("EXIT", this::exitGame, (int) (width * 0.6), (int) (height * 0.05));
-    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (width * 0.3), (int) (height * 0.05));
+    this.startButton = uiElementsCreator.createActionButton("EXIT", this::exitGame, (int) (stage.getWidth() * 0.6), (int) (stage.getHeight() * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (stage.getWidth() * 0.3), (int) (stage.getHeight() * 0.05));
     stage.addActor(startButton);
   }
 
   private void prepareMapSizeSelectBox() {
-    float width = stage.getWidth();
-    float height = stage.getHeight();
     this.mapSizeWindow = uiElementsCreator.createWindow("Map size");
     this.mapSizeWindow.setMovable(false);
-    uiElementsCreator.setActorWidthAndHeight(mapSizeWindow, (int) (width * 0.4), (int) (height * 0.20));
-    uiElementsCreator.setActorPosition(mapSizeWindow, (int) (width * 0.05), (int) (height * 0.15));
+    uiElementsCreator.setActorWidthAndHeight(mapSizeWindow, (int) (stage.getWidth() * 0.4), (int) (stage.getHeight() * 0.20));
+    uiElementsCreator.setActorPosition(mapSizeWindow, (int) (stage.getWidth() * 0.05), (int) (stage.getHeight() * 0.15));
 
     var mapSizeSelectBox = uiElementsCreator.createSelectBox();
-    uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (width * 0.25), (int) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(mapSizeSelectBox, (int) (stage.getWidth() * 0.25), (int) (stage.getHeight() * 0.05));
     mapSizeSelectBox.setItems(MapSize.values());
     mapSizeSelectBox.setSelected(selectedMapSize);
     mapSizeSelectBox.addListener(new ChangeListener() {
@@ -275,17 +268,15 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void prepareMapTypeSelectBox() {
-    float width = stage.getWidth();
-    float height = stage.getHeight();
     var mapTypes = gameConfigAssets.getGameConfigs().getAll(MapTypeConfig.class);
 
     this.mapTypeWindow = uiElementsCreator.createWindow("Map type");
     this.mapTypeWindow.setMovable(false);
-    uiElementsCreator.setActorWidthAndHeight(mapTypeWindow, (int) (width * 0.4), (int) (height * 0.20));
-    uiElementsCreator.setActorPosition(mapTypeWindow, (int) (width * 0.55), (int) (height * 0.15));
+    uiElementsCreator.setActorWidthAndHeight(mapTypeWindow, (int) (stage.getWidth() * 0.4), (int) (stage.getHeight() * 0.20));
+    uiElementsCreator.setActorPosition(mapTypeWindow, (int) (stage.getWidth() * 0.55), (int) (stage.getHeight() * 0.15));
 
     var mapTypeConfigSelectBox = uiElementsCreator.createSelectBox();
-    uiElementsCreator.setActorWidthAndHeight(mapTypeConfigSelectBox, (int) (width * 0.25), (int) (height * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(mapTypeConfigSelectBox, (int) (stage.getWidth() * 0.25), (int) (stage.getHeight() * 0.05));
     mapTypeConfigSelectBox.setItems(mapTypes);
     mapTypeConfigSelectBox.setSelected(selectedMapTypeConfig);
     mapTypeConfigSelectBox.addListener(new ChangeListener() {
@@ -306,7 +297,7 @@ public class GameRoomScreenHUD implements Disposable {
 
   private void exitGame() {
     removePlayer(playerInfo.getUserName());
-    game.changeToMenuScreen();
+    game.changeToGameRoomListScreen();
   }
 
   private void addBot() {

@@ -66,5 +66,6 @@ public class GameRoomScreen extends ScreenAdapter {
     super.resize(width, height);
     starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
+    gameRoomScreenHUD.resize(width, height);
   }
 }
