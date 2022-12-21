@@ -1,0 +1,22 @@
+{
+  "id": 208,
+  "name": "Desert river",
+  "polishName": "Pustynna rzeka",
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/desert_river.png",
+  "materialProductions":
+    [
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      ],
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":2},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":0}
+      ]
+    ]
+}

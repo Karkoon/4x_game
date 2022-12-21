@@ -45,18 +45,25 @@ public class MenuScreen extends ScreenAdapter {
   @Override
   public void show() {
     stage.clear();
-    var mainMenu = createMenu();
-    stage.addActor(mainMenu);
-    planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+    prepareSceleton();
     Gdx.input.setInputProcessor(stage);
+    planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+  }
+
+  private void prepareSceleton() {
+    stage.clear();
+    var mainMenu = createMenu();
+    planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+    stage.addActor(mainMenu);
   }
 
   @Override
   public void resize(int width, int height) {
     starBackground.resize(width, height);
     planet.resize(width, height);
-    stage.getViewport().update(width, height);
+    stage.getViewport().update(width, height, true);
     super.resize(width, height);
+    prepareSceleton();
   }
 
   private Table createMenu() {
@@ -67,11 +74,8 @@ public class MenuScreen extends ScreenAdapter {
     table.add(createAboutButton()).fillX().expandY().fillY().row();
     table.add(createExitButton()).fillX().expandY().fillY().row();
 
-    var width = stage.getWidth() / 5;
-    var height = stage.getHeight() / 5;
-
-    table.setSize(width, height);
-    table.setPosition((stage.getWidth() - width) / 2, (stage.getHeight() - height) / 2);
+    table.setSize((float) (stage.getWidth() * 0.2), (float) (stage.getHeight() * 0.2));
+    table.setPosition((float) (stage.getWidth() * 0.4), (float) (stage.getHeight() * 0.4));
     return table;
   }
 

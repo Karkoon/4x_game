@@ -1,7 +1,7 @@
 {
-  "id": 16,
+  "id": 11,
   "name": "Mountains",
-  "polishName": "pole",
+  "polishName": "Góry",
   "modelPath": "basic.g3db",
   "textureName": "fields/stable_mountains.png",
   "scoreValue": 3

@@ -17,6 +17,7 @@ public class StageModule {
   private static final float VIRTUAL_WIDTH = 1920;
   private static final float VIRTUAL_HEIGHT = 1080;
   public static final String GAME_SCREEN = "game_screen";
+  public static final String FIELD_SCREEN = "field_screen";
   public static final String SCREEN_STAGE = "screen_viewport";
 
   @Provides
@@ -37,8 +38,6 @@ public class StageModule {
     log.info("provided GameScreen Stage");
     return stage;
   }
-
-  public static final String FIELD_SCREEN = "field_screen";
 
   @Provides
   @Singleton

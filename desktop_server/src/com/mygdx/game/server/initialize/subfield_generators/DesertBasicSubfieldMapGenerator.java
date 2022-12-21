@@ -8,40 +8,40 @@ import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import javax.inject.Inject;
 import java.util.List;
 
-public class DesertSubfieldMapGenerator extends SubfieldMapGenerator {
+public class DesertBasicSubfieldMapGenerator extends SubfieldMapGenerator {
 
   private final List<Integer> subfieldList =
       List.of(
-          202,
-          203,
-          202,
-          202,
-          202,
-          203,
-          203,
-          203,
-          202,
-          202,
-          203,
-          203,
-          202,
-          202,
-          202,
-          203,
-          203,
-          202,
-          203
+          205,
+          205,
+          205,
+          205,
+          206,
+          205,
+          205,
+          206,
+          205,
+          205,
+          205,
+          205,
+          206,
+          205,
+          205,
+          205,
+          208,
+          205,
+          208
       );
 
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
 
   @Inject
-  protected DesertSubfieldMapGenerator(
+  protected DesertBasicSubfieldMapGenerator(
       SubFieldFactory subFieldFactory,
       GameConfigAssets assets
   ) {
-    super(3);
+    super(5);
     this.subFieldFactory = subFieldFactory;
     this.assets = assets;
   }

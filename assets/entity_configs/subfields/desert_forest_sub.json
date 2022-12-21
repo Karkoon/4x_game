@@ -1,22 +1,22 @@
 {
-  "id":201,
-  "name":"subfield",
-  "polishName":"podobszar",
-  "modelPath":"basic.g3db",
-  "textureName":"subfields/subbasic.png",
+  "id": 206,
+  "name": "Desert vegetation",
+  "polishName": "Pustynna roślinność",
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/desert_forest.png",
   "materialProductions":
     [
       [
-        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
-        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":2},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":0}
       ],
       [
-        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":0},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":1},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":1},
         {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
-      ],
+      ]
     ]
 }

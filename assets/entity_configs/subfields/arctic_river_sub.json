@@ -1,0 +1,22 @@
+{
+  "id": 204,
+  "name": "Freezing river",
+  "polishName": "Zamarzająca rzeka",
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/arctic_river.png",
+  "materialProductions":
+    [
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+      ],
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      ]
+    ]
+}

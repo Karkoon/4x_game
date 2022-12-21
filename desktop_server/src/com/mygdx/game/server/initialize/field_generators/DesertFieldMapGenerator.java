@@ -42,8 +42,11 @@ public class DesertFieldMapGenerator extends MapGenerator {
   }
 
   private @NonNull FieldConfig chooseFieldConfig() {
-    var chosenField = random.nextInt(10, 13 + 1);
+    var chosenField = random.nextInt(FIELD_MIN, FIELD_MAX + 1);
     return assets.getGameConfigs().get(FieldConfig.class, chosenField);
   }
+
+  private static final int FIELD_MIN = 5;
+  private static final int FIELD_MAX = 8;
 
 }

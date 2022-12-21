@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.client.screen.AboutScreen;
 import com.mygdx.game.client.screen.GameRoomListScreen;
 import com.mygdx.game.client.screen.GameRoomScreen;
 import com.mygdx.game.client.screen.LoadingScreen;
@@ -19,6 +20,7 @@ import javax.inject.Singleton;
 public class GdxGame extends Game {
 
   private final AssetManager assetManager;
+  private final Lazy<AboutScreen> aboutScreen;
   private final Lazy<LoadingScreen> loadingScreen;
   private final Lazy<MenuScreen> menuScreen;
   private final Lazy<GameRoomListScreen> gameRoomListScreen;
@@ -27,12 +29,14 @@ public class GdxGame extends Game {
   @Inject
   GdxGame(
       AssetManager assetManager,
+      Lazy<AboutScreen> aboutScreen,
       Lazy<LoadingScreen> loadingScreen,
       Lazy<MenuScreen> menuScreen,
       Lazy<GameRoomListScreen> gameRoomListScreen,
       Lazy<GameRoomScreen> gameRoomScreen
   ) {
     this.assetManager = assetManager;
+    this.aboutScreen = aboutScreen;
     this.loadingScreen = loadingScreen;
     this.menuScreen = menuScreen;
     this.gameRoomListScreen = gameRoomListScreen;
@@ -74,7 +78,7 @@ public class GdxGame extends Game {
   }
 
   public void changeToAboutScreen() {
-    /* intentionally left empty */
+    setScreen(aboutScreen.get());
   }
 
   public void exit() {

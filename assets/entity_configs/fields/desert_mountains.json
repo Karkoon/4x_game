@@ -1,7 +1,7 @@
 {
-  "id": 12,
-  "name": "Mountains",
-  "polishName": "pole",
+  "id": 7,
+  "name": "Mountains desert",
+  "polishName": "Górzysta pustynia",
   "modelPath": "basic.g3db",
   "textureName": "fields/desert_mountains.png",
   "scoreValue": 3

@@ -42,7 +42,10 @@ public class StableFieldMapGenerator extends MapGenerator {
   }
 
   private @NonNull FieldConfig chooseFieldConfig() {
-    var chosenField = random.nextInt(14, 17 + 1);
+    var chosenField = random.nextInt(FIELD_MIN, FIELD_MAX + 1);
     return assets.getGameConfigs().get(FieldConfig.class, chosenField);
   }
+
+  private static final int FIELD_MIN = 9;
+  private static final int FIELD_MAX = 12;
 }

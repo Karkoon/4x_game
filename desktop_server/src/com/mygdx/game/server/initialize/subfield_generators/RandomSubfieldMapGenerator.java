@@ -10,13 +10,13 @@ import com.mygdx.game.server.ecs.entityfactory.SubFieldFactory;
 import javax.inject.Inject;
 
 @GameInstanceScope
-public class BasicSubfieldMapGenerator extends SubfieldMapGenerator {
+public class RandomSubfieldMapGenerator extends SubfieldMapGenerator {
 
   private final SubFieldFactory subFieldFactory;
   private final GameConfigAssets assets;
 
   @Inject
-  protected BasicSubfieldMapGenerator(
+  protected RandomSubfieldMapGenerator(
       SubFieldFactory subFieldFactory,
       GameConfigAssets assets
   ) {

@@ -111,7 +111,7 @@ public class GameScreenHUD implements Disposable {
     stage.dispose();
   }
 
-  public void resize () {
+  public void resize() {
     prepareHudSceleton();
   }
 

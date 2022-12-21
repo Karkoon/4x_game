@@ -1,0 +1,22 @@
+{
+  "id": 207,
+  "name": "Mountains desert",
+  "polishName": "Górzysta pustynia",
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/desert_mountains.png",
+  "materialProductions":
+    [
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      ],
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+      ]
+    ]
+}

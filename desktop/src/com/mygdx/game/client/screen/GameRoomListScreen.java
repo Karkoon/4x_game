@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.client.GdxGame;
 import com.mygdx.game.client.di.StageModule;
-import com.mygdx.game.client.hud.GameRoomScreenHUD;
 import com.mygdx.game.client.ui.decorations.StarBackground;
 import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.network.service.GameConnectService;
@@ -50,6 +49,12 @@ public class GameRoomListScreen extends ScreenAdapter {
 
   @Override
   public void show() {
+    prepareScleton();
+    Gdx.input.setInputProcessor(stage);
+    super.show();
+  }
+
+  private void prepareScleton() {
     stage.clear();
 
     var title = "Room List";
@@ -98,8 +103,6 @@ public class GameRoomListScreen extends ScreenAdapter {
     dialog.button(leaveButton);
     dialog.pack();
     dialog.show(stage);
-    Gdx.input.setInputProcessor(stage);
-    super.show();
   }
 
   @Override
@@ -122,6 +125,7 @@ public class GameRoomListScreen extends ScreenAdapter {
     super.resize(width, height);
     starBackground.resize(width, height);
     stage.getViewport().update(width, height, true);
+    prepareScleton();
   }
 
   private void joinRoom() {
