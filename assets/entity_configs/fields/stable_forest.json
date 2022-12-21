@@ -1,7 +1,7 @@
 {
-  "id": 15,
+  "id": 10,
   "name": "Forest",
-  "polishName": "pole",
+  "polishName": "Las",
   "modelPath": "basic.g3db",
   "textureName": "fields/stable_forest.png",
   "scoreValue": 3

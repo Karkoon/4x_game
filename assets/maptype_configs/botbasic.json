@@ -1,6 +1,6 @@
 {
   "id": 401,
-  "name": "botbasic",
-  "polishName": "Podstawowa mapa dla bota",
+  "name": "Random map",
+  "polishName": "Losowa mapa",
   "textureName": "basic.png"
 }

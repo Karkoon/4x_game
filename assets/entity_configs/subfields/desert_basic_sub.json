@@ -1,0 +1,22 @@
+{
+  "id": 205,
+  "name": "Desert",
+  "polishName": "Pustynia",
+  "modelPath": "basic.g3db",
+  "textureName": "subfields/desert_basic.png",
+  "materialProductions":
+    [
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":0}
+      ],
+      [
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"SCIENCE","amount":0},
+        {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      ],
+    ]
+}

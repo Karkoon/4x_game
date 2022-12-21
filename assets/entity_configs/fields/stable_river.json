@@ -1,7 +1,7 @@
 {
-  "id": 17,
+  "id": 12,
   "name": "River",
-  "polishName": "pole",
+  "polishName": "Rzeka",
   "modelPath": "basic.g3db",
   "textureName": "fields/stable_river.png",
   "scoreValue": 3

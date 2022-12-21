@@ -46,6 +46,6 @@ public class ArcticFieldMapGenerator extends MapGenerator {
     return assets.getGameConfigs().get(FieldConfig.class, chosenField);
   }
 
-  private static final int FIELD_MIN = 6;
-  private static final int FIELD_MAX = 9;
+  private static final int FIELD_MIN = 1;
+  private static final int FIELD_MAX = 4;
 }

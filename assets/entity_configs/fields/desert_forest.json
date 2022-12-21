@@ -1,7 +1,7 @@
 {
-  "id": 11,
-  "name": "Forest",
-  "polishName": "pole",
+  "id": 6,
+  "name": "Desert vegetation",
+  "polishName": "Pustynna roślinność",
   "modelPath": "basic.g3db",
   "textureName": "fields/desert_forest.png",
   "scoreValue": 3

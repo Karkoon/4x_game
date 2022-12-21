@@ -15,7 +15,7 @@ public class GameConfigs {
   public static final int UNIT_MIN = 101;
   public static final int UNIT_MAX = 103;
   public static final int SUBFIELD_MIN = 201;
-  public static final int SUBFIELD_MAX = 203;
+  public static final int SUBFIELD_MAX = 212;
   public static final int TECHNOLOGY_MIN = 301;
   public static final int TECHNOLOGY_MAX = 302;
   public static final int MAP_TYPE_MIN = 401;

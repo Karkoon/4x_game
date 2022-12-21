@@ -1,12 +1,12 @@
 package com.mygdx.game.server.di;
 
 import com.mygdx.game.server.initialize.field_generators.ArcticFieldMapGenerator;
-import com.mygdx.game.server.initialize.field_generators.BotWinningFieldMapGenerator;
+import com.mygdx.game.server.initialize.field_generators.RandomFieldMapGenerator;
 import com.mygdx.game.server.initialize.field_generators.DesertFieldMapGenerator;
 import com.mygdx.game.server.initialize.field_generators.MapGenerator;
 import com.mygdx.game.server.initialize.field_generators.StableFieldMapGenerator;
-import com.mygdx.game.server.initialize.subfield_generators.BasicSubfieldMapGenerator;
-import com.mygdx.game.server.initialize.subfield_generators.DesertSubfieldMapGenerator;
+import com.mygdx.game.server.initialize.subfield_generators.ArcticBasicSubfieldMapGenerator;
+import com.mygdx.game.server.initialize.subfield_generators.RandomSubfieldMapGenerator;
 import com.mygdx.game.server.initialize.subfield_generators.SubfieldMapGenerator;
 import dagger.Binds;
 import dagger.Module;
@@ -18,8 +18,8 @@ public interface GeneratorBindingsModule {
   @Binds
   @IntoSet
   @GameInstanceScope
-  MapGenerator provideBotWinningFieldMapGenerator(
-      BotWinningFieldMapGenerator generator
+  MapGenerator provideRandomFieldMapGenerator(
+      RandomFieldMapGenerator generator
   );
 
   @Binds
@@ -47,12 +47,12 @@ public interface GeneratorBindingsModule {
   @IntoSet
   @GameInstanceScope
   SubfieldMapGenerator provideBasicSubfieldMapGenerator(
-      BasicSubfieldMapGenerator generator
+      RandomSubfieldMapGenerator generator
   );
 
   @Binds
   @IntoSet
-  SubfieldMapGenerator provideDesertSubfieldMapGenerator(
-          DesertSubfieldMapGenerator generator
+  SubfieldMapGenerator provideArcticBasicSubfieldMapGenerator(
+      ArcticBasicSubfieldMapGenerator generator
   );
 }

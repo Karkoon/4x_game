@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.Random;
 
 @GameInstanceScope
-public class BotWinningFieldMapGenerator extends MapGenerator {
+public class RandomFieldMapGenerator extends MapGenerator {
 
   private static final int WINNING_X = 4;
   private static final int WINNING_Y = 4;
@@ -22,7 +22,7 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
   private final Random random = new Random(0);
 
   @Inject
-  public BotWinningFieldMapGenerator(
+  public RandomFieldMapGenerator(
       GameConfigAssets assets,
       FieldFactory fieldFactory
   ) {
@@ -36,25 +36,16 @@ public class BotWinningFieldMapGenerator extends MapGenerator {
     var fieldIds = new IntArray(width * height);
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        if (i == WINNING_X && j == WINNING_Y) {
-          continue;
-        }
         var fieldConfig = chooseFieldConfig();
         var entityId = fieldFactory.createEntity(fieldConfig, new Coordinates(i, j));
         fieldIds.add(entityId);
       }
     }
-    createWinningField();
     return fieldIds;
   }
 
   private @NonNull FieldConfig chooseFieldConfig() {
     var chosenField = random.nextInt(GameConfigs.FIELD_MIN, GameConfigs.FIELD_MAX);
     return assets.getGameConfigs().get(FieldConfig.class, chosenField);
-  }
-
-  private void createWinningField() {
-    var winningConfig = assets.getGameConfigs().get(FieldConfig.class, 5);
-    fieldFactory.createEntity(winningConfig, new Coordinates(WINNING_X, WINNING_Y));
   }
 }

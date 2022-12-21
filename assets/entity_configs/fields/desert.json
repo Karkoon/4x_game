@@ -1,8 +1,0 @@
-{
-  "id": 3,
-  "name": "desert",
-  "polishName": "pustynia",
-  "modelPath": "basic.g3db",
-  "textureName": "fields/desert.png",
-  "scoreValue": 1
-}

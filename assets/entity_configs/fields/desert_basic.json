@@ -1,7 +1,7 @@
 {
-  "id": 10,
-  "name": "Basic",
-  "polishName": "pole",
+  "id": 5,
+  "name": "Desert",
+  "polishName": "Pustynia",
   "modelPath": "basic.g3db",
   "textureName": "fields/desert_basic.png",
   "scoreValue": 3
