@@ -5,13 +5,13 @@
   "modelPath": "basic.g3db",
   "textureName": "units/tank_viking.png",
   "iconName": "units/tank_viking_icon.png",
-  "maxHp": 100,
-  "attackPower": 125,
-  "defense": 25,
+  "maxHp": 400,
+  "attackPower": 150,
+  "defense": 100,
   "sightRadius": 5,
-  "moveRange": 2,
+  "moveRange": 1,
   "attackRange": 1,
-  "turnAmount": 2,
+  "turnAmount": 10,
   "materials":
   [
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},

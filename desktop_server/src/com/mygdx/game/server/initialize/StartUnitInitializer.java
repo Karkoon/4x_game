@@ -2,8 +2,8 @@ package com.mygdx.game.server.initialize;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
+import com.mygdx.game.config.CivilizationConfig;
 import com.mygdx.game.config.GameConfigs;
-import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.server.di.GameInstanceScope;
 import com.mygdx.game.server.model.GameRoom;
 import com.mygdx.game.server.network.gameinstance.services.CreateUnitService;
@@ -32,23 +32,13 @@ public class StartUnitInitializer {
   }
 
   public void initializeStartingUnits(IntArray map) {
-    var anyConfig = GameConfigs.UNIT_MIN;
     for (int i = 0; i < gameRoom.getNumberOfClients(); i++) {
       var client = gameRoom.getClients().get(i);
       log.info("client id " + client.getPlayerToken());
-      var config = getCivConfig(client.getCivId());
+      var config = gameConfigs.get(CivilizationConfig.class, client.getCivId()).getStartingUnit();
       var fieldId = getUnusedField(map);
-      createUnitService.createUnit((int) config, fieldId, client, true);
+      createUnitService.createUnit(config, fieldId, client, true);
     }
-  }
-
-  private long getCivConfig(long civId) {
-    var allUnits = gameConfigs.getAll(UnitConfig.class);
-    for (UnitConfig unit : allUnits) {
-      if (unit.getCivilizationConfigId() == civId)
-        return unit.getId();
-    }
-    return allUnits.get(0).getId();
   }
 
   private int getUnusedField(IntArray map) {
