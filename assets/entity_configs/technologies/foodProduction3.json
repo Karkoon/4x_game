@@ -1,8 +1,8 @@
 {
   "id": 315,
-  "name": "attack technology",
-  "polishName": "technologia ataku",
-  "textureName": "technologies/attack.png",
+  "name": "Food technology III",
+  "polishName": "Technologia żywności III",
+  "textureName": "technologies/food3.png",
   "x": 4,
   "y": 2,
   "requiredScience": 10,

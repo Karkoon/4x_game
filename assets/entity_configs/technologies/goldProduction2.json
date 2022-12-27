@@ -1,8 +1,8 @@
 {
   "id": 312,
-  "name": "attack technology",
-  "polishName": "technologia ataku",
-  "textureName": "technologies/attack.png",
+  "name": "Gold technology II",
+  "polishName": "Technologia złota II",
+  "textureName": "technologies/gold2.png",
   "x": 5,
   "y": 1,
   "requiredScience": 10,
@@ -12,7 +12,7 @@
       "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "GOLD", "operation": "PLUS", "value": 10}
       ]
     },
   "dependencies" : [311]
