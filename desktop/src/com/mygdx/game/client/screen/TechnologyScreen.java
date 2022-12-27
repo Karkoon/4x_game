@@ -284,13 +284,16 @@ public class TechnologyScreen extends ScreenAdapter {
     for (var dependency : dependencies) {
       var entityIdOfConfig = findEntityIdOfConfig(dependency);
       var dependencyPosition = positionMapper.get(entityIdOfConfig).getValue();
-      if (researchedMapper.has(entityIdOfConfig))
+      if (researchedMapper.has(entityIdOfConfig)) {
         shapeRenderer.setColor(0, 1, 0, 1);
-      else if (inResearchMapper.has(entityIdOfConfig))
+      } else if (inResearchMapper.has(entityIdOfConfig)) {
         shapeRenderer.setColor(1, 1, 0, 1);
-      else
+      } else {
         shapeRenderer.setColor(1, 0, 0, 1);
-      shapeRenderer.rectLine(position.x, position.z, dependencyPosition.x, dependencyPosition.z, 10f);
+      }
+      shapeRenderer.rectLine(position.x + 100, position.z + 100,
+          dependencyPosition.x + 100, dependencyPosition.z + 100,
+          10f);
     }
     shapeRenderer.end();
   }
