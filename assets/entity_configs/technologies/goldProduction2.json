@@ -1,0 +1,19 @@
+{
+  "id": 312,
+  "name": "Gold technology II",
+  "polishName": "Technologia złota II",
+  "textureName": "technologies/gold2.png",
+  "x": 5,
+  "y": 1,
+  "requiredScience": 10,
+  "impact":
+    {
+      "class": com.mygdx.game.core.model.TechnologyImpact,
+      "technologyImpactType":"MATERIAL_IMPACT",
+      "technologyImpactValues":
+      [
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "GOLD", "operation": "PLUS", "value": 10}
+      ]
+    },
+  "dependencies" : [311]
+}

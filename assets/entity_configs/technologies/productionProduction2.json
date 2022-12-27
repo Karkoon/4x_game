@@ -1,0 +1,19 @@
+{
+  "id": 314,
+  "name": "Production technology II",
+  "polishName": "Technologia produkcji II",
+  "textureName": "technologies/production2.png",
+  "x": 6,
+  "y": 1,
+  "requiredScience": 10,
+  "impact":
+    {
+      "class": com.mygdx.game.core.model.TechnologyImpact,
+      "technologyImpactType":"MATERIAL_IMPACT",
+      "technologyImpactValues":
+      [
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "PRODUCTION", "operation": "PLUS", "value": 10}
+      ]
+    },
+  "dependencies" : [313]
+}

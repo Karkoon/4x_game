@@ -1,11 +1,11 @@
 {
-  "id": 304,
-  "name": "Defense technology I",
-  "polishName": "Technologia obrony I",
-  "textureName": "technologies/defense1.png",
+  "id": 306,
+  "name": "Defense technology III",
+  "polishName": "Technologia obrony III",
+  "textureName": "technologies/defense3.png",
   "x": 3,
-  "y": 1,
-  "requiredScience": 10,
+  "y": 3,
+  "requiredScience": 40,
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
@@ -15,5 +15,5 @@
         {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "DEFENSE", "operation": "PLUS", "value": 10}
       ]
     },
-  "dependencies" : [301]
+  "dependencies" : [305]
 }
