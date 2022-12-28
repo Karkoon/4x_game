@@ -23,7 +23,7 @@ public class GameConfigs {
   public static final int BUILDING_MIN = 501;
   public static final int BUILDING_MAX = 502;
   public static final int CIV_MIN = 601;
-  public static final int CIV_MAX = 602;
+  public static final int CIV_MAX = 603;
 
   private final LongMap<Config> configMap = new LongMap<>();
 
