@@ -26,6 +26,7 @@ public class GameConnectService {
   public void connect(String gameRoomName, String userName, String isBot, Integer civId) {
     log.info("connect request sent");
     playerInfo.setUserName(userName);
+    playerInfo.setCivilization(civId);
     sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + civId + ":" + isBot);
   }
 

@@ -12,8 +12,8 @@ public class ChosenConfig {
   private static final int NO_ENTITY = -0xC0FFE;
   private static final Class<?> NO_ENTITY_CLASS = null;
 
-  private long entityConfigId = NO_ENTITY;
   private Class<?> entityConfigClass = NO_ENTITY_CLASS;
+  private long entityConfigId = NO_ENTITY;
 
   @Inject
   public ChosenConfig() {

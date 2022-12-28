@@ -20,15 +20,16 @@ import javax.inject.Inject;
 @Log
 public class NextFieldUtil {
 
-  private ComponentMapper<Owner> ownerComponentMapper;
-  private ComponentMapper<Coordinates> coordinatesComponentMapper;
-  private ComponentMapper<Stats> statsComponentMapper;
-
   @AspectDescriptor(all = {Field.class})
   private EntitySubscription fields;
-
   @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription units;
+
+  private ComponentMapper<Coordinates> coordinatesComponentMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
+  private ComponentMapper<Stats> statsComponentMapper;
+
+
 
   @Inject
   public NextFieldUtil(
@@ -61,7 +62,6 @@ public class NextFieldUtil {
     return fieldOwner == null || !unitOwner.getToken().equals(fieldOwner.getToken());
   }
 
-  // Chyba jeszcze nie działa
   private boolean noEnemyUnits(int unit, int field) {
     var unitOwner = ownerComponentMapper.get(unit);
     var fieldCoordinates = coordinatesComponentMapper.get(field);

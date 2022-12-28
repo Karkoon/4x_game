@@ -26,38 +26,38 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class GameRoomScreen extends ScreenAdapter {
 
   private final ChosenBotType chosenBotType;
-  private final QueueMessageListener listener;
   private final GameScreenSubcomponent.Builder gameScreenBuilder;
-  private final PlayerInfo playerInfo;
-  private final NetworkJobsQueueJobJobberManager jobManager;
   private final GdxGame game;
+  private final NetworkJobsQueueJobJobberManager jobManager;
+  private final PlayerInfo playerInfo;
+  private final QueueMessageListener listener;
 
   @Inject
   GameRoomScreen(
       ChosenBotType chosenBotType,
-      QueueMessageListener listener,
       @NonNull GameScreenSubcomponent.Builder gameScreenBuilder,
-      PlayerInfo playerInfo,
+      GdxGame game,
       NetworkJobsQueueJobJobberManager jobManager,
-      GdxGame game
+      PlayerInfo playerInfo,
+      QueueMessageListener listener
   ) {
     this.chosenBotType = chosenBotType;
-    this.listener = listener;
     this.gameScreenBuilder = gameScreenBuilder;
-    this.jobManager = jobManager;
     this.game = game;
+    this.jobManager = jobManager;
     this.playerInfo = playerInfo;
+    this.listener = listener;
   }
 
   @Override
   public void show() {
     if (!initialized) {
       listener.registerHandler(GameStartedMessage.class, (webSocket, message) -> {
-            var gameScreen = gameScreenBuilder.build().get();
-            gameScreen.setActivePlayerToken(message.getPlayerToken());
-            game.setScreen(gameScreen);
-            return FULLY_HANDLED;
-          }
+          var gameScreen = gameScreenBuilder.build().get();
+          gameScreen.setActivePlayerToken(message.getPlayerToken());
+          game.setScreen(gameScreen);
+          return FULLY_HANDLED;
+        }
       );
       listener.registerHandler(PlayerJoinedRoomMessage.class, this::changeType);
       listener.registerHandler(RoomConfigMessage.class, this::noOp2);

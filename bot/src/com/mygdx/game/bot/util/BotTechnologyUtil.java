@@ -7,7 +7,6 @@ import com.artemis.annotations.AspectDescriptor;
 import com.mygdx.game.assets.GameConfigAssets;
 import com.mygdx.game.bot.model.ChosenBotType;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
-import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.ResearchTechnologyService;
 import com.mygdx.game.config.TechnologyConfig;
 import com.mygdx.game.core.ecs.component.EntityConfigId;
@@ -31,10 +30,8 @@ public class BotTechnologyUtil {
 
   private final ChosenBotType chosenBotType;
   private final GameConfigAssets gameConfigAssets;
-  private final PlayerInfo playerInfo;
-  private final ResearchTechnologyService researchTechnologyService;
   private final Random random;
-  private final World world;
+  private final ResearchTechnologyService researchTechnologyService;
 
   @AspectDescriptor(all = {InResearch.class})
   private EntitySubscription inResearchSubscriber;
@@ -47,23 +44,18 @@ public class BotTechnologyUtil {
 
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private ComponentMapper<InResearch> inResearchMapper;
-  private ComponentMapper<Researched> researchedMapper;
 
   @Inject
   public BotTechnologyUtil(
       ChosenBotType chosenBotType,
       GameConfigAssets gameConfigAssets,
-      PlayerInfo playerInfo,
       ResearchTechnologyService researchTechnologyService,
       World world
   ) {
     this.chosenBotType = chosenBotType;
     this.gameConfigAssets = gameConfigAssets;
-    this.playerInfo = playerInfo;
-    this.researchTechnologyService = researchTechnologyService;
     this.random = new Random();
-    this.world = world;
+    this.researchTechnologyService = researchTechnologyService;
     world.inject(this);
   }
 

@@ -1,7 +1,6 @@
 package com.mygdx.game.bot.network.message_handlers;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.mygdx.game.bot.hud.NextUnitUtil;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.PredictedIncome;
 import com.mygdx.game.client_core.network.QueueMessageListener;
@@ -10,7 +9,6 @@ import com.mygdx.game.core.network.messages.MaterialIncomeMessage;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 

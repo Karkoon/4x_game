@@ -27,7 +27,7 @@ public class CanNotResearchTechnologyDialogFactory {
     dialog.text(message);
     dialog.button("OK");
     dialog.setPosition(400, 200);
-    dialog.setWidth(450);
+    dialog.setWidth(500);
     dialog.scaleBy(1.5f);
     return dialog;
   }

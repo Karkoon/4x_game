@@ -17,7 +17,7 @@ public class PlayerInfo {
   private long civilization;
 
   @Inject
-  public PlayerInfo() { // TODO: 10.10.2022 make username configurable
+  public PlayerInfo() {
     token = UUID.randomUUID().toString();
     civilization = new Random().nextLong(GameConfigs.CIV_MAX+ 1 - GameConfigs.CIV_MIN) + GameConfigs.CIV_MIN;
   }

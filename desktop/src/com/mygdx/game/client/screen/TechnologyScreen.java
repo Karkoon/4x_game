@@ -251,7 +251,7 @@ public class TechnologyScreen extends ScreenAdapter {
       log.info("Can't research");
       stage.addActor(dialog);
     } else if (!allRequiredTechnologiesResearched(entityId)) {
-      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - dependent technologies not researched");
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - dependencies not researched");
       log.info("Can't research");
       stage.addActor(dialog);
     } else {
