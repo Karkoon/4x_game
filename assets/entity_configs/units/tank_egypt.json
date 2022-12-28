@@ -1,0 +1,21 @@
+{
+  "id": 118,
+  "name": "Tank",
+  "polishName": "Czołg",
+  "modelPath": "basic.g3db",
+  "textureName": "units/tank_egypt.png",
+  "iconName": "units/tank_egypt_icon.png",
+  "maxHp": 400,
+  "attackPower": 150,
+  "defense": 100,
+  "sightRadius": 5,
+  "moveRange": 1,
+  "attackRange": 1,
+  "turnAmount": 10,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+  ],
+  "civilizationConfigId": 603
+}

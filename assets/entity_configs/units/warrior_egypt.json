@@ -1,0 +1,21 @@
+{
+  "id": 113,
+  "name": "Warrior",
+  "polishName": "Wojownik",
+  "modelPath": "basic.g3db",
+  "textureName": "units/warrior_egypt.png",
+  "iconName": "units/warrior_egypt_icon.png",
+  "maxHp": 100,
+  "attackPower": 125,
+  "defense": 25,
+  "sightRadius": 2,
+  "moveRange": 2,
+  "attackRange": 1,
+  "turnAmount": 2,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+  ],
+  "civilizationConfigId": 603
+}
