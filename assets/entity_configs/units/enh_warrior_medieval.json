@@ -1,0 +1,21 @@
+{
+  "id": 110,
+  "name": "Enhanced Warrior",
+  "polishName": "Ulepszony Wojownik",
+  "modelPath": "basic.g3db",
+  "textureName": "units/enh_warrior_medieval.png",
+  "iconName": "units/enh_warrior_medieval_icon.png",
+  "maxHp": 150,
+  "attackPower": 125,
+  "defense": 80,
+  "sightRadius": 3,
+  "moveRange": 2,
+  "attackRange": 1,
+  "turnAmount": 5,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+  ],
+  "civilizationConfigId": 602
+}
