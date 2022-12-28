@@ -15,6 +15,7 @@ public class CivilizationConfig implements Config {
   private String name;
   @NonNull
   private String polishName;
+  private int startingUnit;
 
   @Override
   public String toString() {

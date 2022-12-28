@@ -1,10 +1,10 @@
 {
-  "id": 102,
+  "id": 114,
   "name": "Archer",
   "polishName": "łucznik",
   "modelPath": "basic.g3db",
-  "textureName": "units/archer_viking.png",
-  "iconName": "units/archer_viking_icon.png",
+  "textureName": "units/archer_egypt.png",
+  "iconName": "units/archer_egypt_icon.png",
   "maxHp": 100,
   "attackPower": 60,
   "defense": 25,
@@ -17,5 +17,5 @@
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
   ],
-  "civilizationConfigId": 601
+  "civilizationConfigId": 603
 }

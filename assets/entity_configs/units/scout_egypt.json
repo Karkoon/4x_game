@@ -1,0 +1,21 @@
+{
+  "id": 117,
+  "name": "Scout",
+  "polishName": "Zwiadowca",
+  "modelPath": "basic.g3db",
+  "textureName": "units/scout_egypt.png",
+  "iconName": "units/scout_egypt_icon.png",
+  "maxHp": 50,
+  "attackPower": 50,
+  "defense": 0,
+  "sightRadius": 5,
+  "moveRange": 4,
+  "attackRange": 1,
+  "turnAmount": 1,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+  ],
+  "civilizationConfigId": 603
+}
