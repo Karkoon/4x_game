@@ -21,7 +21,7 @@ public class GameConfigs {
   public static final int MAP_TYPE_MIN = 401;
   public static final int MAP_TYPE_MAX = 404;
   public static final int BUILDING_MIN = 501;
-  public static final int BUILDING_MAX = 502;
+  public static final int BUILDING_MAX = 507;
   public static final int CIV_MIN = 601;
   public static final int CIV_MAX = 603;
 

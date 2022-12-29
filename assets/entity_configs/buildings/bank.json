@@ -1,11 +1,11 @@
 {
-  "id": 501,
-  "name": "house",
-  "polishName": "dom",
+  "id": 506,
+  "name": "Bank",
+  "polishName": "Bank",
   "modelPath": "basic.g3db",
-  "textureName": "buildings/house.png",
-  "iconName": "buildings/house_icon.png",
-  "turnAmount": 100,
+  "textureName": "buildings/bank.png",
+  "iconName": "buildings/bank_icon.png",
+  "turnAmount": 5,
   "materials":
     [
       {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
@@ -17,7 +17,7 @@
       "buildingType":"MATERIALS_BUILDING",
       "buildingImpactValues":
       [
-        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 5}
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "GOLD", "operation": "PLUS", "value": 5}
       ]
     }
 }
