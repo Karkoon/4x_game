@@ -1,0 +1,31 @@
+{
+  "id": 502,
+  "name": "Barracks",
+  "polishName": "Baraki",
+  "modelPath": "basic.g3db",
+  "textureName": "buildings/barracks.png",
+  "iconName": "buildings/barracks_icon.png",
+  "turnAmount": 7,
+  "materials":
+    [
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+    ],
+  "impact":
+    {
+      "class": com.mygdx.game.core.model.BuildingImpact,
+      "buildingType":"RECRUITMENT_BUILDING",
+      "buildingImpactValues":
+      [
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 117},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 111},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 105},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 101},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 113},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 107},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 114},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 108},
+        {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 102}
+      ]
+    }
+}

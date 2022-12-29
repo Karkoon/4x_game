@@ -1,0 +1,25 @@
+{
+  "id": 504,
+  "name": "Tank Factory",
+  "polishName": "Fabryka czołgów",
+  "modelPath": "basic.g3db",
+  "textureName": "buildings/tank_factory.png",
+  "iconName": "buildings/tank_factory_icon.png",
+  "turnAmount": 25,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+  ],
+  "impact":
+  {
+    "class": com.mygdx.game.core.model.BuildingImpact,
+    "buildingType":"RECRUITMENT_BUILDING",
+    "buildingImpactValues":
+    [
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 118},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 112},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 106}
+    ]
+  }
+}

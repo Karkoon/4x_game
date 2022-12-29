@@ -1,0 +1,28 @@
+{
+  "id": 503,
+  "name": "Augmented Soldiers Factory",
+  "polishName": "Cyberludzi Fabryka",
+  "modelPath": "basic.g3db",
+  "textureName": "buildings/enh_factory.png",
+  "iconName": "buildings/enh_factory_icon.png",
+  "turnAmount": 25,
+  "materials":
+  [
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+  ],
+  "impact":
+  {
+    "class": com.mygdx.game.core.model.BuildingImpact,
+    "buildingType":"RECRUITMENT_BUILDING",
+    "buildingImpactValues":
+    [
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 115},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 109},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 103},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 116},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 110},
+      {"class": com.mygdx.game.core.model.BuildingImpactValue, "parameter": "RECRUIT", "operation": "NONE", "value": 104}
+    ]
+  }
+}
