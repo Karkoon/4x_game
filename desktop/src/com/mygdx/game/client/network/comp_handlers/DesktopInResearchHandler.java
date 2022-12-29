@@ -12,8 +12,8 @@ import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-@Log
 @GameInstanceScope
+@Log
 public class DesktopInResearchHandler implements ComponentMessageListener.Handler<InResearch> {
 
   private final TechnologyScreen technologyScreen;

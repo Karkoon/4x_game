@@ -17,16 +17,17 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class TextureCompSetter implements Setter {
 
+  private final GameScreenAssets gameScreenAssets;
+
   private ComponentMapper<TextureComp> textureMapper;
-  private final GameScreenAssets assets;
 
   @Inject
   public TextureCompSetter(
-      World world,
-      GameScreenAssets assets
+      GameScreenAssets gameScreenAssets,
+      World world
   ) {
     world.inject(this);
-    this.assets = assets;
+    this.gameScreenAssets = gameScreenAssets;
   }
 
   @Override
@@ -41,7 +42,7 @@ public class TextureCompSetter implements Setter {
 
   private void setUpTextureComp(@NonNull TextureConfig config, int entityId) {
     var texture = textureMapper.create(entityId);
-    texture.setTexture(assets.getTexture(config.getTextureName()));
+    texture.setTexture(gameScreenAssets.getTexture(config.getTextureName()));
   }
 
 

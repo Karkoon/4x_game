@@ -18,15 +18,16 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class ModelInstanceCompSetter implements Setter {
 
+  private final GameScreenAssets gameScreenAssets;
+
   private ComponentMapper<ModelInstanceComp> modelMapper;
-  private final GameScreenAssets assets;
 
   @Inject
   public ModelInstanceCompSetter(World world,
-      GameScreenAssets assets
+      GameScreenAssets gameScreenAssets
   ) {
     world.inject(this);
-    this.assets = assets;
+    this.gameScreenAssets = gameScreenAssets;
   }
 
   @Override
@@ -46,8 +47,8 @@ public class ModelInstanceCompSetter implements Setter {
   }
 
   private ModelInstance prepareModelInstance(ModelConfig config) {
-    var modelInstance = new ModelInstance(assets.getModel(config.getModelPath()), new Vector3());
-    var texture = assets.getTexture(config.getTextureName());
+    var modelInstance = new ModelInstance(gameScreenAssets.getModel(config.getModelPath()), new Vector3());
+    var texture = gameScreenAssets.getTexture(config.getTextureName());
     ModelInstanceUtil.setTexture(modelInstance, texture);
     return modelInstance;
   }

@@ -21,35 +21,36 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
+@All({Highlighted.class, SubField.class})
 @GameInstanceScope
 @Log
-@All({Highlighted.class, SubField.class})
 public class BuildSystem extends IteratingSystem {
+
+
+  private final BuildingService buildingService;
+  private final CanNotBuildDialogFactory canNotBuildDialogFactory;
+  private final ChosenConfig chosenConfig;
+  private final GameConfigAssets gameConfigAssets;
+  private final Lazy<MaterialUtilClient> materialUtilClient;
 
   @AspectDescriptor(all = {PlayerMaterial.class})
   private EntitySubscription playerMaterialSubscriber;
 
-  private final BuildingService buildingService;
-  private final CanNotBuildDialogFactory buildDialog;
-  private final ChosenConfig chosenConfig;
-  private final GameConfigAssets assets;
-  private final Lazy<MaterialUtilClient> materialUtilClient;
-  private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<Highlighted> highlightedMapper;
 
   @Inject
   public BuildSystem(
-      GameConfigAssets assets,
+      BuildingService buildingService,
       CanNotBuildDialogFactory canNotBuildDialogFactory,
       ChosenConfig chosenConfig,
-      BuildingService buildingService,
+      GameConfigAssets gameConfigAssets,
       Lazy<MaterialUtilClient> materialUtilClient
   ) {
-    this.assets = assets;
-    this.buildDialog = canNotBuildDialogFactory;
-    this.chosenConfig = chosenConfig;
     this.buildingService = buildingService;
+    this.canNotBuildDialogFactory = canNotBuildDialogFactory;
+    this.chosenConfig = chosenConfig;
+    this.gameConfigAssets = gameConfigAssets;
     this.materialUtilClient = materialUtilClient;
   }
 
@@ -58,12 +59,12 @@ public class BuildSystem extends IteratingSystem {
     if (chosenConfig.isAnyChosen() && chosenConfig.peekClass().equals(BuildingConfig.class)) {
       log.info("some are chosen and there's a sub highlighted entity");
       long buildingConfigId = chosenConfig.pop();
-      var config = assets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+      var config = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
       if (materialUtilClient.get().checkIfCanBuy(config.getMaterials(), playerMaterialSubscriber.getEntities())) {
         var targetCoordinate = coordinatesMapper.get(entityId);
         buildingService.createBuilding(buildingConfigId, entityId, targetCoordinate);
       } else {
-        buildDialog.createAndShow("You can't build, not enough materials");
+        canNotBuildDialogFactory.createAndShow("You can't build, not enough materials");
       }
       highlightedMapper.remove(entityId);
     }

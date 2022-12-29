@@ -16,15 +16,16 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class DesktopMaterialHandler implements ComponentMessageListener.Handler<PlayerMaterial> {
 
   private final GameScreenHUD gameScreenHUD;
-  private ComponentMapper<PlayerMaterial> playerplayerMaterialMapper;
+
+  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
 
   @Inject
   public DesktopMaterialHandler(
-      World world,
-      GameScreenHUD gameScreenHUD
+      GameScreenHUD gameScreenHUD,
+      World world
   ) {
-    world.inject(this);
     this.gameScreenHUD = gameScreenHUD;
+    world.inject(this);
   }
 
   @Override

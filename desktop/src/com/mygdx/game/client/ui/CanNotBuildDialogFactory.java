@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 @Log
 @Singleton
 public class CanNotBuildDialogFactory {
+
   private final GameScreenAssets assets;
   private final Stage stage;
 

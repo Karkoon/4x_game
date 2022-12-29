@@ -22,18 +22,20 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 public class FieldOwnerColorHandler implements ComponentMessageListener.Handler<Owner> {
 
   private final OwnerToColorMap colorMap;
-  private final GameScreenAssets assets;
+  private final GameScreenAssets gameScreenAssets;
+
   private ComponentMapper<ModelInstanceComp> modelInstanceMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Owner> ownerMapper;
+
   @Inject
   public FieldOwnerColorHandler(
       World world,
       OwnerToColorMap colorMap,
-      GameScreenAssets assets
+      GameScreenAssets gameScreenAssets
   ) {
     this.colorMap = colorMap;
-    this.assets = assets;
+    this.gameScreenAssets = gameScreenAssets;
     world.inject(this);
   }
 
@@ -50,8 +52,8 @@ public class FieldOwnerColorHandler implements ComponentMessageListener.Handler<
     var owner = ownerMapper.create(entityId);
     var color = colorMap.get(owner);
     log.info("added color" + color.toIntBits() + " owner: " + owner.getToken());
-    var modelInstance = new ModelInstance(assets.getModel(GameScreenAssetPaths.HIGHLIGHT_MODEL));
-    var texture = assets.getTexture(GameScreenAssetPaths.HIGHLIGHT_TEXTURE);
+    var modelInstance = new ModelInstance(gameScreenAssets.getModel(GameScreenAssetPaths.HIGHLIGHT_MODEL));
+    var texture = gameScreenAssets.getTexture(GameScreenAssetPaths.HIGHLIGHT_TEXTURE);
     ModelInstanceUtil.setTexture(modelInstance, texture);
     ModelInstanceUtil.tintColor(modelInstance, color);
     return modelInstance;

@@ -21,22 +21,22 @@ import javax.inject.Inject;
 public class MenuScreen extends ScreenAdapter {
 
   private static final Vector2 PLANET_SIZE = new Vector2(1000, 1000);
-  private final Stage stage;
-  private final MenuScreenAssets assets;
-  private final GdxGame navigator;
-  private final StarBackground starBackground;
+  private final GdxGame gdxGame;
+  private final MenuScreenAssets menuScreenAssets;
   private Planet planet;
+  private final Stage stage;
+  private final StarBackground starBackground;
 
   @Inject
   public MenuScreen(
+      GdxGame gdxGame,
+      MenuScreenAssets menuScreenAssets,
       Stage stage,
-      MenuScreenAssets assets,
-      GdxGame navigator,
       StarBackground starBackground
   ) {
+    this.gdxGame = gdxGame;
+    this.menuScreenAssets = menuScreenAssets;
     this.stage = stage;
-    this.assets = assets;
-    this.navigator = navigator;
     this.starBackground = starBackground;
 
     Gdx.input.setInputProcessor(stage);
@@ -47,13 +47,13 @@ public class MenuScreen extends ScreenAdapter {
     stage.clear();
     prepareSceleton();
     Gdx.input.setInputProcessor(stage);
-    planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+    planet = new Planet(menuScreenAssets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
   }
 
   private void prepareSceleton() {
     stage.clear();
     var mainMenu = createMenu();
-    planet = new Planet(assets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
+    planet = new Planet(menuScreenAssets, PLANET_SIZE, Vector3Util.toVector2(stage.getCamera().position));
     stage.addActor(mainMenu);
   }
 
@@ -80,19 +80,19 @@ public class MenuScreen extends ScreenAdapter {
   }
 
   private Button createStartButton() {
-    return createFunctionalButton(navigator::changeToGameRoomListScreen, "START");
+    return createFunctionalButton(gdxGame::changeToGameRoomListScreen, "START");
   }
 
   private Button createAboutButton() {
-    return createFunctionalButton(navigator::changeToAboutScreen, "ABOUT");
+    return createFunctionalButton(gdxGame::changeToAboutScreen, "ABOUT");
   }
 
   private Button createExitButton() {
-    return createFunctionalButton(navigator::exit, "EXIT");
+    return createFunctionalButton(gdxGame::exit, "EXIT");
   }
 
   private Button createFunctionalButton(final Runnable runnable, String text) {
-    var button = new TextButton(text, assets.getSkin(MenuScreenAssetPaths.SKIN));
+    var button = new TextButton(text, menuScreenAssets.getSkin(MenuScreenAssetPaths.SKIN));
     button.getLabel().setFontScale(1.5f);
     button.addListener(new ClickListener() {
       @Override

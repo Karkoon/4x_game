@@ -22,8 +22,8 @@ import static com.mygdx.game.client_core.di.gameinstance.GameInstanceNetworkModu
 public class PlayerTurnDialogFactory {
 
   private final GameScreenAssets assets;
-  private final Stage stage;
   private final PlayerInfo playerInfo;
+  private final Stage stage;
   private final QueueMessageListener listener;
 
   @Inject

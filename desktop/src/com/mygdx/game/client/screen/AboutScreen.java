@@ -20,8 +20,9 @@ public class AboutScreen extends ScreenAdapter {
 
   private final GdxGame game;
   private final Stage stage;
-  private final UiElementsCreator uiElementsCreator;
   private final StarBackground starBackground;
+  private final UiElementsCreator uiElementsCreator;
+
   private Window authorsWindow;
 
 
@@ -29,13 +30,13 @@ public class AboutScreen extends ScreenAdapter {
   public AboutScreen(
       GdxGame game,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      UiElementsCreator uiElementsCreator,
-      StarBackground starBackground
+      StarBackground starBackground,
+      UiElementsCreator uiElementsCreator
   ) {
     this.game = game;
     this.stage = stage;
-    this.uiElementsCreator = uiElementsCreator;
     this.starBackground = starBackground;
+    this.uiElementsCreator = uiElementsCreator;
   }
 
   @Override

@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 @Log
 @Singleton
 public class CanNotResearchTechnologyDialogFactory {
+
   private final GameScreenAssets assets;
 
   @Inject

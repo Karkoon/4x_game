@@ -24,12 +24,13 @@ import javax.inject.Singleton;
 @Singleton
 public class LoadingScreen extends ScreenAdapter {
 
+  private final AssetManager assetManager;
+  private final GameConfigAssets gameConfigAssets;
+  private final GameScreenAssets gameScreenAssets;
+  private final GdxGame gdxGame;
   private final LoadingScreenAssets loadingScreenAssets;
   private final MenuScreenAssets menuScreenAssets;
-  private final GdxGame navigator;
-  private final GameScreenAssets gameScreenAssets;
-  private final GameConfigAssets gameConfigAssets;
-  private final AssetManager manager;
+
   private Stage stage;
   private Image logo;
   private Image loadingFrame;
@@ -43,19 +44,19 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Inject
   public LoadingScreen(
-      GdxGame navigator,
+      AssetManager assetManager,
       GameScreenAssets gameScreenAssets,
-      LoadingScreenAssets loadingScreenAssets,
-      MenuScreenAssets menuScreenAssets,
       GameConfigAssets gameConfigAssets,
-      AssetManager manager
+      GdxGame gdxGame,
+      MenuScreenAssets menuScreenAssets,
+      LoadingScreenAssets loadingScreenAssets
   ) {
-    this.navigator = navigator;
+    this.assetManager = assetManager;
+    this.gameConfigAssets = gameConfigAssets;
     this.gameScreenAssets = gameScreenAssets;
+    this.gdxGame = gdxGame;
     this.loadingScreenAssets = loadingScreenAssets;
     this.menuScreenAssets = menuScreenAssets;
-    this.gameConfigAssets = gameConfigAssets;
-    this.manager = manager;
   }
 
   @Override
@@ -81,8 +82,8 @@ public class LoadingScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    if (manager.update()) {
-      navigator.changeToMenuScreen();
+    if (assetManager.update()) {
+      gdxGame.changeToMenuScreen();
     }
     updateLoadingBar();
     stage.act();
@@ -90,7 +91,7 @@ public class LoadingScreen extends ScreenAdapter {
   }
 
   private void updateLoadingBar() {
-    displayedPercent = Interpolation.linear.apply(displayedPercent, manager.getProgress(), 0.1f);
+    displayedPercent = Interpolation.linear.apply(displayedPercent, assetManager.getProgress(), 0.1f);
     loadingBarHidden.setX(startX + endX * displayedPercent);
     loadingBg.setX(loadingBarHidden.getX() + 30);
     loadingBg.setWidth(450 - 450 * displayedPercent);

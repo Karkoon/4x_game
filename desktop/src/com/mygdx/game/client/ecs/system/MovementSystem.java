@@ -21,20 +21,21 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({Highlighted.class, Movable.class})
 @GameInstanceScope
+@Log
 public class MovementSystem extends IteratingSystem {
 
   private final ChosenEntity chosenEntity;
   private final MoveEntityService moveEntityService;
-  private final WarningDialogFactory warningDialog;
-  private ComponentMapper<Highlighted> highlightedMapper;
-  private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<Owner> ownerComponentMapper;
   private final PlayerInfo playerInfo;
+  private final WarningDialogFactory warningDialog;
+
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Field> fieldMapper;
+  private ComponentMapper<Highlighted> highlightedMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
+  private ComponentMapper<Stats> statsMapper;
 
   @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription units;
@@ -43,13 +44,13 @@ public class MovementSystem extends IteratingSystem {
   public MovementSystem(
       ChosenEntity chosenEntity,
       MoveEntityService moveEntityService,
-      WarningDialogFactory warningDialog,
-      PlayerInfo playerInfo
+      PlayerInfo playerInfo,
+      WarningDialogFactory warningDialog
   ) {
     this.chosenEntity = chosenEntity;
     this.moveEntityService = moveEntityService;
-    this.warningDialog = warningDialog;
     this.playerInfo = playerInfo;
+    this.warningDialog = warningDialog;
   }
 
   @Override

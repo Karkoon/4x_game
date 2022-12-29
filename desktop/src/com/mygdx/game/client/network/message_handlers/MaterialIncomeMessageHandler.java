@@ -15,20 +15,20 @@ import java.util.Map;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-@Log
 @GameInstanceScope
+@Log
 public class MaterialIncomeMessageHandler implements QueueMessageListener.Handler<MaterialIncomeMessage>  {
 
-  private final PredictedIncome predictedIncome;
   private final GameScreenHUD gameScreenHUD;
+  private final PredictedIncome predictedIncome;
 
   @Inject
   public MaterialIncomeMessageHandler(
-      PredictedIncome predictedIncome,
-      GameScreenHUD gameScreenHUD
+      GameScreenHUD gameScreenHUD,
+      PredictedIncome predictedIncome
   ) {
-    this.predictedIncome = predictedIncome;
     this.gameScreenHUD = gameScreenHUD;
+    this.predictedIncome = predictedIncome;
   }
 
   @Override

@@ -40,78 +40,77 @@ import org.lwjgl.glfw.GLFW;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Log
 @GameInstanceScope
+@Log
 public class GameScreen extends ScreenAdapter implements Navigator {
 
   private final ActiveToken activeToken;
-  private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
-
-  private final World world;
-  private final Viewport viewport;
-  private final ModelInstanceRenderer renderer;
-
-  private final Stage stage;
-  private final GameScreenHUD gameScreenHUD;
+  private final CameraMoverInputProcessor cameraInputProcessor;
   private final ClickInputAdapter clickInputAdapter;
-  private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
-  private final PlayerTurnDialogFactory playerTurnDialogFactory;
-  private final WinAnnouncementDialogFactory winAnnouncementDialogFactory;
-  private final PlayerInfo playerInfo;
-  private final GdxGame game;
+  private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
   private final Lazy<FieldScreen> fieldScreen;
-  private final Lazy<TechnologyScreen> technologyScreen;
-  private final QueueMessageListener queueMessageListener;
+  private final GameScreenHUD gameScreenHUD;
+  private final GameScreenUiInputAdapter gameScreenUiInputAdapter;
+  private final GdxGame game;
   private final GameInterruptedService gameInterruptedService;
+  private final ModelInstanceRenderer modelInstanceRenderer;
+  private final PlayerInfo playerInfo;
+  private final PlayerTurnDialogFactory playerTurnDialogFactory;
+  private final Stage stage;
   private final StarBackground starBackground;
+  private final Lazy<TechnologyScreen> technologyScreen;
+  private final Viewport viewport;
+  private final QueueMessageListener queueMessageListener;
+  private final WinAnnouncementDialogFactory winAnnouncementDialogFactory;
+  private final World world;
 
   private boolean initialized = false;
 
   @AspectDescriptor(all = {Movable.class, Owner.class, Coordinates.class})
   private EntitySubscription unitsWithOwner;
-  private ComponentMapper<Owner> ownerMapper;
+
   private ComponentMapper<Coordinates> coordinatesMapper;
-  private final CameraMoverInputProcessor cameraInputProcessor;
+  private ComponentMapper<Owner> ownerMapper;
 
   @Inject
   public GameScreen(
-      ModelInstanceRenderer renderer,
-      World world,
-      Viewport viewport,
-      @Named(StageModule.GAME_SCREEN) Stage stage,
-      GameScreenHUD gameScreenHUD,
-      ClickInputAdapter clickInputAdapter,
-      GameScreenUiInputAdapter gameScreenUiInputAdapter,
-      PlayerTurnDialogFactory playerTurnDialogFactory,
-      WinAnnouncementDialogFactory winAnnouncementDialogFactory,
-      PlayerInfo playerInfo,
       ActiveToken activeToken,
+      ClickInputAdapter clickInputAdapter,
+      GameScreenHUD gameScreenHUD,
+      GameInterruptedService gameInterruptedService,
+      GameScreenUiInputAdapter gameScreenUiInputAdapter,
       GdxGame game,
       Lazy<FieldScreen> fieldScreen,
+      ModelInstanceRenderer modelInstanceRenderer,
+      PlayerInfo playerInfo,
+      PlayerTurnDialogFactory playerTurnDialogFactory,
+      @Named(StageModule.GAME_SCREEN) Stage stage,
+      StarBackground starBackground,
       Lazy<TechnologyScreen> technologyScreen,
       @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
-      GameInterruptedService gameInterruptedService,
-      StarBackground starBackground
-  ) {
-    this.renderer = renderer;
-    this.world = world;
-    this.viewport = viewport;
-    this.stage = stage;
+      Viewport viewport,
+      WinAnnouncementDialogFactory winAnnouncementDialogFactory,
+      World world
+      ) {
+    this.activeToken = activeToken;
+    this.cameraInputProcessor = new CameraMoverInputProcessor(viewport);
+    this.clickInputAdapter = clickInputAdapter;
+    this.fieldScreen = fieldScreen;
     this.gameScreenHUD = gameScreenHUD;
     this.gameScreenUiInputAdapter = gameScreenUiInputAdapter;
-    this.clickInputAdapter = clickInputAdapter;
-    this.playerTurnDialogFactory = playerTurnDialogFactory;
-    this.winAnnouncementDialogFactory = winAnnouncementDialogFactory;
-    this.playerInfo = playerInfo;
-    this.activeToken = activeToken;
     this.game = game;
-    this.fieldScreen = fieldScreen;
+    this.gameInterruptedService = gameInterruptedService;
+    this.modelInstanceRenderer = modelInstanceRenderer;
+    this.playerInfo = playerInfo;
+    this.playerTurnDialogFactory = playerTurnDialogFactory;
+    this.stage = stage;
+    this.starBackground = starBackground;
     this.technologyScreen = technologyScreen;
     this.queueMessageListener = queueMessageListener;
-    this.gameInterruptedService = gameInterruptedService;
+    this.viewport = viewport;
+    this.winAnnouncementDialogFactory = winAnnouncementDialogFactory;
+    this.world = world;
     this.world.inject(this);
-    this.starBackground = starBackground;
-    this.cameraInputProcessor = new CameraMoverInputProcessor(viewport);
   }
 
   @Override
@@ -164,7 +163,7 @@ public class GameScreen extends ScreenAdapter implements Navigator {
 
   @Override
   public void dispose() {
-    renderer.dispose();
+    modelInstanceRenderer.dispose();
   }
 
   @Override

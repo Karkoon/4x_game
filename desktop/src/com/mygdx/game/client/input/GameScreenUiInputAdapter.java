@@ -15,19 +15,19 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class GameScreenUiInputAdapter extends InputAdapter {
 
-  private final Lazy<Navigator> navigator;
   private final EndTurnService endTurnService;
   private final GameScreenHUD gameScreenHUD;
+  private final Lazy<Navigator> navigator;
 
   @Inject
   public GameScreenUiInputAdapter(
-      Lazy<Navigator> navigator,
       EndTurnService endTurnService,
-      GameScreenHUD gameScreenHUD
+      GameScreenHUD gameScreenHUD,
+      Lazy<Navigator> navigator
   ) {
-    this.navigator = navigator;
     this.endTurnService = endTurnService;
     this.gameScreenHUD = gameScreenHUD;
+    this.navigator = navigator;
   }
 
   @Override

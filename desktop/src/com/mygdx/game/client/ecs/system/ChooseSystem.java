@@ -20,15 +20,15 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({Choosable.class, Position.class, Name.class})
 @GameInstanceScope
+@Log
 public class ChooseSystem extends IteratingSystem {
 
-  private final ClickInput clickInput;
-  private final Lazy<ChooseEntityDialogFactory> dialogFactory;
-  private final ChosenEntity chosenEntities;
   private final ClickedEntities clickedEntities;
+  private final ClickInput clickInput;
+  private final ChosenEntity chosenEntity;
+  private final Lazy<ChooseEntityDialogFactory> chooseEntityDialogFactory;
   private final Lazy<GameScreenHUD> worldHUD;
 
   private ComponentMapper<Position> positionMapper;
@@ -36,14 +36,14 @@ public class ChooseSystem extends IteratingSystem {
   @Inject
   public ChooseSystem(
       ClickInput clickInput,
-      Lazy<ChooseEntityDialogFactory> dialogFactory,
       ChosenEntity chosenEntity,
+      Lazy<ChooseEntityDialogFactory> chooseEntityDialogFactory,
       Lazy<GameScreenHUD> worldHUD
   ) {
-    this.clickInput = clickInput;
-    this.dialogFactory = dialogFactory;
-    this.chosenEntities = chosenEntity;
     this.clickedEntities = new ClickedEntities();
+    this.clickInput = clickInput;
+    this.chosenEntity = chosenEntity;
+    this.chooseEntityDialogFactory = chooseEntityDialogFactory;
     this.worldHUD = worldHUD;
   }
 
@@ -64,7 +64,7 @@ public class ChooseSystem extends IteratingSystem {
     if (clickedEntities.moreThanOneClicked()) {
       showChooseEntityDialog();
     } else if (clickedEntities.areAnyClicked()) {
-      chosenEntities.addChosen(clickedEntities.getClickedEntity());
+      chosenEntity.addChosen(clickedEntities.getClickedEntity());
       worldHUD.get().prepareHudSceleton();
     }
     clickInput.setHandled(true);
@@ -72,11 +72,11 @@ public class ChooseSystem extends IteratingSystem {
 
   private void showChooseEntityDialog() {
     var allClicked = clickedEntities.getAllClicked();
-    dialogFactory.get().createAndShow(allClicked, this::refresh);
+    chooseEntityDialogFactory.get().createAndShow(allClicked, this::refresh);
   }
 
   private void refresh(int entityId) {
-    chosenEntities.addChosen(entityId);
+    chosenEntity.addChosen(entityId);
     worldHUD.get().prepareHudSceleton();
   }
 

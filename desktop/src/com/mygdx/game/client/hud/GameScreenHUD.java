@@ -25,7 +25,6 @@ import com.mygdx.game.client_core.util.MaterialUtilClient;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Name;
 import com.mygdx.game.core.ecs.component.Owner;
-import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.model.MaterialBase;
 import dagger.Lazy;
@@ -42,13 +41,13 @@ public class GameScreenHUD implements Disposable {
   private final EndTurnService endTurnService;
   private final GameScreenAssets gameAssets;
   private final MaterialUtilClient materialUtilClient;
+  private final Lazy<Navigator> navigator;
+  private final NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory;
   private final PlayerInfo playerInfo;
   private final PredictedIncome predictedIncome;
   private final Stage stage;
   private final UiElementsCreator uiElementsCreator;
   private final Viewport viewport;
-  private final NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory;
-  private final Lazy<Navigator> navigator;
 
   private Button endTurnButton;
   private Button nextUnitButton;
@@ -61,12 +60,11 @@ public class GameScreenHUD implements Disposable {
   private EntitySubscription playerUnitsSubscriptions;
 
   private ComponentMapper<CanAttack> canAttackMapper;
-  private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<Movable> movableMapper;
   private ComponentMapper<Name> nameMapper;
-  private ComponentMapper<PlayerMaterial> playerMaterialMapper;
+  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<Movable> movableMapper;
 
   @Inject
   public GameScreenHUD(
@@ -74,14 +72,14 @@ public class GameScreenHUD implements Disposable {
       EndTurnService endTurnService,
       GameScreenAssets gameScreenAssets,
       MaterialUtilClient materialUtilClient,
+      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory,
+      Lazy<Navigator> navigator,
       PlayerInfo playerInfo,
       PredictedIncome predictedIncome,
       @Named(StageModule.GAME_SCREEN) Stage stage,
       UiElementsCreator uiElementsCreator,
-      World world,
       Viewport viewport,
-      NoUnitWithMoveRangeFactory noUnitWithMoveRangeFactory,
-      Lazy<Navigator> navigator
+      World world
   ) {
     world.inject(this);
 
@@ -89,13 +87,13 @@ public class GameScreenHUD implements Disposable {
     this.endTurnService = endTurnService;
     this.gameAssets = gameScreenAssets;
     this.materialUtilClient = materialUtilClient;
+    this.navigator = navigator;
+    this.noUnitWithMoveRangeFactory = noUnitWithMoveRangeFactory;
     this.playerInfo = playerInfo;
     this.predictedIncome = predictedIncome;
     this.stage = stage;
     this.uiElementsCreator = uiElementsCreator;
     this.viewport = viewport;
-    this.noUnitWithMoveRangeFactory = noUnitWithMoveRangeFactory;
-    this.navigator = navigator;
     prepareHudSceleton();
   }
 
