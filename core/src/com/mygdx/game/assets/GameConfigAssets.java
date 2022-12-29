@@ -25,9 +25,9 @@ import java.util.List;
 @Singleton
 public class GameConfigAssets {
 
+  private final AssetManager assetManager;
   @NonNull
   private final GameConfigs gameConfigs;
-  private final AssetManager assetManager;
 
   private final List<Class<? extends Config>> configClasses =
     List.of(

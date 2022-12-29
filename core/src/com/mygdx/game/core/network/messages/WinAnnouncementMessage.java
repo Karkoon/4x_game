@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class WinAnnouncementMessage {
   private String winnerToken;
   private String winnerName;

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
 public class PlayerJoinedRoomMessage {
 

@@ -139,7 +139,7 @@ public class GameScreen extends ScreenAdapter {
         return FULLY_HANDLED;
       }));
 
-      queueMessageListener.registerHandler(BuildingBuildedMessage.class, ((webSocket, message) -> {
+      queueMessageListener.registerHandler(BuildingConstructedMessage.class, ((webSocket, message) -> {
         buildBuildings();
         return FULLY_HANDLED;
       }));

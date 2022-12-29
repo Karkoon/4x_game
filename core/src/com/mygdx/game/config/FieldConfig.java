@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+@AllArgsConstructor
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class FieldConfig implements Config, ModelConfig {
 
   private long id;
