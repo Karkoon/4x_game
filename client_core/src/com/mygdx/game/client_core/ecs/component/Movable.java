@@ -6,6 +6,5 @@ public class Movable extends PooledComponent {
 
   @Override
   protected void reset() {
-
   }
 }

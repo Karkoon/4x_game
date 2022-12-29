@@ -17,14 +17,14 @@ import javax.inject.Inject;
 @Log
 public class FieldFactory {
 
+  private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
   private ComponentMapper<Score> scoreMapper;
-  private ComponentMapper<Field> fieldMapper;
 
   @Inject
   public FieldFactory(
-      @NonNull World world
+      World world
   ) {
     world.inject(this);
   }

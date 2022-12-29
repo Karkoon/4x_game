@@ -18,8 +18,8 @@ public class PlayerInfo {
 
   @Inject
   public PlayerInfo() {
-    token = UUID.randomUUID().toString();
-    civilization = new Random().nextLong(GameConfigs.CIV_MAX+ 1 - GameConfigs.CIV_MIN) + GameConfigs.CIV_MIN;
+    this.token = UUID.randomUUID().toString();
+    this.civilization = new Random().nextLong(GameConfigs.CIV_MAX+ 1 - GameConfigs.CIV_MIN) + GameConfigs.CIV_MIN;
   }
 
   public void setUserName(String userName) {

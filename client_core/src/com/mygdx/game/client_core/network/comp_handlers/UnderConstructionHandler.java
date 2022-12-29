@@ -18,8 +18,9 @@ public class UnderConstructionHandler implements ComponentMessageListener.Handle
 
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
-  private ComponentMapper<UnderConstruction> underConstructionMapper;
+
   private ComponentMapper<Position> positionMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
 
   @Inject
   public UnderConstructionHandler(

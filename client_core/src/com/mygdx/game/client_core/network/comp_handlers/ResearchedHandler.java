@@ -13,12 +13,12 @@ import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-@Log
 @GameInstanceScope
+@Log
 public class ResearchedHandler implements ComponentMessageListener.Handler<Researched> {
 
-  private ComponentMapper<Researched> reserchedMapper;
   private ComponentMapper<InResearch> inResearchMapper;
+  private ComponentMapper<Researched> researchedMapper;
 
   @Inject
   public ResearchedHandler(
@@ -31,7 +31,7 @@ public class ResearchedHandler implements ComponentMessageListener.Handler<Resea
   public boolean handle(WebSocket webSocket, int worldEntity, Researched component) {
     log.info("Read researched handler");
     inResearchMapper.remove(worldEntity);
-    reserchedMapper.create(worldEntity);
+    researchedMapper.create(worldEntity);
     return FULLY_HANDLED;
   }
 }

@@ -22,7 +22,7 @@ public class SubFieldFactory {
 
   @Inject
   public SubFieldFactory(
-      @NonNull World world
+      World world
   ) {
     world.inject(this);
   }

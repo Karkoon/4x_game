@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 @Module
 public class MainSchedulerModule {
+
   @Singleton
   @Provides
   @Named(CoreNames.MAIN_THREAD)

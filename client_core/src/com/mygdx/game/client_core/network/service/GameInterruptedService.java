@@ -8,17 +8,17 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class GameInterruptedService {
 
-  private final MessageSender sender;
+  private final MessageSender messageSender;
 
   @Inject
   public GameInterruptedService(
-      MessageSender sender
+      MessageSender messageSender
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
   }
 
   public void sendInterruptNotification() {
-    sender.send("interrupt");
+    messageSender.send("interrupt");
   }
 
 }

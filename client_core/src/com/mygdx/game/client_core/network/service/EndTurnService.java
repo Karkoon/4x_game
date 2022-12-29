@@ -7,21 +7,21 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class EndTurnService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
 
   @Inject
   public EndTurnService(
-      Lazy<MessageSender> sender
+      Lazy<MessageSender> messageSender
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
   }
 
   public void endTurn() {
     log.info("end turn request send");
-    sender.get().send("end_turn");
+    messageSender.get().send("end_turn");
   }
 }

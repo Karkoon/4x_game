@@ -8,8 +8,9 @@ import javax.inject.Inject;
 import java.util.EnumMap;
 import java.util.Map;
 
-@GameInstanceScope
 @Data
+
+@GameInstanceScope
 public class PredictedIncome {
 
   private Map<MaterialBase, Integer> incomes;

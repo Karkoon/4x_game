@@ -8,8 +8,8 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@GameInstanceScope
 @Log
+@GameInstanceScope
 public class NetworkWorldEntityMapper {
 
   private final IntIntMap networkToWorldEntity = new IntIntMap();

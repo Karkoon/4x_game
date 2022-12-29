@@ -12,21 +12,21 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class ShowSubfieldService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public ShowSubfieldService(
-      Lazy<MessageSender> sender,
+      Lazy<MessageSender> messageSender,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public void flipSubscriptionState(int fieldId) {
     log.info("Show subfields from client to server");
     fieldId = networkWorldEntityMapper.getNetworkEntity(fieldId);
-    sender.get().send("field:" + fieldId);
+    messageSender.get().send("field:" + fieldId);
   }
 }

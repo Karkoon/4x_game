@@ -12,20 +12,21 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class RemoveEntityMessageHandler implements QueueMessageListener.Handler<RemoveEntityMessage> {
 
   private final NetworkWorldEntityMapper mapper;
+
   private ComponentMapper<ToRemove> toRemoveComponentMapper;
 
   @Inject
   public RemoveEntityMessageHandler(
-      World world,
-      NetworkWorldEntityMapper mapper
+      NetworkWorldEntityMapper mapper,
+      World world
   ) {
-    world.inject(this);
     this.mapper = mapper;
+    world.inject(this);
   }
 
   @Override

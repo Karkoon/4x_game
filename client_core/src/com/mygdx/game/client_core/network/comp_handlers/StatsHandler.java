@@ -6,12 +6,14 @@ import com.github.czyzby.websocket.WebSocket;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.network.ComponentMessageListener;
 import com.mygdx.game.core.ecs.component.Stats;
+import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
 @GameInstanceScope
+@Log
 public class StatsHandler implements ComponentMessageListener.Handler<Stats> {
 
   private ComponentMapper<Stats> statsComponentMapper;
@@ -25,6 +27,7 @@ public class StatsHandler implements ComponentMessageListener.Handler<Stats> {
 
   @Override
   public boolean handle(WebSocket webSocket, int worldEntity, Stats component) {
+    log.info("Read stats component");
     statsComponentMapper.create(worldEntity).set(component);
     return FULLY_HANDLED;
   }

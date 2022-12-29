@@ -6,10 +6,11 @@ import lombok.Setter;
 
 import javax.inject.Inject;
 
+@GameInstanceScope
 @Getter
 @Setter
-@GameInstanceScope
 public class PlayerScore {
+
   private int scoreValue = 0;
 
   @Inject
