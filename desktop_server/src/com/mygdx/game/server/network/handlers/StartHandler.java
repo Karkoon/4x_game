@@ -11,13 +11,13 @@ import javax.inject.Inject;
 @Log
 public class StartHandler {
 
-  private final MessageSender sender;
+  private final MessageSender messageSender;
 
   @Inject
   public StartHandler(
-      MessageSender sender
+      MessageSender messageSender
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
   }
 
   public void handle(String[] commands, Client client) {
@@ -25,7 +25,7 @@ public class StartHandler {
       var room = client.getGameRoom();
       var msg = new GameStartedMessage(room.getClients().get(0).getPlayerToken());
       log.info("GameStartedMessage: " + msg + " room " + room.getClients().toString());
-      sender.sendToAll(msg, room.getClients());
+      messageSender.sendToAll(msg, room.getClients());
       room.setupGameInstance();
       room.getGameInstance().startGame();
     });

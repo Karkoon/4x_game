@@ -15,25 +15,25 @@ import java.util.stream.Collectors;
 
 public class ConnectHandler {
 
-  private final MessageSender sender;
-  private final GameRoomManager rooms;
+  private final MessageSender messageSender;
+  private final GameRoomManager gameRoomManager;
 
   @Inject
   public ConnectHandler(
-      MessageSender sender,
-      GameRoomManager rooms
+      GameRoomManager gameRoomManager,
+      MessageSender messageSender
   ) {
-    this.sender = sender;
-    this.rooms = rooms;
+    this.gameRoomManager = gameRoomManager;
+    this.messageSender = messageSender;
   }
 
   public void handle(String[] commands, Client client) {
     var userName = commands[1];
     var userToken = commands[2];
     var roomId = commands[3];
-    if (rooms.getRoom(roomId).getClients().stream().map(Client::getPlayerUsername).anyMatch(name -> name.equals(userName))) {
+    if (gameRoomManager.getRoom(roomId).getClients().stream().map(Client::getPlayerUsername).anyMatch(name -> name.equals(userName))) {
       var msg = new PlayerAlreadyInTheRoomMessage();
-      sender.send(msg, client);
+      messageSender.send(msg, client);
     } else {
       long civId = Long.parseLong(commands[4]);
       var playerType = commands[5];
@@ -41,16 +41,16 @@ public class ConnectHandler {
       client.setPlayerToken(userToken);
       client.setCivId(civId);
       client.setBotType(BotType.valueOf(playerType));
-      var room = rooms.getRoom(roomId);
+      var room = gameRoomManager.getRoom(roomId);
       room.addClient(client);
       client.setGameRoom(room);
       List<PlayerLobby> users = room.getClients()
               .stream()
               .map(Client::mapToPlayerLobby).collect(Collectors.toList());
       var msg = new PlayerJoinedRoomMessage(users);
-      sender.sendToAll(msg, room.getClients());
+      messageSender.sendToAll(msg, room.getClients());
       var msg2 = new RoomConfigMessage(room.getMapSize(), room.getMapType());
-      sender.send(msg2, client);
+      messageSender.send(msg2, client);
     }
   }
 }

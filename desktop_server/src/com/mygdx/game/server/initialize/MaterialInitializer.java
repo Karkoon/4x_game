@@ -11,16 +11,16 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class MaterialInitializer {
 
-  private final MaterialFactory materialFactory;
   private final GameRoom gameRoom;
+  private final MaterialFactory materialFactory;
 
   @Inject
   public MaterialInitializer(
-      MaterialFactory materialFactory,
-      GameRoom gameRoom
+      GameRoom gameRoom,
+      MaterialFactory materialFactory
   ) {
-    this.materialFactory = materialFactory;
     this.gameRoom = gameRoom;
+    this.materialFactory = materialFactory;
   }
 
   public void initializeMaterials() {

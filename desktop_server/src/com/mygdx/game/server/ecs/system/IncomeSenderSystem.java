@@ -12,8 +12,8 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import java.util.HashMap;
 
-@Log
 @GameInstanceScope
+@Log
 public class IncomeSenderSystem extends BaseSystem {
 
   private final GameRoom gameRoom;

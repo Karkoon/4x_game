@@ -21,18 +21,19 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Log
 @All({Owner.class})
-@One({Unit.class, Field.class})
 @GameInstanceScope
+@Log
+@One({Unit.class, Field.class})
 public class LoseCheckSystem extends IteratingSystem {
 
   private final WinAnnouncementService announcementService;
+  private Set<String> currentPlayers;
   private final Lazy<GameInstance> gameInstance;
   private final GameRoom gameRoom;
-  private Set<String> currentPlayers;
-  private ComponentMapper<Owner> ownerComponentMapper;
+
   private ComponentMapper<Name> nameMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
 
   @Inject
   public LoseCheckSystem(

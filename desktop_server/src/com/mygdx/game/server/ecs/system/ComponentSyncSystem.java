@@ -18,14 +18,14 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({ChangeSubscribers.class, SharedComponents.class, FriendlyOrFoe.class})
+@Log
 @GameInstanceScope
 public class ComponentSyncSystem extends IteratingSystem {
 
-  private final StateSyncer stateSyncer;
-  private final Lazy<RemoveClientEntityService> removeClientEntityService;
   private final GameRoom gameRoom;
+  private final Lazy<RemoveClientEntityService> removeClientEntityService;
+  private final StateSyncer stateSyncer;
 
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<DirtyComponents> dirtyComponentsMapper;
@@ -35,13 +35,13 @@ public class ComponentSyncSystem extends IteratingSystem {
 
   @Inject
   public ComponentSyncSystem(
-      StateSyncer stateSyncer,
+      GameRoom gameRoom,
       Lazy<RemoveClientEntityService> removeClientEntityService,
-      GameRoom gameRoom
-  ) {
-    this.stateSyncer = stateSyncer;
-    this.removeClientEntityService = removeClientEntityService;
+      StateSyncer stateSyncer
+      ) {
     this.gameRoom = gameRoom;
+    this.removeClientEntityService = removeClientEntityService;
+    this.stateSyncer = stateSyncer;
   }
 
   @Override

@@ -9,24 +9,25 @@ import javax.inject.Inject;
 
 @GameInstanceScope
 public class WinAnnouncementService {
-  private final MessageSender sender;
-  private final GameRoom room;
+
+  private final GameRoom gameRoom;
+  private final MessageSender messageSender;
 
   @Inject
   WinAnnouncementService(
-      MessageSender sender,
-      GameRoom room
-  ) {
+      GameRoom gameRoom,
+      MessageSender messageSender
+      ) {
     super();
-    this.sender = sender;
-    this.room = room;
+    this.gameRoom = gameRoom;
+    this.messageSender = messageSender;
   }
 
   public void notifyOfWinner(String winnerToken) {
-    var winnerName = room.getClientByToken(winnerToken).getPlayerUsername();
+    var winnerName = gameRoom.getClientByToken(winnerToken).getPlayerUsername();
     var msg = new WinAnnouncementMessage(winnerToken, winnerName);
-    room.tearDownGameInstance();
-    sender.sendToAll(msg, room.getClients());
+    gameRoom.tearDownGameInstance();
+    messageSender.sendToAll(msg, gameRoom.getClients());
   }
 
 

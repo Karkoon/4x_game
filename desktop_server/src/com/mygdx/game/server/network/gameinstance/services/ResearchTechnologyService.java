@@ -30,16 +30,15 @@ public class ResearchTechnologyService extends WorldService {
   private final MessageSender messageSender;
   private World world;
 
+  @AspectDescriptor(all = {Owner.class, InResearch.class})
+  private EntitySubscription ownerInResearchSubscriber;
+  @AspectDescriptor(all = {Owner.class, Researched.class})
+  private EntitySubscription ownerResearchedSubscriber;
+
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
   private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Researched> researchedMapper;
-
-  @AspectDescriptor(all = {Owner.class, InResearch.class})
-  private EntitySubscription ownerInResearchSubscriber;
-
-  @AspectDescriptor(all = {Owner.class, Researched.class})
-  private EntitySubscription ownerResearchedSubscriber;
 
   @Inject
   public ResearchTechnologyService(

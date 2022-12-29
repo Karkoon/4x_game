@@ -24,9 +24,10 @@ import javax.inject.Inject;
 @Log
 public class VisibilitySystem extends IteratingSystem {
 
+  private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
+
   @AspectDescriptor(all = {Coordinates.class, ChangeSubscribers.class}, exclude = { SubField.class, Building.class, UnderConstruction.class})
   private EntitySubscription allThatCanBePerceived;
-  private final IntMap<Bits> entityToNewChangeSubscribers = new IntMap<>();
 
   private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;

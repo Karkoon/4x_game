@@ -9,31 +9,31 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class EndTurnService {
 
-  private final MessageSender sender;
-  private final GameRoom room;
+  private final MessageSender messageSender;
+  private final GameRoom gameRoom;
   private final GameInstance gameInstance;
 
   @Inject
   EndTurnService(
-      MessageSender sender,
-      GameRoom room,
-      GameInstance gameInstance
-  ) {
+      GameRoom gameRoom,
+      GameInstance gameInstance,
+      MessageSender messageSender
+      ) {
     super();
-    this.sender = sender;
-    this.room = room;
+    this.gameRoom = gameRoom;
     this.gameInstance = gameInstance;
+    this.messageSender = messageSender;
   }
 
   public void nextTurn() {
     var nextClient = gameInstance.changeToNextPlayer();
     log.info("Give control to player " + nextClient.getPlayerUsername());
     var msg = new ChangeTurnMessage(nextClient.getPlayerToken());
-    sender.sendToAll(msg, room.getClients());
+    messageSender.sendToAll(msg, gameRoom.getClients());
   }
 
 }

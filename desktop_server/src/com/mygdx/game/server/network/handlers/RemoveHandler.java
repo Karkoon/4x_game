@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 
 public class RemoveHandler {
 
-  private final MessageSender sender;
-  private final GameRoomManager rooms;
+  private final GameRoomManager gameRoomManager;
+  private final MessageSender messageSender;
 
   @Inject
   public RemoveHandler(
-      MessageSender sender,
-      GameRoomManager rooms
-  ) {
-    this.sender = sender;
-    this.rooms = rooms;
+      GameRoomManager gameRoomManager,
+      MessageSender messageSender
+      ) {
+    this.gameRoomManager = gameRoomManager;
+    this.messageSender = messageSender;
   }
 
   public void handle(String[] commands, Client client) {
@@ -37,6 +37,6 @@ public class RemoveHandler {
             .stream()
             .map(Client::mapToPlayerLobby).collect(Collectors.toList());
     var msg = new PlayerJoinedRoomMessage(users);
-    sender.sendToAll(msg, gameRoom.getClients());
+    messageSender.sendToAll(msg, gameRoom.getClients());
   }
 }

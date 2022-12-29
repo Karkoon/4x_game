@@ -16,6 +16,7 @@ import javax.inject.Inject;
 public class AddOwnerToChangeSubscribersSystem extends IteratingSystem {
 
   private final GameRoom gameRoom;
+
   private ComponentMapper<ChangeSubscribers> changeSubscribersComponentMapper;
   private ComponentMapper<Name> nameComponentMapper;
   private ComponentMapper<Owner> ownerComponentMapper;

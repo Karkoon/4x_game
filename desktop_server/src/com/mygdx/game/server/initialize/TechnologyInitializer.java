@@ -13,19 +13,19 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class TechnologyInitializer {
 
-  private final TechnologyFactory technologyFactory;
   private final GameConfigAssets assets;
   private final GameRoom gameRoom;
+  private final TechnologyFactory technologyFactory;
 
   @Inject
   public TechnologyInitializer(
-      TechnologyFactory technologyFactory,
       GameConfigAssets assets,
-      GameRoom gameRoom
-  ) {
-    this.technologyFactory = technologyFactory;
+      GameRoom gameRoom,
+      TechnologyFactory technologyFactory
+      ) {
     this.assets = assets;
     this.gameRoom = gameRoom;
+    this.technologyFactory = technologyFactory;
   }
 
   public void initializeTechnologies() {
