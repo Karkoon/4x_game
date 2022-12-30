@@ -83,7 +83,6 @@ public class GameScreenAssets {
     loadDirectory(GameScreenAssetPaths. MATERIALS_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.TECHNOLOGIES_TEXTURE_DIR, ".png", Texture.class);
     loadDirectory(GameScreenAssetPaths.TEXTURE_DIR, ".png", Texture.class);
-    assetManager.load(GameScreenAssetPaths.DEMO_TEXTURE_PATH, Texture.class);
   }
 
   private void loadSkin() {
