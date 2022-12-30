@@ -1,21 +1,22 @@
 {
   "id": 104,
-  "name": "Enhanced Warrior",
-  "polishName": "Ulepszony Wojownik",
+  "name": "Enhanced viking",
+  "polishName": "Ulepszony wiking",
   "modelPath": "basic.g3db",
   "textureName": "units/enh_warrior_viking.png",
   "iconName": "units/enh_warrior_viking_icon.png",
   "maxHp": 150,
-  "attackPower": 125,
-  "defense": 80,
+  "attackPower": 145,
+  "defense": 60,
   "sightRadius": 3,
   "moveRange": 2,
   "attackRange": 1,
-  "turnAmount": 5,
+  "turnAmount": 8,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":35},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":8},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":8}
   ],
   "civilizationConfigId": 601
 }

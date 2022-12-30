@@ -1,21 +1,22 @@
 {
   "id": 105,
-  "name": "Scout",
-  "polishName": "Zwiadowca",
+  "name": "Viking scout",
+  "polishName": "Wikiński zwiadowca",
   "modelPath": "basic.g3db",
   "textureName": "units/scout_viking.png",
   "iconName": "units/scout_viking_icon.png",
   "maxHp": 50,
-  "attackPower": 50,
+  "attackPower": 65,
   "defense": 0,
-  "sightRadius": 5,
+  "sightRadius": 4,
   "moveRange": 4,
   "attackRange": 1,
-  "turnAmount": 1,
+  "turnAmount": 2,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":4},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":5},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":3}
   ],
   "civilizationConfigId": 601
 }

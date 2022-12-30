@@ -1,21 +1,22 @@
 {
   "id": 108,
   "name": "Archer",
-  "polishName": "łucznik",
+  "polishName": "Łucznik",
   "modelPath": "basic.g3db",
   "textureName": "units/archer_medieval.png",
   "iconName": "units/archer_medieval_icon.png",
-  "maxHp": 100,
-  "attackPower": 60,
-  "defense": 25,
+  "maxHp": 120,
+  "attackPower": 50,
+  "defense": 35,
   "sightRadius": 2,
   "moveRange": 2,
   "attackRange": 2,
-  "turnAmount": 2,
+  "turnAmount": 4,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":1},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":5},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":5}
   ],
   "civilizationConfigId": 602
 }

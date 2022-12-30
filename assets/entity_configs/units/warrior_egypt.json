@@ -1,21 +1,22 @@
 {
   "id": 113,
-  "name": "Warrior",
-  "polishName": "Wojownik",
+  "name": "Desert warrior",
+  "polishName": "Pustynny wojownik",
   "modelPath": "basic.g3db",
   "textureName": "units/warrior_egypt.png",
   "iconName": "units/warrior_egypt_icon.png",
-  "maxHp": 100,
-  "attackPower": 125,
+  "maxHp": 115,
+  "attackPower": 95,
   "defense": 25,
   "sightRadius": 2,
   "moveRange": 2,
   "attackRange": 1,
-  "turnAmount": 2,
+  "turnAmount": 4,
   "materials":
   [
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":5},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":5}
   ],
   "civilizationConfigId": 603
 }

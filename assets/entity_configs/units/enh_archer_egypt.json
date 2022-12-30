@@ -1,21 +1,22 @@
 {
   "id": 115,
-  "name": "Enhanced Archer",
-  "polishName": "Ulepszony Łucznik",
+  "name": "Enhanced Desert archer",
+  "polishName": "Ulepszony pustynny Łucznik",
   "modelPath": "basic.g3db",
   "textureName": "units/enh_archer_egypt.png",
   "iconName": "units/enh_archer_egypt_icon.png",
-  "maxHp": 120,
-  "attackPower": 100,
+  "maxHp": 130,
+  "attackPower": 110,
   "defense": 50,
   "sightRadius": 3,
   "moveRange": 2,
-  "attackRange": 2,
-  "turnAmount": 5,
+  "attackRange": 3,
+  "turnAmount": 6,
   "materials":
   [
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":25},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":5}
   ],
   "civilizationConfigId": 603
 }

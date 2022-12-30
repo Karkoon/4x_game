@@ -1,21 +1,22 @@
 {
   "id": 103,
-  "name": "Enhanced Archer",
-  "polishName": "Ulepszony Łucznik",
+  "name": "Enhanced nordic archer",
+  "polishName": "Ulepszony nordycki łucznik",
   "modelPath": "basic.g3db",
   "textureName": "units/enh_archer_viking.png",
   "iconName": "units/enh_archer_viking_icon.png",
-  "maxHp": 120,
-  "attackPower": 100,
-  "defense": 50,
+  "maxHp": 140,
+  "attackPower": 115,
+  "defense": 30,
   "sightRadius": 3,
   "moveRange": 2,
-  "attackRange": 2,
+  "attackRange": 3,
   "turnAmount": 5,
   "materials":
   [
     {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":10},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":5}
   ],
   "civilizationConfigId": 601
 }

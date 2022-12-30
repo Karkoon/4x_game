@@ -1,21 +1,22 @@
 {
   "id": 107,
-  "name": "warrior",
-  "polishName": "wojownik",
+  "name": "Knight",
+  "polishName": "Rycerz",
   "modelPath": "basic.g3db",
   "textureName": "units/warrior_medieval.png",
   "iconName": "units/warrior_medieval_icon.png",
-  "maxHp": 100,
-  "attackPower": 125,
-  "defense": 25,
+  "maxHp": 115,
+  "attackPower": 80,
+  "defense": 65,
   "sightRadius": 2,
-  "moveRange": 2,
+  "moveRange": 1,
   "attackRange": 1,
-  "turnAmount": 2,
+  "turnAmount": 3,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":5},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":5}
   ],
   "civilizationConfigId": 602
 }

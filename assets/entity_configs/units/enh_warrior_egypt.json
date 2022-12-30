@@ -1,7 +1,7 @@
 {
   "id": 116,
-  "name": "Enhanced Warrior",
-  "polishName": "Ulepszony Wojownik",
+  "name": "Enhanced desert warrior",
+  "polishName": "Ulepszony pustynny wojownik",
   "modelPath": "basic.g3db",
   "textureName": "units/enh_warrior_egypt.png",
   "iconName": "units/enh_warrior_egypt_icon.png",
@@ -11,11 +11,12 @@
   "sightRadius": 3,
   "moveRange": 2,
   "attackRange": 1,
-  "turnAmount": 5,
+  "turnAmount": 7,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":20},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":15},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"FOOD","amount":10}
   ],
   "civilizationConfigId": 603
 }

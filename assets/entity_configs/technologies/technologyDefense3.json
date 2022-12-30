@@ -1,7 +1,7 @@
 {
   "id": 306,
-  "name": "Defense technology III",
-  "polishName": "Technologia obrony III",
+  "name": "Steel armor",
+  "polishName": "Stalowy pancerz",
   "textureName": "technologies/defense3.png",
   "x": 3,
   "y": 3,
@@ -12,7 +12,7 @@
       "technologyImpactType":"UNIT_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "DEFENSE", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "DEFENSE", "operation": "PLUS", "value": 20}
       ]
     },
   "dependencies" : [305]

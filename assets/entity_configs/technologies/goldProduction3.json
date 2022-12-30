@@ -1,18 +1,18 @@
 {
   "id": 316,
-  "name": "Gold technology III",
-  "polishName": "Technologia złota III",
+  "name": "Electronic money",
+  "polishName": "Pieniądz elektroniczny",
   "textureName": "technologies/gold3.png",
   "x": 5,
   "y": 2,
-  "requiredScience": 10,
+  "requiredScience": 30,
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
       "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "GOLD", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "GOLD", "operation": "MULTIPLE", "value": 2}
       ]
     },
   "dependencies" : [312]

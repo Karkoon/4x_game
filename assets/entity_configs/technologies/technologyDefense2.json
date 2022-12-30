@@ -1,7 +1,7 @@
 {
   "id": 305,
-  "name": "Defense technology II",
-  "polishName": "Technologia obrony II",
+  "name": "Iron armor",
+  "polishName": "Żelazny pancerz",
   "textureName": "technologies/defense2.png",
   "x": 3,
   "y": 2,
@@ -12,7 +12,7 @@
       "technologyImpactType":"UNIT_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "DEFENSE", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "DEFENSE", "operation": "PLUS", "value": 15}
       ]
     },
   "dependencies" : [304]

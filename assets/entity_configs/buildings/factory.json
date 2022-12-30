@@ -5,11 +5,11 @@
   "modelPath": "basic.g3db",
   "textureName": "buildings/factory.png",
   "iconName": "buildings/factory_icon.png",
-  "turnAmount": 5,
+  "turnAmount": 6,
   "materials":
     [
-      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
-      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":25},
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":15}
     ],
   "impact":
     {

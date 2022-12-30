@@ -1,7 +1,7 @@
 {
   "id": 307,
-  "name": "Sight radius technology",
-  "polishName": "Technologia pola widzenia",
+  "name": "Telescope",
+  "polishName": "Luneta",
   "textureName": "technologies/sightrange1.png",
   "x": 2,
   "y": 4,

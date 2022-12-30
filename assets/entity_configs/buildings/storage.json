@@ -8,8 +8,8 @@
   "turnAmount": 5,
   "materials":
     [
-      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
-      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":20},
+      {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":10}
     ],
   "impact":
     {

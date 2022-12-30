@@ -1,15 +1,15 @@
 {
   "id": 503,
-  "name": "Augmented Soldiers Factory",
-  "polishName": "Cyberludzi Fabryka",
+  "name": "Augmented soldiers factory",
+  "polishName": "Fabryka cyberludzi",
   "modelPath": "basic.g3db",
   "textureName": "buildings/enh_factory.png",
   "iconName": "buildings/enh_factory_icon.png",
   "turnAmount": 25,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":2},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":2}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":30},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":35}
   ],
   "impact":
   {

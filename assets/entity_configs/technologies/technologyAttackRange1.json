@@ -1,7 +1,7 @@
 {
   "id": 308,
-  "name": "Attack range technology",
-  "polishName": "Technologia dystansu ataku",
+  "name": "Shooting target",
+  "polishName": "Tarcza strzelecka",
   "textureName": "technologies/attackrange1.png",
   "x": 1,
   "y": 4,
