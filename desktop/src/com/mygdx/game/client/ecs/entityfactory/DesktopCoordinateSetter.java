@@ -12,8 +12,8 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class DesktopCoordinateSetter implements Setter {
 
   private ComponentMapper<Coordinates> coordinatesMapper;

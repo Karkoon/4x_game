@@ -1,7 +1,7 @@
 {
   "id": 304,
-  "name": "Defense technology I",
-  "polishName": "Technologia obrony I",
+  "name": "Copper armor",
+  "polishName": "Miedziany pancerz",
   "textureName": "technologies/defense1.png",
   "x": 3,
   "y": 1,

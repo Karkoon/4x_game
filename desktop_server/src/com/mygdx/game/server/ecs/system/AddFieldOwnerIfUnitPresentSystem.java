@@ -27,15 +27,16 @@ public class AddFieldOwnerIfUnitPresentSystem extends IteratingSystem {
 
   private final GameRoom room;
   private final Lazy<RemoveClientEntityService> service;
+
   @AspectDescriptor(all = {Unit.class, Coordinates.class})
   private EntitySubscription units;
 
-  private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<ChangeSubscribers> changeSubscribersComponentMapper;
-  private ComponentMapper<SightlineSubscribers> sightlineSubscribersComponentMapper;
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<DirtyComponents> dirtyMapper;
   private ComponentMapper<FriendlyOrFoe> friendlyOrFoeComponentMapper;
+  private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<SightlineSubscribers> sightlineSubscribersComponentMapper;
 
   @Inject
   public AddFieldOwnerIfUnitPresentSystem(

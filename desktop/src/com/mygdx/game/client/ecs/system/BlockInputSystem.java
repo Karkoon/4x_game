@@ -10,26 +10,26 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class BlockInputSystem extends BaseSystem {
 
-  private final PlayerInfo playerInfo;
   private final ActiveToken activeToken;
   private final ClickInput clickInput;
   private final NotPlayerTurnDialogFactory notPlayerTurnDialogFactory;
+  private final PlayerInfo playerInfo;
 
   @Inject
   public BlockInputSystem(
-      PlayerInfo playerInfo,
       ActiveToken activeToken,
       ClickInput clickInput,
-      NotPlayerTurnDialogFactory notPlayerTurnDialogFactory
+      NotPlayerTurnDialogFactory notPlayerTurnDialogFactory,
+      PlayerInfo playerInfo
   ) {
-    this.playerInfo = playerInfo;
     this.activeToken = activeToken;
     this.clickInput = clickInput;
     this.notPlayerTurnDialogFactory = notPlayerTurnDialogFactory;
+    this.playerInfo = playerInfo;
   }
 
   @Override

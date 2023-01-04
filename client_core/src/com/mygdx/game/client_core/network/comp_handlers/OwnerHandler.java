@@ -12,8 +12,8 @@ import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-@Log
 @GameInstanceScope
+@Log
 public class OwnerHandler implements ComponentMessageListener.Handler<Owner> {
 
   private ComponentMapper<Owner> ownerMapper;

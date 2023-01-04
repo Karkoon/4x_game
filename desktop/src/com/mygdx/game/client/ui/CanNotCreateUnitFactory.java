@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 @Log
 @Singleton
 public class CanNotCreateUnitFactory {
+
   private final GameScreenAssets assets;
   private final Stage stage;
 

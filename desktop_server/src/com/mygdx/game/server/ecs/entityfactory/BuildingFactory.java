@@ -16,17 +16,15 @@ import javax.inject.Inject;
 @Log
 public class BuildingFactory {
 
-  private final World world;
   private final ComponentFactory componentFactory;
 
   @Inject
   public BuildingFactory(
-      World world,
-      ComponentFactory componentFactory
+      ComponentFactory componentFactory,
+      World world
   ) {
     this.componentFactory = componentFactory;
-    this.world = world;
-    this.world.inject(this);
+    world.inject(this);
   }
 
   public int createBeforeEntity(

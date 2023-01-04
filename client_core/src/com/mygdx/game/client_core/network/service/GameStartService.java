@@ -9,17 +9,17 @@ import javax.inject.Inject;
 @Log
 public class GameStartService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
 
   @Inject
   public GameStartService(
-      Lazy<MessageSender> sender
+      Lazy<MessageSender> messageSender
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
   }
 
   public void startGame() {
     log.info("start game request sent");
-    sender.get().send("start");
+    messageSender.get().send("start");
   }
 }

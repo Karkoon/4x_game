@@ -7,24 +7,25 @@ import com.mygdx.game.server.network.MessageSender;
 import javax.inject.Inject;
 
 public class InterruptService {
-  private final MessageSender sender;
-  private final GameRoom room;
+
+  private final GameRoom gameRoom;
+  private final MessageSender messageSender;
 
   @Inject
   InterruptService(
-      MessageSender sender,
-      GameRoom room
+      GameRoom gameRoom,
+      MessageSender messageSender
   ) {
     super();
-    this.sender = sender;
-    this.room = room;
+    this.gameRoom = gameRoom;
+    this.messageSender = messageSender;
   }
 
   public void notifyOfInterrupt(String exceptPlayerToken) {
     var msg = new GameInterruptedMessage();
-    if (room.getGameInstance() != null) {
-      room.tearDownGameInstance();
-      sender.sendToAll(msg, room.getClients().stream().filter(c -> !c.getPlayerToken().equals(exceptPlayerToken)).toList());
+    if (gameRoom.getGameInstance() != null) {
+      gameRoom.tearDownGameInstance();
+      messageSender.sendToAll(msg, gameRoom.getClients().stream().filter(c -> !c.getPlayerToken().equals(exceptPlayerToken)).toList());
     }
   }
 

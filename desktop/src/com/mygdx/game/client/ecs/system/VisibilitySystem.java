@@ -20,9 +20,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({Coordinates.class, Stats.class, Owner.class})
 @GameInstanceScope
+@Log
 public class VisibilitySystem extends IteratingSystem {
 
   private final InField inField;

@@ -13,11 +13,12 @@ import javax.inject.Inject;
 
 import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 
-@Log
 @GameInstanceScope
+@Log
 public class SubFieldHandler implements ComponentMessageListener.Handler<SubField> {
 
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
+
   private ComponentMapper<SubField> subFieldMapper;
 
   @Inject

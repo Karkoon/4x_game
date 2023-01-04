@@ -27,16 +27,16 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Random;
 
-@Log
 @GameInstanceScope
+@Log
 public class CreateUnitService extends WorldService {
 
   private final ComponentFactory componentFactory;
   private final GameConfigAssets assets;
   private final MaterialUtilServer materialUtilServer;
-  private final UnitFactory unitFactory;
-  private final MessageSender sender;
+  private final MessageSender messageSender;
   private final Random random;
+  private final UnitFactory unitFactory;
   private final World world;
 
   private ComponentMapper<Coordinates> coordinatesMapper;
@@ -51,17 +51,17 @@ public class CreateUnitService extends WorldService {
       ComponentFactory componentFactory,
       GameConfigAssets assets,
       MaterialUtilServer materialUtilServer,
+      MessageSender messageSender,
       UnitFactory unitFactory,
-      MessageSender sender,
       World world
   ) {
     this.componentFactory = componentFactory;
     this.assets = assets;
     this.materialUtilServer = materialUtilServer;
+    this.messageSender = messageSender;
+    this.random = new Random();
     this.unitFactory = unitFactory;
     this.world = world;
-    this.sender = sender;
-    this.random = new Random();
     world.inject(this);
   }
 
@@ -152,7 +152,7 @@ public class CreateUnitService extends WorldService {
         log.info("Player don't have enought materials");
       }
     }
-    sender.send(new UnitRecruitedMessage(), client);
+    messageSender.send(new UnitRecruitedMessage(), client);
   }
 
   public int randomBetween(int min, int max) {

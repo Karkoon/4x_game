@@ -32,8 +32,8 @@ public class NextUnitUtil {
       PlayerInfo playerInfo,
       World world
   ) {
-    world.inject(this);
     this.playerInfo = playerInfo;
+    world.inject(this);
   }
 
   public ArrayList<Integer> selectMoveUnits() {

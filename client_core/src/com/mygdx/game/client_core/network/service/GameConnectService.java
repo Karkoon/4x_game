@@ -11,47 +11,48 @@ import javax.inject.Inject;
 @Log
 public class GameConnectService {
 
-  private final MessageSender sender;
+  private final MessageSender messageSender;
   private final PlayerInfo playerInfo;
 
   @Inject
   public GameConnectService(
-      MessageSender sender,
+      MessageSender messageSender,
       PlayerInfo playerInfo
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
     this.playerInfo = playerInfo;
   }
 
   public void connect(String gameRoomName, String userName, String isBot, Integer civId) {
     log.info("connect request sent");
     playerInfo.setUserName(userName);
-    sender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + civId + ":" + isBot);
+    playerInfo.setCivilization(civId);
+    messageSender.send("connect:" + playerInfo.getUserName() + ":" + playerInfo.getToken() + ":" + gameRoomName + ":" + civId + ":" + isBot);
   }
 
   public void changeUser() {
     log.info("change user request sent");
-    sender.send("change_user:"  + playerInfo.getUserName() + ":" + playerInfo.getCivilization() + ":" + BotType.NOT_BOT.name());
+    messageSender.send("change_user:"  + playerInfo.getUserName() + ":" + playerInfo.getCivilization() + ":" + BotType.NOT_BOT.name());
   }
 
   public void changeUser(String userName, long civId, String botType) {
     log.info("change user request sent");
-    sender.send("change_user:"  + userName + ":" + civId + ":" + botType);
+    messageSender.send("change_user:"  + userName + ":" + civId + ":" + botType);
   }
 
   public void changeLobby(MapSize selectedMapSize, int mapType) {
     var mapSize = selectedMapSize.name();
     log.info("change lobby request sent");
-    sender.send("change_lobby:"  + mapSize + ":" + mapType);
+    messageSender.send("change_lobby:"  + mapSize + ":" + mapType);
   }
 
   public void removeUser(String userName) {
     log.info("remove user request sent");
-    sender.send("remove_user:"  + userName);
+    messageSender.send("remove_user:"  + userName);
   }
 
   public void addBot() {
     log.info("add bot");
-    sender.send("add_bot");
+    messageSender.send("add_bot");
   }
 }

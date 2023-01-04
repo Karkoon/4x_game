@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.ecs.component.Score;
 import com.mygdx.game.core.ecs.component.Coordinates;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -24,7 +23,7 @@ public class GameState {
 
   @Inject
   public GameState(
-      @NonNull World world
+      World world
   ) {
     world.inject(this);
     this.entitiesAtCoordinateGame = new HashMap<>();

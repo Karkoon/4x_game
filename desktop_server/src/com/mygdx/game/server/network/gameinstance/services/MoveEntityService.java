@@ -16,8 +16,8 @@ import javax.inject.Inject;
 
 import static com.artemis.Aspect.all;
 
-@Log
 @GameInstanceScope
+@Log
 public class MoveEntityService extends WorldService {
 
   private final MessageSender messageSender;

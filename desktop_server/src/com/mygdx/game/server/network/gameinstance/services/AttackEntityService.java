@@ -15,16 +15,16 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class AttackEntityService extends WorldService {
 
   private final MessageSender messageSender;
-
-  private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<CanAttack> canAttackMapper;
-
   private World world;
+
+  private ComponentMapper<CanAttack> canAttackMapper;
+  private ComponentMapper<Coordinates> coordinatesMapper;
+
 
   @Inject
   public AttackEntityService(

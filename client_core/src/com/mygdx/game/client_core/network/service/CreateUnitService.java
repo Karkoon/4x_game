@@ -12,25 +12,26 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class CreateUnitService {
 
-  private final Lazy<MessageSender> sender;
-  private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final InfieldUtil infieldUtil;
+  private final Lazy<MessageSender> messageSender;
+  private final NetworkWorldEntityMapper networkWorldEntityMapper;
+
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
 
   @Inject
   public CreateUnitService(
-      Lazy<MessageSender> sender,
-      NetworkWorldEntityMapper networkWorldEntityMapper,
       InfieldUtil infieldUtil,
+      Lazy<MessageSender> messageSender,
+      NetworkWorldEntityMapper networkWorldEntityMapper,
       World world
   ) {
-    this.sender = sender;
-    this.networkWorldEntityMapper = networkWorldEntityMapper;
     this.infieldUtil = infieldUtil;
+    this.messageSender = messageSender;
+    this.networkWorldEntityMapper = networkWorldEntityMapper;
     world.inject(this);
   }
 
@@ -44,7 +45,7 @@ public class CreateUnitService {
     } else {
       var fieldNetworkId = networkWorldEntityMapper.getNetworkEntity(fieldId);
       log.info("create unit " + unitConfigId + " for field " + fieldNetworkId + " request send");
-      sender.get().send("create_unit" + ":" + unitConfigId + ":" + fieldNetworkId);
+      messageSender.get().send("create_unit" + ":" + unitConfigId + ":" + fieldNetworkId);
     }
   }
 
@@ -54,7 +55,7 @@ public class CreateUnitService {
     } else {
       var fieldNetworkId = networkWorldEntityMapper.getNetworkEntity(fieldId);
       log.info("create unit by boy for field " + fieldNetworkId + " request send");
-      sender.get().send("create_unit_bot" + ":" + fieldNetworkId);
+      messageSender.get().send("create_unit_bot" + ":" + fieldNetworkId);
     }
   }
 }

@@ -9,26 +9,26 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class MoveEntityService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public MoveEntityService(
-      Lazy<MessageSender> sender,
+      Lazy<MessageSender> messageSender,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public boolean moveEntity(int selectedUnit, Coordinates coordinates) {
     log.info("Send move message from client to server");
     selectedUnit = networkWorldEntityMapper.getNetworkEntity(selectedUnit);
-    sender.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
+    messageSender.get().send("move:" + selectedUnit + ":" + coordinates.getX() + ":" + coordinates.getY());
     return true;
   }
 }

@@ -18,9 +18,9 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({Position.class, Coordinates.class})
 @GameInstanceScope
+@Log
 public class CoordinateToPositionSystem extends IteratingSystem {
 
   private ComponentMapper<Building> buildingMapper;

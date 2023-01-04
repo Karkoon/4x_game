@@ -14,26 +14,27 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class NavigationSystem extends BaseSystem {
 
   private final ChosenEntity chosenEntity;
   private final Lazy<Navigator> navigator;
-  private ComponentMapper<NavigationDirection> directionMapper;
-  private ComponentMapper<Owner> ownerMapper;
   private final PlayerInfo playerInfo;
   private final WarningDialogFactory warningDialog;
 
+  private ComponentMapper<NavigationDirection> directionMapper;
+  private ComponentMapper<Owner> ownerMapper;
+
   @Inject
   public NavigationSystem(
-      final Lazy<Navigator> navigator,
       final ChosenEntity chosenEntity,
+      final Lazy<Navigator> navigator,
       PlayerInfo playerInfo,
       WarningDialogFactory warningDialog
   ) {
-    this.navigator = navigator;
     this.chosenEntity = chosenEntity;
+    this.navigator = navigator;
     this.playerInfo = playerInfo;
     this.warningDialog = warningDialog;
   }

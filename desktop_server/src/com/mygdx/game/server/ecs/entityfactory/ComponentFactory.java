@@ -47,10 +47,10 @@ import java.util.Random;
 @Log
 public class ComponentFactory {
 
-  private final GameRoom room;
-  private final World world;
   private final ComponentClassToIndexCache componentIndicesCache;
+  private final GameRoom gameRoom;
   private final Random random;
+  private final World world;
 
   private ComponentMapper<AppliedTechnologies> appliedTechnologiesMapper;
   private ComponentMapper<Building> buildingMapper;
@@ -77,15 +77,15 @@ public class ComponentFactory {
 
   @Inject
   public ComponentFactory(
-      GameRoom room,
-      World world,
-      ComponentClassToIndexCache componentIndicesCache
+      ComponentClassToIndexCache componentIndicesCache,
+      GameRoom gameRoom,
+      World world
   ) {
-    this.room = room;
+    this.componentIndicesCache = componentIndicesCache;
+    this.gameRoom = gameRoom;
+    this.random = new Random();
     this.world = world;
     this.world.inject(this);
-    this.random = new Random();
-    this.componentIndicesCache = componentIndicesCache;
     createAndDeleteEntityWithAllComponents();
   }
 
@@ -180,9 +180,9 @@ public class ComponentFactory {
       Client nullableClient
   ) {
     var friendlyOrFoe = friendlyOrFoeMapper.create(entityId);
-    var friendlies = new Bits(room.getNumberOfClients());
+    var friendlies = new Bits(gameRoom.getNumberOfClients());
     if (nullableClient != null) {
-      friendlies.set(room.getClients().indexOf(nullableClient));
+      friendlies.set(gameRoom.getClients().indexOf(nullableClient));
     }
     friendlyOrFoe.setFriendlies(friendlies);
   }
@@ -250,7 +250,7 @@ public class ComponentFactory {
   ) {
     var sightlineSubscribers = sightlineSubscribersMapper.create(entityId);
     sightlineSubscribers.setSightlineRadius(sightlineRadius);
-    var subscribedClients = new Bits(room.getNumberOfClients());
+    var subscribedClients = new Bits(gameRoom.getNumberOfClients());
     sightlineSubscribers.setClients(subscribedClients);
   }
 

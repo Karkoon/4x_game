@@ -10,7 +10,7 @@ import com.mygdx.game.core.ecs.component.SubField;
 import com.mygdx.game.core.model.MaterialBase;
 import com.mygdx.game.core.model.MaterialUnit;
 import com.mygdx.game.core.model.TechnologyImpactType;
-import com.mygdx.game.core.network.messages.BuildingBuildedMessage;
+import com.mygdx.game.core.network.messages.BuildingConstructedMessage;
 import com.mygdx.game.server.model.Client;
 import com.mygdx.game.server.network.MessageSender;
 import com.mygdx.game.server.util.MaterialUtilServer;
@@ -27,11 +27,11 @@ import java.util.Map;
 public class CreateBuildingService extends WorldService {
 
   private final BuildingFactory buildingFactory;
-  private final ComponentFactory componentFactory;
   private final GameConfigAssets assets;
+  private final MessageSender messageSender;
   private final MaterialUtilServer materialUtilServer;
   private final TechnologyUtilServer technologyUtilServer;
-  private final MessageSender sender;
+
   private ComponentMapper<Coordinates> coordinatesMapper;
   private ComponentMapper<Field> fieldMapper;
   private ComponentMapper<SubField> subfieldMapper;
@@ -39,19 +39,17 @@ public class CreateBuildingService extends WorldService {
   @Inject
   CreateBuildingService(
       BuildingFactory buildingFactory,
-      ComponentFactory componentFactory,
       GameConfigAssets assets,
       MaterialUtilServer materialUtilServer,
+      MessageSender messageSender,
       TechnologyUtilServer technologyUtilServer,
-      MessageSender sender,
       World world
   ) {
     this.buildingFactory = buildingFactory;
-    this.componentFactory = componentFactory;
     this.assets = assets;
     this.materialUtilServer = materialUtilServer;
+    this.messageSender = messageSender;
     this.technologyUtilServer = technologyUtilServer;
-    this.sender = sender;
     world.inject(this);
   }
 
@@ -115,6 +113,6 @@ public class CreateBuildingService extends WorldService {
         }
       }
     }
-    sender.send(new BuildingBuildedMessage(), client);
+    messageSender.send(new BuildingConstructedMessage(), client);
   }
 }

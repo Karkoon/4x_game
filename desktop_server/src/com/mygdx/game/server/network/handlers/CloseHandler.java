@@ -7,13 +7,13 @@ import javax.inject.Inject;
 
 public class CloseHandler {
 
-  private final GameRoomManager manager;
+  private final GameRoomManager gameRoomManager;
 
   @Inject
   public CloseHandler(
-      GameRoomManager manager
+      GameRoomManager gameRoomManager
   ) {
-    this.manager = manager;
+    this.gameRoomManager = gameRoomManager;
     // todo remove gameroom when no players are connected
     // when something like this happens, the current way
     // uses the same room because the clients don't support

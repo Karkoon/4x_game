@@ -34,16 +34,6 @@ public class TechnologyUtilServer extends WorldService {
   private final MaterialUtilServer materialUtilServer;
   private final World world;
 
-  private ComponentMapper<AppliedTechnologies> appliedTechnologiesMapper;
-  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
-  private ComponentMapper<InResearch> inResearchMapper;
-  private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<Researched> researchedMapper;
-  private ComponentMapper<Stats> statsMapper;
-  private ComponentMapper<SubField> subfieldMapper;
-  private ComponentMapper<Technology> technologyMapper;
-  private ComponentMapper<UnderConstruction> underConstructionMapper;
-
   @AspectDescriptor(all = {InResearch.class})
   private EntitySubscription inResearchSubscriber;
 
@@ -55,6 +45,17 @@ public class TechnologyUtilServer extends WorldService {
 
   @AspectDescriptor(all = {Researched.class, Owner.class})
   private EntitySubscription researchedOwnerSubscriber;
+
+  private ComponentMapper<AppliedTechnologies> appliedTechnologiesMapper;
+  private ComponentMapper<EntityConfigId> entityConfigIdMapper;
+  private ComponentMapper<InResearch> inResearchMapper;
+  private ComponentMapper<Owner> ownerMapper;
+  private ComponentMapper<Researched> researchedMapper;
+  private ComponentMapper<Stats> statsMapper;
+  private ComponentMapper<SubField> subfieldMapper;
+  private ComponentMapper<Technology> technologyMapper;
+  private ComponentMapper<UnderConstruction> underConstructionMapper;
+
 
   @Inject
   TechnologyUtilServer(

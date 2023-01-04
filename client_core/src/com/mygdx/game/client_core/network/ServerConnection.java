@@ -13,9 +13,10 @@ import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@Singleton
 @Log
+@Singleton
 public class ServerConnection implements MessageSender {
+
   private final ConcurrentLinkedQueue<String> dataToSend = new ConcurrentLinkedQueue<>();
 
   private WebSocketListener persistentListener;

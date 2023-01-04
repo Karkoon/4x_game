@@ -7,6 +7,6 @@ import lombok.Data;
 public class UnderConstruction extends Component {
 
   private int buildingConfigId;
-  private int turnLeft;
   private int parentSubfield;
+  private int turnLeft;
 }

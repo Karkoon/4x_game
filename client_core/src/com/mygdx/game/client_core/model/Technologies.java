@@ -10,8 +10,8 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class Technologies {
 
   @AspectDescriptor(all = {Technology.class})

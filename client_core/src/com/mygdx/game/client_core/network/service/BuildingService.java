@@ -9,32 +9,32 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class BuildingService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
 
   @Inject
   public BuildingService(
-      Lazy<MessageSender> sender,
+      Lazy<MessageSender> messageSender,
       NetworkWorldEntityMapper networkWorldEntityMapper
   ) {
-    this.sender = sender;
+    this.messageSender = messageSender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
   }
 
   public void createBuilding(long buildingConfigId, int subfieldEntityId, Coordinates coordinates) {
     log.info("build:" + buildingConfigId + ":" + subfieldEntityId + ":" + coordinates.getX() + ":" + coordinates.getY());
     int networkEntity = networkWorldEntityMapper.getNetworkEntity(subfieldEntityId);
-    sender.get().send("build:" + buildingConfigId + ":" + networkEntity + ":" + coordinates.getX() + ":" + coordinates.getY());
+    messageSender.get().send("build:" + buildingConfigId + ":" + networkEntity + ":" + coordinates.getX() + ":" + coordinates.getY());
   }
 
   public void createBuilding(long buildingConfigId, int fieldEntityId) {
     log.info("build_bot:" + buildingConfigId + ":" + fieldEntityId);
     int networkEntity = networkWorldEntityMapper.getNetworkEntity(fieldEntityId);
-    sender.get().send("build_bot:" + buildingConfigId + ":" + networkEntity);
+    messageSender.get().send("build_bot:" + buildingConfigId + ":" + networkEntity);
   }
 
 }

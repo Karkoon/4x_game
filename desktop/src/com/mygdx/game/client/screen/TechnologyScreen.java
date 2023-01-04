@@ -43,21 +43,27 @@ import java.util.ArrayList;
 @GameInstanceScope
 public class TechnologyScreen extends ScreenAdapter {
 
-  private final Stage stage;
-  private final ShapeRenderer shapeRenderer;
-  private final Viewport viewport;
-  private final GameConfigAssets gameConfigAssets;
-  private final @NonNull Technologies technologies;
-  private final UiElementsCreator uiElementsCreator;
-  private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
-  private final ResearchTechnologyService researchTechnologyService;
-  private final World world;
   private final CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory;
+  private final GameConfigAssets gameConfigAssets;
+  private final ResearchTechnologyService researchTechnologyService;
+  private final ShapeRenderer shapeRenderer;
+  private final Stage stage;
   private final StarBackground starBackground;
+  private final @NonNull Technologies technologies;
+  private final TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter;
+  private final UiElementsCreator uiElementsCreator;
+  private final Viewport viewport;
+  private final World world;
+
   private Vector3 pos;
   private final Texture inResearchTexture;
   private final Texture researchedTexture;
   private final Texture unblockedTexture;
+
+  @AspectDescriptor(all = {InResearch.class})
+  private EntitySubscription inResearchSubscriber;
+  @AspectDescriptor(all = {Technology.class})
+  private EntitySubscription technologySubscriber;
 
   private ComponentMapper<EntityConfigId> entityConfigIdMapper;
   private ComponentMapper<InResearch> inResearchMapper;
@@ -67,38 +73,32 @@ public class TechnologyScreen extends ScreenAdapter {
 
   boolean draw = false;
 
-  @AspectDescriptor(all = {InResearch.class})
-  private EntitySubscription inResearchSubscriber;
-
-  @AspectDescriptor(all = {Technology.class})
-  private EntitySubscription technologySubscriber;
-
   @Inject
   public TechnologyScreen(
-      World world,
-      Stage stage,
-      Viewport viewport,
+      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory,
       GameConfigAssets gameConfigAssets,
       GameScreenAssets gameScreenAssets,
-      Technologies technologies,
-      UiElementsCreator uiElementsCreator,
-      TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
+      Stage stage,
+      StarBackground starBackground,
       ResearchTechnologyService researchTechnologyService,
-      CanNotResearchTechnologyDialogFactory canNotResearchTechnologyDialogFactory,
-      StarBackground starBackground
-  ) {
-    this.starBackground = starBackground;
-    world.inject(this);
-    this.world = world;
-    this.stage = stage;
-    this.shapeRenderer = new ShapeRenderer();
-    this.viewport = viewport;
-    this.gameConfigAssets = gameConfigAssets;
-    this.technologies = technologies;
-    this.uiElementsCreator = uiElementsCreator;
-    this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
-    this.researchTechnologyService = researchTechnologyService;
+      Technologies technologies,
+      TechnologyScreenUiInputAdapter technologyScreenUiInputAdapter,
+      UiElementsCreator uiElementsCreator,
+      Viewport viewport,
+      World world
+      ) {
     this.canNotResearchTechnologyDialogFactory = canNotResearchTechnologyDialogFactory;
+    this.gameConfigAssets = gameConfigAssets;
+    this.researchTechnologyService = researchTechnologyService;
+    this.shapeRenderer = new ShapeRenderer();
+    this.starBackground = starBackground;
+    this.stage = stage;
+    this.technologies = technologies;
+    this.technologyScreenUiInputAdapter = technologyScreenUiInputAdapter;
+    this.uiElementsCreator = uiElementsCreator;
+    this.viewport = viewport;
+    this.world = world;
+    world.inject(this);
     this.inResearchTexture = gameScreenAssets.getTexture( "technologies/inresearch.png");
     this.unblockedTexture = gameScreenAssets.getTexture( "technologies/unblocked.png");
     this.researchedTexture = gameScreenAssets.getTexture( "technologies/researched.png");
@@ -251,7 +251,7 @@ public class TechnologyScreen extends ScreenAdapter {
       log.info("Can't research");
       stage.addActor(dialog);
     } else if (!allRequiredTechnologiesResearched(entityId)) {
-      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - dependent technologies not researched");
+      var dialog = canNotResearchTechnologyDialogFactory.createAndShow("Can't research new technology - dependencies not researched");
       log.info("Can't research");
       stage.addActor(dialog);
     } else {

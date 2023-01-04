@@ -11,9 +11,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class UnitConfig implements Config, ModelConfig {
 
   private long id;

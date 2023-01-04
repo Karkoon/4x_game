@@ -8,9 +8,9 @@ import lombok.NonNull;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SubFieldConfig implements Config, ModelConfig {
 
   private long id;

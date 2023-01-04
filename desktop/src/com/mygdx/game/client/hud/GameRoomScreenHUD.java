@@ -44,17 +44,17 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @Log
 public class GameRoomScreenHUD implements Disposable {
 
-  private final GameConnectService connectService;
   private final GameConfigAssets gameConfigAssets;
+  private final GameConnectService gameConnectService;
   private final GameStartService gameStartService;
   private final GameScreenSubcomponent.Builder gameScreenBuilder;
   private final GdxGame game;
-  private final Stage stage;
   private final PlayerInfo playerInfo;
-  private final UiElementsCreator uiElementsCreator;
-  private final QueueMessageListener queueMessageListener;
   private final PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory;
   private final Random random;
+  private final Stage stage;
+  private final UiElementsCreator uiElementsCreator;
+  private final QueueMessageListener queueMessageListener;
 
   private List<PlayerLobby> players;
   private MapSize selectedMapSize;
@@ -70,7 +70,7 @@ public class GameRoomScreenHUD implements Disposable {
 
   @Inject
   public GameRoomScreenHUD(
-      GameConnectService connectService,
+      GameConnectService gameConnectService,
       GameConfigAssets gameConfigAssets,
       GameStartService gameStartService,
       GameScreenSubcomponent.Builder gameScreenBuilder,
@@ -81,7 +81,7 @@ public class GameRoomScreenHUD implements Disposable {
       QueueMessageListener queueMessageListener,
       PlayerAlreadyInTheRoomDialogFactory playerAlreadyInTheRoomDialogFactory
   ) {
-    this.connectService = connectService;
+    this.gameConnectService = gameConnectService;
     this.gameConfigAssets = gameConfigAssets;
     this.gameStartService = gameStartService;
     this.gameScreenBuilder = gameScreenBuilder;
@@ -185,14 +185,14 @@ public class GameRoomScreenHUD implements Disposable {
           @Override
           public void changed(ChangeEvent event, Actor actor) {
             playerInfo.setCivilization(((CivilizationConfig) selectBox.getSelected()).getId());
-            connectService.changeUser();
+            gameConnectService.changeUser();
           }
         });
       } else if (player.getBotType() != BotType.NOT_BOT) {
         selectBox.addListener(new ChangeListener() {
           @Override
           public void changed(ChangeEvent event, Actor actor) {
-            connectService.changeUser(player.getUserName(), ((CivilizationConfig) selectBox.getSelected()).getId(), player.getBotType().name());
+            gameConnectService.changeUser(player.getUserName(), ((CivilizationConfig) selectBox.getSelected()).getId(), player.getBotType().name());
           }
         });
       } else {
@@ -209,7 +209,7 @@ public class GameRoomScreenHUD implements Disposable {
         botBox.addListener(new ChangeListener() {
           @Override
           public void changed (ChangeEvent event, Actor actor) {
-            connectService.changeUser(player.getUserName(), player.getCivId(), (String) botBox.getSelected());
+            gameConnectService.changeUser(player.getUserName(), player.getCivId(), (String) botBox.getSelected());
           }
         });
         uiElementsCreator.addToTableRow(botBox, singlePlayerTable);
@@ -237,9 +237,9 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void prepareExitButton() {
-    this.startButton = uiElementsCreator.createActionButton("EXIT", this::exitGame, (int) (stage.getWidth() * 0.6), (int) (stage.getHeight() * 0.05));
-    uiElementsCreator.setActorWidthAndHeight(startButton, (int) (stage.getWidth() * 0.3), (int) (stage.getHeight() * 0.05));
-    stage.addActor(startButton);
+    this.exitButton = uiElementsCreator.createActionButton("EXIT", this::exitGame, (int) (stage.getWidth() * 0.6), (int) (stage.getHeight() * 0.05));
+    uiElementsCreator.setActorWidthAndHeight(exitButton, (int) (stage.getWidth() * 0.3), (int) (stage.getHeight() * 0.05));
+    stage.addActor(exitButton);
   }
 
   private void prepareMapSizeSelectBox() {
@@ -256,7 +256,7 @@ public class GameRoomScreenHUD implements Disposable {
       @Override
       public void changed (ChangeEvent event, Actor actor) {
         selectedMapSize = (MapSize) mapSizeSelectBox.getSelected();
-        connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
+        gameConnectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
       }
     });
     mapSizeWindow.add(mapSizeSelectBox);
@@ -264,7 +264,7 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void removePlayer(String playerName) {
-    connectService.removeUser(playerName);
+    gameConnectService.removeUser(playerName);
   }
 
   private void prepareMapTypeSelectBox() {
@@ -283,7 +283,7 @@ public class GameRoomScreenHUD implements Disposable {
       @Override
       public void changed (ChangeEvent event, Actor actor) {
         selectedMapTypeConfig = (MapTypeConfig) mapTypeConfigSelectBox.getSelected();
-        connectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
+        gameConnectService.changeLobby(selectedMapSize, (int) selectedMapTypeConfig.getId());
       }
     });
     mapTypeWindow.add(mapTypeConfigSelectBox);
@@ -301,7 +301,7 @@ public class GameRoomScreenHUD implements Disposable {
   }
 
   private void addBot() {
-    connectService.addBot();
+    gameConnectService.addBot();
   }
 
   public int randomBetween(int min, int max) {

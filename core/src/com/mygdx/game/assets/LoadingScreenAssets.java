@@ -17,7 +17,7 @@ public class LoadingScreenAssets {
   private final AssetManager assetManager;
 
   @Inject
-  public LoadingScreenAssets(@NonNull AssetManager manager) {
+  public LoadingScreenAssets(AssetManager manager) {
     this.assetManager = manager;
     initCustomLoaders();
   }

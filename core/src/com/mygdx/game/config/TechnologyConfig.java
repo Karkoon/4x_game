@@ -8,9 +8,9 @@ import lombok.NonNull;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class TechnologyConfig implements Config, TextureConfig {
 
   private long id;

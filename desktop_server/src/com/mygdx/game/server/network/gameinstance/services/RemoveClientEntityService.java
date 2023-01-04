@@ -13,30 +13,31 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class RemoveClientEntityService {
 
-  private final MessageSender sender;
-  private final GameRoom room;
+  private final GameRoom gameRoom;
+  private final MessageSender messageSender;
+
   private ComponentMapper<ChangeSubscribers> subscribersComponentMapper;
 
 
   @Inject
   RemoveClientEntityService(
-      MessageSender sender,
-      World world,
-      GameRoom room
+      GameRoom gameRoom,
+      MessageSender messageSender,
+      World world
   ) {
     super();
-    this.sender = sender;
-    this.room = room;
+    this.gameRoom = gameRoom;
+    this.messageSender = messageSender;
     world.inject(this);
   }
 
   public void removeEntity(int entityId, @NonNull Client client) {
     var msg = new RemoveEntityMessage(entityId);
-    sender.send(msg, client);
+    messageSender.send(msg, client);
   }
 
   public void removeEntityForAll(int entityId) {
@@ -47,8 +48,8 @@ public class RemoveClientEntityService {
         clientIndex != -1;
         clientIndex = clients.nextSetBit(clientIndex + 1)
     ) {
-      var client = room.getClients().get(clientIndex);
-      sender.send(msg, client);
+      var client = gameRoom.getClients().get(clientIndex);
+      messageSender.send(msg, client);
     }
   }
 }

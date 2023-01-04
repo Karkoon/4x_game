@@ -1,7 +1,7 @@
 {
   "id": 303,
-  "name": "Attack technology III",
-  "polishName": "Technologia ataku III",
+  "name": "Steel weapon",
+  "polishName": "Stalowa broń",
   "textureName": "technologies/attack3.png",
   "x": 0,
   "y": 2,
@@ -12,7 +12,7 @@
       "technologyImpactType":"UNIT_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 20}
       ]
     },
   "dependencies" : [302]

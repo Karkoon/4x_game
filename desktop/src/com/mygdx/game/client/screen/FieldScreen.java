@@ -32,55 +32,54 @@ import lombok.extern.java.Log;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Log
 @GameInstanceScope
+@Log
 public class FieldScreen extends ScreenAdapter {
 
-  private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
-
-  private final World world;
-  private final InField inField;
-  private final Viewport viewport;
-
-  private final Stage stage;
   private final ClickInputAdapter clickInputAdapter;
-  private final FieldScreenHUD fieldScreenHUD;
   private final ChosenEntity chosenEntity;
-  private final ShowSubfieldService showSubfieldService;
+  private final CompositeUpdatable compositeUpdatable = new CompositeUpdatable();
+  private final InField inField;
+  private final FieldScreenHUD fieldScreenHUD;
   private final FieldUIInputAdapter subFieldUiInputProcessor;
+  private final World world;
+  private final Viewport viewport;
+  private final ShowSubfieldService showSubfieldService;
+  private final Stage stage;
   private final StarBackground starBackground;
 
   private int fieldParent = -1;
+  private Vector3 pos;
 
   @AspectDescriptor(one = {SubField.class, Building.class, UnderConstruction.class})
   private EntitySubscription subscription;
+
   private ComponentMapper<Visible> visibleComponentMapper;
-  private Vector3 pos;
 
   @Inject
   public FieldScreen(
-      World world,
-      Viewport viewport,
-      @Named(StageModule.FIELD_SCREEN) Stage stage,
       ClickInputAdapter clickInputAdapter,
-      FieldScreenHUD fieldScreenHUD,
       ChosenEntity chosenEntity,
-      ShowSubfieldService showSubfieldService,
+      FieldScreenHUD fieldScreenHUD,
       FieldUIInputAdapter subFieldUiInputProcessor,
       InField inField,
-      StarBackground starBackground
-  ) {
-    this.world = world;
-    this.inField = inField;
-    world.inject(this);
-    this.viewport = viewport;
-    this.stage = stage;
+      ShowSubfieldService showSubfieldService,
+      @Named(StageModule.FIELD_SCREEN) Stage stage,
+      StarBackground starBackground,
+      Viewport viewport,
+      World world
+      ) {
     this.clickInputAdapter = clickInputAdapter;
-    this.fieldScreenHUD = fieldScreenHUD;
     this.chosenEntity = chosenEntity;
+    this.inField = inField;
+    this.fieldScreenHUD = fieldScreenHUD;
     this.showSubfieldService = showSubfieldService;
-    this.subFieldUiInputProcessor = subFieldUiInputProcessor;
+    this.stage = stage;
     this.starBackground = starBackground;
+    this.subFieldUiInputProcessor = subFieldUiInputProcessor;
+    this.viewport = viewport;
+    this.world = world;
+    world.inject(this);
   }
 
   @Override

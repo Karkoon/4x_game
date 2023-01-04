@@ -21,25 +21,25 @@ import java.util.UUID;
 @Singleton
 public class GdxGame extends Game {
 
-  private final GameConfigAssets assets;
+  private final GameConfigAssets gameConfigAssets;
   private final Lazy<GameRoomScreen> gameRoomScreen;
 
   @Inject
   GdxGame(
-    GameConfigAssets assets,
-    Lazy<GameRoomScreen> gameRoomScreen,
-    GameConnectService gameConnectService
+    GameConfigAssets gameConfigAssets,
+    GameConnectService gameConnectService,
+    Lazy<GameRoomScreen> gameRoomScreen
   ) {
-    this.assets = assets;
-    this.gameRoomScreen = gameRoomScreen;
+    this.gameConfigAssets = gameConfigAssets;
     this.gameConnectService = gameConnectService;
+    this.gameRoomScreen = gameRoomScreen;
   }
   private final GameConnectService gameConnectService;
 
   @Override
   public void create() {
     log.info("Loading assets...");
-    assets.loadAssetsSync();
+    gameConfigAssets.loadAssetsSync();
     log.info("Assets loaded.");
     if (InitialBotRoom.roomName != null)
       gameRoomName = InitialBotRoom.roomName;

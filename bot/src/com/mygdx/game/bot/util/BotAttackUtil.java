@@ -53,7 +53,7 @@ public class BotAttackUtil {
 
   public boolean attack(int unitId) {
     if (chosenBotType.getBotType() == BotType.RANDOM_FIRST || chosenBotType.getBotType() == BotType.TRAINED) {
-      if (propabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
+      if (probabilityCheck(SHOULD_ATTACK_RANDOM_FIRST)) {
         var coordinates = coordinatesMapper.get(unitId);
         var stats = statsMapper.get(unitId);
         var entities = unitsSubscription.getEntities();
@@ -70,7 +70,7 @@ public class BotAttackUtil {
     return false;
   }
 
-  public boolean propabilityCheck(float value) {
+  public boolean probabilityCheck(float value) {
     float probabilityValue = random.nextFloat();
     return probabilityValue <= value;
   }

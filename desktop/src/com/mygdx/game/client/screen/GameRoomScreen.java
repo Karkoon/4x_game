@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 public class GameRoomScreen extends ScreenAdapter {
 
   private final GameRoomScreenHUD gameRoomScreenHUD;
-  private final Stage stage;
   private final NetworkJobsQueueJobJobberManager jobManager;
+  private final Stage stage;
   private final StarBackground starBackground;
 
 

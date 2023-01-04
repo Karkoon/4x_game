@@ -5,17 +5,17 @@
   "modelPath": "basic.g3db",
   "textureName": "units/tank_medieval.png",
   "iconName": "units/tank_medieval_icon.png",
-  "maxHp": 400,
+  "maxHp": 500,
   "attackPower": 150,
-  "defense": 100,
+  "defense": 150,
   "sightRadius": 5,
   "moveRange": 1,
   "attackRange": 1,
-  "turnAmount": 10,
+  "turnAmount": 12,
   "materials":
   [
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":15},
-    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":1}
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"GOLD","amount":20},
+    {"class": com.mygdx.game.core.model.MaterialUnit,"base":"PRODUCTION","amount":50}
   ],
   "civilizationConfigId": 602
 }

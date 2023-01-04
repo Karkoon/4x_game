@@ -33,6 +33,7 @@ import java.util.Map;
 public class MaterialUtilServer extends WorldService {
 
   private final GameConfigAssets gameConfigAssets;
+  private final World world;
 
   @AspectDescriptor(all = {Owner.class, Field.class})
   private EntitySubscription ownerFieldsSubscriber;
@@ -51,8 +52,6 @@ public class MaterialUtilServer extends WorldService {
   private ComponentMapper<SubField> subfieldMapper;
   private ComponentMapper<Technology> technologyMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
-
-  private final World world;
 
   @Inject
   MaterialUtilServer(

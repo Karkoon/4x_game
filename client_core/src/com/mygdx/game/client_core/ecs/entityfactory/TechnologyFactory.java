@@ -24,7 +24,7 @@ public class TechnologyFactory {
 
   @Inject
   public TechnologyFactory(
-      @NonNull World world
+      World world
   ) {
     world.inject(this);
   }

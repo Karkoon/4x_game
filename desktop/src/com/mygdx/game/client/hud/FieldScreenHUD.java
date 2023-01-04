@@ -20,7 +20,6 @@ import com.mygdx.game.client.util.UiElementsCreator;
 import com.mygdx.game.client_core.model.PlayerInfo;
 import com.mygdx.game.client_core.network.service.CreateUnitService;
 import com.mygdx.game.client_core.util.InfieldUtil;
-import com.mygdx.game.client_core.util.MaterialUtilClient;
 import com.mygdx.game.config.BuildingConfig;
 import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.InRecruitment;
@@ -45,17 +44,14 @@ public class FieldScreenHUD implements Disposable {
   private final GameScreenAssets gameScreenAssets;
   private final InField inField;
   private final InfieldUtil infieldUtil;
-  private final Lazy<MaterialUtilClient> materialUtilClient;
   private final Lazy<Navigator> navigator;
-
   private final PlayerInfo playerInfo;
   private final Stage stage;
   private final Texture inRecruitmentImageTexture;
   private final UiElementsCreator uiElementsCreator;
+  private Window unitAndBuildingContainer;
 
   private ComponentMapper<InRecruitment> inRecruitmentMapper;
-
-  private Window unitAndBuildingContainer;
 
   @Inject
   public FieldScreenHUD(
@@ -66,7 +62,6 @@ public class FieldScreenHUD implements Disposable {
       GameScreenAssets gameScreenAssets,
       InField inField,
       InfieldUtil infieldUtil,
-      Lazy<MaterialUtilClient> materialUtilClient,
       Lazy<Navigator> navigator,
       PlayerInfo playerInfo,
       @Named(StageModule.FIELD_SCREEN) Stage stage,
@@ -81,7 +76,6 @@ public class FieldScreenHUD implements Disposable {
     this.inField = inField;
     this.infieldUtil = infieldUtil;
     this.inRecruitmentImageTexture = gameScreenAssets.getTexture("units/in_recruitment.png");
-    this.materialUtilClient = materialUtilClient;
     this.navigator = navigator;
     this.playerInfo = playerInfo;
     this.stage = stage;

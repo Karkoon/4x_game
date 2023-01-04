@@ -10,8 +10,6 @@ import com.mygdx.game.config.UnitConfig;
 import com.mygdx.game.core.ecs.component.CanAttack;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.InRecruitment;
-import com.mygdx.game.core.ecs.component.Owner;
-import com.mygdx.game.core.ecs.component.PlayerMaterial;
 import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.ecs.component.UnderConstruction;
 import com.mygdx.game.core.model.TechnologyImpactType;
@@ -26,20 +24,27 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class RoundEndService extends WorldService {
 
-  @AspectDescriptor(all = {Stats.class})
-  private EntitySubscription unitSubscriber;
+  private final BuildingFactory buildingFactory;
+  private final GameConfigAssets gameConfigAssets;
+  private final GameRoom gameRoom;
+  private final MaterialUtilServer materialUtilServer;
+  private final StateSyncer stateSyncer;
+  private final TechnologyUtilServer technologyUtilServer;
+  private final UnitFactory unitFactory;
+  private final World world;
+
   @AspectDescriptor(all = {CanAttack.class})
   private EntitySubscription canAttackSubscriber;
   @AspectDescriptor(all = {InRecruitment.class})
   private EntitySubscription inRecruitmentSubscriber;
-  @AspectDescriptor(all = {Owner.class, PlayerMaterial.class})
-  private EntitySubscription ownerPlayerMaterialSubscriber;
   @AspectDescriptor(all = {UnderConstruction.class})
   private EntitySubscription underConstructionSubscriber;
+  @AspectDescriptor(all = {Stats.class})
+  private EntitySubscription unitSubscriber;
 
   private ComponentMapper<CanAttack> canAttackMapper;
   private ComponentMapper<Coordinates> coordinatesMapper;
@@ -47,36 +52,26 @@ public class RoundEndService extends WorldService {
   private ComponentMapper<Stats> statsMapper;
   private ComponentMapper<UnderConstruction> underConstructionMapper;
 
-  private final World world;
-
-  private final BuildingFactory buildingFactory;
-  private final GameConfigAssets gameConfigAssets;
-  private final MaterialUtilServer materialUtilServer;
-  private final GameRoom room;
-  private final TechnologyUtilServer technologyUtilServer;
-  private final UnitFactory unitFactory;
-  private final StateSyncer stateSyncer;
-
   @Inject
   RoundEndService(
-      World world,
       BuildingFactory buildingFactory,
       GameConfigAssets gameConfigAssets,
+      GameRoom gameRoom,
       MaterialUtilServer materialUtilServer,
-      GameRoom room,
+      StateSyncer stateSyncer,
       TechnologyUtilServer technologyUtilServer,
       UnitFactory unitFactory,
-      StateSyncer stateSyncer
-  ) {
+      World world
+      ) {
     world.inject(this);
-    this.world = world;
     this.buildingFactory = buildingFactory;
     this.gameConfigAssets = gameConfigAssets;
+    this.gameRoom = gameRoom;
     this.materialUtilServer = materialUtilServer;
-    this.room = room;
+    this.stateSyncer = stateSyncer;
     this.technologyUtilServer = technologyUtilServer;
     this.unitFactory = unitFactory;
-    this.stateSyncer = stateSyncer;
+    this.world = world;
   }
 
   public void makeEndRoundSteps() {
@@ -146,7 +141,7 @@ public class RoundEndService extends WorldService {
       if (inRecruitment.getTurnLeft() == 0) {
         long unitConfigId = inRecruitment.getUnitConfigId();
         var coordinates = coordinatesMapper.get(entityId);
-        var client = room.getClientByToken(inRecruitment.getClientToken());
+        var client = gameRoom.getClientByToken(inRecruitment.getClientToken());
         stateSyncer.sendComponentTo(inRecruitment, entityId, client);
         var unitConfig = gameConfigAssets.getGameConfigs().get(UnitConfig.class, unitConfigId);
         int unitEntityId = this.unitFactory.createEntity(unitConfig, coordinates, client);

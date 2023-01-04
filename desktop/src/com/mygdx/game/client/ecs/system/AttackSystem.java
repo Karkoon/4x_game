@@ -17,31 +17,32 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({Highlighted.class, Stats.class})
+@Log
 @GameInstanceScope
 public class AttackSystem extends IteratingSystem {
 
-  private final ChosenEntity chosenEntity;
   private final AttackEntityService attackEntityService;
-  private final WarningDialogFactory warningDialog;
-  private ComponentMapper<Highlighted> highlightedMapper;
-  private ComponentMapper<Coordinates> coordinatesMapper;
-  private ComponentMapper<Stats> statsComponentMapper;
-  private ComponentMapper<Owner> ownerComponentMapper;
+  private final ChosenEntity chosenEntity;
   private final PlayerInfo playerInfo;
+  private final WarningDialogFactory warningDialog;
+
+  private ComponentMapper<Coordinates> coordinatesMapper;
+  private ComponentMapper<Highlighted> highlightedMapper;
+  private ComponentMapper<Owner> ownerComponentMapper;
+  private ComponentMapper<Stats> statsComponentMapper;
 
   @Inject
   public AttackSystem(
-      ChosenEntity chosenEntity,
       AttackEntityService attackEntityService,
-      WarningDialogFactory warningDialog,
-      PlayerInfo playerInfo
+      ChosenEntity chosenEntity,
+      PlayerInfo playerInfo,
+      WarningDialogFactory warningDialog
   ) {
-    this.chosenEntity = chosenEntity;
     this.attackEntityService = attackEntityService;
-    this.warningDialog = warningDialog;
+    this.chosenEntity = chosenEntity;
     this.playerInfo = playerInfo;
+    this.warningDialog = warningDialog;
   }
 
   @Override

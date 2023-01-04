@@ -17,14 +17,14 @@ import javax.inject.Inject;
 @Log
 public class UnitFactory {
 
+  private ComponentMapper<Movable> movableMapper;
   private ComponentMapper<Name> nameMapper;
   private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<Movable> movableMapper;
   private ComponentMapper<Stats> statsMapper;
 
   @Inject
   public UnitFactory(
-      @NonNull World world
+      World world
   ) {
     world.inject(this);
   }

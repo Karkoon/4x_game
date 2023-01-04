@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 @GameInstanceScope
 public class ActiveToken {
+
   private String token = "";
 
   @Inject

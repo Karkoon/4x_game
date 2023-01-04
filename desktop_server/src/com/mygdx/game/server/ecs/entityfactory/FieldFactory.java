@@ -17,16 +17,16 @@ import javax.inject.Inject;
 @Log
 public class FieldFactory {
 
-  private final SubfieldMapInitializer subMapInitializer;
   private final ComponentFactory componentFactory;
+  private final SubfieldMapInitializer subMapInitializer;
 
   @Inject
   public FieldFactory(
-      SubfieldMapInitializer subMapInitializer,
-      ComponentFactory componentFactory
+      ComponentFactory componentFactory,
+      SubfieldMapInitializer subMapInitializer
   ) {
-    this.subMapInitializer = subMapInitializer;
     this.componentFactory = componentFactory;
+    this.subMapInitializer = subMapInitializer;
   }
 
   public int createEntity(@NonNull FieldConfig config, Coordinates coordinate) {

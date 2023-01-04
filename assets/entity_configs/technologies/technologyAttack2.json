@@ -1,7 +1,7 @@
 {
   "id": 302,
-  "name": "Attack technology II",
-  "polishName": "Technologia ataku II",
+  "name": "Iron weapon",
+  "polishName": "Żelazna broń",
   "textureName": "technologies/attack2.png",
   "x": 0,
   "y": 1,
@@ -12,7 +12,7 @@
       "technologyImpactType":"UNIT_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "ATTACK_POWER", "operation": "PLUS", "value": 15}
       ]
     },
   "dependencies" : [301]

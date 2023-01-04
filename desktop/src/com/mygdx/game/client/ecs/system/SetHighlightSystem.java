@@ -11,11 +11,12 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class SetHighlightSystem extends BaseSystem {
 
   private final ChosenEntity chosenEntity;
+
   private ComponentMapper<Highlighted> highlightedMapper;
   private ComponentMapper<Movable> movableMapper;
   private ComponentMapper<SubField> subFieldMapper;

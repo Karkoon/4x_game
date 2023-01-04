@@ -17,8 +17,8 @@ public class AddOwnerToSightlineSubscribersSystem extends IteratingSystem {
 
   private final GameRoom gameRoom;
 
-  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<Name> nameComponentMapper;
+  private ComponentMapper<Owner> ownerMapper;
   private ComponentMapper<SightlineSubscribers> sightlineSubscribersMapper;
 
   @Inject

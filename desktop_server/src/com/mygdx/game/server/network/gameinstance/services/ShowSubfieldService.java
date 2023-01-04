@@ -15,17 +15,19 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class ShowSubfieldService extends WorldService {
 
-  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class, Building.class, UnderConstruction.class})
-  private ComponentMapper<Field> fieldMapper;
-  private ComponentMapper<SubField> subFieldMapper;
-  private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
 
   private final MessageSender sender;
   private final World world;
+
+  @AspectDescriptor(all = {ChangeSubscribers.class}, exclude = {SubField.class, Building.class, UnderConstruction.class})
+  private ComponentMapper<Field> fieldMapper;
+
+  private ComponentMapper<ChangeSubscribers> changeSubscribersMapper;
+  private ComponentMapper<SubField> subFieldMapper;
 
   @Inject
   ShowSubfieldService(

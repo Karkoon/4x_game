@@ -6,6 +6,7 @@ import com.mygdx.game.server.network.gameinstance.services.InterruptService;
 import javax.inject.Inject;
 
 public class InterruptHandler {
+
   private final InterruptService interruptService;
 
   @Inject

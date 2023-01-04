@@ -12,12 +12,13 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @All({ModelInstanceComp.class, Position.class, Visible.class})
 @GameInstanceScope
+@Log
 public class RenderSystem extends IteratingSystem {
 
   private final ModelInstanceRenderer renderer;
+
   private ComponentMapper<ModelInstanceComp> modelInstanceMapper;
   private ComponentMapper<Position> positionMapper;
 

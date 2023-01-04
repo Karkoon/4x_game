@@ -17,8 +17,6 @@ import com.mygdx.game.client_core.di.gameinstance.GameInstanceScope;
 import com.mygdx.game.client_core.model.ActiveToken;
 import com.mygdx.game.client_core.model.ChangesApplied;
 import com.mygdx.game.client_core.model.PlayerInfo;
-import com.mygdx.game.client_core.model.PredictedIncome;
-import com.mygdx.game.client_core.network.NetworkWorldEntityMapper;
 import com.mygdx.game.client_core.network.QueueMessageListener;
 import com.mygdx.game.client_core.network.service.EndTurnService;
 import com.mygdx.game.client_core.network.service.MoveEntityService;
@@ -27,9 +25,7 @@ import com.mygdx.game.client_core.network.service.ShowSubfieldService;
 import com.mygdx.game.core.ecs.component.Coordinates;
 import com.mygdx.game.core.ecs.component.Field;
 import com.mygdx.game.core.ecs.component.Owner;
-import com.mygdx.game.core.ecs.component.Stats;
 import com.mygdx.game.core.network.messages.*;
-import dagger.Lazy;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -45,82 +41,72 @@ import static com.github.czyzby.websocket.WebSocketListener.FULLY_HANDLED;
 @GameInstanceScope
 public class GameScreen extends ScreenAdapter {
 
-  private final World world;
 
+  private final ActiveToken activeToken;
   private final BotAttackUtil botAttackUtil;
   private final BotBuildUtil botBuildUtil;
   private final BotRecruitUtil botRecruitUtil;
   private final BotTechnologyUtil botTechnologyUtil;
-  private final PredictedIncome predictedIncome;
+  private final ChangesApplied changesApplied;
+  private final EndTurnService endTurnService;
+  private final GdxGame game;
+  private final MoveEntityService moveEntityService;
+  private final NextFieldUtil nextFieldUtil;
   private final NextUnitUtil nextUnitUtil;
   private final PlayerInfo playerInfo;
-  private final ActiveToken activeToken;
-  private final GdxGame game;
-  private final Lazy<FieldScreen> fieldScreen;
-  private final ResearchTechnologyService technologyScreen;
-  private final QueueMessageListener queueMessageListener;
-  private final MoveEntityService moveEntityService;
-  private final EndTurnService endTurnService;
-  private final NextFieldUtil nextFieldUtil;
-  private final ChangesApplied changesApplied;
-  private final ShowSubfieldService showSubfieldService;
-  private final NetworkWorldEntityMapper networkWorldEntityMapper;
   private final Random random;
+  private final ResearchTechnologyService technologyScreen;
+  private final ShowSubfieldService showSubfieldService;
+  private final QueueMessageListener queueMessageListener;
+  private final World world;
+
   private List<Integer> worksOnFields;
   private List<Integer> attackBefore;
   private List<Integer> attackAfter;
   private boolean isAttackBefore = true;
-
   private boolean initialized = false;
-
-  private ComponentMapper<Coordinates> coordinatesComponentMapper;
-  private ComponentMapper<Owner> ownerMapper;
-  private ComponentMapper<Stats> statsMapper;
 
   @AspectDescriptor(all = {Owner.class, Field.class})
   private EntitySubscription fieldSubscriber;
 
+  private ComponentMapper<Coordinates> coordinatesComponentMapper;
+  private ComponentMapper<Owner> ownerMapper;
+
   @Inject
   public GameScreen(
-      World world,
+      ActiveToken activeToken,
       BotAttackUtil botAttackUtil,
       BotBuildUtil botBuildUtil,
       BotRecruitUtil botRecruitUtil,
       BotTechnologyUtil botTechnologyUtil,
-      PredictedIncome predictedIncome,
+      ChangesApplied changesApplied,
+      EndTurnService endTurnService,
+      GdxGame game,
+      MoveEntityService moveEntityService,
+      NextFieldUtil nextFieldUtil,
       NextUnitUtil nextUnitUtil,
       PlayerInfo playerInfo,
-      ActiveToken activeToken,
-      GdxGame game,
-      Lazy<FieldScreen> fieldScreen,
       ResearchTechnologyService technologyScreen,
-      @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
-      MoveEntityService moveEntityService,
-      EndTurnService endTurnService,
-      NextFieldUtil nextFieldUtil,
-      ChangesApplied changesApplied,
       ShowSubfieldService showSubfieldService,
-      NetworkWorldEntityMapper networkWorldEntityMapper
+      @Named(GameInstanceNetworkModule.GAME_INSTANCE) QueueMessageListener queueMessageListener,
+      World world
   ) {
-    this.world = world;
+    this.activeToken = activeToken;
     this.botAttackUtil = botAttackUtil;
     this.botBuildUtil = botBuildUtil;
     this.botRecruitUtil = botRecruitUtil;
     this.botTechnologyUtil = botTechnologyUtil;
-    this.predictedIncome = predictedIncome;
+    this.changesApplied = changesApplied;
+    this.endTurnService = endTurnService;
+    this.game = game;
+    this.moveEntityService = moveEntityService;
+    this.nextFieldUtil = nextFieldUtil;
     this.nextUnitUtil = nextUnitUtil;
     this.playerInfo = playerInfo;
-    this.activeToken = activeToken;
-    this.game = game;
-    this.fieldScreen = fieldScreen;
+    this.showSubfieldService = showSubfieldService;
     this.technologyScreen = technologyScreen;
     this.queueMessageListener = queueMessageListener;
-    this.moveEntityService = moveEntityService;
-    this.endTurnService = endTurnService;
-    this.nextFieldUtil = nextFieldUtil;
-    this.changesApplied = changesApplied;
-    this.showSubfieldService = showSubfieldService;
-    this.networkWorldEntityMapper = networkWorldEntityMapper;
+    this.world = world;
     this.world.inject(this);
 
     this.random = new Random();
@@ -153,7 +139,7 @@ public class GameScreen extends ScreenAdapter {
         return FULLY_HANDLED;
       }));
 
-      queueMessageListener.registerHandler(BuildingBuildedMessage.class, ((webSocket, message) -> {
+      queueMessageListener.registerHandler(BuildingConstructedMessage.class, ((webSocket, message) -> {
         buildBuildings();
         return FULLY_HANDLED;
       }));

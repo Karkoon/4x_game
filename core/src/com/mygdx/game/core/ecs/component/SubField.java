@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubField extends PooledComponent {
 
-  private int parent = -0xC0FEE;
   private int building = -0xC0FEE;
+  private int parent = -0xC0FEE;
 
   @Override
   protected void reset() {
-    this.parent = -0xC0FEE;
     this.building = -0xC0FEE;
+    this.parent = -0xC0FEE;
   }
 
   public boolean hasBuilding() {

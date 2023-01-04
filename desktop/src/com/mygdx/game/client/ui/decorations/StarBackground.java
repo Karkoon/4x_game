@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.google.inject.Singleton;
 import com.mygdx.game.assets.MenuScreenAssetPaths;
 import com.mygdx.game.core.util.NoiseGenerator;
-import lombok.NonNull;
 
 import javax.inject.Inject;
 
@@ -33,7 +32,7 @@ public class StarBackground {
   private float iPosY;
 
   public @Inject StarBackground(
-      @NonNull AssetManager assets
+      AssetManager assets
   ) {
     this.assets = assets;
     nebula = assets.get(MenuScreenAssetPaths.NEBULA, Texture.class);

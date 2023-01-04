@@ -19,15 +19,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Singleton
 @Log
+@Singleton
 public class GameRoomListScreen extends ScreenAdapter {
 
   private final GameConnectService connectService;
   private final GdxGame game;
   private final Stage stage;
-  private final UiElementsCreator uiElementsCreator;
   private final StarBackground starBackground;
+  private final UiElementsCreator uiElementsCreator;
 
   private String roomName = "defaultRoom";
   private String userName = "defaultUser";
@@ -37,14 +37,14 @@ public class GameRoomListScreen extends ScreenAdapter {
       GameConnectService connectService,
       GdxGame game,
       @Named(StageModule.SCREEN_STAGE) Stage stage,
-      UiElementsCreator uiElementsCreator,
-      StarBackground starBackground
-  ) {
+      StarBackground starBackground,
+      UiElementsCreator uiElementsCreator
+      ) {
     this.connectService = connectService;
     this.game = game;
     this.stage = stage;
-    this.uiElementsCreator = uiElementsCreator;
     this.starBackground = starBackground;
+    this.uiElementsCreator = uiElementsCreator;
   }
 
   @Override

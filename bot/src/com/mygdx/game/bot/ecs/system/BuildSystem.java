@@ -24,23 +24,24 @@ import javax.inject.Inject;
 @All({SubField.class})
 public class BuildSystem extends IteratingSystem {
 
+  private final BuildingService buildingService;
+  private final ChosenConfig chosenConfig;
+  private final GameConfigAssets gameConfigAssets;
+  private final Lazy<MaterialUtilClient> materialUtilClient;
+
   @AspectDescriptor(all = {PlayerMaterial.class})
   private EntitySubscription playerMaterialSubscriber;
 
-  private final BuildingService buildingService;
-  private final ChosenConfig chosenConfig;
-  private final GameConfigAssets assets;
-  private final Lazy<MaterialUtilClient> materialUtilClient;
   private ComponentMapper<Coordinates> coordinatesMapper;
 
   @Inject
   public BuildSystem(
-      GameConfigAssets assets,
-      ChosenConfig chosenConfig,
       BuildingService buildingService,
+      ChosenConfig chosenConfig,
+      GameConfigAssets gameConfigAssets,
       Lazy<MaterialUtilClient> materialUtilClient
   ) {
-    this.assets = assets;
+    this.gameConfigAssets = gameConfigAssets;
     this.chosenConfig = chosenConfig;
     this.buildingService = buildingService;
     this.materialUtilClient = materialUtilClient;
@@ -51,7 +52,7 @@ public class BuildSystem extends IteratingSystem {
     if (chosenConfig.isAnyChosen() && chosenConfig.peekClass().equals(BuildingConfig.class)) {
       log.info("some are chosen and there's a sub highlighted entity");
       long buildingConfigId = chosenConfig.pop();
-      var config = assets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
+      var config = gameConfigAssets.getGameConfigs().get(BuildingConfig.class, buildingConfigId);
       if (materialUtilClient.get().checkIfCanBuy(config.getMaterials(), playerMaterialSubscriber.getEntities())) {
         var targetCoordinate = coordinatesMapper.get(entityId);
         buildingService.createBuilding(buildingConfigId, entityId, targetCoordinate); // think if the conditions need to be in the system

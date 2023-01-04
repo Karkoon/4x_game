@@ -15,16 +15,16 @@ import javax.inject.Inject;
 @GameInstanceScope
 public class StartUnitInitializer {
 
-  private final GameRoom gameRoom;
-  private final GameConfigs gameConfigs;
   private final CreateUnitService createUnitService;
+  private final GameConfigs gameConfigs;
+  private final GameRoom gameRoom;
   private final IntSet usedMapPositions = new IntSet();
 
   @Inject
   public StartUnitInitializer(
+      CreateUnitService createUnitService,
       GameRoom gameRoom,
-      GameConfigs gameConfigs,
-      CreateUnitService createUnitService
+      GameConfigs gameConfigs
   ) {
     this.createUnitService = createUnitService;
     this.gameConfigs = gameConfigs;

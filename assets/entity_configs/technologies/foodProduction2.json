@@ -1,18 +1,18 @@
 {
   "id": 310,
-  "name": "Food technology II",
-  "polishName": "Technologia żywności II",
+  "name": "Three-field system",
+  "polishName": "Trójpolówka",
   "textureName": "technologies/food2.png",
   "x": 4,
   "y": 1,
-  "requiredScience": 10,
+  "requiredScience": 20,
   "impact":
     {
       "class": com.mygdx.game.core.model.TechnologyImpact,
       "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 5}
       ]
     },
   "dependencies" : [309]

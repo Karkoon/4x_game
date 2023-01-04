@@ -14,28 +14,29 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class ResearchTechnologyService {
 
-  private final Lazy<MessageSender> sender;
+  private final Lazy<MessageSender> messageSender;
   private final NetworkWorldEntityMapper networkWorldEntityMapper;
-
-  private ComponentMapper<InResearch> inResearchMapper;
-  private ComponentMapper<Researched> researchedMapper;
 
   @AspectDescriptor(all = {InResearch.class})
   private EntitySubscription inResearchSubscriber;
 
+  private ComponentMapper<InResearch> inResearchMapper;
+  private ComponentMapper<Researched> researchedMapper;
+
+
   @Inject
   public ResearchTechnologyService(
-    Lazy<MessageSender> sender,
+    Lazy<MessageSender> messageSender,
     NetworkWorldEntityMapper networkWorldEntityMapper,
     World world
   ) {
-    world.inject(this);
-    this.sender = sender;
+    this.messageSender = messageSender;
     this.networkWorldEntityMapper = networkWorldEntityMapper;
+    world.inject(this);
   }
 
   public void researchTechnology(int entityId) {
@@ -48,7 +49,7 @@ public class ResearchTechnologyService {
       log.info("Can't research because it's researched");
     } else {
       int networkEntity = networkWorldEntityMapper.getNetworkEntity(entityId);
-      sender.get().send("research:" + networkEntity);
+      messageSender.get().send("research:" + networkEntity);
     }
   }
 }

@@ -7,10 +7,11 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@Singleton
 @Log
+@Singleton
 public class AddJobToQueueListener implements WebSocketListener {
 
     private final ConcurrentLinkedQueue<OnMessageArgs> queue = new ConcurrentLinkedQueue<>();
@@ -58,7 +59,7 @@ public class AddJobToQueueListener implements WebSocketListener {
             return true;
         } catch (final Exception exception) {
             return onError(webSocket,
-                new WebSocketException("Unable to handle the received packet: " + packet, exception));
+                new WebSocketException("Unable to handle the received packet: " + Arrays.toString(packet), exception));
         }
     }
 

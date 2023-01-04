@@ -1,7 +1,7 @@
 {
   "id": 309,
-  "name": "Food technology I",
-  "polishName": "Technologia żywności I",
+  "name": "Irrigation",
+  "polishName": "Nawadnianie",
   "textureName": "technologies/food1.png",
   "x": 4,
   "y": 0,
@@ -12,7 +12,7 @@
       "technologyImpactType":"MATERIAL_IMPACT",
       "technologyImpactValues":
       [
-        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 10}
+        {"class": com.mygdx.game.core.model.TechnologyImpactValue, "parameter": "FOOD", "operation": "PLUS", "value": 5}
       ]
     },
   "dependencies" : []

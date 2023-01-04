@@ -14,8 +14,8 @@ import lombok.extern.java.Log;
 
 import javax.inject.Inject;
 
-@Log
 @GameInstanceScope
+@Log
 public class StateSyncer {
 
   private final Json json = new Json(JsonWriter.OutputType.minimal);
